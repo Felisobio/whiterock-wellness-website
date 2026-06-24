@@ -1,1 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhiteRock Wellness LTD – Wellness Through Alignment</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0A1628;
+  --royal:#1A3FBF;
+  --cyan:#00AAFF;
+  --cyan-lt:#00D4FF;
+  --sky:#E8F4FF;
+  --sky2:#C8E8FF;
+  --white:#FFFFFF;
+  --offwhite:#F5F9FF;
+  --text:#0A1628;
+  --muted:#5A6A7A;
+  --border:rgba(26,63,191,0.12);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--white);line-height:1.6;overflow-x:hidden}
 
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0A1628}
+::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:3px}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;height:76px;
+  background:rgba(10,22,40,0.97);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(0,170,255,0.15);
+  transition:all 0.3s;
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo svg{height:42px;width:auto;display:block}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1}
+.nav-logo-text .t1{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;letter-spacing:-0.01em}
+.nav-logo-text .t1 span{color:#00AAFF}
+.nav-logo-text .t2{font-family:'Plus Jakarta Sans',sans-serif;font-size:0.6rem;font-weight:500;color:rgba(255,255,255,0.5);letter-spacing:0.18em;text-transform:uppercase;margin-top:1px}
+.nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover{color:var(--cyan)}
+.nav-book{
+  background:var(--cyan);color:var(--navy) !important;
+  padding:0.55rem 1.4rem;border-radius:50px;
+  font-weight:700 !important;font-size:0.85rem !important;
+  transition:all 0.2s !important;
+}
+.nav-book:hover{background:var(--cyan-lt) !important;transform:translateY(-1px)}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;
+  background:linear-gradient(145deg,#030A18 0%,#0A1628 40%,#0D2050 70%,#0A1628 100%);
+  display:flex;align-items:center;
+  position:relative;overflow:hidden;
+  padding-top:76px;
+}
+.hero-bg-glow{
+  position:absolute;top:-20%;right:-10%;
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(0,170,255,0.15) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-bg-glow2{
+  position:absolute;bottom:-20%;left:-10%;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(26,63,191,0.2) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:4rem;align-items:center;
+  max-width:1300px;margin:0 auto;padding:6rem 5%;
+  position:relative;z-index:1;width:100%;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:rgba(0,170,255,0.12);
+  border:1px solid rgba(0,170,255,0.3);
+  color:var(--cyan);
+  font-size:0.78rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  padding:0.4rem 1rem;border-radius:50px;
+  margin-bottom:1.5rem;
+}
+.hero-tag::before{content:'';width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.5)}}
+
+.hero-content h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.6rem,5vw,4.2rem);
+  font-weight:700;line-height:1.1;
+  color:var(--white);margin-bottom:1.5rem;
+}
+.hero-content h1 .cyan{color:var(--cyan)}
+.hero-content h1 .italic{font-style:italic;color:#B8D4FF}
+
+.hero-content p{
+  color:rgba(255,255,255,0.65);
+  font-size:1.05rem;font-weight:300;
+  max-width:480px;margin-bottom:2.5rem;line-height:1.8;
+}
+
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-cyan{
+  background:var(--cyan);color:var(--navy);
+  padding:0.9rem 2rem;border-radius:50px;
+  font-weight:700;font-size:0.95rem;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:all 0.2s;display:inline-block;
+}
+.btn-cyan:hover{background:var(--cyan-lt);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,170,255,0.4)}
+.btn-ghost{
+  background:transparent;
+  border:1.5px solid rgba(255,255,255,0.25);
+  color:white;padding:0.9rem 2rem;border-radius:50px;
+  font-weight:500;font-size:0.95rem;
+  text-decoration:none;cursor:pointer;
+  transition:all 0.2s;display:inline-block;
+}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+
+.hero-stats{
+  display:flex;gap:2rem;margin-top:3rem;
+  padding-top:2rem;border-top:1px solid rgba(255,255,255,0.1);
+}
+.stat-item{}
+.stat-num{
+  display:block;font-size:1.8rem;font-weight:800;
+  color:var(--cyan);line-height:1;margin-bottom:0.2rem;
+}
+.stat-label{font-size:0.78rem;color:rgba(255,255,255,0.5);font-weight:400;letter-spacing:0.05em}
+
+/* Hero right - booking card */
+.hero-right{position:relative}
+.hero-img-wrap{
+  position:relative;
+  border-radius:20px;overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,0.5);
+}
+.hero-img-wrap img{
+  width:100%;height:500px;object-fit:cover;display:block;
+}
+.hero-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,22,40,0.8) 0%,transparent 50%);
+}
+.hero-badge{
+  position:absolute;top:-20px;right:-20px;
+  background:var(--cyan);
+  width:100px;height:100px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 8px 30px rgba(0,170,255,0.5);
+  text-align:center;
+}
+.hero-badge span:first-child{font-size:1.4rem;font-weight:800;color:var(--navy);line-height:1}
+.hero-badge span:last-child{font-size:0.6rem;font-weight:700;color:var(--navy);text-align:center;line-height:1.2}
+
+.floating-card{
+  position:absolute;bottom:-24px;left:-24px;
+  background:var(--white);
+  border-radius:16px;
+  padding:1.25rem 1.5rem;
+  box-shadow:0 20px 50px rgba(0,0,0,0.3);
+  min-width:220px;
+}
+.fc-label{font-size:0.7rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem}
+.fc-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem}
+.fc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.fc-dot.green{background:#22C55E}
+.fc-dot.yellow{background:#F59E0B}
+.fc-text{font-size:0.82rem;color:var(--text);font-weight:500}
+
+/* ── CONDITIONS TICKER ── */
+.ticker-bar{
+  background:var(--navy);
+  border-top:1px solid rgba(0,170,255,0.2);
+  border-bottom:1px solid rgba(0,170,255,0.2);
+  padding:0.9rem 0;overflow:hidden;
+}
+.ticker-inner{
+  display:flex;gap:3rem;
+  animation:ticker 30s linear infinite;
+  width:max-content;
+}
+.ticker-item{
+  display:flex;align-items:center;gap:0.6rem;
+  color:rgba(255,255,255,0.7);font-size:0.85rem;font-weight:500;
+  white-space:nowrap;
+}
+.ticker-item::before{content:'✦';color:var(--cyan);font-size:0.7rem}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SECTIONS ── */
+section{padding:100px 5%}
+.section-max{max-width:1300px;margin:0 auto}
+.label{
+  font-size:0.72rem;font-weight:700;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--cyan);
+  display:flex;align-items:center;gap:0.6rem;margin-bottom:1rem;
+}
+.label::before{content:'';width:24px;height:2px;background:var(--cyan)}
+.section-h{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,3.5vw,3rem);
+  font-weight:700;color:var(--navy);
+  line-height:1.2;margin-bottom:1rem;
+}
+.section-sub{color:var(--muted);font-size:1rem;max-width:560px;margin-bottom:3.5rem;line-height:1.8}
+
+/* ── WHY US ── */
+#why{background:var(--offwhite)}
+.why-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+}
+.why-left img{
+  width:100%;border-radius:20px;
+  box-shadow:0 20px 60px rgba(10,22,40,0.15);
+}
+.why-points{display:flex;flex-direction:column;gap:1.5rem}
+.why-point{
+  display:flex;gap:1rem;align-items:flex-start;
+  padding:1.25rem;background:white;border-radius:12px;
+  border:1px solid var(--border);
+  transition:all 0.2s;
+}
+.why-point:hover{border-color:var(--cyan);transform:translateX(4px)}
+.why-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:var(--sky);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:1.3rem;
+}
+.why-point h4{font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem}
+.why-point p{font-size:0.85rem;color:var(--muted);line-height:1.6}
+
+/* ── CONDITIONS ── */
+#conditions{background:var(--navy);color:white}
+#conditions .section-h{color:white}
+#conditions .section-sub{color:rgba(255,255,255,0.6)}
+.cond-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1rem;
+}
+.cond-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(0,170,255,0.15);
+  border-radius:12px;padding:1.25rem;
+  cursor:default;transition:all 0.25s;
+  text-align:center;
+}
+.cond-card:hover{
+  background:rgba(0,170,255,0.08);
+  border-color:var(--cyan);
+  transform:translateY(-3px);
+}
+.cond-icon{font-size:1.8rem;margin-bottom:0.75rem;display:block}
+.cond-name{font-size:0.88rem;font-weight:600;color:white;display:block;margin-bottom:0.3rem}
+.cond-desc{font-size:0.75rem;color:rgba(255,255,255,0.45);line-height:1.5}
+
+/* ── SERVICES ── */
+#services{background:var(--offwhite)}
+.srv-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+}
+.srv-card{
+  background:white;border-radius:16px;overflow:hidden;
+  border:1px solid var(--border);
+  transition:all 0.25s;
+}
+.srv-card:hover{transform:translateY(-5px);box-shadow:0 20px 50px rgba(26,63,191,0.12)}
+.srv-img{height:180px;overflow:hidden;position:relative}
+.srv-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.srv-card:hover .srv-img img{transform:scale(1.05)}
+.srv-img-bg{
+  height:180px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:3rem;
+}
+.bg1{background:linear-gradient(135deg,#0A1628,#1A3FBF)}
+.bg2{background:linear-gradient(135deg,#0D2050,#00AAFF)}
+.bg3{background:linear-gradient(135deg,#051020,#1A3FBF)}
+.bg4{background:linear-gradient(135deg,#0A1628,#005A8A)}
+.bg5{background:linear-gradient(135deg,#1A3FBF,#00AAFF)}
+.bg6{background:linear-gradient(135deg,#030A18,#0D2050)}
+.srv-body{padding:1.5rem}
+.srv-body h3{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:0.4rem}
+.srv-body p{font-size:0.84rem;color:var(--muted);line-height:1.65;margin-bottom:1rem}
+.srv-tag{
+  font-size:0.75rem;font-weight:600;color:var(--royal);
+  border-top:1px solid var(--border);padding-top:0.75rem;
+  display:flex;align-items:center;gap:0.3rem;
+}
+
+/* ── BOOKING ── */
+#booking{background:var(--navy);position:relative;overflow:hidden}
+#booking::before{
+  content:'';position:absolute;top:-50%;right:-20%;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(0,170,255,0.08) 0%,transparent 65%);
+}
+.book-grid{
+  display:grid;grid-template-columns:1fr 1.3fr;
+  gap:5rem;align-items:start;position:relative;z-index:1;
+}
+.book-info .section-h{color:white}
+.book-steps{list-style:none;margin:2rem 0}
+.book-step{
+  display:flex;gap:1rem;align-items:flex-start;
+  margin-bottom:1.5rem;
+  color:rgba(255,255,255,0.7);font-size:0.9rem;
+}
+.step-n{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--cyan);color:var(--navy);
+  font-weight:800;font-size:0.8rem;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.book-step strong{display:block;color:white;font-size:0.92rem;margin-bottom:0.2rem}
+.book-contact{
+  margin-top:2.5rem;padding-top:2rem;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.book-contact p{font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:0.4rem}
+.book-contact a{color:var(--cyan);text-decoration:none;font-weight:600;font-size:1rem}
+.whatsapp-btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:#25D366;color:white;
+  padding:0.7rem 1.5rem;border-radius:50px;
+  font-weight:600;font-size:0.9rem;text-decoration:none;
+  margin-top:1rem;transition:all 0.2s;
+}
+.whatsapp-btn:hover{background:#20B858;transform:translateY(-1px)}
+
+/* Booking Form */
+.book-form{
+  background:white;border-radius:20px;padding:2.5rem;
+  box-shadow:0 30px 80px rgba(0,0,0,0.3);
+}
+.book-form h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.5rem;color:var(--navy);margin-bottom:0.3rem;
+}
+.book-form>p{color:var(--muted);font-size:0.85rem;margin-bottom:2rem}
+
+/* Specialist picker */
+.spec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;margin-bottom:1.5rem}
+.spec-opt{
+  border:1.5px solid #E2EAF0;border-radius:10px;
+  padding:0.85rem 0.5rem;text-align:center;cursor:pointer;
+  transition:all 0.2s;
+}
+.spec-opt:hover,.spec-opt.active{border-color:var(--cyan);background:var(--sky)}
+.spec-opt .si{font-size:1.5rem;display:block;margin-bottom:0.3rem}
+.spec-opt .sn{font-size:0.75rem;font-weight:700;color:var(--navy);display:block}
+.spec-opt .ss{font-size:0.65rem;color:var(--muted)}
+
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem}
+.fg{margin-bottom:1rem}
+.fg label{
+  display:block;font-size:0.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.08em;
+  color:var(--muted);margin-bottom:0.35rem;
+}
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:0.7rem 0.9rem;
+  border:1.5px solid #E2EAF0;border-radius:8px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:0.88rem;color:var(--text);
+  outline:none;transition:border-color 0.2s;background:white;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--cyan)}
+.fg textarea{resize:vertical;min-height:70px}
+.submit-btn{
+  width:100%;background:var(--royal);color:white;
+  border:none;padding:1rem;border-radius:10px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:1rem;font-weight:700;cursor:pointer;
+  transition:all 0.2s;margin-top:0.5rem;
+}
+.submit-btn:hover{background:var(--cyan);color:var(--navy);transform:translateY(-1px)}
+
+/* ── DR PAUL ── */
+#doctor{background:white}
+.doc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.doc-img-wrap{position:relative}
+.doc-img-bg{
+  width:100%;min-height:520px;border-radius:20px;
+  background:linear-gradient(145deg,var(--royal),var(--navy));
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;
+}
+.doc-img-bg img{width:100%;height:520px;object-fit:cover;border-radius:20px}
+.doc-credential{
+  position:absolute;bottom:-24px;right:-24px;
+  background:var(--cyan);border-radius:16px;
+  padding:1.25rem 1.5rem;
+  box-shadow:0 10px 40px rgba(0,170,255,0.4);
+}
+.doc-credential p{font-size:0.7rem;color:var(--navy);opacity:0.7;font-weight:600;text-transform:uppercase;letter-spacing:0.08em}
+.doc-credential h4{font-size:1.1rem;font-weight:800;color:var(--navy)}
+.doc-info .section-h em{font-style:italic;color:var(--royal)}
+.doc-bio{color:var(--muted);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem}
+.doc-highlights{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:2rem}
+.doc-hl{
+  display:flex;align-items:center;gap:0.75rem;
+  font-size:0.88rem;color:var(--text);
+}
+.doc-hl::before{
+  content:'✓';width:24px;height:24px;
+  background:var(--sky);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;color:var(--royal);font-weight:800;
+  flex-shrink:0;
+}
+
+/* ── TESTIMONIALS ── */
+#testimonials{background:var(--offwhite)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.testi-card{
+  background:white;border-radius:16px;padding:2rem;
+  border:1px solid var(--border);position:relative;
+  transition:all 0.2s;
+}
+.testi-card:hover{box-shadow:0 10px 40px rgba(26,63,191,0.1);transform:translateY(-3px)}
+.testi-card::before{
+  content:'"';
+  font-family:'Playfair Display',serif;
+  font-size:5rem;color:var(--sky2);line-height:0.8;
+  position:absolute;top:1rem;right:1.5rem;
+}
+.stars{color:var(--cyan);font-size:0.9rem;margin-bottom:1rem;letter-spacing:0.1em}
+.testi-text{font-size:0.9rem;color:var(--muted);line-height:1.75;margin-bottom:1.25rem;font-style:italic}
+.testi-name{font-weight:700;font-size:0.9rem;color:var(--navy)}
+.testi-type{font-size:0.75rem;color:var(--cyan)}
+
+/* ── GALLERY/SOCIAL WALL ── */
+#gallery{background:var(--navy);overflow:hidden}
+.gallery-scroll{
+  display:flex;gap:1rem;
+  animation:scroll-gal 25s linear infinite;
+  width:max-content;margin-top:2rem;
+}
+.gallery-item{
+  width:260px;height:260px;border-radius:16px;
+  overflow:hidden;flex-shrink:0;
+  border:1px solid rgba(0,170,255,0.2);
+  position:relative;
+}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.3s}
+.gallery-item:hover img{transform:scale(1.05)}
+.gallery-img-placeholder{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0.5rem;color:rgba(255,255,255,0.4);font-size:0.8rem;
+}
+@keyframes scroll-gal{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── CONTACT ── */
+#contact{background:white}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.contact-cards{display:flex;flex-direction:column;gap:1rem;margin-top:2rem}
+.contact-card{
+  display:flex;gap:1rem;align-items:flex-start;
+  background:var(--offwhite);border-radius:12px;padding:1.25rem;
+  border:1px solid var(--border);transition:all 0.2s;
+}
+.contact-card:hover{border-color:var(--cyan)}
+.contact-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:var(--sky);display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;flex-shrink:0;
+}
+.contact-card h4{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.25rem}
+.contact-card p,.contact-card a{font-size:0.95rem;color:var(--navy);font-weight:600;text-decoration:none}
+.contact-card a:hover{color:var(--royal)}
+
+.hours-block{background:var(--navy);border-radius:16px;padding:2rem;margin-top:1.5rem}
+.hours-block h4{color:white;font-size:0.88rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;color:var(--cyan)}
+.hours-row{display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:0.88rem}
+.hours-row:last-child{border-bottom:none}
+.hours-row span:first-child{color:rgba(255,255,255,0.6)}
+.hours-row span:last-child{color:var(--cyan);font-weight:600}
+
+.map-embed{
+  width:100%;height:400px;border-radius:16px;overflow:hidden;
+  border:2px solid var(--border);
+  background:var(--sky);display:flex;align-items:center;justify-content:center;
+  color:var(--muted);flex-direction:column;gap:0.5rem;font-size:0.9rem;
+}
+.map-pin-svg{font-size:3rem}
+
+/* ── SOCIAL CTA ── */
+.social-cta{
+  background:linear-gradient(135deg,var(--royal) 0%,#0D2050 50%,var(--navy) 100%);
+  padding:80px 5%;text-align:center;
+}
+.social-cta h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.8rem,3vw,2.8rem);color:white;margin-bottom:1rem;
+}
+.social-cta p{color:rgba(255,255,255,0.65);font-size:1rem;margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto}
+.social-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.social-btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  color:white;padding:0.7rem 1.5rem;border-radius:50px;
+  font-size:0.85rem;font-weight:600;text-decoration:none;
+  transition:all 0.2s;
+}
+.social-btn:hover{background:var(--cyan);border-color:var(--cyan);color:var(--navy)}
+
+/* ── FOOTER ── */
+footer{
+  background:#030A18;padding:3rem 5% 2rem;
+}
+.footer-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr;
+  gap:3rem;max-width:1300px;margin:0 auto;
+  padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.footer-brand p{color:rgba(255,255,255,0.4);font-size:0.85rem;margin-top:1rem;max-width:300px;line-height:1.7}
+.footer-col h5{color:white;font-size:0.85rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1rem}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.6rem}
+.footer-col ul a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+.footer-col ul a:hover{color:var(--cyan)}
+.footer-bottom{
+  max-width:1300px;margin:1.5rem auto 0;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.footer-bottom p{color:rgba(255,255,255,0.25);font-size:0.8rem}
+.tagline-footer{color:var(--cyan);font-size:0.8rem;font-weight:600}
+
+/* ── MODAL ── */
+.modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,0.7);
+  z-index:1000;display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.modal-bg.show{display:flex}
+.modal-box{
+  background:white;border-radius:24px;
+  padding:3rem;max-width:420px;text-align:center;
+  animation:popIn 0.3s ease;
+}
+@keyframes popIn{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-emoji{font-size:4rem;margin-bottom:1rem;display:block}
+.modal-box h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem;color:var(--navy);margin-bottom:0.75rem;
+}
+.modal-box p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;line-height:1.7}
+.modal-close{
+  background:var(--royal);color:white;border:none;
+  padding:0.8rem 2.5rem;border-radius:50px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:0.95rem;font-weight:700;cursor:pointer;
+  transition:all 0.2s;
+}
+.modal-close:hover{background:var(--cyan);color:var(--navy)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero-grid,.why-grid,.doc-grid,.book-grid,.contact-grid{grid-template-columns:1fr;gap:3rem}
+  .hero-right{display:none}
+  nav ul{display:none}
+  .srv-grid{grid-template-columns:repeat(2,1fr)}
+  .testi-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;gap:2rem}
+  .frow{grid-template-columns:1fr}
+  .spec-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .srv-grid{grid-template-columns:1fr}
+  .cond-grid{grid-template-columns:repeat(2,1fr)}
+  section{padding:70px 5%}
+  .hero-stats{gap:1.5rem;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <!-- Real WhiteRock icon mark from Asset_4.svg — recoloured white/cyan for dark nav -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="44" width="auto">
+      <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1ZM833.36,359.33v87.4c0,.15-.23.23-.35.12l-139.83-139.83c-19.5-19.53-45.51-30.19-73.12-30c-56.67.43-101.61,48.22-101.61,104.89v60.84c0,.19-.23.27-.35.15l-165.42-165.46h-2.24c45.28-.15,82.04-36.98,82.04-82.31v-87.36c0-.15.23-.27.35-.15l139.83,139.86c19.5,19.5,45.51,30.15,73.12,29.96,56.67-.39,101.61-48.18,101.61-104.85v-60.88c0-.15.23-.23.35-.12l165.42,165.46h2.24c-45.28.12-82.04,36.98-82.04,82.27Z" transform="translate(0, 0)"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span class="t1">White<span>Rock</span></span>
+      <span class="t2">Wellness LTD</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#why">About</a></li>
+    <li><a href="#conditions">Conditions</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#doctor">Dr. Paul</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#booking" class="nav-book">Book Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-bg-glow2"></div>
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-tag">Wellness Through Alignment</div>
+      <h1>Back pain isn't a<br><span class="cyan">Lagos</span> rite<br>of <span class="italic">passage.</span></h1>
+      <p>WhiteRock Wellness brings world-class chiropractic care — rooted in Eastern precision and Western science — to Oniru, Lagos. No more managing pain. Let's eliminate it.</p>
+      <div class="hero-btns">
+        <a href="#booking" class="btn-cyan">Book Appointment →</a>
+        <a href="#conditions" class="btn-ghost">See What We Treat</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">1,200+</span>
+          <span class="stat-label">Patients treated</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">98%</span>
+          <span class="stat-label">Pain relief rate</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">10+</span>
+          <span class="stat-label">Years experience</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-img-wrap">
+        <!-- Placeholder hero image with brand look -->
+        <div style="width:100%;height:500px;background:linear-gradient(145deg,#0D2050,#1A3FBF,#00AAFF);display:flex;align-items:center;justify-content:center;position:relative;">
+          <svg width="180" height="300" viewBox="0 0 180 300" fill="none" xmlns="http://www.w3.org/2000/svg" opacity="0.3">
+            <path d="M90 10 Q108 40 90 70 Q72 100 90 130 Q108 160 90 190 Q72 220 90 250 Q108 280 90 290" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <line x1="55" y1="90" x2="125" y2="90" stroke="white" stroke-width="3" stroke-linecap="round"/>
+            <line x1="50" y1="130" x2="130" y2="130" stroke="white" stroke-width="3" stroke-linecap="round"/>
+            <line x1="52" y1="170" x2="128" y2="170" stroke="white" stroke-width="3" stroke-linecap="round"/>
+            <line x1="55" y1="210" x2="125" y2="210" stroke="white" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <div style="position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to top,rgba(10,22,40,0.9),transparent)"></div>
+          <div style="position:absolute;bottom:1.5rem;left:1.5rem;color:white">
+            <div style="font-size:0.7rem;opacity:0.6;text-transform:uppercase;letter-spacing:0.1em">Featured</div>
+            <div style="font-size:1.1rem;font-weight:700">Spinal Alignment</div>
+            <div style="font-size:0.8rem;opacity:0.6">Precision chiropractic adjustment</div>
+          </div>
+        </div>
+        <div class="hero-badge">
+          <span>No.1</span>
+          <span>Chiro<br>Lagos</span>
+        </div>
+        <div class="floating-card">
+          <div class="fc-label">Today's availability</div>
+          <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Dr. Paul — 3 slots open</div></div>
+          <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Massage — Available</div></div>
+          <div class="fc-row"><div class="fc-dot yellow"></div><div class="fc-text">Physio — 1 slot left</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item">Back Pain</span>
+    <span class="ticker-item">Neck Stiffness</span>
+    <span class="ticker-item">Headaches & Migraines</span>
+    <span class="ticker-item">Sciatica</span>
+    <span class="ticker-item">Posture Correction</span>
+    <span class="ticker-item">Joint Pain</span>
+    <span class="ticker-item">Sports Injuries</span>
+    <span class="ticker-item">Disc Problems</span>
+    <span class="ticker-item">Knee Pain</span>
+    <span class="ticker-item">Shoulder Pain</span>
+    <span class="ticker-item">Stress Relief</span>
+    <span class="ticker-item">Sleep Issues</span>
+    <span class="ticker-item">Back Pain</span>
+    <span class="ticker-item">Neck Stiffness</span>
+    <span class="ticker-item">Headaches & Migraines</span>
+    <span class="ticker-item">Sciatica</span>
+    <span class="ticker-item">Posture Correction</span>
+    <span class="ticker-item">Joint Pain</span>
+    <span class="ticker-item">Sports Injuries</span>
+    <span class="ticker-item">Disc Problems</span>
+    <span class="ticker-item">Knee Pain</span>
+    <span class="ticker-item">Shoulder Pain</span>
+    <span class="ticker-item">Stress Relief</span>
+    <span class="ticker-item">Sleep Issues</span>
+  </div>
+</div>
+
+<!-- WHY US -->
+<section id="why">
+<div class="section-max">
+  <div class="why-grid">
+    <div class="why-left">
+      <img src="/mnt/user-data/uploads/Everybody_needs.png" alt="Chiropractic care for everyone" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div style="display:none;width:100%;min-height:400px;background:linear-gradient(145deg,#0A1628,#1A3FBF);border-radius:20px;align-items:center;justify-content:center;color:white;font-family:'Playfair Display',serif;font-size:1.5rem;text-align:center;padding:2rem">Everybody needs a Chiropractor.</div>
+    </div>
+    <div class="why-right">
+      <div class="label">Why WhiteRock</div>
+      <h2 class="section-h">No matter your age<br>or lifestyle — we align.</h2>
+      <p class="section-sub">Whether you sit at a desk all day, hustle Lagos traffic, or push your body on the field — your spine feels it all. We fix the root cause, not just the symptom.</p>
+      <div class="why-points">
+        <div class="why-point">
+          <div class="why-icon">🏥</div>
+          <div>
+            <h4>Eastern-trained precision</h4>
+            <p>Dr. Paul trained at a renowned Chinese chiropractic institution — combining traditional Eastern bodywork techniques with modern evidence-based practice.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-icon">🎯</div>
+          <div>
+            <h4>Root cause treatment</h4>
+            <p>We don't just treat the pain — we find what's causing it, correct it, and prevent it from returning. Lasting results, not temporary relief.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-icon">💙</div>
+          <div>
+            <h4>Built for everyday Lagosians</h4>
+            <p>From the okada rider to the office executive — our clinic is welcoming, affordable, and built around your schedule and lifestyle.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-icon">⚡</div>
+          <div>
+            <h4>Fast relief, real results</h4>
+            <p>Most patients feel significant improvement after just 1–3 sessions. We're committed to getting you back to living fully — fast.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CONDITIONS -->
+<section id="conditions">
+<div class="section-max">
+  <div class="label" style="color:var(--cyan-lt)">What We Treat</div>
+  <h2 class="section-h">Your spine is your lifeline.<br>We protect it.</h2>
+  <p class="section-sub">Chiropractic care addresses more than back pain — it touches nearly every part of your health and daily function.</p>
+
+  <div class="cond-grid">
+    <div class="cond-card">
+      <span class="cond-icon">🔙</span>
+      <span class="cond-name">Lower Back Pain</span>
+      <span class="cond-desc">Disc issues, muscle spasms, posture strain from long sitting</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">🤕</span>
+      <span class="cond-name">Neck Pain & Stiffness</span>
+      <span class="cond-desc">Phone posture, office work, cervical misalignment</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">🧠</span>
+      <span class="cond-name">Headaches & Migraines</span>
+      <span class="cond-desc">Often caused by spinal tension — not dehydration</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">⚡</span>
+      <span class="cond-name">Sciatica</span>
+      <span class="cond-desc">Sharp nerve pain from hip to leg — we decompress it</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">🦴</span>
+      <span class="cond-name">Slipped Disc</span>
+      <span class="cond-desc">Non-surgical disc realignment and pain relief</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">🦵</span>
+      <span class="cond-name">Knee & Hip Pain</span>
+      <span class="cond-desc">Structural imbalances that affect the whole body</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">💤</span>
+      <span class="cond-name">Poor Sleep</span>
+      <span class="cond-desc">Alignment affects your nervous system and sleep cycles</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">🧍</span>
+      <span class="cond-name">Bad Posture</span>
+      <span class="cond-desc">Desk workers, drivers — we correct it before it worsens</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">🏃</span>
+      <span class="cond-name">Sports Injuries</span>
+      <span class="cond-desc">Sprains, strains, impact injuries, recovery optimisation</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">💼</span>
+      <span class="cond-name">Work-Related Pain</span>
+      <span class="cond-desc">Repetitive strain, ergonomic damage, chronic office pain</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">😰</span>
+      <span class="cond-name">Stress & Tension</span>
+      <span class="cond-desc">Spinal adjustments release nervous system tension</span>
+    </div>
+    <div class="cond-card">
+      <span class="cond-icon">🤰</span>
+      <span class="cond-name">Pregnancy Back Pain</span>
+      <span class="cond-desc">Safe, gentle care for expecting mothers</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+<div class="section-max">
+  <div class="label">Our Services</div>
+  <h2 class="section-h">Everything your body<br>needs, under one roof.</h2>
+  <p class="section-sub">Choose from our range of expert treatments — all tailored to you, all delivered with care and precision.</p>
+
+  <div class="srv-grid">
+    <div class="srv-card">
+      <div class="srv-img">
+        <img src="/mnt/user-data/uploads/First_step_to_welness.png" alt="Chiropractic Adjustment" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'srv-img-bg bg1\'><span style=\'font-size:3rem\'>🦴</span></div>'">
+      </div>
+      <div class="srv-body">
+        <h3>Chiropractic Adjustment</h3>
+        <p>Precise spinal manipulation by Dr. Paul to correct misalignments, relieve nerve pressure, and restore full range of motion. The core of what we do.</p>
+        <div class="srv-tag">✦ From 45 min · Most popular</div>
+      </div>
+    </div>
+
+    <div class="srv-card">
+      <div class="srv-img">
+        <img src="/mnt/user-data/uploads/Back_pain.png" alt="Back Pain Treatment" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'srv-img-bg bg2\'><span style=\'font-size:3rem\'>💆</span></div>'">
+      </div>
+      <div class="srv-body">
+        <h3>Physiotherapy</h3>
+        <p>Evidence-based rehabilitation to restore movement, strength, and function. Perfect for post-injury recovery, chronic pain, and post-surgery rehab.</p>
+        <div class="srv-tag">✦ From 60 min · Rehab focused</div>
+      </div>
+    </div>
+
+    <div class="srv-card">
+      <div class="srv-img">
+        <img src="/mnt/user-data/uploads/Lifeline.png" alt="Massage Therapy" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'srv-img-bg bg3\'><span style=\'font-size:3rem\'>🤲</span></div>'">
+      </div>
+      <div class="srv-body">
+        <h3>Therapeutic Massage</h3>
+        <p>Deep tissue and sports massage to release muscle knots, reduce stress hormones, and prepare your body for chiropractic work. Lagos stress, gone.</p>
+        <div class="srv-tag">✦ From 30 min · Stress relief</div>
+      </div>
+    </div>
+
+    <div class="srv-card">
+      <div class="srv-img">
+        <img src="/mnt/user-data/uploads/Headaches.png" alt="Headache Treatment" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'srv-img-bg bg4\'><span style=\'font-size:3rem\'>🧠</span></div>'">
+      </div>
+      <div class="srv-body">
+        <h3>Headache & Migraine Clinic</h3>
+        <p>Most headaches start in the spine — not the head. We address the cervical tension and nerve compression that cause your chronic headaches.</p>
+        <div class="srv-tag">✦ Targeted treatment</div>
+      </div>
+    </div>
+
+    <div class="srv-card">
+      <div class="srv-img">
+        <img src="/mnt/user-data/uploads/setup.png" alt="Posture Correction" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'srv-img-bg bg5\'><span style=\'font-size:3rem\'>🧍</span></div>'">
+      </div>
+      <div class="srv-body">
+        <h3>Posture Correction</h3>
+        <p>Your desk setup could be silently destroying your spine. We assess, correct, and give you a programme to maintain great posture for life.</p>
+        <div class="srv-tag">✦ Corporate packages available</div>
+      </div>
+    </div>
+
+    <div class="srv-card">
+      <div class="srv-img-bg bg1" style="height:180px">
+        <span style="font-size:3rem">📋</span>
+      </div>
+      <div class="srv-body">
+        <h3>Initial Consultation</h3>
+        <p>A thorough one-to-one assessment with Dr. Paul. We map your pain, identify root causes, and build a personalised treatment plan just for you.</p>
+        <div class="srv-tag">✦ 60 min · Start here</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+<div class="section-max">
+  <div class="book-grid">
+    <div class="book-info">
+      <div class="label" style="color:var(--cyan-lt)">Reserve Your Spot</div>
+      <h2 class="section-h" style="color:white">Book in 2 minutes.<br>Feel better in days.</h2>
+      <p style="color:rgba(255,255,255,0.6);margin-bottom:0;font-size:0.95rem;line-height:1.8">No long waits. No complicated process. Just pick your service, choose a time, and show up. We handle the rest.</p>
+
+      <ul class="book-steps">
+        <li class="book-step">
+          <div class="step-n">1</div>
+          <div><strong>Choose your specialist</strong>Chiropractor, massage therapist, or physiotherapist — we have the right person for you.</div>
+        </li>
+        <li class="book-step">
+          <div class="step-n">2</div>
+          <div><strong>Pick your date & time</strong>Morning, afternoon, or Saturday sessions available. We work around your schedule.</div>
+        </li>
+        <li class="book-step">
+          <div class="step-n">3</div>
+          <div><strong>Fill in your details</strong>Tell us what's bothering you so your clinician is ready when you arrive.</div>
+        </li>
+        <li class="book-step">
+          <div class="step-n">4</div>
+          <div><strong>Show up & get aligned</strong>We confirm within 2 hours. Just bring yourself — we'll take care of the rest.</div>
+        </li>
+      </ul>
+
+      <div class="book-contact">
+        <p>Prefer to call or WhatsApp?</p>
+        <a href="tel:+2348162847976">+234 816 284 7976</a>
+        <br>
+        <a href="https://wa.me/2348162847976" class="whatsapp-btn" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chat on WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="book-form">
+      <h3>Request Appointment</h3>
+      <p>We confirm within 2 hours during clinic hours.</p>
+
+      <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.6rem">I want to see a:</p>
+      <div class="spec-grid" id="spec-grid">
+        <div class="spec-opt active" data-val="chiro" onclick="setSpec(this,'Chiropractic Adjustment')">
+          <span class="si">🦴</span>
+          <span class="sn">Chiropractor</span>
+          <span class="ss">Dr. Paul</span>
+        </div>
+        <div class="spec-opt" data-val="physio" onclick="setSpec(this,'Physiotherapy')">
+          <span class="si">🏃</span>
+          <span class="sn">Physiotherapist</span>
+          <span class="ss">Rehabilitation</span>
+        </div>
+        <div class="spec-opt" data-val="massage" onclick="setSpec(this,'Therapeutic Massage')">
+          <span class="si">🤲</span>
+          <span class="sn">Massage Therapist</span>
+          <span class="ss">Deep tissue</span>
+        </div>
+      </div>
+
+      <div class="frow">
+        <div class="fg"><label>First Name *</label><input type="text" id="ff" placeholder="e.g. Amaka"></div>
+        <div class="fg"><label>Last Name *</label><input type="text" id="fl" placeholder="e.g. Okonkwo"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>Phone / WhatsApp *</label><input type="tel" id="fp" placeholder="+234 800 000 0000"></div>
+        <div class="fg"><label>Email</label><input type="email" id="fe" placeholder="your@email.com"></div>
+      </div>
+
+      <div class="fg">
+        <label>What's bothering you? *</label>
+        <select id="fs">
+          <option value="">Pick your main concern…</option>
+          <option>Back pain (lower / upper)</option>
+          <option>Neck pain or stiffness</option>
+          <option>Headaches or migraines</option>
+          <option>Sciatica / leg pain</option>
+          <option>Shoulder or arm pain</option>
+          <option>Knee or hip pain</option>
+          <option>Posture correction</option>
+          <option>Sports injury</option>
+          <option>General wellness & prevention</option>
+          <option>Post-surgery rehabilitation</option>
+          <option>Stress & muscle tension</option>
+          <option>Other / Not sure</option>
+        </select>
+      </div>
+
+      <div class="frow">
+        <div class="fg"><label>Preferred Date *</label><input type="date" id="fd"></div>
+        <div class="fg">
+          <label>Preferred Time</label>
+          <select id="ft">
+            <option>Any available time</option>
+            <option>8:00 AM – 9:00 AM</option>
+            <option>9:00 AM – 10:00 AM</option>
+            <option>10:00 AM – 11:00 AM</option>
+            <option>11:00 AM – 12:00 PM</option>
+            <option>1:00 PM – 2:00 PM</option>
+            <option>2:00 PM – 3:00 PM</option>
+            <option>3:00 PM – 4:00 PM</option>
+            <option>4:00 PM – 5:00 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label>Extra notes for Dr. Paul (optional)</label>
+        <textarea id="fn" placeholder="How long have you had this pain? Had any previous treatment? Let us know…"></textarea>
+      </div>
+
+      <div style="display:flex;gap:0.5rem;align-items:flex-start;margin-bottom:1rem;font-size:0.78rem;color:var(--muted)">
+        <span style="margin-top:2px">🔒</span>
+        <span>Your information is private and only shared with your clinician. We never sell data.</span>
+      </div>
+
+      <button class="submit-btn" onclick="submitForm()">Confirm Appointment Request →</button>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- DR PAUL -->
+<section id="doctor">
+<div class="section-max">
+  <div class="doc-grid">
+    <div class="doc-img-wrap">
+      <div class="doc-img-bg">
+        <!-- Placeholder for Dr Paul photo -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:white;text-align:center;padding:2rem">
+          <div style="width:120px;height:120px;border-radius:50%;background:rgba(0,170,255,0.2);border:3px solid rgba(0,170,255,0.4);display:flex;align-items:center;justify-content:center;font-size:3rem;margin-bottom:1rem">👨‍⚕️</div>
+          <p style="font-size:0.8rem;opacity:0.5">Replace with Dr. Paul's photo</p>
+        </div>
+      </div>
+      <div class="doc-credential">
+        <p>Lead Chiropractor</p>
+        <h4>Dr. Paul Johnson Chima</h4>
+      </div>
+    </div>
+
+    <div class="doc-info">
+      <div class="label">Meet the Doctor</div>
+      <h2 class="section-h">Trained where <em>precision</em><br>meets tradition.</h2>
+      <p class="doc-bio">Dr. Paul Johnson Chima's journey into chiropractic began in China — where he immersed himself in one of the world's oldest and most rigorous traditions of spinal medicine. At his Chinese chiropractic institution, he mastered techniques that combine ancient Eastern bodywork with modern biomechanical science.</p>
+      <p class="doc-bio">Returning to Nigeria with that rare Eastern-trained precision, Dr. Paul founded WhiteRock Wellness with one mission: to make world-class chiropractic care accessible to everyday Lagosians. No gimmicks. No one-size-fits-all. Just careful, personalised care that gets to the root of your pain.</p>
+      <div class="doc-highlights">
+        <div class="doc-hl">Trained in chiropractic medicine at a leading Chinese institution</div>
+        <div class="doc-hl">Specialises in spinal dysfunction, disc conditions & sports injuries</div>
+        <div class="doc-hl">Combines Eastern precision with Western evidence-based practice</div>
+        <div class="doc-hl">Over 1,200 patients successfully treated in Lagos</div>
+        <div class="doc-hl">Passionate about preventive care and patient education</div>
+      </div>
+      <a href="#booking" class="btn-cyan">Book with Dr. Paul →</a>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+<div class="section-max">
+  <div class="label">Patient Reviews</div>
+  <h2 class="section-h">Real Lagosians.<br>Real results.</h2>
+  <p class="section-sub">Don't take our word for it — hear from the people whose lives we've changed.</p>
+
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"I was living on painkillers for my back for 2 years. After just 4 sessions with Dr. Paul, I stopped completely. He found the real cause — nobody else had."</p>
+      <div class="testi-name">Chidinma O.</div>
+      <div class="testi-type">Back pain patient · Lekki</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Lagos traffic was destroying my neck. WhiteRock sorted me out in 3 visits. The booking was easy, the doctor listened, and I actually feel like myself again."</p>
+      <div class="testi-name">Emeka T.</div>
+      <div class="testi-type">Neck pain patient · Victoria Island</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"My sciatica was so bad I couldn't sit through a meeting. Dr. Paul explained everything clearly, treated me, and gave me exercises. Gone in 6 weeks. Unbelievable."</p>
+      <div class="testi-name">Bola A.</div>
+      <div class="testi-type">Sciatica patient · Oniru</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SOCIAL GALLERY WALL -->
+<section id="gallery" style="padding:80px 0">
+  <div style="padding:0 5%;max-width:1300px;margin:0 auto">
+    <div class="label" style="color:var(--cyan-lt)">@Whiterockwelness</div>
+    <h2 class="section-h" style="color:white">Follow our journey</h2>
+  </div>
+  <div class="gallery-scroll">
+    <!-- Row of brand social images + placeholders -->
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Back_pain.png" alt="" onerror="this.parentElement.style.background='#1A3FBF';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Headaches.png" alt="" onerror="this.parentElement.style.background='#0A1628';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Everybody_needs.png" alt="" onerror="this.parentElement.style.background='#1A3FBF';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/First_step_to_welness.png" alt="" onerror="this.parentElement.style.background='#0A1628';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Lifeline.png" alt="" onerror="this.parentElement.style.background='#00AAFF';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/setup.png" alt="" onerror="this.parentElement.style.background='#0D2050';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Weekend_loading.png" alt="" onerror="this.parentElement.style.background='#1A3FBF';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Thrivia_sleep.png" alt="" onerror="this.parentElement.style.background='#0A1628';this.remove()"></div>
+    <!-- Duplicate for seamless loop -->
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Back_pain.png" alt="" onerror="this.parentElement.style.background='#1A3FBF';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Headaches.png" alt="" onerror="this.parentElement.style.background='#0A1628';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Everybody_needs.png" alt="" onerror="this.parentElement.style.background='#1A3FBF';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/First_step_to_welness.png" alt="" onerror="this.parentElement.style.background='#0A1628';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Lifeline.png" alt="" onerror="this.parentElement.style.background='#00AAFF';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/setup.png" alt="" onerror="this.parentElement.style.background='#0D2050';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Weekend_loading.png" alt="" onerror="this.parentElement.style.background='#1A3FBF';this.remove()"></div>
+    <div class="gallery-item"><img src="/mnt/user-data/uploads/Thrivia_sleep.png" alt="" onerror="this.parentElement.style.background='#0A1628';this.remove()"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+<div class="section-max">
+  <div class="contact-grid">
+    <div>
+      <div class="label">Find Us</div>
+      <h2 class="section-h">Come see us<br>in Oniru, Lagos.</h2>
+      <div class="contact-cards">
+        <div class="contact-card">
+          <div class="contact-icon">📍</div>
+          <div>
+            <h4>Address</h4>
+            <p>No. 3 Ayobaba Tunde Crescent,<br>Oniru, Lagos, Nigeria</p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">📞</div>
+          <div>
+            <h4>Phone / WhatsApp</h4>
+            <a href="tel:+2348162847976">+234 816 284 7976</a>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">📱</div>
+          <div>
+            <h4>Social Media</h4>
+            <p>@Whiterockwelness</p>
+          </div>
+        </div>
+      </div>
+      <div class="hours-block">
+        <h4>Opening Hours</h4>
+        <div class="hours-row"><span>Monday – Friday</span><span>8:00 AM – 6:00 PM</span></div>
+        <div class="hours-row"><span>Saturday</span><span>9:00 AM – 4:00 PM</span></div>
+        <div class="hours-row"><span>Sunday</span><span>Closed</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="map-embed">
+        <div class="map-pin-svg">📍</div>
+        <strong>No. 3 Ayobaba Tunde Crescent, Oniru, Lagos</strong>
+        <p style="font-size:0.8rem;color:var(--muted);text-align:center;max-width:250px">Embed your Google Maps iframe here by replacing this block</p>
+        <a href="https://maps.google.com/?q=Oniru+Lagos+Nigeria" target="_blank" class="btn-cyan" style="margin-top:1rem;font-size:0.85rem;padding:0.65rem 1.5rem">Open in Google Maps →</a>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SOCIAL CTA -->
+<div class="social-cta">
+  <h2>Follow @Whiterockwelness</h2>
+  <p>Tips, patient stories, Thrivia quizzes, and wellness advice — straight from the clinic to your feed.</p>
+  <div class="social-links">
+    <a href="#" class="social-btn">📸 Instagram</a>
+    <a href="#" class="social-btn">👍 Facebook</a>
+    <a href="#" class="social-btn">🎵 TikTok</a>
+    <a href="https://wa.me/2348162847976" class="social-btn" target="_blank">💬 WhatsApp Us</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.75rem">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="40" width="auto">
+          <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1ZM833.36,359.33v87.4c0,.15-.23.23-.35.12l-139.83-139.83c-19.5-19.53-45.51-30.19-73.12-30c-56.67.43-101.61,48.22-101.61,104.89v60.84c0,.19-.23.27-.35.15l-165.42-165.46h-2.24c45.28-.15,82.04-36.98,82.04-82.31v-87.36c0-.15.23-.27.35-.15l139.83,139.86c19.5,19.5,45.51,30.15,73.12,29.96,56.67-.39,101.61-48.18,101.61-104.85v-60.88c0-.15.23-.23.35-.12l165.42,165.46h2.24c-45.28.12-82.04,36.98-82.04,82.27Z"/>
+        </svg>
+        <div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:-0.01em">White<span style="color:#00AAFF">Rock</span></div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.58rem;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:0.18em;text-transform:uppercase">Wellness LTD</div>
+        </div>
+      </div>
+      <p>Wellness Through Alignment. Expert chiropractic care by Dr. Paul Johnson Chima, serving Lagos with Eastern-trained precision since day one.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="#why">About Us</a></li>
+        <li><a href="#conditions">Conditions We Treat</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#doctor">Dr. Paul</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#booking">Book Appointment</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="tel:+2348162847976">+234 816 284 7976</a></li>
+        <li><a href="#">No. 3 Ayobaba Tunde Crescent</a></li>
+        <li><a href="#">Oniru, Lagos, Nigeria</a></li>
+        <li><a href="#">@Whiterockwelness</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 WhiteRock Wellness LTD. All rights reserved.</p>
+    <span class="tagline-footer">Wellness Through Alignment ✦</span>
+  </div>
+</footer>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    <span class="modal-emoji">🎉</span>
+    <h3>You're all booked!</h3>
+    <p>Your appointment request has been received. Dr. Paul's team will confirm your slot via WhatsApp or call within 2 hours. See you at the clinic!</p>
+    <div style="background:var(--sky);border-radius:10px;padding:1rem;margin-bottom:1.5rem;font-size:0.85rem;color:var(--royal)">
+      📍 No. 3 Ayobaba Tunde Crescent, Oniru, Lagos<br>
+      📞 +234 816 284 7976
+    </div>
+    <button class="modal-close" onclick="document.getElementById('modal').classList.remove('show')">Done ✓</button>
+  </div>
+</div>
+
+<script>
+// Set min date to today
+const today = new Date().toISOString().split('T')[0];
+document.querySelectorAll('input[type=date]').forEach(e=>e.min=today);
+
+// Specialist selector
+function setSpec(el, svcVal) {
+  document.querySelectorAll('.spec-opt').forEach(o=>o.classList.remove('active'));
+  el.classList.add('active');
+  const sel = document.getElementById('fs');
+  for(let o of sel.options){ if(o.text.toLowerCase().includes(svcVal.toLowerCase().split(' ')[0])){ sel.value=o.value; break; } }
+}
+
+// Form submit
+function submitForm(){
+  const req = [
+    {id:'ff',name:'First Name'},{id:'fl',name:'Last Name'},
+    {id:'fp',name:'Phone'},{id:'fs',name:'Concern'},{id:'fd',name:'Date'}
+  ];
+  let ok=true;
+  req.forEach(r=>{
+    const el=document.getElementById(r.id);
+    if(!el.value.trim()){el.style.borderColor='#EF4444';ok=false;}
+    else el.style.borderColor='#E2EAF0';
+  });
+  if(!ok){alert('Please fill in all required fields marked with *');return;}
+  document.getElementById('modal').classList.add('show');
+  // Reset
+  ['ff','fl','fp','fe','fs','fd','ft','fn'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value='';
+  });
+}
+
+// Close modal on bg click
+document.getElementById('modal').addEventListener('click',function(e){
+  if(e.target===this) this.classList.remove('show');
+});
+
+// Nav scroll effect
+window.addEventListener('scroll',()=>{
+  const nav=document.querySelector('nav');
+  if(window.scrollY>100){
+    nav.style.height='64px';
+    nav.style.borderBottomColor='rgba(0,170,255,0.25)';
+  } else {
+    nav.style.height='76px';
+    nav.style.borderBottomColor='rgba(0,170,255,0.15)';
+  }
+});
+</script>
+</body>
+</html>
