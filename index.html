@@ -643,26 +643,124 @@ footer{
 
     <div class="hero-right">
       <div class="hero-img-wrap">
-        <!-- Placeholder hero image with brand look -->
-        <div style="width:100%;height:500px;background:linear-gradient(145deg,#0D2050,#1A3FBF,#00AAFF);display:flex;align-items:center;justify-content:center;position:relative;">
-          <svg width="180" height="300" viewBox="0 0 180 300" fill="none" xmlns="http://www.w3.org/2000/svg" opacity="0.3">
-            <path d="M90 10 Q108 40 90 70 Q72 100 90 130 Q108 160 90 190 Q72 220 90 250 Q108 280 90 290" stroke="white" stroke-width="4" stroke-linecap="round"/>
-            <line x1="55" y1="90" x2="125" y2="90" stroke="white" stroke-width="3" stroke-linecap="round"/>
-            <line x1="50" y1="130" x2="130" y2="130" stroke="white" stroke-width="3" stroke-linecap="round"/>
-            <line x1="52" y1="170" x2="128" y2="170" stroke="white" stroke-width="3" stroke-linecap="round"/>
-            <line x1="55" y1="210" x2="125" y2="210" stroke="white" stroke-width="3" stroke-linecap="round"/>
+        <!-- Hero visual: deep gradient background + 3D spine SVG -->
+        <div style="width:100%;height:520px;background:linear-gradient(160deg,#030A18 0%,#0A1628 45%,#0D2050 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-radius:20px;">
+
+          <!-- Background glow rings -->
+          <div style="position:absolute;width:380px;height:380px;border-radius:50%;border:1px solid rgba(0,170,255,0.1);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+          <div style="position:absolute;width:280px;height:280px;border-radius:50%;border:1px solid rgba(0,170,255,0.15);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+          <div style="position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,170,255,0.08),transparent);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+
+          <!-- 3D Spine SVG Illustration -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 480" width="200" height="440" style="position:relative;z-index:2;filter:drop-shadow(0 0 30px rgba(0,170,255,0.5))">
+            <!-- Central spine cord -->
+            <path d="M100 20 C108 35 108 50 100 65 C92 80 92 95 100 110 C108 125 108 140 100 155 C92 170 92 185 100 200 C108 215 108 230 100 245 C92 260 92 275 100 290 C108 305 108 320 100 335 C92 350 92 365 100 380 C108 395 108 410 100 425 C96 435 100 445 100 455" stroke="url(#spineGrad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+            <!-- Vertebrae discs - top (cervical) -->
+            <g opacity="0.95">
+              <!-- C1 -->
+              <ellipse cx="100" cy="38" rx="28" ry="9" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="36" rx="28" ry="7" fill="url(#topGrad)" />
+              <!-- C2 -->
+              <ellipse cx="100" cy="68" rx="27" ry="9" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="66" rx="27" ry="7" fill="url(#topGrad)" />
+              <!-- C3 -->
+              <ellipse cx="100" cy="98" rx="26" ry="9" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="96" rx="26" ry="7" fill="url(#topGrad)" />
+              <!-- C4 -->
+              <ellipse cx="100" cy="128" rx="27" ry="9" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="126" rx="27" ry="7" fill="url(#topGrad)" />
+              <!-- T1 -->
+              <ellipse cx="100" cy="160" rx="30" ry="10" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="158" rx="30" ry="8" fill="url(#topGrad)" />
+              <!-- T2 -->
+              <ellipse cx="100" cy="193" rx="31" ry="10" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="191" rx="31" ry="8" fill="url(#topGrad)" />
+              <!-- T3 -->
+              <ellipse cx="100" cy="226" rx="32" ry="11" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="224" rx="32" ry="9" fill="url(#topGrad)" />
+              <!-- L1 - lumbar wider -->
+              <ellipse cx="100" cy="262" rx="35" ry="12" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="260" rx="35" ry="10" fill="url(#topGrad)" />
+              <!-- L2 -->
+              <ellipse cx="100" cy="298" rx="36" ry="12" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="296" rx="36" ry="10" fill="url(#topGrad)" />
+              <!-- L3 -->
+              <ellipse cx="100" cy="334" rx="35" ry="12" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="332" rx="35" ry="10" fill="url(#topGrad)" />
+              <!-- L4 -->
+              <ellipse cx="100" cy="368" rx="33" ry="11" fill="url(#discGrad)" />
+              <ellipse cx="100" cy="366" rx="33" ry="9" fill="url(#topGrad)" />
+              <!-- Sacrum -->
+              <ellipse cx="100" cy="400" rx="30" ry="13" fill="url(#sacGrad)" />
+              <ellipse cx="100" cy="398" rx="30" ry="11" fill="url(#sacTop)" />
+              <ellipse cx="100" cy="430" rx="24" ry="11" fill="url(#sacGrad)" />
+              <ellipse cx="100" cy="428" rx="24" ry="9" fill="url(#sacTop)" />
+              <ellipse cx="100" cy="455" rx="18" ry="9" fill="url(#sacGrad)" />
+              <ellipse cx="100" cy="453" rx="18" ry="7" fill="url(#sacTop)" />
+            </g>
+
+            <!-- Transverse processes (side protrusions) -->
+            <g stroke="rgba(0,170,255,0.4)" stroke-width="1.5" fill="none">
+              <line x1="72" y1="38" x2="55" y2="30"/><line x1="128" y1="38" x2="145" y2="30"/>
+              <line x1="73" y1="68" x2="56" y2="60"/><line x1="127" y1="68" x2="144" y2="60"/>
+              <line x1="74" y1="98" x2="57" y2="90"/><line x1="126" y1="98" x2="143" y2="90"/>
+              <line x1="73" y1="128" x2="54" y2="119"/><line x1="127" y1="128" x2="146" y2="119"/>
+              <line x1="70" y1="160" x2="48" y2="152"/><line x1="130" y1="160" x2="152" y2="152"/>
+              <line x1="69" y1="193" x2="46" y2="185"/><line x1="131" y1="193" x2="154" y2="185"/>
+              <line x1="68" y1="226" x2="44" y2="218"/><line x1="132" y1="226" x2="156" y2="218"/>
+              <line x1="65" y1="262" x2="40" y2="254"/><line x1="135" y1="262" x2="160" y2="254"/>
+              <line x1="64" y1="298" x2="38" y2="290"/><line x1="136" y1="298" x2="162" y2="290"/>
+              <line x1="65" y1="334" x2="40" y2="326"/><line x1="135" y1="334" x2="160" y2="326"/>
+            </g>
+
+            <!-- Glowing highlight dots on key vertebrae -->
+            <circle cx="100" cy="36" r="3" fill="#00AAFF" opacity="0.9"/>
+            <circle cx="100" cy="158" r="3.5" fill="#00D4FF" opacity="0.8"/>
+            <circle cx="100" cy="260" r="4" fill="#00AAFF" opacity="0.9"/>
+            <circle cx="100" cy="398" r="4" fill="#1A3FBF" opacity="0.8"/>
+
+            <defs>
+              <linearGradient id="spineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#00D4FF;stop-opacity:1"/>
+                <stop offset="50%" style="stop-color:#00AAFF;stop-opacity:1"/>
+                <stop offset="100%" style="stop-color:#1A3FBF;stop-opacity:1"/>
+              </linearGradient>
+              <linearGradient id="discGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#1A3FBF;stop-opacity:0.9"/>
+                <stop offset="100%" style="stop-color:#0A1628;stop-opacity:0.9"/>
+              </linearGradient>
+              <linearGradient id="topGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#00AAFF;stop-opacity:0.5"/>
+                <stop offset="100%" style="stop-color:#1A3FBF;stop-opacity:0.3"/>
+              </linearGradient>
+              <linearGradient id="sacGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#1A3FBF;stop-opacity:1"/>
+                <stop offset="100%" style="stop-color:#0A1628;stop-opacity:1"/>
+              </linearGradient>
+              <linearGradient id="sacTop" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#00AAFF;stop-opacity:0.3"/>
+                <stop offset="100%" style="stop-color:#1A3FBF;stop-opacity:0.1"/>
+              </linearGradient>
+            </defs>
           </svg>
-          <div style="position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to top,rgba(10,22,40,0.9),transparent)"></div>
-          <div style="position:absolute;bottom:1.5rem;left:1.5rem;color:white">
-            <div style="font-size:0.7rem;opacity:0.6;text-transform:uppercase;letter-spacing:0.1em">Featured</div>
-            <div style="font-size:1.1rem;font-weight:700">Spinal Alignment</div>
-            <div style="font-size:0.8rem;opacity:0.6">Precision chiropractic adjustment</div>
+
+          <!-- Bottom gradient fade -->
+          <div style="position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(to top,rgba(10,22,40,0.95),transparent);z-index:3"></div>
+
+          <!-- Bottom label -->
+          <div style="position:absolute;bottom:1.5rem;left:1.5rem;color:white;z-index:4">
+            <div style="font-size:0.68rem;color:rgba(0,170,255,0.8);text-transform:uppercase;letter-spacing:0.12em;font-weight:600;margin-bottom:0.2rem">WhiteRock Wellness</div>
+            <div style="font-size:1.05rem;font-weight:700">Move Better. Live Better.</div>
+            <div style="font-size:0.78rem;opacity:0.5;margin-top:0.1rem">Precision spinal care · Oniru, Lagos</div>
           </div>
         </div>
-        <div class="hero-badge">
-          <span>No.1</span>
-          <span>Chiro<br>Lagos</span>
+
+        <!-- Motto badge replacing No.1 Chiro Lagos -->
+        <div class="hero-badge" style="background:linear-gradient(135deg,#1A3FBF,#00AAFF);width:110px;height:110px">
+          <span style="font-size:0.7rem;font-weight:800;color:white;text-align:center;line-height:1.3;padding:0 6px">Move Better.<br>Live Better.</span>
         </div>
+
         <div class="floating-card">
           <div class="fc-label">Today's availability</div>
           <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Dr. Paul — 3 slots open</div></div>
