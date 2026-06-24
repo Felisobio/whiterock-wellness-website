@@ -58,13 +58,14 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
 .splash-bar-fill{height:100%;background:var(--cyan);border-radius:2px;animation:splashLoad 2.5s ease forwards}
 @keyframes splashLoad{from{width:0}to{width:100%}}
 #back-top{
-  position:fixed;bottom:100px;right:24px;
+  position:fixed;bottom:80px;right:24px;
   width:44px;height:44px;border-radius:50%;
   background:var(--royal);border:1.5px solid rgba(0,170,255,0.3);
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;z-index:500;
+  cursor:pointer;z-index:600;
   opacity:0;visibility:hidden;
-  transition:all 0.3s;box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  transition:opacity 0.3s,visibility 0.3s;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
 }
 #back-top.show{opacity:1;visibility:visible}
 #back-top:hover{background:var(--cyan);transform:translateY(-3px)}
@@ -3335,41 +3336,11 @@ function updateAvailability() {
 updateAvailability();
 setInterval(updateAvailability, 5 * 60 * 1000);
 
-// ── SPLASH — JS hide, guaranteed ──
-(function(){
-  function hideSplash(){
-    var s = document.getElementById('splash');
-    if(!s) return;
-    s.style.transition = 'opacity 0.5s';
-    s.style.opacity = '0';
-    setTimeout(function(){ s.style.display = 'none'; }, 600);
-  }
-  setTimeout(hideSplash, 2800);
-})();
-
-// ── STATS — set immediately, no scroll needed ──
-(function(){
-  var stats = [
-    { id: null, sel: '.stat-count[data-target="1200"]', val: '1,200+' },
-    { id: null, sel: '.stat-count[data-target="98"]',   val: '98%'   },
-    { id: null, sel: '.stat-count[data-target="16"]',   val: '16+'   },
-    { id: null, sel: '.stat-count[data-target="7"]',    val: '7'     }
-  ];
-  function setStats(){
-    stats.forEach(function(s){
-      var el = document.querySelector(s.sel);
-      if(el) el.textContent = s.val;
-    });
-  }
-  // Set on DOM ready
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', setStats);
-  } else {
-    setStats();
-  }
-  // Also set after 1s as backup
-  setTimeout(setStats, 1000);
-})();
+// ── SPLASH — hide after 2.8 seconds ──
+setTimeout(function(){
+  var s = document.getElementById('splash');
+  if(s) s.style.display = 'none';
+}, 2800);
 
 // ── SCROLL PROGRESS BAR + BACK TO TOP ──
 window.addEventListener('scroll', () => {
