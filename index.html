@@ -79,11 +79,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
   width:44px;height:44px;border-radius:50%;
   background:var(--royal);border:1.5px solid rgba(0,170,255,0.3);
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;z-index:500;
+  cursor:pointer;z-index:9999;
   opacity:0;visibility:hidden;
   transition:all 0.3s;box-shadow:0 4px 20px rgba(0,0,0,0.3);
 }
-#back-top.show{opacity:1;visibility:visible}
+#back-top.show{opacity:1!important;visibility:visible!important;display:flex!important}
 #back-top:hover{background:var(--cyan);transform:translateY(-3px)}
 #back-top svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2.5}
 
@@ -3119,9 +3119,13 @@ function copyNumber(elementId, btnId){
 }
 
 // ── SPLASH SCREEN ──
-window.addEventListener('load', () => {
-  setTimeout(() => { document.getElementById('splash').classList.add('hidden'); }, 2000);
-});
+setTimeout(function(){
+  var s = document.getElementById('splash');
+  if(!s) return;
+  s.style.transition = 'opacity 0.6s';
+  s.style.opacity = '0';
+  setTimeout(function(){ s.style.display = 'none'; }, 700);
+}, 2800);
 
 // ── SCROLL PROGRESS BAR + BACK TO TOP ──
 window.addEventListener('scroll', () => {
@@ -3129,30 +3133,10 @@ window.addEventListener('scroll', () => {
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
   document.getElementById('progress-bar').style.width = ((scrollTop/docHeight)*100)+'%';
   const bt = document.getElementById('back-top');
-  scrollTop > 200 ? bt.classList.add('show') : bt.classList.remove('show');
+  scrollTop > 400 ? bt.classList.add('show') : bt.classList.remove('show');
 });
 
-// ── STATS COUNTER ──
-const statObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      entry.target.querySelectorAll('.stat-count').forEach(el => {
-        const target = parseInt(el.dataset.target);
-        const suffix = el.dataset.suffix||'+';
-        let cur = 0;
-        const step = Math.ceil(target/60);
-        const t = setInterval(()=>{
-          cur = Math.min(cur+step, target);
-          el.textContent = cur.toLocaleString()+suffix;
-          if(cur>=target) clearInterval(t);
-        }, 25);
-      });
-      statObserver.unobserve(entry.target);
-    }
-  });
-},{threshold:0.3});
-const statsEl = document.getElementById('stats');
-if(statsEl) statObserver.observe(statsEl);
+// ── STATS — values hardcoded, no observer needed ──
 
 // ── FAQ TOGGLE ──
 function toggleFaq(el){
@@ -3284,12 +3268,6 @@ window.addEventListener('scroll',()=>{
     nav.style.borderBottomColor='rgba(0,170,255,0.15)';
   }
 });
-
-// Hide splash after 3 seconds
-setTimeout(function(){
-  var s = document.getElementById('splash');
-  if(s){ s.style.transition='opacity 0.5s'; s.style.opacity='0'; setTimeout(function(){ s.style.display='none'; }, 500); }
-}, 3000);
 </script>
 </body>
 </html>
