@@ -164,19 +164,22 @@ nav{
 .hero-badge span:last-child{font-size:0.6rem;font-weight:700;color:var(--navy);text-align:center;line-height:1.2}
 
 .floating-card{
-  position:absolute;bottom:-24px;left:-24px;
-  background:var(--white);
-  border-radius:16px;
-  padding:1.25rem 1.5rem;
-  box-shadow:0 20px 50px rgba(0,0,0,0.3);
-  min-width:220px;
+  position:absolute;bottom:16px;left:16px;
+  background:rgba(10,22,40,0.92);
+  border:1px solid rgba(0,170,255,0.25);
+  border-radius:14px;
+  padding:1rem 1.25rem;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  min-width:210px;
+  z-index:5;
+  backdrop-filter:blur(10px);
 }
-.fc-label{font-size:0.7rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem}
+.fc-label{font-size:0.7rem;color:var(--cyan);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem}
 .fc-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem}
 .fc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .fc-dot.green{background:#22C55E}
 .fc-dot.yellow{background:#F59E0B}
-.fc-text{font-size:0.82rem;color:var(--text);font-weight:500}
+.fc-text{font-size:0.82rem;color:rgba(255,255,255,0.85);font-weight:500}
 
 /* ── CONDITIONS TICKER ── */
 .ticker-bar{
@@ -541,7 +544,49 @@ footer{
 .footer-bottom p{color:rgba(255,255,255,0.25);font-size:0.8rem}
 .tagline-footer{color:var(--cyan);font-size:0.8rem;font-weight:600}
 
-/* ── MODAL ── */
+/* ── CONDITION MODAL ── */
+.cond-modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,0.75);
+  z-index:1000;display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);padding:1rem;
+}
+.cond-modal-bg.show{display:flex}
+.cond-modal{
+  background:var(--navy);border-radius:20px;
+  max-width:540px;width:100%;
+  border:1px solid rgba(0,170,255,0.2);
+  overflow:hidden;animation:popIn 0.3s ease;
+  position:relative;
+}
+.cond-modal-img{width:100%;height:260px;object-fit:cover;display:block}
+.cond-modal-img-placeholder{
+  width:100%;height:260px;
+  background:linear-gradient(135deg,#1A3FBF,#00AAFF);
+  display:flex;align-items:center;justify-content:center;
+  font-size:4rem;
+}
+.cond-modal-body{padding:1.75rem}
+.cond-modal-tag{
+  font-size:0.7rem;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--cyan);margin-bottom:0.5rem;
+}
+.cond-modal-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem;color:white;margin-bottom:0.75rem;
+}
+.cond-modal-text{font-size:0.9rem;color:rgba(255,255,255,0.7);line-height:1.8;margin-bottom:1.25rem}
+.cond-modal-close{
+  position:absolute;top:1rem;right:1rem;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(0,0,0,0.5);border:none;cursor:pointer;
+  color:white;font-size:1.1rem;display:flex;align-items:center;justify-content:center;
+  transition:background 0.2s;
+}
+.cond-modal-close:hover{background:var(--royal)}
+.cond-card{cursor:pointer}
+.cond-card:hover .cond-name{color:var(--cyan)}
+.cond-learn{font-size:0.7rem;color:var(--cyan);margin-top:0.4rem;font-weight:600;opacity:0.8}
+
 .modal-bg{
   position:fixed;inset:0;background:rgba(0,0,0,0.7);
   z-index:1000;display:none;align-items:center;justify-content:center;
@@ -619,7 +664,7 @@ footer{
   <div class="hero-grid">
     <div class="hero-content">
       <div class="hero-tag">Wellness Through Alignment</div>
-      <h1>Back pain isn't a<br><span class="cyan">Lagos</span> rite<br>of <span class="italic">passage.</span></h1>
+      <h1>Back pain isn't a<br><span class="cyan">Nigerian</span> rite<br>of <span class="italic">passage.</span></h1>
       <p>WhiteRock Wellness brings world-class chiropractic care — rooted in Eastern precision and Western science — to Oniru, Lagos. No more managing pain. Let's eliminate it.</p>
       <div class="hero-btns">
         <a href="#booking" class="btn-cyan">Book Appointment →</a>
@@ -813,7 +858,7 @@ footer{
     <div class="why-right">
       <div class="label">Why WhiteRock</div>
       <h2 class="section-h">No matter your age<br>or lifestyle — we align.</h2>
-      <p class="section-sub">Whether you sit at a desk all day, hustle Lagos traffic, or push your body on the field — your spine feels it all. We fix the root cause, not just the symptom.</p>
+      <p class="section-sub">Whether you sit at a desk all day, battle Nigeria's traffic, or push your body on the field — your spine feels it all. We fix the root cause, not just the symptom.</p>
       <div class="why-points">
         <div class="why-point">
           <div class="why-icon">🏥</div>
@@ -832,7 +877,7 @@ footer{
         <div class="why-point">
           <div class="why-icon">💙</div>
           <div>
-            <h4>Built for everyday Lagosians</h4>
+            <h4>Built for everyday Nigerians</h4>
             <p>From the okada rider to the office executive — our clinic is welcoming, affordable, and built around your schedule and lifestyle.</p>
           </div>
         </div>
@@ -854,72 +899,122 @@ footer{
 <div class="section-max">
   <div class="label" style="color:var(--cyan-lt)">What We Treat</div>
   <h2 class="section-h">Your spine is your lifeline.<br>We protect it.</h2>
-  <p class="section-sub">Chiropractic care addresses more than back pain — it touches nearly every part of your health and daily function.</p>
+  <p class="section-sub">Chiropractic care addresses more than back pain — it touches nearly every part of your health and daily function. <strong style="color:var(--cyan)">Click any condition to learn more.</strong></p>
 
   <div class="cond-grid">
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('scoliosis')">
+      <span class="cond-icon">〰️</span>
+      <span class="cond-name">Scoliosis</span>
+      <span class="cond-desc">Sideways curvature of the spine — S or C shaped</span>
+      <span class="cond-learn">Tap to learn more →</span>
+    </div>
+    <div class="cond-card" onclick="openCond('spondylosis')">
+      <span class="cond-icon">🦴</span>
+      <span class="cond-name">Spondylosis</span>
+      <span class="cond-desc">Age-related spinal wear and degeneration</span>
+      <span class="cond-learn">Tap to learn more →</span>
+    </div>
+    <div class="cond-card" onclick="openCond('spondylolisthesis')">
+      <span class="cond-icon">↔️</span>
+      <span class="cond-name">Spondylolisthesis</span>
+      <span class="cond-desc">Vertebra slipping forward over the one below it</span>
+      <span class="cond-learn">Tap to learn more →</span>
+    </div>
+    <div class="cond-card" onclick="openCond('spondylitis')">
+      <span class="cond-icon">🔥</span>
+      <span class="cond-name">Spondylitis</span>
+      <span class="cond-desc">Inflammatory arthritis affecting the spine</span>
+      <span class="cond-learn">Tap to learn more →</span>
+    </div>
+    <div class="cond-card" onclick="openCond('backpain')">
       <span class="cond-icon">🔙</span>
       <span class="cond-name">Lower Back Pain</span>
       <span class="cond-desc">Disc issues, muscle spasms, posture strain from long sitting</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('neck')">
       <span class="cond-icon">🤕</span>
       <span class="cond-name">Neck Pain & Stiffness</span>
       <span class="cond-desc">Phone posture, office work, cervical misalignment</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('headache')">
       <span class="cond-icon">🧠</span>
       <span class="cond-name">Headaches & Migraines</span>
       <span class="cond-desc">Often caused by spinal tension — not dehydration</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('sciatica')">
       <span class="cond-icon">⚡</span>
       <span class="cond-name">Sciatica</span>
       <span class="cond-desc">Sharp nerve pain from hip to leg — we decompress it</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
-      <span class="cond-icon">🦴</span>
+    <div class="cond-card" onclick="openCond('disc')">
+      <span class="cond-icon">💿</span>
       <span class="cond-name">Slipped Disc</span>
       <span class="cond-desc">Non-surgical disc realignment and pain relief</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('knee')">
       <span class="cond-icon">🦵</span>
       <span class="cond-name">Knee & Hip Pain</span>
       <span class="cond-desc">Structural imbalances that affect the whole body</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('sleep')">
       <span class="cond-icon">💤</span>
       <span class="cond-name">Poor Sleep</span>
       <span class="cond-desc">Alignment affects your nervous system and sleep cycles</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('posture')">
       <span class="cond-icon">🧍</span>
       <span class="cond-name">Bad Posture</span>
       <span class="cond-desc">Desk workers, drivers — we correct it before it worsens</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('sports')">
       <span class="cond-icon">🏃</span>
       <span class="cond-name">Sports Injuries</span>
       <span class="cond-desc">Sprains, strains, impact injuries, recovery optimisation</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('work')">
       <span class="cond-icon">💼</span>
       <span class="cond-name">Work-Related Pain</span>
       <span class="cond-desc">Repetitive strain, ergonomic damage, chronic office pain</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('stress')">
       <span class="cond-icon">😰</span>
       <span class="cond-name">Stress & Tension</span>
       <span class="cond-desc">Spinal adjustments release nervous system tension</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
-    <div class="cond-card">
+    <div class="cond-card" onclick="openCond('pregnancy')">
       <span class="cond-icon">🤰</span>
       <span class="cond-name">Pregnancy Back Pain</span>
       <span class="cond-desc">Safe, gentle care for expecting mothers</span>
+      <span class="cond-learn">Tap to learn more →</span>
     </div>
   </div>
 </div>
 </section>
+
+<!-- CONDITION DETAIL MODAL -->
+<div class="cond-modal-bg" id="condModal" onclick="if(event.target===this)closeCond()">
+  <div class="cond-modal">
+    <button class="cond-modal-close" onclick="closeCond()">✕</button>
+    <div id="condModalImg"></div>
+    <div class="cond-modal-body">
+      <div class="cond-modal-tag" id="condModalTag">Condition</div>
+      <h3 class="cond-modal-title" id="condModalTitle"></h3>
+      <p class="cond-modal-text" id="condModalText"></p>
+      <a href="#booking" class="btn-cyan" onclick="closeCond()" style="font-size:0.88rem;padding:0.75rem 1.75rem">Book a Consultation →</a>
+    </div>
+  </div>
+</div>
 
 <!-- SERVICES -->
 <section id="services">
@@ -957,7 +1052,7 @@ footer{
       </div>
       <div class="srv-body">
         <h3>Therapeutic Massage</h3>
-        <p>Deep tissue and sports massage to release muscle knots, reduce stress hormones, and prepare your body for chiropractic work. Lagos stress, gone.</p>
+        <p>Deep tissue and sports massage to release muscle knots, reduce stress hormones, and prepare your body for chiropractic work. Nigerian hustle stress, gone.</p>
         <div class="srv-tag">✦ From 30 min · Stress relief</div>
       </div>
     </div>
@@ -1175,7 +1270,7 @@ footer{
     </div>
     <div class="testi-card">
       <div class="stars">★★★★★</div>
-      <p class="testi-text">"Lagos traffic was destroying my neck. WhiteRock sorted me out in 3 visits. The booking was easy, the doctor listened, and I actually feel like myself again."</p>
+      <p class="testi-text">"Traffic was destroying my neck. WhiteRock sorted me out in 3 visits. The booking was easy, the doctor listened, and I actually feel like myself again."</p>
       <div class="testi-name">Emeka T.</div>
       <div class="testi-type">Neck pain patient · Victoria Island</div>
     </div>
@@ -1336,7 +1431,126 @@ footer{
 </div>
 
 <script>
-// Set min date to today
+// ── CONDITION MODAL DATA ──
+const condData = {
+  scoliosis:{
+    tag:'Spinal Condition',
+    title:'Scoliosis',
+    img:'/mnt/user-data/uploads/WhatsApp_Image_2026-06-24_at_3_54_30_PM.jpeg',
+    text:'Scoliosis is a sideways curve of the spine, often appearing as an S or C shape. It is usually diagnosed in childhood or adolescence, but can also develop in adults — often from degeneration. Symptoms include uneven shoulders or hips, one shoulder blade sticking out, uneven rib cage, back pain, stiffness and tiredness. Chiropractic care can help manage scoliosis by reducing pain, improving posture, and slowing progression through targeted spinal adjustments.'
+  },
+  spondylosis:{
+    tag:'Degenerative Condition',
+    title:'Spondylosis',
+    img:'',
+    text:'Spondylosis is the general wear and degeneration of the spinal discs and joints that comes with age. It affects the cervical (neck), thoracic (mid-back) and lumbar (lower back) regions. Common symptoms include stiffness, chronic pain, and reduced range of motion. Many Nigerians over 40 suffer from this silently. Chiropractic adjustments help restore joint mobility, reduce inflammation, and slow the degenerative process naturally — without surgery or heavy medication.'
+  },
+  spondylolisthesis:{
+    tag:'Structural Condition',
+    title:'Spondylolisthesis',
+    img:'',
+    text:'Spondylolisthesis occurs when one vertebra slips forward over the vertebra below it. This can cause lower back pain, leg pain, muscle tightness, and in severe cases, difficulty walking. It is common in athletes and those who do heavy lifting. Chiropractic care focuses on stabilising the spine, strengthening surrounding muscles, and relieving the nerve compression caused by the slipped vertebra — helping patients avoid surgery.'
+  },
+  spondylitis:{
+    tag:'Inflammatory Condition',
+    title:'Spondylitis (Ankylosing Spondylitis)',
+    img:'',
+    text:'Spondylitis, particularly Ankylosing Spondylitis, is a form of inflammatory arthritis that primarily affects the spine and sacroiliac joints. Over time it can cause vertebrae to fuse together, leading to a rigid, inflexible spine. Symptoms include chronic back pain and stiffness that is typically worse in the mornings. Chiropractic care combined with physiotherapy helps maintain mobility, reduce inflammation, and significantly improve quality of life for spondylitis patients.'
+  },
+  backpain:{
+    tag:'Most Common Condition',
+    title:'Lower Back Pain',
+    img:'',
+    text:'Lower back pain is the number one reason Nigerians visit a chiropractor. Whether caused by a herniated disc, muscle spasm, poor posture from long sitting, or structural imbalance — it can be debilitating. Chiropractic adjustments directly address the root cause of lower back pain, realigning the spine, relieving pressure on nerves, and restoring normal movement. Most patients experience significant relief within 2–4 sessions.'
+  },
+  neck:{
+    tag:'Common Condition',
+    title:'Neck Pain & Stiffness',
+    img:'',
+    text:'Neck pain is increasingly common — driven by phone use, long hours at desks, and poor sleeping positions. Cervical misalignment puts pressure on nerves and muscles, causing pain, stiffness, and even headaches. Dr. Paul uses precise cervical adjustments to restore proper alignment, relieve muscle tension, and eliminate the root cause of your neck pain.'
+  },
+  headache:{
+    tag:'Surprising But True',
+    title:'Headaches & Migraines',
+    img:'/mnt/user-data/uploads/Headaches.png',
+    text:'Most people reach for paracetamol when they get a headache — but many headaches start in the spine, not the head. Tension in the cervical vertebrae can compress nerves that trigger chronic headaches and migraines. Chiropractic care targets this cervical tension directly, providing long-term relief that medication alone cannot achieve. Studies show chiropractic treatment reduces migraine frequency significantly.'
+  },
+  sciatica:{
+    tag:'Nerve Condition',
+    title:'Sciatica',
+    img:'',
+    text:'Sciatica is sharp, shooting pain that travels from the lower back through the hip and down the leg — often to the foot. It is caused by compression of the sciatic nerve, usually from a herniated disc or bone spur. The pain can be severe and debilitating. Chiropractic spinal decompression and targeted adjustments relieve the pressure on the sciatic nerve, eliminating the pain at its source without surgery.'
+  },
+  disc:{
+    tag:'Structural Condition',
+    title:'Slipped / Herniated Disc',
+    img:'',
+    text:'A slipped disc (herniated disc) occurs when the soft cushion between vertebrae pushes out and presses on nearby nerves. This causes pain, numbness, and weakness — often in the back, neck, or limbs. Many people are told they need surgery — but chiropractic care offers a proven non-surgical alternative. Through targeted adjustments and spinal decompression, Dr. Paul helps the disc return to position and relieves nerve pressure naturally.'
+  },
+  knee:{
+    tag:'Joint Condition',
+    title:'Knee & Hip Pain',
+    img:'',
+    text:'Knee and hip pain are often caused not just by local joint problems but by structural imbalances higher up in the spine and pelvis. When the pelvis is misaligned, it changes how weight is distributed through the hips, knees, and ankles — causing chronic pain. Chiropractic care corrects these structural imbalances at the source, reducing knee and hip pain without relying on pain medication.'
+  },
+  sleep:{
+    tag:'Did You Know?',
+    title:'Poor Sleep',
+    img:'/mnt/user-data/uploads/Thrivia_sleep.png',
+    text:'Your nervous system controls your sleep cycles — and your spine controls your nervous system. Spinal misalignment can cause nerve irritation that disrupts deep sleep, causes restlessness, and contributes to insomnia. Chiropractic adjustments reduce this nerve interference, helping your body relax fully and sleep deeply. Many patients report dramatically improved sleep quality within weeks of starting chiropractic care.'
+  },
+  posture:{
+    tag:'Preventive Care',
+    title:'Bad Posture',
+    img:'/mnt/user-data/uploads/setup.png',
+    text:'Your desk setup, how you sit in Lagos traffic, how you hold your phone — all of it silently shapes your spine over years. Bad posture leads to muscle imbalances, chronic pain, reduced lung capacity, and even digestive issues. Chiropractic posture correction identifies and corrects these imbalances before they become serious problems. We also give you a personalised home programme to maintain great posture for life.'
+  },
+  sports:{
+    tag:'Sports Medicine',
+    title:'Sports Injuries',
+    img:'',
+    text:'Whether you play football, run, lift weights, or simply live an active lifestyle — sports injuries happen. Sprains, strains, impact injuries, and repetitive use injuries all respond very well to chiropractic care. Dr. Paul helps athletes recover faster, return to peak performance sooner, and prevents re-injury through targeted treatment and performance optimisation. We treat both amateur and professional athletes across Nigeria.'
+  },
+  work:{
+    tag:'Modern Epidemic',
+    title:'Work-Related Pain',
+    img:'/mnt/user-data/uploads/setup.png',
+    text:'Sitting at a desk for 8+ hours a day is one of the biggest threats to spinal health in modern Nigeria. Repetitive strain, poor ergonomics, and prolonged static postures cause chronic pain that slowly worsens over years. WhiteRock Wellness offers corporate wellness programmes and individual treatment plans specifically designed for working professionals who need to stay at their best — pain free.'
+  },
+  stress:{
+    tag:'Mind-Body Connection',
+    title:'Stress & Tension',
+    img:'',
+    text:'When you are stressed, your muscles contract and your body holds tension — especially in the neck, shoulders, and back. Over time, this chronic muscular tension causes spinal misalignment and nerve irritation that makes the stress even worse. Chiropractic adjustments break this cycle by releasing physical tension, calming the nervous system, and restoring the body to a balanced, relaxed state. Many patients feel calmer and lighter immediately after a session.'
+  },
+  pregnancy:{
+    tag:'Prenatal Care',
+    title:'Pregnancy Back Pain',
+    img:'',
+    text:'As the baby grows, the centre of gravity shifts, the pelvis widens, and enormous pressure is placed on the lower back and hips. Pregnancy back pain affects up to 70% of Nigerian women during pregnancy. Chiropractic care during pregnancy is safe, gentle, and highly effective. Dr. Paul uses specially modified techniques to relieve back pain, align the pelvis, and even help with optimal baby positioning — making delivery easier.'
+  }
+};
+
+function openCond(key){
+  const d=condData[key];
+  if(!d) return;
+  document.getElementById('condModalTag').textContent=d.tag;
+  document.getElementById('condModalTitle').textContent=d.title;
+  document.getElementById('condModalText').textContent=d.text;
+  const imgEl=document.getElementById('condModalImg');
+  if(d.img){
+    imgEl.innerHTML=`<img src="${d.img}" class="cond-modal-img" alt="${d.title}" onerror="this.parentElement.innerHTML='<div class=\\'cond-modal-img-placeholder\\'>🦴</div>'">`;
+  } else {
+    imgEl.innerHTML=`<div class="cond-modal-img-placeholder">🦴</div>`;
+  }
+  document.getElementById('condModal').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+
+function closeCond(){
+  document.getElementById('condModal').classList.remove('show');
+  document.body.style.overflow='';
+}
 const today = new Date().toISOString().split('T')[0];
 document.querySelectorAll('input[type=date]').forEach(e=>e.min=today);
 
