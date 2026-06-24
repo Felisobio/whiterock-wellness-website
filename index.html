@@ -166,7 +166,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
 
 /* ── PAYMENT SECTION ── */
 #payment{background:var(--navy)}
-.pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.pay-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
 .pay-card{
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(0,170,255,0.15);
@@ -1403,8 +1403,8 @@ footer{
     </div>
     <div class="cond-card" onclick="openCond('backpain')">
       <svg class="cond-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="52" rx="10" fill="rgba(0,170,255,0.1)"/><ellipse cx="26" cy="18" rx="10" ry="11" fill="#1A3FBF" opacity="0.7"/><rect x="19" y="27" width="14" height="18" rx="4" fill="#1A3FBF" opacity="0.6"/><ellipse cx="26" cy="34" rx="10" ry="7" fill="rgba(255,68,68,0.4)"/><circle cx="26" cy="34" r="4" fill="rgba(255,68,68,0.7)"/></svg>
-      <span class="cond-name">Lower Back Pain</span>
-      <span class="cond-desc">Disc issues, muscle spasms, posture strain from long sitting</span>
+      <span class="cond-name">Lordosis / Lower Back Pain</span>
+      <span class="cond-desc">Excessive inward spinal curve, disc issues, muscle spasms from long sitting</span>
       <span class="cond-learn">Tap to learn more →</span>
     </div>
     <div class="cond-card" onclick="openCond('neck')">
@@ -1439,7 +1439,7 @@ footer{
     </div>
     <div class="cond-card" onclick="openCond('sleep')">
       <svg class="cond-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="52" rx="10" fill="rgba(0,170,255,0.1)"/><path d="M16 26 C16 18 22 12 30 12 C24 14 20 20 20 26 C20 32 24 38 30 40 C22 40 16 34 16 26Z" fill="#00AAFF" opacity="0.5"/><text x="34" y="20" font-size="10" fill="#00AAFF" font-family="sans-serif">Z</text><text x="38" y="28" font-size="8" fill="#00AAFF" opacity="0.7" font-family="sans-serif">z</text></svg>
-      <span class="cond-name">Poor Sleep</span>
+      <span class="cond-name">Insomnia / Sleep Disorder</span>
       <span class="cond-desc">Alignment affects your nervous system and sleep cycles</span>
       <span class="cond-learn">Tap to learn more →</span>
     </div>
@@ -1447,6 +1447,18 @@ footer{
       <svg class="cond-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="52" rx="10" fill="rgba(0,170,255,0.1)"/><ellipse cx="16" cy="12" rx="5" ry="6" fill="#1A3FBF" opacity="0.6"/><path d="M16 18 Q16 26 16 34 Q16 40 16 44" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="36" cy="12" rx="5" ry="6" fill="#1A3FBF" opacity="0.6"/><path d="M36 18 Q30 24 29 32 Q28 38 30 44" stroke="#FF4444" stroke-width="2.5" stroke-linecap="round"/><line x1="8" y1="18" x2="24" y2="18" stroke="#22C55E" stroke-width="1" stroke-dasharray="2,2"/><line x1="28" y1="18" x2="44" y2="22" stroke="#FF4444" stroke-width="1" stroke-dasharray="2,2"/></svg>
       <span class="cond-name">Bad Posture</span>
       <span class="cond-desc">Desk workers, drivers — we correct it before it worsens</span>
+      <span class="cond-learn">Tap to learn more →</span>
+    </div>
+    <div class="cond-card" onclick="openCond('kyphosis')">
+      <svg class="cond-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="52" rx="10" fill="rgba(0,170,255,0.1)"/><path d="M26 8 Q20 14 18 22 Q16 30 20 36 Q24 42 26 44" stroke="#FF4444" stroke-width="3" stroke-linecap="round" fill="none"/><ellipse cx="22" cy="18" rx="7" ry="3" fill="rgba(0,170,255,0.3)" transform="rotate(-20,22,18)"/><ellipse cx="19" cy="28" rx="7" ry="3" fill="rgba(0,170,255,0.3)" transform="rotate(-30,19,28)"/><ellipse cx="22" cy="38" rx="7" ry="3" fill="rgba(0,170,255,0.3)" transform="rotate(-15,22,38)"/></svg>
+      <span class="cond-name">Kyphosis</span>
+      <span class="cond-desc">Excessive outward curve of the upper spine — hunchback posture</span>
+      <span class="cond-learn">Tap to learn more →</span>
+    </div>
+    <div class="cond-card" onclick="openCond('indigestion')">
+      <svg class="cond-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="52" rx="10" fill="rgba(0,170,255,0.1)"/><ellipse cx="26" cy="30" rx="14" ry="12" fill="#1A3FBF" opacity="0.4"/><ellipse cx="26" cy="28" rx="10" ry="9" fill="rgba(255,100,0,0.3)" stroke="#FF6600" stroke-width="1.5"/><path d="M20 18 Q26 14 32 18" stroke="#00AAFF" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M22 22 Q26 19 30 22" stroke="#00AAFF" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="26" cy="28" r="4" fill="rgba(255,100,0,0.5)"/></svg>
+      <span class="cond-name">Indigestion / Acid Reflux</span>
+      <span class="cond-desc">Spinal nerve compression affects digestive system function</span>
       <span class="cond-learn">Tap to learn more →</span>
     </div>
     <div class="cond-card" onclick="openCond('sports')">
@@ -1471,6 +1483,12 @@ footer{
       <svg class="cond-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="52" rx="10" fill="rgba(0,170,255,0.1)"/><ellipse cx="26" cy="13" rx="7" ry="7" fill="#1A3FBF" opacity="0.7"/><ellipse cx="28" cy="32" rx="13" ry="14" fill="#1A3FBF" opacity="0.5"/><ellipse cx="28" cy="32" rx="8" ry="9" fill="rgba(0,170,255,0.15)" stroke="rgba(0,170,255,0.3)" stroke-width="1"/><circle cx="28" cy="32" r="4" fill="rgba(0,170,255,0.2)"/><path d="M18 22 Q14 28 14 34" stroke="#FF4444" stroke-width="1.5" stroke-linecap="round"/></svg>
       <span class="cond-name">Pregnancy Back Pain</span>
       <span class="cond-desc">Safe, gentle care for expecting mothers</span>
+      <span class="cond-learn">Tap to learn more →</span>
+    </div>
+    <div class="cond-card" onclick="openCond('wellness')">
+      <svg class="cond-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="52" rx="10" fill="rgba(34,197,94,0.1)"/><circle cx="26" cy="26" r="14" stroke="#22C55E" stroke-width="2" fill="rgba(34,197,94,0.1)"/><path d="M20 26 L24 30 L32 22" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="26" r="6" fill="rgba(34,197,94,0.2)"/></svg>
+      <span class="cond-name">Wellness & Retreat</span>
+      <span class="cond-desc">Full body realignment, relaxation & preventive wellness sessions</span>
       <span class="cond-learn">Tap to learn more →</span>
     </div>
   </div>
@@ -1612,45 +1630,46 @@ footer{
       <h3>Request Appointment</h3>
       <p>We confirm within 30 minutes during clinic hours.</p>
 
+      <!-- Consultation Fee Notice -->
+      <div style="background:linear-gradient(135deg,rgba(0,170,255,0.08),rgba(26,63,191,0.1));border:1.5px solid rgba(0,170,255,0.25);border-radius:10px;padding:0.85rem 1.1rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;gap:1rem">
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--royal);margin-bottom:2px">Consultation Fee</div>
+          <div style="font-size:1.25rem;font-weight:800;color:var(--navy)">₦20,000 <span style="font-size:0.75rem;font-weight:400;color:var(--muted)">per session</span></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:0.72rem;color:var(--muted);line-height:1.5">✓ No payment needed to book<br>✓ Pay at clinic or via transfer</div>
+        </div>
+      </div>
+
       <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.6rem">I want to see a:</p>
-      <div class="spec-grid" id="spec-grid">
+      <div class="spec-grid" id="spec-grid" style="grid-template-columns:repeat(2,1fr)">
         <div class="spec-opt active" data-val="chiro" onclick="setSpec(this,'Chiropractic Adjustment')">
           <span class="si">
-            <svg viewBox="0 0 36 36" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 4 Q22 9 18 14 Q14 19 18 24 Q22 29 18 33" stroke="#00AAFF" stroke-width="2.5" stroke-linecap="round"/>
-              <ellipse cx="18" cy="9" rx="6" ry="2.5" fill="rgba(0,170,255,0.3)"/>
-              <ellipse cx="18" cy="19" rx="6" ry="2.5" fill="rgba(0,170,255,0.3)"/>
-              <ellipse cx="18" cy="28" rx="6" ry="2.5" fill="rgba(0,170,255,0.3)"/>
-            </svg>
+            <svg viewBox="0 0 36 36" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 4 Q22 9 18 14 Q14 19 18 24 Q22 29 18 33" stroke="#00AAFF" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="18" cy="9" rx="6" ry="2.5" fill="rgba(0,170,255,0.3)"/><ellipse cx="18" cy="19" rx="6" ry="2.5" fill="rgba(0,170,255,0.3)"/><ellipse cx="18" cy="28" rx="6" ry="2.5" fill="rgba(0,170,255,0.3)"/></svg>
           </span>
           <span class="sn">Chiropractor</span>
           <span class="ss" id="ss-chiro">Dr. Paul Chima</span>
         </div>
         <div class="spec-opt" data-val="physio" onclick="setSpec(this,'Physiotherapy')">
           <span class="si">
-            <svg viewBox="0 0 36 36" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <ellipse cx="18" cy="8" rx="5" ry="5" fill="#1A3FBF" opacity="0.7"/>
-              <path d="M18 13 L12 22 L18 20 L24 22 Z" fill="#1A3FBF" opacity="0.6"/>
-              <path d="M12 22 L9 32" stroke="#1A3FBF" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-              <path d="M24 22 L27 32" stroke="#1A3FBF" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-              <path d="M14 16 L8 18" stroke="#00AAFF" stroke-width="2" stroke-linecap="round"/>
-              <path d="M22 16 L28 18" stroke="#00AAFF" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+            <svg viewBox="0 0 36 36" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="18" cy="8" rx="5" ry="5" fill="#1A3FBF" opacity="0.7"/><path d="M18 13 L12 22 L18 20 L24 22 Z" fill="#1A3FBF" opacity="0.6"/><path d="M12 22 L9 32" stroke="#1A3FBF" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/><path d="M24 22 L27 32" stroke="#1A3FBF" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/><path d="M14 16 L8 18" stroke="#00AAFF" stroke-width="2" stroke-linecap="round"/><path d="M22 16 L28 18" stroke="#00AAFF" stroke-width="2" stroke-linecap="round"/></svg>
           </span>
           <span class="sn">Physiotherapist</span>
           <span class="ss" id="ss-physio">Rehabilitation</span>
         </div>
         <div class="spec-opt" data-val="massage" onclick="setSpec(this,'Therapeutic Massage')">
           <span class="si">
-            <svg viewBox="0 0 36 36" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8 20 Q10 14 16 12 Q20 10 24 14 L28 18 Q30 22 26 24 L18 28 Q12 30 10 26 Z" fill="#1A3FBF" opacity="0.6"/>
-              <path d="M18 28 Q16 32 14 34" stroke="#1A3FBF" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
-              <circle cx="24" cy="10" r="3" fill="#00AAFF" opacity="0.4"/>
-              <path d="M14 16 Q16 14 20 16" stroke="#00AAFF" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
+            <svg viewBox="0 0 36 36" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 20 Q10 14 16 12 Q20 10 24 14 L28 18 Q30 22 26 24 L18 28 Q12 30 10 26 Z" fill="#1A3FBF" opacity="0.6"/><path d="M18 28 Q16 32 14 34" stroke="#1A3FBF" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/><circle cx="24" cy="10" r="3" fill="#00AAFF" opacity="0.4"/><path d="M14 16 Q16 14 20 16" stroke="#00AAFF" stroke-width="1.5" stroke-linecap="round"/></svg>
           </span>
           <span class="sn">Massage Therapist</span>
           <span class="ss" id="ss-massage">Deep tissue</span>
+        </div>
+        <div class="spec-opt" data-val="wellness" onclick="setSpec(this,'Wellness & Retreat')">
+          <span class="si">
+            <svg viewBox="0 0 36 36" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="12" stroke="#22C55E" stroke-width="2" fill="rgba(34,197,94,0.1)"/><path d="M13 18 L16 21 L23 14" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="sn">Wellness / Retreat</span>
+          <span class="ss" id="ss-wellness">Full body care</span>
         </div>
       </div>
 
@@ -1669,27 +1688,30 @@ footer{
           <option value="">Pick your main concern…</option>
           <optgroup label="── Spine Conditions ──">
             <option>Scoliosis (curved spine)</option>
+            <option>Kyphosis (hunchback / upper spine curve)</option>
+            <option>Lordosis / Lower back pain</option>
             <option>Spondylosis (spinal degeneration)</option>
             <option>Spondylolisthesis (slipped vertebra)</option>
             <option>Spondylitis / Ankylosing Spondylitis</option>
             <option>Slipped / Herniated Disc</option>
           </optgroup>
           <optgroup label="── Pain & Nerve Issues ──">
-            <option>Lower back pain</option>
             <option>Upper back pain</option>
             <option>Neck pain or stiffness</option>
             <option>Sciatica (pain shooting down leg)</option>
             <option>Shoulder or arm pain</option>
             <option>Knee or hip pain</option>
             <option>Headaches or migraines</option>
+            <option>Indigestion / Acid Reflux</option>
           </optgroup>
           <optgroup label="── Lifestyle & Wellness ──">
             <option>Bad posture correction</option>
             <option>Work / desk-related back pain</option>
             <option>Sports injury</option>
             <option>Pregnancy back pain</option>
-            <option>Poor sleep (spine-related)</option>
+            <option>Insomnia / Sleep disorder</option>
             <option>Stress & muscle tension</option>
+            <option>Wellness & Retreat session</option>
           </optgroup>
           <optgroup label="── Other ──">
             <option>General wellness & prevention</option>
@@ -1718,8 +1740,9 @@ footer{
       </div>
 
       <div class="fg">
-        <label id="notes-label">Extra notes for Dr. Paul Chima (optional)</label>
-        <textarea id="fn" placeholder="How long have you had this pain? Had any previous treatment? Let us know…"></textarea>
+        <label id="notes-label">Notes for your clinician * <span style="color:#EF4444">required</span></label>
+        <textarea id="fn" placeholder="Tell us: How long have you had this? Any previous treatment? What makes it better or worse? The more detail you give, the better Dr. Paul can prepare for you…" style="min-height:90px"></textarea>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:0.3rem">💡 This helps your clinician prepare before your session — please be as detailed as possible.</div>
       </div>
 
       <div style="display:flex;gap:0.5rem;align-items:flex-start;margin-bottom:1rem;font-size:0.78rem;color:var(--muted)">
@@ -1889,27 +1912,43 @@ footer{
   <div class="label" style="color:var(--cyan-lt)">Payment & Booking</div>
   <h2 class="section-h" style="color:white">Simple, transparent,<br>no surprises.</h2>
   <p class="section-sub" style="color:rgba(255,255,255,0.6)">We believe healthcare should be accessible. Here's everything you need to know before your visit.</p>
-  <div class="pay-grid">
-
-    <div class="pay-card">
-      <span class="pay-icon">💵</span>
-      <h3>Cash Payment</h3>
-      <p>Pay comfortably at the clinic after your session. No advance payment required for your first visit.</p>
-      <span class="pay-badge">✓ Accepted</span>
+  <!-- CONSULTATION FEE BANNER -->
+  <div style="background:linear-gradient(135deg,rgba(0,170,255,0.12),rgba(26,63,191,0.2));border:1.5px solid rgba(0,170,255,0.35);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:1rem">
+      <div style="width:52px;height:52px;border-radius:12px;background:rgba(0,170,255,0.15);border:1.5px solid rgba(0,170,255,0.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">💊</div>
+      <div>
+        <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--cyan-lt);margin-bottom:0.25rem">Initial Consultation Fee</div>
+        <div style="font-size:1.6rem;font-weight:800;color:white;line-height:1">₦20,000</div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-top:0.2rem">Per session · Includes full assessment & treatment plan</div>
+      </div>
     </div>
+    <div style="display:flex;flex-direction:column;gap:0.4rem;text-align:right">
+      <div style="display:flex;align-items:center;gap:0.4rem;color:rgba(255,255,255,0.6);font-size:0.82rem;justify-content:flex-end">
+        <span style="color:#22C55E;font-size:0.9rem">✓</span> No payment required to book
+      </div>
+      <div style="display:flex;align-items:center;gap:0.4rem;color:rgba(255,255,255,0.6);font-size:0.82rem;justify-content:flex-end">
+        <span style="color:#22C55E;font-size:0.9rem">✓</span> Pay at clinic or transfer before
+      </div>
+      <div style="display:flex;align-items:center;gap:0.4rem;color:rgba(255,255,255,0.6);font-size:0.82rem;justify-content:flex-end">
+        <span style="color:#22C55E;font-size:0.9rem">✓</span> Subsequent sessions may vary
+      </div>
+    </div>
+  </div>
+
+  <div class="pay-grid">
 
     <div class="pay-card" onclick="showBankDetails()" style="cursor:pointer;position:relative">
       <span class="pay-icon">🏦</span>
       <h3>Bank Transfer</h3>
-      <p>Transfer directly to our Providus Bank account. Click to view our full account details.</p>
-      <span class="pay-badge" style="background:rgba(0,170,255,0.15);color:var(--cyan-lt);border-color:rgba(0,170,255,0.3)">👆 Tap to see account details</span>
+      <p>Transfer directly to our accounts via internet banking. Two banks available for your convenience.</p>
+      <span class="pay-badge" style="background:rgba(0,170,255,0.15);color:var(--cyan-lt);border-color:rgba(0,170,255,0.3)">👆 Tap to view account details</span>
     </div>
 
     <div class="pay-card" onclick="showBankDetails()" style="cursor:pointer">
       <span class="pay-icon">📱</span>
       <h3>Mobile Transfer</h3>
-      <p>Pay via Opay, Kuda, PalmPay, or any Nigerian mobile banking app using our account details.</p>
-      <span class="pay-badge" style="background:rgba(0,170,255,0.15);color:var(--cyan-lt);border-color:rgba(0,170,255,0.3)">👆 Tap to see account details</span>
+      <p>Pay via Opay, Kuda, PalmPay, or any Nigerian mobile banking app using either of our account details.</p>
+      <span class="pay-badge" style="background:rgba(0,170,255,0.15);color:var(--cyan-lt);border-color:rgba(0,170,255,0.3)">👆 Tap to view account details</span>
     </div>
 
   </div>
@@ -2172,40 +2211,58 @@ footer{
     <!-- Bank Logo Area -->
     <div style="background:linear-gradient(135deg,#0A1628,#1A3FBF);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;text-align:center">
       <div style="font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.5rem">Payment to</div>
-      <div style="font-size:1.4rem;font-weight:800;color:white;margin-bottom:0.25rem">WhiteRock Wellness</div>
-      <div style="font-size:0.8rem;color:rgba(255,255,255,0.5)">Providus Bank</div>
+      <div style="font-size:1.4rem;font-weight:800;color:white;margin-bottom:0.25rem">Whiterock Wellness</div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.5)">Select either account below</div>
     </div>
 
-    <!-- Account Details -->
-    <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem">
+    <!-- Consultation Fee Reminder -->
+    <div style="background:rgba(0,170,255,0.08);border:1px solid rgba(0,170,255,0.2);border-radius:10px;padding:0.85rem 1rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:0.82rem;color:var(--muted)">Consultation Fee</span>
+      <span style="font-size:1.1rem;font-weight:800;color:var(--royal)">₦20,000</span>
+    </div>
 
-      <div style="background:var(--offwhite);border-radius:10px;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.2rem">Bank Name</div>
-          <div style="font-size:1rem;font-weight:700;color:var(--navy)">Providus Bank</div>
-        </div>
-        <span style="font-size:1.5rem">🏦</span>
+    <!-- PROVIDUS BANK -->
+    <div style="border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1rem">
+      <div style="background:var(--navy);padding:0.6rem 1rem;display:flex;align-items:center;gap:0.5rem">
+        <span style="font-size:1rem">🏦</span>
+        <span style="font-size:0.78rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:0.08em">Account 1 — Providus Bank</span>
       </div>
-
-      <div style="background:var(--offwhite);border-radius:10px;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.2rem">Account Name</div>
-          <div style="font-size:1rem;font-weight:700;color:var(--navy)">Whiterock Wellness</div>
+      <div style="padding:1rem;display:flex;flex-direction:column;gap:0.6rem">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em">Account Name</span>
+          <span style="font-size:0.9rem;font-weight:700;color:var(--navy)">Whiterock Wellness</span>
         </div>
-        <span style="font-size:1.5rem">✅</span>
-      </div>
-
-      <!-- Account Number with Copy -->
-      <div style="background:var(--sky);border:2px solid var(--cyan);border-radius:10px;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--royal);margin-bottom:0.25rem">Account Number</div>
-          <div style="font-size:1.5rem;font-weight:800;color:var(--navy);letter-spacing:0.08em" id="acc-number">1305103047</div>
+        <div style="height:1px;background:var(--border)"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px">Account Number</div>
+            <div style="font-size:1.4rem;font-weight:800;color:var(--navy);letter-spacing:0.1em" id="acc-providus">1305103047</div>
+          </div>
+          <button onclick="copyNumber('acc-providus','copy-providus')" id="copy-providus" style="background:var(--royal);color:white;border:none;padding:0.45rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s;flex-shrink:0">Copy</button>
         </div>
-        <button onclick="copyAccNumber()" id="copy-btn" style="background:var(--royal);color:white;border:none;padding:0.5rem 1rem;border-radius:8px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s">
-          Copy
-        </button>
       </div>
+    </div>
 
+    <!-- WEMA BANK -->
+    <div style="border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.25rem">
+      <div style="background:var(--navy);padding:0.6rem 1rem;display:flex;align-items:center;gap:0.5rem">
+        <span style="font-size:1rem">🏦</span>
+        <span style="font-size:0.78rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:0.08em">Account 2 — Wema Bank</span>
+      </div>
+      <div style="padding:1rem;display:flex;flex-direction:column;gap:0.6rem">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em">Account Name</span>
+          <span style="font-size:0.9rem;font-weight:700;color:var(--navy)">Whiterock Wellness</span>
+        </div>
+        <div style="height:1px;background:var(--border)"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px">Account Number</div>
+            <div style="font-size:1.4rem;font-weight:800;color:var(--navy);letter-spacing:0.1em" id="acc-wema">ADD WEMA NUMBER</div>
+          </div>
+          <button onclick="copyNumber('acc-wema','copy-wema')" id="copy-wema" style="background:var(--royal);color:white;border:none;padding:0.45rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s;flex-shrink:0">Copy</button>
+        </div>
+      </div>
     </div>
 
     <!-- Important note -->
@@ -2810,7 +2867,10 @@ const condData = {
   sports:{tag:'Sports Medicine',title:'Sports Injuries',svg:'sports',text:'Whether you play football, run, lift weights, or simply live an active lifestyle — sports injuries happen. Sprains, strains, impact injuries, and repetitive use injuries all respond very well to chiropractic care. Dr. Paul helps athletes recover faster, return to peak performance sooner, and prevents re-injury through targeted treatment and performance optimisation.'},
   work:{tag:'Modern Epidemic',title:'Work-Related Pain',svg:'work',text:'Sitting at a desk for 8+ hours a day is one of the biggest threats to spinal health in modern Nigeria. Repetitive strain, poor ergonomics, and prolonged static postures cause chronic pain that slowly worsens over years. WhiteRock Wellness offers corporate wellness programmes and individual treatment plans specifically designed for working professionals.'},
   stress:{tag:'Mind-Body Connection',title:'Stress & Tension',svg:'stress',text:'When you are stressed, your muscles contract and your body holds tension — especially in the neck, shoulders, and back. Over time, this chronic muscular tension causes spinal misalignment and nerve irritation that makes the stress even worse. Chiropractic adjustments break this cycle by releasing physical tension, calming the nervous system, and restoring the body to a balanced, relaxed state.'},
-  pregnancy:{tag:'Prenatal Care',title:'Pregnancy Back Pain',svg:'pregnancy',text:'As the baby grows, the centre of gravity shifts, the pelvis widens, and enormous pressure is placed on the lower back and hips. Pregnancy back pain affects up to 70% of Nigerian women during pregnancy. Chiropractic care during pregnancy is safe, gentle, and highly effective. Dr. Paul uses specially modified techniques to relieve back pain, align the pelvis, and help with optimal baby positioning.'}
+  pregnancy:{tag:'Prenatal Care',title:'Pregnancy Back Pain',svg:'pregnancy',text:'As the baby grows, the centre of gravity shifts, the pelvis widens, and enormous pressure is placed on the lower back and hips. Pregnancy back pain affects up to 70% of Nigerian women during pregnancy. Chiropractic care during pregnancy is safe, gentle, and highly effective. Dr. Paul uses specially modified techniques to relieve back pain, align the pelvis, and help with optimal baby positioning.'},
+  kyphosis:{tag:'Spinal Condition',title:'Kyphosis',svg:'scoliosis',text:'Kyphosis is an excessive outward curvature of the upper spine, causing a rounded or hunched back appearance. It can result from poor posture, osteoporosis, or developmental issues. Symptoms include back pain, stiffness, fatigue, and in severe cases breathing difficulties. Chiropractic adjustments combined with postural exercises can significantly reduce the curve, relieve pain, and restore upright posture — particularly when caught early.'},
+  indigestion:{tag:'Digestive Health',title:'Indigestion / Acid Reflux',svg:'stress',text:'Many people do not realise that spinal misalignment — particularly in the thoracic and lumbar regions — can directly affect digestive function. The nerves that control stomach acid production and digestion pass through your spine. When these nerves are compressed or irritated by spinal misalignment, indigestion, acid reflux, bloating, and discomfort can result. Chiropractic adjustments relieve this nerve compression, often dramatically improving digestive health.'},
+  wellness:{tag:'Wellness & Retreat',title:'Wellness & Retreat Session',svg:'posture',text:'Not every visit needs to be about pain. Our Wellness & Retreat sessions are designed for those who want to feel their absolute best — body in full alignment, nervous system balanced, muscles relaxed. Whether you come monthly for maintenance, as a gift to yourself, or as a stress reset after a hectic week, these full-body sessions combine gentle adjustments, relaxation techniques, and personalised wellness coaching to leave you feeling lighter, clearer, and fully recharged.'}
 };
 
 function openCond(key){
@@ -3028,26 +3088,21 @@ function closeBankModal(){
   document.body.style.overflow = '';
 }
 
-// ── COPY ACCOUNT NUMBER ──
-function copyAccNumber(){
-  const accNum = document.getElementById('acc-number').textContent;
+// ── COPY ACCOUNT NUMBER (supports multiple) ──
+function copyNumber(elementId, btnId){
+  const accNum = document.getElementById(elementId).textContent.trim();
+  const btn = document.getElementById(btnId);
   navigator.clipboard.writeText(accNum).then(()=>{
-    const btn = document.getElementById('copy-btn');
     btn.textContent = '✓ Copied!';
     btn.style.background = '#22C55E';
-    setTimeout(()=>{
-      btn.textContent = 'Copy';
-      btn.style.background = 'var(--royal)';
-    }, 2500);
+    setTimeout(()=>{ btn.textContent = 'Copy'; btn.style.background = 'var(--royal)'; }, 2500);
   }).catch(()=>{
-    // Fallback for older browsers
     const el = document.createElement('textarea');
     el.value = accNum;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    const btn = document.getElementById('copy-btn');
     btn.textContent = '✓ Copied!';
     btn.style.background = '#22C55E';
     setTimeout(()=>{ btn.textContent = 'Copy'; btn.style.background = 'var(--royal)'; }, 2500);
@@ -3124,9 +3179,10 @@ document.querySelectorAll('input[type=date]').forEach(e=>e.min=today);
 
 // Specialist selector
 const specLabels = {
-  chiro:  { notes:'Extra notes for Dr. Paul Chima (optional)',        ph:'How long have you had this pain? Had any previous treatment? Let us know…' },
-  physio: { notes:'Extra notes for your Physiotherapist (optional)',   ph:'Tell us about your injury, mobility issues, or rehabilitation goals…' },
-  massage:{ notes:'Extra notes for your Massage Therapist (optional)', ph:'Any specific areas of tension? Preferred pressure — light, medium or deep?' }
+  chiro:   { notes:'Notes for Dr. Paul Chima * (required)',          ph:'How long have you had this? Any previous treatment? What makes it better or worse?' },
+  physio:  { notes:'Notes for your Physiotherapist * (required)',    ph:'Tell us about your injury, mobility issues, or rehabilitation goals…' },
+  massage: { notes:'Notes for your Massage Therapist * (required)',  ph:'Any specific areas of tension? Preferred pressure — light, medium or deep?' },
+  wellness:{ notes:'Notes for your Wellness session * (required)',   ph:'What are your wellness goals? Any areas of focus? How are you feeling overall?' }
 };
 
 function setSpec(el, svcVal) {
@@ -3148,7 +3204,7 @@ function setSpec(el, svcVal) {
 function submitForm(){
   const req = [
     {id:'ff',name:'First Name'},{id:'fl',name:'Last Name'},
-    {id:'fp',name:'Phone'},{id:'fs',name:'Concern'},{id:'fd',name:'Date'}
+    {id:'fp',name:'Phone'},{id:'fs',name:'Concern'},{id:'fd',name:'Date'},{id:'fn',name:'Notes'}
   ];
   let ok=true;
   req.forEach(r=>{
