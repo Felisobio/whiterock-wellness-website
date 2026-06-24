@@ -2839,7 +2839,7 @@ function closeCond(){
 // Replace the URL below with your Power Automate
 // HTTP trigger URL after setting it up
 // ─────────────────────────────────────────────
-const POWER_AUTOMATE_URL = 'YOUR_POWER_AUTOMATE_WEBHOOK_URL_HERE';
+const POWER_AUTOMATE_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c3eccbf19a9d4994a5dfe971ab58af96/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GI0LL2CWNbGwVCm36BkS5eghAPvA4mPs63MigacspKA';
 
 async function sendToMicrosoftLists(bookingData) {
   if(!POWER_AUTOMATE_URL || POWER_AUTOMATE_URL.includes('YOUR_POWER')) return;
