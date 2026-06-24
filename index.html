@@ -849,18 +849,81 @@ footer{
 @media(max-width:1024px){
   .hero-grid,.why-grid,.doc-grid,.book-grid,.contact-grid{grid-template-columns:1fr;gap:3rem}
   .hero-right{display:none}
-  nav ul{display:none}
   .srv-grid{grid-template-columns:repeat(2,1fr)}
   .testi-grid{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr;gap:2rem}
   .frow{grid-template-columns:1fr}
   .spec-grid{grid-template-columns:1fr 1fr}
+  /* Hide desktop nav links, show hamburger */
+  .nav-links{display:none!important}
+  .hamburger{display:flex!important}
 }
+
+/* ── HAMBURGER BUTTON ── */
+.hamburger{
+  display:none;
+  flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:6px;
+}
+.hamburger span{
+  display:block;width:24px;height:2px;
+  background:white;border-radius:2px;
+  transition:all 0.3s;
+}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* ── MOBILE MENU DRAWER ── */
+#mobile-menu{
+  position:fixed;top:76px;left:0;right:0;
+  background:rgba(10,22,40,0.98);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(0,170,255,0.15);
+  z-index:199;
+  transform:translateY(-120%);
+  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  padding:1.5rem 5%;
+}
+#mobile-menu.open{transform:translateY(0)}
+.mob-nav-links{list-style:none;display:flex;flex-direction:column;gap:0}
+.mob-nav-links li a{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 0;
+  color:rgba(255,255,255,0.75);
+  text-decoration:none;font-size:1rem;font-weight:500;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  transition:color 0.2s;
+}
+.mob-nav-links li a:hover{color:var(--cyan)}
+.mob-nav-links li:last-child a{border-bottom:none}
+.mob-nav-book{
+  display:block;text-align:center;
+  background:var(--cyan);color:var(--navy)!important;
+  padding:1rem!important;border-radius:10px;
+  font-weight:700!important;margin-top:1rem;
+  font-size:1rem!important;
+}
+.mob-contact-strip{
+  margin-top:1.25rem;padding-top:1.25rem;
+  border-top:1px solid rgba(255,255,255,0.08);
+  display:flex;gap:1.5rem;flex-wrap:wrap;
+}
+.mob-contact-strip a{
+  color:rgba(255,255,255,0.4);font-size:0.82rem;
+  text-decoration:none;
+}
+.mob-contact-strip a:hover{color:var(--cyan)}
+
 @media(max-width:600px){
   .srv-grid{grid-template-columns:1fr}
   .cond-grid{grid-template-columns:repeat(2,1fr)}
   section{padding:70px 5%}
   .hero-stats{gap:1.5rem;flex-wrap:wrap}
+  .pay-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .tips-grid{grid-template-columns:1fr}
+  .faq-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -928,7 +991,32 @@ footer{
     <li><a href="#testimonials">Reviews</a></li>
     <li><a href="#booking" class="nav-book">Book Now</a></li>
   </ul>
+
+  <!-- Hamburger for mobile -->
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU DRAWER -->
+<div id="mobile-menu">
+  <ul class="mob-nav-links">
+    <li><a href="#why" onclick="closeMobileMenu()">About Us <span>→</span></a></li>
+    <li><a href="#conditions" onclick="closeMobileMenu()">Conditions We Treat <span>→</span></a></li>
+    <li><a href="#services" onclick="closeMobileMenu()">Our Services <span>→</span></a></li>
+    <li><a href="#doctor" onclick="closeMobileMenu()">Dr. Paul <span>→</span></a></li>
+    <li><a href="#testimonials" onclick="closeMobileMenu()">Patient Reviews <span>→</span></a></li>
+    <li><a href="#faq" onclick="closeMobileMenu()">FAQs <span>→</span></a></li>
+    <li><a href="#payment" onclick="closeMobileMenu()">Payment Info <span>→</span></a></li>
+    <li><a href="#contact" onclick="closeMobileMenu()">Find Us <span>→</span></a></li>
+    <li><a href="#booking" class="mob-nav-book" onclick="closeMobileMenu()">📅 Book Appointment</a></li>
+  </ul>
+  <div class="mob-contact-strip">
+    <a href="tel:+2348162847976">📞 +234 816 284 7976</a>
+    <a href="https://wa.me/2348162847976" target="_blank">💬 WhatsApp</a>
+    <a href="https://www.instagram.com/whiterockwellness?igsh=MWhvc2J6bWdyZ3lkZg==" target="_blank">📸 Instagram</a>
+  </div>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -1696,18 +1784,18 @@ footer{
       <span class="pay-badge">✓ Accepted</span>
     </div>
 
-    <div class="pay-card">
+    <div class="pay-card" onclick="showBankDetails()" style="cursor:pointer;position:relative">
       <span class="pay-icon">🏦</span>
       <h3>Bank Transfer</h3>
-      <p>Transfer directly to our account before or after your session. Account details provided upon booking confirmation.</p>
-      <span class="pay-badge">✓ Accepted</span>
+      <p>Transfer directly to our Providus Bank account. Click to view our full account details.</p>
+      <span class="pay-badge" style="background:rgba(0,170,255,0.15);color:var(--cyan-lt);border-color:rgba(0,170,255,0.3)">👆 Tap to see account details</span>
     </div>
 
-    <div class="pay-card">
+    <div class="pay-card" onclick="showBankDetails()" style="cursor:pointer">
       <span class="pay-icon">📱</span>
       <h3>Mobile Transfer</h3>
-      <p>Pay via Opay, Kuda, PalmPay, or any Nigerian mobile banking app. Fast, safe and convenient.</p>
-      <span class="pay-badge">✓ Accepted</span>
+      <p>Pay via Opay, Kuda, PalmPay, or any Nigerian mobile banking app using our account details.</p>
+      <span class="pay-badge" style="background:rgba(0,170,255,0.15);color:var(--cyan-lt);border-color:rgba(0,170,255,0.3)">👆 Tap to see account details</span>
     </div>
 
   </div>
@@ -1962,7 +2050,64 @@ footer{
   </div>
 </footer>
 
-<!-- SUCCESS MODAL -->
+<!-- BANK DETAILS MODAL -->
+<div class="modal-bg" id="bankModal" onclick="if(event.target===this)closeBankModal()" style="z-index:1001">
+  <div class="modal-box" style="max-width:460px">
+    <button onclick="closeBankModal()" style="position:absolute;top:1rem;right:1rem;background:var(--sky);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:var(--navy)">✕</button>
+
+    <!-- Bank Logo Area -->
+    <div style="background:linear-gradient(135deg,#0A1628,#1A3FBF);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;text-align:center">
+      <div style="font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.5rem">Payment to</div>
+      <div style="font-size:1.4rem;font-weight:800;color:white;margin-bottom:0.25rem">WhiteRock Wellness</div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.5)">Providus Bank</div>
+    </div>
+
+    <!-- Account Details -->
+    <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem">
+
+      <div style="background:var(--offwhite);border-radius:10px;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.2rem">Bank Name</div>
+          <div style="font-size:1rem;font-weight:700;color:var(--navy)">Providus Bank</div>
+        </div>
+        <span style="font-size:1.5rem">🏦</span>
+      </div>
+
+      <div style="background:var(--offwhite);border-radius:10px;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.2rem">Account Name</div>
+          <div style="font-size:1rem;font-weight:700;color:var(--navy)">Whiterock Wellness</div>
+        </div>
+        <span style="font-size:1.5rem">✅</span>
+      </div>
+
+      <!-- Account Number with Copy -->
+      <div style="background:var(--sky);border:2px solid var(--cyan);border-radius:10px;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--royal);margin-bottom:0.25rem">Account Number</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--navy);letter-spacing:0.08em" id="acc-number">1305103047</div>
+        </div>
+        <button onclick="copyAccNumber()" id="copy-btn" style="background:var(--royal);color:white;border:none;padding:0.5rem 1rem;border-radius:8px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s">
+          Copy
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Important note -->
+    <div style="background:rgba(255,184,0,0.08);border:1px solid rgba(255,184,0,0.25);border-radius:8px;padding:0.85rem 1rem;margin-bottom:1.25rem;display:flex;gap:0.6rem;align-items:flex-start">
+      <span style="font-size:1rem;flex-shrink:0">⚠️</span>
+      <p style="font-size:0.8rem;color:#8A6200;line-height:1.6">After transferring, please send your payment receipt to our WhatsApp to confirm your appointment.</p>
+    </div>
+
+    <a href="https://wa.me/2348162847976?text=Hello%20WhiteRock%20Wellness!%20I%20just%20made%20a%20bank%20transfer%20payment.%20Please%20confirm%20my%20appointment." target="_blank" style="display:block;background:#25D366;color:white;text-align:center;padding:0.85rem;border-radius:10px;font-weight:700;text-decoration:none;font-size:0.95rem;margin-bottom:0.75rem">
+      💬 Send Receipt on WhatsApp
+    </a>
+    <button onclick="closeBankModal()" style="width:100%;background:var(--offwhite);border:1px solid var(--border);color:var(--muted);padding:0.75rem;border-radius:10px;font-size:0.88rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">
+      Close
+    </button>
+  </div>
+</div>
 <div class="modal-bg" id="modal">
   <div class="modal-box">
     <span class="modal-emoji">🎉</span>
@@ -2573,6 +2718,56 @@ function openCond(key){
 function closeCond(){
   document.getElementById('condModal').classList.remove('show');
   document.body.style.overflow='';
+}
+
+// ── MOBILE MENU ──
+function toggleMobileMenu(){
+  const menu = document.getElementById('mobile-menu');
+  const ham = document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  ham.classList.toggle('open');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+function closeMobileMenu(){
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── BANK DETAILS MODAL ──
+function showBankDetails(){
+  document.getElementById('bankModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeBankModal(){
+  document.getElementById('bankModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// ── COPY ACCOUNT NUMBER ──
+function copyAccNumber(){
+  const accNum = document.getElementById('acc-number').textContent;
+  navigator.clipboard.writeText(accNum).then(()=>{
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied!';
+    btn.style.background = '#22C55E';
+    setTimeout(()=>{
+      btn.textContent = 'Copy';
+      btn.style.background = 'var(--royal)';
+    }, 2500);
+  }).catch(()=>{
+    // Fallback for older browsers
+    const el = document.createElement('textarea');
+    el.value = accNum;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied!';
+    btn.style.background = '#22C55E';
+    setTimeout(()=>{ btn.textContent = 'Copy'; btn.style.background = 'var(--royal)'; }, 2500);
+  });
 }
 
 // ── SPLASH SCREEN ──
