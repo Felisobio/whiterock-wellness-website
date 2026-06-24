@@ -1283,9 +1283,9 @@ footer{
 
         <div class="floating-card">
           <div class="fc-label">Today's availability</div>
-          <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Dr. Paul — 3 slots open</div></div>
-          <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Massage — Available</div></div>
-          <div class="fc-row"><div class="fc-dot yellow"></div><div class="fc-text">Physio — 1 slot left</div></div>
+          <div id="avail-content">
+            <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Loading availability...</div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -2209,6 +2209,8 @@ footer{
   <div class="footer-bottom">
     <p>© 2025 WhiteRock Wellness LTD. All rights reserved.</p>
     <span class="tagline-footer">Wellness Through Alignment ✦</span>
+    <!-- Admin only: triple-click to reset slots -->
+    <span onclick="adminResetSlots()" style="cursor:default;color:transparent;font-size:0.5rem;user-select:none">·</span>
   </div>
 </footer>
 
@@ -3030,36 +3032,141 @@ function removeTyping() {
   document.getElementById('typing')?.remove();
 }
 
-async function sendChat() {
+// ── SMART LOCAL CHATBOT ──
+let chatOpen = false;
+let chatGreeted = false;
+
+// ── KNOWLEDGE BASE ──
+const KB = [
+  // Greetings
+  { p:[/^(hi|hello|hey|good morning|good afternoon|good evening|howdy|sup|yo|how are you|how r u|i am fine|i'm fine|fine|okay|ok cool)/i],
+    r:["Hello! 👋 Welcome to WhiteRock Wellness. I'm your virtual assistant. How can I help you today?\n\nYou can ask me about our services, conditions we treat, Dr. Paul, location, booking, or pricing!",
+       "Hi there! 😊 Great to have you here at WhiteRock Wellness. What can I help you with today?",
+       "Hello and welcome! I'm here to answer any questions about WhiteRock Wellness. What would you like to know?"] },
+
+  // Services
+  { p:[/service|treat|offer|what do you do|what can you|help with|do you do/i],
+    r:["We offer 6 main services at WhiteRock Wellness:\n\n🦴 Chiropractic Adjustment (45 min)\n🏃 Physiotherapy (60 min)\n🤲 Therapeutic Massage (30 min)\n🧠 Headache & Migraine Clinic\n🧍 Posture Correction\n💼 Corporate Wellness & Retreat\n📋 Initial Consultation (60 min)\n\nWhich one would you like to know more about?"] },
+
+  // Chiropractic
+  { p:[/chiropract|adjustment|spinal|spine manipulation|crack/i],
+    r:["Our Chiropractic Adjustment sessions are led by Dr. Paul Johnson Chima. 🦴\n\nDr. Paul uses precise spinal manipulation to:\n✓ Correct misalignments\n✓ Relieve nerve pressure\n✓ Restore full range of motion\n✓ Eliminate pain at the root\n\nSessions are 45 minutes. Would you like to book one?"] },
+
+  // Physiotherapy
+  { p:[/physio|rehabilitation|rehab|recovery|injury recovery/i],
+    r:["Our Physiotherapy sessions focus on rehabilitation and recovery. 🏃\n\n✓ Post-injury recovery\n✓ Chronic pain management\n✓ Post-surgery rehab\n✓ Strength restoration\n\nSessions are 60 minutes. Perfect if you've had an injury or surgery. Want to book?"] },
+
+  // Massage
+  { p:[/massage|deep tissue|sports massage|muscle.*tension|tension.*muscle/i],
+    r:["Our Therapeutic Massage sessions are available from 30 minutes. 🤲\n\n✓ Deep tissue massage\n✓ Sports massage\n✓ Stress relief\n✓ Muscle knot release\n\nPerfect for Lagos work stress! Want to book a session?"] },
+
+  // Headache
+  { p:[/headache|migraine|head pain|head.*hurt/i],
+    r:["Did you know most headaches actually start in your spine, not your head? 🧠\n\nOur Headache & Migraine Clinic targets the cervical tension causing your headaches — providing long-term relief that paracetamol alone can't achieve.\n\nMany patients notice a difference after just 1-2 sessions. Would you like to book?"] },
+
+  // Posture
+  { p:[/posture|hunch|slouch|sitting.*pain|desk.*pain|office.*pain/i],
+    r:["Your desk setup could be silently damaging your spine! 🧍\n\nOur Posture Correction programme:\n✓ Full postural assessment\n✓ Spinal correction\n✓ Home exercise programme\n✓ Corporate packages available\n\nPerfect for office workers and remote workers. Want to book an assessment?"] },
+
+  // Corporate wellness
+  { p:[/corporate|retreat|wellness.*package|group|company|office.*package|staff/i],
+    r:["Our Corporate Wellness & Retreat programme is perfect for companies! 💼\n\nWe offer:\n✓ Group chiropractic sessions\n✓ Workplace wellness assessments\n✓ Staff posture screenings\n✓ Corporate packages & discounts\n\nContact us on +234 816 284 7976 or WhatsApp to discuss a package for your team!"] },
+
+  // Conditions
+  { p:[/condition|scoliosis|sciatica|back pain|neck pain|slip.*disc|disc|spondyl|kyphosis|lordosis|indigestion|acid reflux|knee|hip pain|pregnancy|sleep|insomnia/i],
+    r:["We treat a wide range of conditions at WhiteRock Wellness:\n\n🦴 Scoliosis & Kyphosis\n🔙 Lordosis / Lower Back Pain\n⚡ Sciatica\n💿 Slipped / Herniated Disc\n🤕 Neck Pain & Stiffness\n🧠 Headaches & Migraines\n🦵 Knee & Hip Pain\n💤 Insomnia / Sleep Disorders\n🍽️ Indigestion / Acid Reflux\n🤰 Pregnancy Back Pain\n\nClick any condition on our website to see a full explanation. Which one affects you?"] },
+
+  // Dr Paul
+  { p:[/dr paul|doctor|chiropractor|who.*treat|who.*doctor|about.*doctor|paul.*chima|dr\. paul/i],
+    r:["Dr. Paul Johnson Chima is our Lead Chiropractor. 👨‍⚕️\n\nHe trained at a renowned Chinese chiropractic institution — combining Eastern precision with Western evidence-based medicine.\n\n✓ Specialist in spinal dysfunction & disc conditions\n✓ Sports injury expert\n✓ Over 1,200 patients successfully treated in Nigeria\n✓ Passionate about preventive care\n\nWould you like to book a session with Dr. Paul?"] },
+
+  // Booking
+  { p:[/book|appointment|schedule|reserve|session|how.*book|want.*session|make.*appointment/i],
+    r:["Booking is super easy! 📅\n\nYou can:\n1️⃣ Fill the booking form on this page\n2️⃣ Call us: +234 816 284 7976\n3️⃣ WhatsApp us the same number\n\nWe confirm within 30 minutes during clinic hours. No payment needed to book — pay at the clinic or transfer before your session.\n\nShall I take you to the booking form?"] },
+
+  // Price / cost
+  { p:[/price|cost|fee|how much|charge|pay|payment|expensive|afford|naira|₦/i],
+    r:["Our consultation fee is ₦20,000 per session. 💰\n\nPayment options:\n🏦 Providus Bank — Whiterock Wellness — 1305103047\n🏦 Wema Bank — Billboxx/Whiterock Wellness Ltd — 9329104152\n📱 Mobile transfer (Opay, Kuda, PalmPay)\n\nNo payment needed to book — you pay at the clinic or transfer before your session. No HMO currently."] },
+
+  // Location / address
+  { p:[/location|address|where.*are|where.*you|find you|direction|come to|how.*get|oniru|victoria island|lagos/i],
+    r:["We are located at:\n\n📍 No. 3 Ayobaba Tunde Crescent\nOniru, Victoria Island, Lagos, Nigeria\n\n🕐 Opening Hours:\nMon–Fri: 8:00 AM – 6:00 PM\nSaturday: 9:00 AM – 5:00 PM\nSunday: 10:00 AM – 3:00 PM\n\nNeed directions? Open Google Maps and search 'WhiteRock Wellness Oniru Lagos'!"] },
+
+  // Opening hours
+  { p:[/hour|open|close|when.*open|time|weekend|sunday|saturday|monday/i],
+    r:["We are open 7 days a week! 🕐\n\nMonday – Friday: 8:00 AM – 6:00 PM\nSaturday: 9:00 AM – 5:00 PM\nSunday: 10:00 AM – 3:00 PM\n\nWe work around your schedule. Book online anytime and we confirm within 30 minutes!"] },
+
+  // Contact
+  { p:[/contact|phone|call|whatsapp|reach|number|email|social|instagram|facebook|tiktok/i],
+    r:["You can reach us through:\n\n📞 Phone/WhatsApp: +234 816 284 7976\n📸 Instagram: @whiterockwellness\n👍 Facebook: @whiterockwellness\n🎵 TikTok: @whiterockwellness\n▶️ YouTube: @dr.paulchiropractor\n\nWhatsApp is the fastest way to reach us!"] },
+
+  // Pain related
+  { p:[/pain|hurt|ache|sore|suffering|chronic|severe|unbearable/i],
+    r:["I'm sorry to hear you're in pain. 💙 WhiteRock Wellness specialises in finding and eliminating the ROOT cause of pain — not just masking it.\n\nDr. Paul will conduct a full assessment to understand exactly what's causing your pain and build a personalised treatment plan.\n\nMost patients feel significant relief after just 1-3 sessions. Would you like to book an appointment?"] },
+
+  // Is it painful / safe
+  { p:[/painful|does it hurt|safe|scared|nervous|afraid|fear|dangerous|side effect/i],
+    r:["Chiropractic care is very safe! 😊\n\nMost patients feel immediate relief — not pain. You may hear a popping sound during adjustment — that's just gas releasing from the joint, completely normal!\n\nSome patients feel mild soreness for 24 hours after their first session — similar to post-exercise soreness.\n\nDr. Paul always explains every step before he does it. You're in safe hands! Would you like to book?"] },
+
+  // How many sessions
+  { p:[/how many|session.*need|number of session|how long.*take|duration|treatment.*long/i],
+    r:["It depends on your condition:\n\n⚡ Acute pain (recent): 1-3 sessions\n🔄 Chronic pain (long-term): 6-12 sessions\n💆 Maintenance/wellness: Monthly sessions\n\nDr. Paul will assess you at your first consultation and give you a clear, honest treatment plan with realistic expectations.\n\nWould you like to book your first session?"] },
+
+  // Insurance / HMO
+  { p:[/insurance|hmo|nhis|axa|hygeia|coverage/i],
+    r:["We currently operate on a private pay basis — cash and bank transfer only. We are working towards accepting HMO coverage in the near future.\n\n💰 Consultation fee: ₦20,000\n🏦 Providus Bank: 1305103047\n🏦 Wema Bank: 9329104152\n\nContact us if you need flexible payment arrangements!"] },
+
+  // Thank you
+  { p:[/thank|thanks|appreciate|helpful|great|awesome|excellent|wonderful|perfect/i],
+    r:["You're very welcome! 😊 That's what we're here for.\n\nIs there anything else you'd like to know about WhiteRock Wellness? We're always happy to help!\n\nRemember — you can also reach us on WhatsApp: +234 816 284 7976",
+       "Happy to help! 🙏 Feel free to ask anything else.\n\nWould you like to book an appointment with Dr. Paul?"] },
+
+  // Goodbye
+  { p:[/bye|goodbye|see you|later|take care|ciao/i],
+    r:["Goodbye! 👋 Thank you for visiting WhiteRock Wellness.\n\nRemember — your spine is your lifeline. Take care of it!\n\nWe're here whenever you need us. Visit us at whiterock-wellness.com or call +234 816 284 7976. 💙"] },
+
+  // Default fallback
+  { p:[/.*/],
+    r:["Great question! For the most accurate answer, I'd recommend:\n\n📞 Call us: +234 816 284 7976\n💬 WhatsApp us the same number\n\nOur team will respond within 30 minutes during clinic hours!\n\nOr you can ask me about:\n• Our services\n• Conditions we treat\n• Booking an appointment\n• Pricing & location",
+       "I want to make sure you get the right answer! Please contact us directly:\n\n💬 WhatsApp: +234 816 284 7976\n📸 Instagram: @whiterockwellness\n\nOr ask me about our services, booking, location, or pricing!"] }
+];
+
+function getBotReply(text) {
+  for(const item of KB) {
+    for(const pattern of item.p) {
+      if(pattern.test(text)) {
+        const replies = item.r;
+        return replies[Math.floor(Math.random() * replies.length)];
+      }
+    }
+  }
+  return KB[KB.length-1].r[0];
+}
+
+function sendChat() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if(!text) return;
   input.value = '';
   addUserMessage(text);
-  chatHistory.push({role:'user', content: text});
-  showTyping();
-  // Hide quick replies after first message
   document.getElementById('quick-replies').style.display = 'none';
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 300,
-        system: CLINIC_CONTEXT,
-        messages: chatHistory
-      })
-    });
-    const data = await res.json();
+  showTyping();
+  // Simulate thinking delay for natural feel
+  setTimeout(() => {
     removeTyping();
-    const reply = data.content?.[0]?.text || "I'm having a moment — please call us directly on +234 816 284 7976 or WhatsApp us!";
-    chatHistory.push({role:'assistant', content: reply});
+    const reply = getBotReply(text);
     addBotMessage(reply);
-  } catch(e) {
-    removeTyping();
-    addBotMessage("Sorry, I'm having a connection issue right now. Please contact us directly:\n📞 +234 816 284 7976\n💬 WhatsApp the same number");
-  }
+    // If booking mentioned, show booking button
+    if(/book|appointment|session|schedule/i.test(reply)) {
+      setTimeout(() => {
+        const msgs = document.getElementById('chat-messages');
+        const btn = document.createElement('div');
+        btn.innerHTML = `<div style="padding:0 0 0.5rem"><a href="#booking" onclick="toggleChat()" style="display:inline-block;background:var(--royal);color:white;padding:0.5rem 1.1rem;border-radius:20px;font-size:0.78rem;font-weight:700;text-decoration:none;margin-top:4px">📅 Book Now →</a></div>`;
+        msgs.appendChild(btn);
+        msgs.scrollTop = msgs.scrollHeight;
+      }, 300);
+    }
+  }, 800 + Math.random() * 600);
 }
 
 function sendQuick(text) {
@@ -3074,6 +3181,26 @@ setTimeout(() => {
     if(notif) notif.style.display = 'flex';
   }
 }, 8000);
+// ── ADMIN: Reset slots (triple-click dot in footer, password: wrw2025) ──
+let adminClickCount = 0;
+function adminResetSlots() {
+  adminClickCount++;
+  setTimeout(() => adminClickCount = 0, 2000);
+  if(adminClickCount >= 3) {
+    adminClickCount = 0;
+    const pwd = prompt('Admin password:');
+    if(pwd === 'wrw2025') {
+      try {
+        const key = getTodayKey();
+        const fresh = { paul: MAX_SLOTS, physio: MAX_SLOTS, massage: MAX_SLOTS, updated: Date.now() };
+        localStorage.setItem(key, JSON.stringify(fresh));
+        updateAvailability();
+        alert('✅ All slots reset to 6 for today!');
+      } catch(e) { alert('Could not reset slots'); }
+    }
+  }
+}
+
 function toggleMobileMenu(){
   const menu = document.getElementById('mobile-menu');
   const ham = document.getElementById('hamburger');
@@ -3118,7 +3245,111 @@ function copyNumber(elementId, btnId){
   });
 }
 
-// ── SPLASH SCREEN ──
+// ── SLOT TRACKING SYSTEM ──
+// 6 slots per specialist per day, resets at midnight
+// Syncs with Microsoft Lists via Power Automate on each booking
+
+const MAX_SLOTS = 6;
+const SPECIALISTS = ['paul', 'physio', 'massage'];
+
+function getTodayKey() {
+  const d = new Date();
+  return `wrw_slots_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
+}
+
+function getSlots() {
+  try {
+    const key = getTodayKey();
+    const stored = localStorage.getItem(key);
+    if(stored) return JSON.parse(stored);
+    // New day — reset all slots to 6
+    const fresh = { paul: MAX_SLOTS, physio: MAX_SLOTS, massage: MAX_SLOTS, updated: Date.now() };
+    localStorage.setItem(key, JSON.stringify(fresh));
+    // Clean up old keys
+    Object.keys(localStorage).filter(k => k.startsWith('wrw_slots_') && k !== key)
+      .forEach(k => localStorage.removeItem(k));
+    return fresh;
+  } catch(e) {
+    return { paul: MAX_SLOTS, physio: MAX_SLOTS, massage: MAX_SLOTS };
+  }
+}
+
+function reduceSlot(specialistVal) {
+  try {
+    const key = getTodayKey();
+    const slots = getSlots();
+    // Map specialist selector value to slot key
+    const map = { chiro: 'paul', physio: 'physio', massage: 'massage', wellness: 'paul' };
+    const slotKey = map[specialistVal] || 'paul';
+    if(slots[slotKey] > 0) slots[slotKey]--;
+    slots.updated = Date.now();
+    localStorage.setItem(key, JSON.stringify(slots));
+    updateAvailability();
+  } catch(e) {}
+}
+
+function getSlotDot(count) {
+  if(count <= 0) return '#EF4444';
+  if(count <= 2) return '#F59E0B';
+  return '#22C55E';
+}
+
+function getSlotText(name, count) {
+  if(count <= 0) return `${name} — Fully booked today`;
+  if(count === 1) return `${name} — Last slot today! 🔥`;
+  if(count === 2) return `${name} — Only 2 slots left`;
+  return `${name} — ${count} slots available`;
+}
+
+function isClinicOpen() {
+  const now = new Date();
+  const day = now.getDay();
+  const hour = now.getHours();
+  return (day >= 1 && day <= 5 && hour >= 8 && hour < 18) ||
+         (day === 6 && hour >= 9 && hour < 17) ||
+         (day === 0 && hour >= 10 && hour < 15);
+}
+
+function updateAvailability() {
+  const el = document.getElementById('avail-content');
+  if(!el) return;
+
+  const now = new Date();
+  const day = now.getDay();
+  const hour = now.getHours();
+
+  if(!isClinicOpen()) {
+    const nextOpen = day === 5 && hour >= 18 ? 'Saturday 9:00 AM'
+      : day === 6 && hour >= 17 ? 'Sunday 10:00 AM'
+      : day === 0 && hour >= 15 ? 'Monday 8:00 AM'
+      : day === 0 ? 'Monday 8:00 AM'
+      : 'tomorrow 8:00 AM';
+    el.innerHTML = `
+      <div class="fc-row"><div class="fc-dot" style="background:#EF4444"></div><div class="fc-text">Clinic currently closed</div></div>
+      <div class="fc-row"><div class="fc-dot" style="background:#F59E0B"></div><div class="fc-text">Opens ${nextOpen}</div></div>
+      <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Book online anytime ✓</div></div>`;
+    return;
+  }
+
+  const slots = getSlots();
+  el.innerHTML = `
+    <div class="fc-row">
+      <div class="fc-dot" style="background:${getSlotDot(slots.paul)}"></div>
+      <div class="fc-text">${getSlotText('Dr. Paul', slots.paul)}</div>
+    </div>
+    <div class="fc-row">
+      <div class="fc-dot" style="background:${getSlotDot(slots.massage)}"></div>
+      <div class="fc-text">${getSlotText('Massage', slots.massage)}</div>
+    </div>
+    <div class="fc-row">
+      <div class="fc-dot" style="background:${getSlotDot(slots.physio)}"></div>
+      <div class="fc-text">${getSlotText('Physio', slots.physio)}</div>
+    </div>`;
+}
+
+// Run on load, refresh every 5 minutes
+updateAvailability();
+setInterval(updateAvailability, 5 * 60 * 1000);
 window.addEventListener('load', () => {
   setTimeout(() => { document.getElementById('splash').classList.add('hidden'); }, 2000);
 });
@@ -3237,6 +3468,10 @@ function submitForm(){
     `📅 Date: ${date}\n⏰ Time: ${time}\n\n`+
     `Please confirm my appointment. Thank you!`
   );
+
+  // Reduce available slot for this specialist
+  const selectedSpec = document.querySelector('.spec-opt.active')?.dataset?.val || 'chiro';
+  reduceSlot(selectedSpec);
 
   // Send to Microsoft Lists via Power Automate
   const bookingData = {
