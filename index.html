@@ -48,12 +48,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
   position:fixed;inset:0;z-index:10000;
   background:var(--navy);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  animation:splashFade 0.5s ease 2.8s forwards;
-  pointer-events:none;
+  animation:splashFade 0.6s ease 2.5s forwards;
 }
 @keyframes splashFade{
-  0%{opacity:1;visibility:visible}
-  100%{opacity:0;visibility:hidden;display:none}
+  0%{opacity:1;pointer-events:all}
+  99%{opacity:0;pointer-events:none}
+  100%{opacity:0;visibility:hidden;pointer-events:none}
 }
 .splash-logo{animation:splashPulse 1.4s ease infinite}
 @keyframes splashPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
@@ -61,7 +61,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
 .splash-text span{color:var(--cyan)}
 .splash-sub{font-size:0.78rem;color:rgba(255,255,255,0.4);letter-spacing:0.15em;text-transform:uppercase;margin-top:0.5rem}
 .splash-bar{width:160px;height:2px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:2rem;overflow:hidden}
-.splash-bar-fill{height:100%;background:var(--cyan);border-radius:2px;animation:splashLoad 2.6s ease forwards}
+.splash-bar-fill{height:100%;background:var(--cyan);border-radius:2px;animation:splashLoad 2.4s ease forwards}
 @keyframes splashLoad{from{width:0}to{width:100%}}
 #back-top{
   position:fixed;bottom:100px;right:24px;
@@ -1817,19 +1817,19 @@ footer{
 <section id="stats">
   <div class="stats-grid">
     <div class="stat-box">
-      <span class="stat-count" data-target="1200">0</span>
+      <span class="stat-count" data-target="1200">1,200+</span>
       <div class="stat-desc">Patients successfully treated</div>
     </div>
     <div class="stat-box">
-      <span class="stat-count" data-target="98" data-suffix="%">0</span>
+      <span class="stat-count" data-target="98" data-suffix="%">98%</span>
       <div class="stat-desc">Patient satisfaction rate</div>
     </div>
     <div class="stat-box">
-      <span class="stat-count" data-target="16">0</span>
+      <span class="stat-count" data-target="16">16+</span>
       <div class="stat-desc">Conditions we treat</div>
     </div>
     <div class="stat-box">
-      <span class="stat-count" data-target="7">0</span>
+      <span class="stat-count" data-target="7">7+</span>
       <div class="stat-desc">Days a week we're open</div>
     </div>
   </div>
@@ -3340,6 +3340,9 @@ function updateAvailability() {
 // Run immediately — no waiting
 updateAvailability();
 setInterval(updateAvailability, 5 * 60 * 1000);
+
+// Splash backup — force hide after 3.5s
+setTimeout(()=>{const s=document.getElementById('splash');if(s){s.style.opacity='0';s.style.visibility='hidden';s.style.pointerEvents='none';}},3500);
 
 // ── SCROLL PROGRESS BAR + BACK TO TOP ──
 window.addEventListener('scroll', () => {
