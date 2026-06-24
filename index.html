@@ -43,7 +43,26 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
   z-index:9999;width:0%;transition:width 0.1s;
 }
 
-/* ── BACK TO TOP ── */
+/* ── SPLASH SCREEN — CSS only, cannot get stuck ── */
+#splash{
+  position:fixed;inset:0;z-index:10000;
+  background:var(--navy);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  animation:splashFade 0.5s ease 2.8s forwards;
+  pointer-events:none;
+}
+@keyframes splashFade{
+  0%{opacity:1;visibility:visible}
+  100%{opacity:0;visibility:hidden;display:none}
+}
+.splash-logo{animation:splashPulse 1.4s ease infinite}
+@keyframes splashPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.splash-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.4rem;font-weight:800;color:white;margin-top:1.25rem;letter-spacing:-0.01em}
+.splash-text span{color:var(--cyan)}
+.splash-sub{font-size:0.78rem;color:rgba(255,255,255,0.4);letter-spacing:0.15em;text-transform:uppercase;margin-top:0.5rem}
+.splash-bar{width:160px;height:2px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:2rem;overflow:hidden}
+.splash-bar-fill{height:100%;background:var(--cyan);border-radius:2px;animation:splashLoad 2.6s ease forwards}
+@keyframes splashLoad{from{width:0}to{width:100%}}
 #back-top{
   position:fixed;bottom:100px;right:24px;
   width:44px;height:44px;border-radius:50%;
@@ -1015,6 +1034,16 @@ footer{
   </button>
 </div>
 <div id="progress-bar"></div>
+
+<!-- SPLASH SCREEN — CSS only, auto-dismisses after 2.8s -->
+<div id="splash">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="80" width="80" class="splash-logo">
+    <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1ZM833.36,359.33v87.4c0,.15-.23.23-.35.12l-139.83-139.83c-19.5-19.53-45.51-30.19-73.12-30c-56.67.43-101.61,48.22-101.61,104.89v60.84c0,.19-.23.27-.35.15l-165.42-165.46h-2.24c45.28-.15,82.04-36.98,82.04-82.31v-87.36c0-.15.23-.27.35-.15l139.83,139.86c19.5,19.5,45.51,30.15,73.12,29.96,56.67-.39,101.61-48.18,101.61-104.85v-60.88c0-.15.23-.23.35-.12l165.42,165.46h2.24c-45.28.12-82.04,36.98-82.04,82.27Z"/>
+  </svg>
+  <div class="splash-text">White<span>Rock</span> Wellness</div>
+  <div class="splash-sub">Wellness Through Alignment</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
 
 <!-- BACK TO TOP -->
 <div id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
@@ -3322,26 +3351,45 @@ window.addEventListener('scroll', () => {
 });
 
 // ── STATS COUNTER ──
-const statObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      entry.target.querySelectorAll('.stat-count').forEach(el => {
-        const target = parseInt(el.dataset.target);
-        const suffix = el.dataset.suffix||'+';
-        let cur = 0;
-        const step = Math.ceil(target/60);
-        const t = setInterval(()=>{
-          cur = Math.min(cur+step, target);
-          el.textContent = cur.toLocaleString()+suffix;
-          if(cur>=target) clearInterval(t);
-        }, 25);
-      });
-      statObserver.unobserve(entry.target);
-    }
+// ── STATS COUNTER — reliable version ──
+function animateStats() {
+  document.querySelectorAll('.stat-count').forEach(el => {
+    if(el.dataset.animated) return; // don't re-animate
+    el.dataset.animated = '1';
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '+';
+    let cur = 0;
+    const step = Math.ceil(target / 60);
+    const t = setInterval(() => {
+      cur = Math.min(cur + step, target);
+      el.textContent = cur.toLocaleString() + suffix;
+      if(cur >= target) clearInterval(t);
+    }, 25);
   });
-},{threshold:0.3});
+}
+
+// Try IntersectionObserver first
 const statsEl = document.getElementById('stats');
-if(statsEl) statObserver.observe(statsEl);
+if(statsEl && 'IntersectionObserver' in window) {
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        animateStats();
+        statObserver.unobserve(entry.target);
+      }
+    });
+  }, {threshold: 0.1});
+  statObserver.observe(statsEl);
+} else {
+  // Fallback — just animate after 1 second
+  setTimeout(animateStats, 1000);
+}
+
+// Extra fallback — if still 0 after 4 seconds, force animate
+setTimeout(() => {
+  const first = document.querySelector('.stat-count');
+  if(first && (first.textContent === '0' || first.textContent === '0+')) animateStats();
+}, 4000);
 
 // ── FAQ TOGGLE ──
 function toggleFaq(el){
