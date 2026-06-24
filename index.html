@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WhiteRock Wellness LTD – Wellness Through Alignment</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -27,6 +35,229 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:#0A1628}
 ::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:3px}
+
+/* ── SCROLL PROGRESS BAR ── */
+#progress-bar{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--royal),var(--cyan),var(--cyan-lt));
+  z-index:9999;width:0%;transition:width 0.1s;
+}
+
+/* ── SPLASH SCREEN ── */
+#splash{
+  position:fixed;inset:0;z-index:10000;
+  background:var(--navy);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.6s ease,visibility 0.6s;
+}
+#splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.splash-logo{animation:splashPulse 1.5s ease infinite}
+@keyframes splashPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:0.85}}
+.splash-text{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:1.4rem;font-weight:800;color:white;
+  margin-top:1.25rem;letter-spacing:-0.01em;
+}
+.splash-text span{color:var(--cyan)}
+.splash-sub{
+  font-size:0.78rem;color:rgba(255,255,255,0.4);
+  letter-spacing:0.15em;text-transform:uppercase;margin-top:0.5rem;
+}
+.splash-bar{
+  width:160px;height:2px;background:rgba(255,255,255,0.1);
+  border-radius:2px;margin-top:2rem;overflow:hidden;
+}
+.splash-bar-fill{
+  height:100%;background:var(--cyan);border-radius:2px;
+  animation:splashLoad 1.8s ease forwards;
+}
+@keyframes splashLoad{from{width:0}to{width:100%}}
+
+/* ── BACK TO TOP ── */
+#back-top{
+  position:fixed;bottom:100px;right:24px;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--royal);border:1.5px solid rgba(0,170,255,0.3);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:500;
+  opacity:0;visibility:hidden;
+  transition:all 0.3s;box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
+#back-top.show{opacity:1;visibility:visible}
+#back-top:hover{background:var(--cyan);transform:translateY(-3px)}
+#back-top svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2.5}
+
+/* ── WHATSAPP FLOATING BUTTON ── */
+#wa-float{
+  position:fixed;bottom:24px;right:24px;
+  width:56px;height:56px;border-radius:50%;
+  background:#25D366;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:500;
+  box-shadow:0 4px 24px rgba(37,211,102,0.5);
+  transition:all 0.3s;
+  text-decoration:none;
+}
+#wa-float:hover{transform:scale(1.1);box-shadow:0 8px 32px rgba(37,211,102,0.6)}
+#wa-float svg{width:28px;height:28px;fill:white}
+.wa-tooltip{
+  position:absolute;right:68px;
+  background:var(--navy);color:white;
+  font-size:0.78rem;font-weight:600;
+  padding:0.4rem 0.8rem;border-radius:6px;
+  white-space:nowrap;
+  opacity:0;transition:opacity 0.2s;
+  pointer-events:none;
+}
+#wa-float:hover .wa-tooltip{opacity:1}
+
+/* ── MOBILE STICKY BOOK BAR ── */
+#mobile-book-bar{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--navy);
+  border-top:1px solid rgba(0,170,255,0.2);
+  padding:0.85rem 1.25rem;
+  z-index:400;
+  gap:0.75rem;align-items:center;justify-content:space-between;
+}
+.mbb-info{color:rgba(255,255,255,0.6);font-size:0.78rem}
+.mbb-info strong{display:block;color:white;font-size:0.88rem}
+.mbb-btn{
+  background:var(--cyan);color:var(--navy);
+  padding:0.7rem 1.5rem;border-radius:50px;
+  font-weight:700;font-size:0.9rem;
+  text-decoration:none;white-space:nowrap;flex-shrink:0;
+}
+@media(max-width:768px){
+  #mobile-book-bar{display:flex}
+  body{padding-bottom:72px}
+}
+
+/* ── FAQ SECTION ── */
+#faq{background:var(--offwhite)}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.faq-item{
+  background:white;border-radius:12px;
+  border:1px solid var(--border);overflow:hidden;
+  transition:border-color 0.2s;
+}
+.faq-item:hover{border-color:var(--cyan)}
+.faq-q{
+  padding:1.25rem 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;gap:1rem;
+  font-weight:600;font-size:0.92rem;color:var(--navy);
+}
+.faq-icon{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--sky);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:1rem;transition:transform 0.3s;color:var(--royal);font-weight:700;
+}
+.faq-item.open .faq-icon{transform:rotate(45deg);background:var(--cyan);color:white}
+.faq-a{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.35s ease,padding 0.3s;
+  font-size:0.88rem;color:var(--muted);line-height:1.75;
+  padding:0 1.5rem;
+}
+.faq-item.open .faq-a{max-height:300px;padding:0 1.5rem 1.25rem}
+@media(max-width:768px){.faq-grid{grid-template-columns:1fr}}
+
+/* ── PAYMENT SECTION ── */
+#payment{background:var(--navy)}
+.pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.pay-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(0,170,255,0.15);
+  border-radius:14px;padding:2rem;text-align:center;
+  transition:all 0.2s;
+}
+.pay-card:hover{background:rgba(0,170,255,0.06);border-color:var(--cyan);transform:translateY(-3px)}
+.pay-icon{font-size:2.5rem;margin-bottom:1rem;display:block}
+.pay-card h3{font-size:1rem;font-weight:700;color:white;margin-bottom:0.5rem}
+.pay-card p{font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.65}
+.pay-badge{
+  display:inline-block;margin-top:0.75rem;
+  font-size:0.7rem;font-weight:700;
+  padding:0.25rem 0.75rem;border-radius:20px;
+  background:rgba(34,197,94,0.15);color:#22C55E;
+  border:1px solid rgba(34,197,94,0.3);
+}
+
+/* ── STATS COUNTER ── */
+#stats{background:linear-gradient(135deg,var(--royal) 0%,#0D2050 100%);padding:70px 5%}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2rem;max-width:1300px;margin:0 auto;
+  text-align:center;
+}
+.stat-box{}
+.stat-count{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.2rem,4vw,3.5rem);
+  font-weight:700;color:var(--cyan);
+  display:block;line-height:1;margin-bottom:0.5rem;
+}
+.stat-desc{color:rgba(255,255,255,0.65);font-size:0.88rem;font-weight:500}
+@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}.pay-grid{grid-template-columns:1fr}}
+
+/* ── BLOG TIPS ── */
+#tips{background:white}
+.tips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.tip-card{
+  border-radius:12px;overflow:hidden;
+  border:1px solid var(--border);transition:all 0.25s;
+}
+.tip-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(26,63,191,0.1)}
+.tip-img{
+  height:160px;display:flex;align-items:center;justify-content:center;
+  font-size:3rem;position:relative;overflow:hidden;
+}
+.tip-body{padding:1.25rem}
+.tip-tag{
+  font-size:0.7rem;font-weight:700;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--cyan);margin-bottom:0.5rem;
+}
+.tip-body h3{font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:0.4rem;line-height:1.4}
+.tip-body p{font-size:0.82rem;color:var(--muted);line-height:1.65}
+.tip-link{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  margin-top:0.75rem;font-size:0.8rem;font-weight:600;
+  color:var(--royal);text-decoration:none;
+}
+.tip-link:hover{color:var(--cyan)}
+@media(max-width:768px){.tips-grid{grid-template-columns:1fr}}
+
+/* ── COOKIE NOTICE ── */
+#cookie{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(10,22,40,0.97);
+  border-top:1px solid rgba(0,170,255,0.2);
+  padding:1rem 5%;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;z-index:800;flex-wrap:wrap;
+  backdrop-filter:blur(8px);
+  transform:translateY(100%);transition:transform 0.4s;
+}
+#cookie.show{transform:translateY(0)}
+#cookie p{font-size:0.82rem;color:rgba(255,255,255,0.6);max-width:600px}
+#cookie a{color:var(--cyan)}
+.cookie-btns{display:flex;gap:0.75rem;flex-shrink:0}
+.cookie-accept{
+  background:var(--cyan);color:var(--navy);
+  border:none;padding:0.55rem 1.25rem;border-radius:6px;
+  font-weight:700;font-size:0.85rem;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+.cookie-decline{
+  background:transparent;color:rgba(255,255,255,0.4);
+  border:1px solid rgba(255,255,255,0.15);
+  padding:0.55rem 1.25rem;border-radius:6px;
+  font-size:0.85rem;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+@media(max-width:768px){#cookie{flex-direction:column;align-items:flex-start}}
 
 /* ── NAV ── */
 nav{
@@ -634,6 +865,48 @@ footer{
 </style>
 </head>
 <body>
+
+<!-- SCROLL PROGRESS BAR -->
+<div id="progress-bar"></div>
+
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="80" width="80" class="splash-logo">
+    <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1ZM833.36,359.33v87.4c0,.15-.23.23-.35.12l-139.83-139.83c-19.5-19.53-45.51-30.19-73.12-30c-56.67.43-101.61,48.22-101.61,104.89v60.84c0,.19-.23.27-.35.15l-165.42-165.46h-2.24c45.28-.15,82.04-36.98,82.04-82.31v-87.36c0-.15.23-.27.35-.15l139.83,139.86c19.5,19.5,45.51,30.15,73.12,29.96,56.67-.39,101.61-48.18,101.61-104.85v-60.88c0-.15.23-.23.35-.12l165.42,165.46h2.24c-45.28.12-82.04,36.98-82.04,82.27Z"/>
+  </svg>
+  <div class="splash-text">White<span>Rock</span> Wellness</div>
+  <div class="splash-sub">Wellness Through Alignment</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
+<!-- BACK TO TOP -->
+<div id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</div>
+
+<!-- WHATSAPP FLOATING BUTTON -->
+<a id="wa-float" href="https://wa.me/2348162847976?text=Hello%20WhiteRock%20Wellness%2C%20I%20would%20like%20to%20book%20an%20appointment." target="_blank">
+  <span class="wa-tooltip">Book via WhatsApp</span>
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- MOBILE STICKY BOOK BAR -->
+<div id="mobile-book-bar">
+  <div class="mbb-info">
+    <strong>WhiteRock Wellness</strong>
+    Open Mon–Sun · Oniru, Lagos
+  </div>
+  <a href="#booking" class="mbb-btn">Book Now →</a>
+</div>
+
+<!-- COOKIE NOTICE -->
+<div id="cookie">
+  <p>We use cookies to improve your experience on our website. By continuing to browse, you agree to our use of cookies. <a href="#">Privacy Policy</a></p>
+  <div class="cookie-btns">
+    <button class="cookie-accept" onclick="acceptCookie()">Accept</button>
+    <button class="cookie-decline" onclick="declineCookie()">Decline</button>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav>
@@ -1298,7 +1571,7 @@ footer{
 <section id="testimonials">
 <div class="section-max">
   <div class="label">Patient Reviews</div>
-  <h2 class="section-h">Real Lagosians.<br>Real results.</h2>
+  <h2 class="section-h">Real Nigerians.<br>Real results.</h2>
   <p class="section-sub">Don't take our word for it — hear from the people whose lives we've changed.</p>
 
   <div class="testi-grid">
@@ -1320,6 +1593,198 @@ footer{
       <div class="testi-name">Bola A.</div>
       <div class="testi-type">Sciatica patient · Oniru</div>
     </div>
+  </div>
+</div>
+</section>
+
+<!-- STATS COUNTER -->
+<section id="stats">
+  <div class="stats-grid">
+    <div class="stat-box">
+      <span class="stat-count" data-target="1200">0</span>
+      <div class="stat-desc">Patients successfully treated</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-count" data-target="98" data-suffix="%">0</span>
+      <div class="stat-desc">Patient satisfaction rate</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-count" data-target="16">0</span>
+      <div class="stat-desc">Conditions we treat</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-count" data-target="7">0</span>
+      <div class="stat-desc">Days a week we're open</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+<div class="section-max">
+  <div class="label">Common Questions</div>
+  <h2 class="section-h">Everything you're afraid<br>to ask — answered.</h2>
+  <p class="section-sub">We know chiropractic is new to many Nigerians. Here are the most common questions we hear every day.</p>
+  <div class="faq-grid">
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is chiropractic adjustment painful?<div class="faq-icon">+</div></div>
+      <div class="faq-a">Most patients feel immediate relief after an adjustment — not pain. You may hear a popping sound, which is simply gas releasing from the joint, not bones cracking. Some patients feel mild soreness for 24 hours after their first session, similar to post-exercise soreness. Dr. Paul always adjusts gently and explains every step before he does it.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How many sessions will I need?<div class="faq-icon">+</div></div>
+      <div class="faq-a">It depends on your condition. Many patients feel significant relief after just 1–3 sessions. For chronic conditions like scoliosis or long-term back pain, a course of 6–12 sessions is common. Dr. Paul will assess your condition at the initial consultation and give you a clear, honest treatment plan with realistic expectations.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is chiropractic care safe?<div class="faq-icon">+</div></div>
+      <div class="faq-a">Yes — chiropractic is one of the safest forms of healthcare for musculoskeletal conditions. Dr. Paul is fully trained and qualified. Serious complications are extremely rare — far rarer than the risks of long-term painkiller use or unnecessary surgery. He will conduct a thorough assessment before any treatment to ensure it is safe for you.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What happens during my first visit?<div class="faq-icon">+</div></div>
+      <div class="faq-a">Your first visit is a full consultation — about 60 minutes. Dr. Paul will take a detailed history of your pain, assess your posture and spine, perform specific tests, and explain exactly what he finds. If treatment is appropriate that same day, he may begin. You will leave with a clear diagnosis and personalised treatment plan.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Do I need a referral from a doctor?<div class="faq-icon">+</div></div>
+      <div class="faq-a">No referral is needed. You can book directly with us online, by phone, or via WhatsApp. Chiropractic is a primary healthcare profession — you can see Dr. Paul as your first point of contact for back pain, neck pain, headaches, and many other conditions without seeing a GP first.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can children and elderly people receive chiropractic care?<div class="faq-icon">+</div></div>
+      <div class="faq-a">Absolutely. Chiropractic care is suitable for all ages — from newborns to the elderly. Techniques are always adapted to the patient. Gentle, low-force adjustments are used for children and older patients. Many parents bring their children for posture checks, scoliosis screening, and sports injury treatment.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is chiropractic care safe during pregnancy?<div class="faq-icon">+</div></div>
+      <div class="faq-a">Yes — and it is highly recommended. Pregnancy places enormous stress on the lower back and pelvis. Dr. Paul uses specially modified, gentle techniques that are completely safe for mother and baby throughout all trimesters. Many women experience dramatic relief from pregnancy-related back pain and pelvic discomfort.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How is chiropractic different from physiotherapy?<div class="faq-icon">+</div></div>
+      <div class="faq-a">Chiropractic focuses primarily on spinal alignment and the nervous system — correcting the structural root cause of pain through manual adjustments. Physiotherapy focuses more on rehabilitation, strengthening exercises, and restoring movement after injury. At WhiteRock we offer both, and Dr. Paul often combines approaches for the best results.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What should I wear to my appointment?<div class="faq-icon">+</div></div>
+      <div class="faq-a">Wear comfortable, loose-fitting clothing. You do not need to wear anything specific — Dr. Paul will ask you to remove shoes and may ask you to change into a gown if needed for proper assessment. Leave tight jeans and formal clothing at home if possible.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Once I start, do I have to keep coming forever?<div class="faq-icon">+</div></div>
+      <div class="faq-a">No — this is a common myth. Treatment has a clear beginning, middle, and end. Once your condition is resolved, Dr. Paul may recommend periodic wellness visits (once a month or every few months) to maintain your results, but this is entirely your choice. Think of it like servicing your car — optional but beneficial.</div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- PAYMENT & BOOKING INFO -->
+<section id="payment">
+<div class="section-max">
+  <div class="label" style="color:var(--cyan-lt)">Payment & Booking</div>
+  <h2 class="section-h" style="color:white">Simple, transparent,<br>no surprises.</h2>
+  <p class="section-sub" style="color:rgba(255,255,255,0.6)">We believe healthcare should be accessible. Here's everything you need to know before your visit.</p>
+  <div class="pay-grid">
+
+    <div class="pay-card">
+      <span class="pay-icon">💵</span>
+      <h3>Cash Payment</h3>
+      <p>Pay comfortably at the clinic after your session. No advance payment required for your first visit.</p>
+      <span class="pay-badge">✓ Accepted</span>
+    </div>
+
+    <div class="pay-card">
+      <span class="pay-icon">🏦</span>
+      <h3>Bank Transfer</h3>
+      <p>Transfer directly to our account before or after your session. Account details provided upon booking confirmation.</p>
+      <span class="pay-badge">✓ Accepted</span>
+    </div>
+
+    <div class="pay-card">
+      <span class="pay-icon">📱</span>
+      <h3>Mobile Transfer</h3>
+      <p>Pay via Opay, Kuda, PalmPay, or any Nigerian mobile banking app. Fast, safe and convenient.</p>
+      <span class="pay-badge">✓ Accepted</span>
+    </div>
+
+  </div>
+
+  <!-- HMO Notice -->
+  <div style="margin-top:2rem;background:rgba(255,184,0,0.08);border:1px solid rgba(255,184,0,0.2);border-radius:12px;padding:1.5rem 2rem;display:flex;gap:1rem;align-items:flex-start">
+    <span style="font-size:1.5rem;flex-shrink:0">ℹ️</span>
+    <div>
+      <h4 style="color:#FFB800;font-size:0.95rem;margin-bottom:0.3rem">HMO / Health Insurance</h4>
+      <p style="color:rgba(255,255,255,0.55);font-size:0.88rem;line-height:1.7">We currently operate on a private pay basis — cash and bank transfer only. We are working towards accepting HMO coverage in the near future. Contact us to discuss flexible payment arrangements if needed.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- HEALTH TIPS BLOG -->
+<section id="tips">
+<div class="section-max">
+  <div class="label">Health Tips</div>
+  <h2 class="section-h">From Dr. Paul's desk —<br>wellness made simple.</h2>
+  <p class="section-sub">Practical advice to keep your spine healthy between sessions. Follow us on social media for more daily tips.</p>
+  <div class="tips-grid">
+
+    <div class="tip-card">
+      <div class="tip-img" style="background:linear-gradient(135deg,#0A1628,#1A3FBF)">
+        <svg viewBox="0 0 80 80" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="28" y="10" width="24" height="8" rx="4" fill="rgba(0,170,255,0.4)"/>
+          <path d="M40 18 Q40 35 40 55 Q40 65 40 72" stroke="#00AAFF" stroke-width="3" stroke-linecap="round"/>
+          <rect x="25" y="26" width="30" height="7" rx="3" fill="rgba(0,170,255,0.3)"/>
+          <rect x="25" y="38" width="30" height="7" rx="3" fill="rgba(0,170,255,0.3)"/>
+          <rect x="25" y="50" width="30" height="7" rx="3" fill="rgba(0,170,255,0.3)"/>
+        </svg>
+      </div>
+      <div class="tip-body">
+        <div class="tip-tag">Posture</div>
+        <h3>The 45-Minute Rule That Could Save Your Spine</h3>
+        <p>Every 45 minutes of sitting, stand up and walk for 2 minutes. This simple habit dramatically reduces disc pressure and prevents chronic back pain from office work.</p>
+        <a href="https://www.instagram.com/whiterockwellness?igsh=MWhvc2J6bWdyZ3lkZg==" target="_blank" class="tip-link">Read more on Instagram →</a>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-img" style="background:linear-gradient(135deg,#0D2050,#00AAFF)">
+        <svg viewBox="0 0 80 80" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="40" cy="30" rx="18" ry="20" fill="rgba(255,255,255,0.15)"/>
+          <path d="M32 18 L28 8" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+          <path d="M40 15 L40 5" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+          <path d="M48 18 L52 8" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+          <rect x="33" y="49" width="14" height="22" rx="5" fill="rgba(255,255,255,0.15)"/>
+          <path d="M40 49 Q40 42 40 38" stroke="white" stroke-width="2" stroke-dasharray="3,2" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="tip-body">
+        <div class="tip-tag">Headaches</div>
+        <h3>Your Headache Isn't Always About Water — Check Your Neck</h3>
+        <p>Many Nigerians treat headaches with paracetamol for years without relief. If your headaches start at the base of your skull, your cervical spine may be the real cause.</p>
+        <a href="https://www.tiktok.com/@whiterockwellness?_r=1&_t=ZS-97U7HjlDVez" target="_blank" class="tip-link">Watch on TikTok →</a>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-img" style="background:linear-gradient(135deg,#051020,#1A3FBF)">
+        <svg viewBox="0 0 80 80" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 50 C20 35 30 25 40 20 C50 25 60 35 60 50" stroke="#00AAFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="40" cy="52" rx="20" ry="8" fill="rgba(0,170,255,0.2)"/>
+          <path d="M30 38 Q35 30 40 28 Q45 30 50 38" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>
+          <circle cx="40" cy="55" r="5" fill="rgba(0,170,255,0.5)"/>
+        </svg>
+      </div>
+      <div class="tip-body">
+        <div class="tip-tag">Sleep</div>
+        <h3>The Best Sleeping Position for Your Spine</h3>
+        <p>Sleeping on your back with a pillow under your knees, or on your side with a pillow between your knees, keeps your spine in neutral alignment and reduces morning stiffness.</p>
+        <a href="https://www.facebook.com/share/1BNdHGuDKB/?mibextid=wwXIfr" target="_blank" class="tip-link">Read more on Facebook →</a>
+      </div>
+    </div>
+
   </div>
 </div>
 </section>
@@ -2109,6 +2574,72 @@ function closeCond(){
   document.getElementById('condModal').classList.remove('show');
   document.body.style.overflow='';
 }
+
+// ── SPLASH SCREEN ──
+window.addEventListener('load', () => {
+  setTimeout(() => { document.getElementById('splash').classList.add('hidden'); }, 2000);
+});
+
+// ── SCROLL PROGRESS BAR + BACK TO TOP ──
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress-bar').style.width = ((scrollTop/docHeight)*100)+'%';
+  const bt = document.getElementById('back-top');
+  scrollTop > 400 ? bt.classList.add('show') : bt.classList.remove('show');
+});
+
+// ── STATS COUNTER ──
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.querySelectorAll('.stat-count').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix||'+';
+        let cur = 0;
+        const step = Math.ceil(target/60);
+        const t = setInterval(()=>{
+          cur = Math.min(cur+step, target);
+          el.textContent = cur.toLocaleString()+suffix;
+          if(cur>=target) clearInterval(t);
+        }, 25);
+      });
+      statObserver.unobserve(entry.target);
+    }
+  });
+},{threshold:0.3});
+const statsEl = document.getElementById('stats');
+if(statsEl) statObserver.observe(statsEl);
+
+// ── FAQ TOGGLE ──
+function toggleFaq(el){
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!isOpen) el.classList.add('open');
+}
+
+// ── COOKIE NOTICE ──
+function showCookie(){
+  try{ if(!localStorage.getItem('wrw-cookie')) setTimeout(()=>document.getElementById('cookie').classList.add('show'),2500); }catch(e){}
+}
+function acceptCookie(){ try{ localStorage.setItem('wrw-cookie','accepted'); }catch(e){} document.getElementById('cookie').classList.remove('show'); }
+function declineCookie(){ try{ localStorage.setItem('wrw-cookie','declined'); }catch(e){} document.getElementById('cookie').classList.remove('show'); }
+showCookie();
+
+// ── ACTIVE NAV ──
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) navLinks.forEach(a=>{
+      a.style.color = a.getAttribute('href')==='#'+e.target.id ? 'var(--cyan)':'rgba(255,255,255,0.7)';
+    });
+  });
+},{threshold:0.35}).observe && document.querySelectorAll('section[id]').forEach(s=>
+  new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) navLinks.forEach(a=>{ a.style.color=a.getAttribute('href')==='#'+e.target.id?'var(--cyan)':'rgba(255,255,255,0.7)'; }); });
+  },{threshold:0.3}).observe(s)
+);
+
 const today = new Date().toISOString().split('T')[0];
 document.querySelectorAll('input[type=date]').forEach(e=>e.min=today);
 
@@ -2147,8 +2678,31 @@ function submitForm(){
     else el.style.borderColor='#E2EAF0';
   });
   if(!ok){alert('Please fill in all required fields marked with *');return;}
+
+  // Build WhatsApp message
+  const name = (document.getElementById('ff').value+' '+document.getElementById('fl').value).trim();
+  const phone = document.getElementById('fp').value;
+  const concern = document.getElementById('fs').value;
+  const date = document.getElementById('fd').value;
+  const time = document.getElementById('ft').value;
+  const spec = document.querySelector('.spec-opt.active .sn')?.textContent || 'Chiropractor';
+  const waMsg = encodeURIComponent(
+    `Hello WhiteRock Wellness! 👋\n\nI just submitted a booking request:\n\n`+
+    `👤 Name: ${name}\n📞 Phone: ${phone}\n`+
+    `🩺 Specialist: ${spec}\n💬 Concern: ${concern}\n`+
+    `📅 Date: ${date}\n⏰ Time: ${time}\n\n`+
+    `Please confirm my appointment. Thank you!`
+  );
+
+  // Show success modal
   document.getElementById('modal').classList.add('show');
-  // Reset
+
+  // Open WhatsApp after short delay
+  setTimeout(()=>{
+    window.open('https://wa.me/2348162847976?text='+waMsg,'_blank');
+  }, 1500);
+
+  // Reset form
   ['ff','fl','fp','fe','fs','fd','ft','fn'].forEach(id=>{
     const el=document.getElementById(id);
     if(el) el.value='';
