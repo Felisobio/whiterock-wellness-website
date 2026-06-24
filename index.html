@@ -43,17 +43,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
   z-index:9999;width:0%;transition:width 0.1s;
 }
 
-/* ── SPLASH SCREEN — CSS only, cannot get stuck ── */
+/* ── SPLASH SCREEN ── */
 #splash{
   position:fixed;inset:0;z-index:10000;
   background:var(--navy);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  animation:splashFade 0.6s ease 2.5s forwards;
-}
-@keyframes splashFade{
-  0%{opacity:1;pointer-events:all}
-  99%{opacity:0;pointer-events:none}
-  100%{opacity:0;visibility:hidden;pointer-events:none}
 }
 .splash-logo{animation:splashPulse 1.4s ease infinite}
 @keyframes splashPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
@@ -61,7 +55,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
 .splash-text span{color:var(--cyan)}
 .splash-sub{font-size:0.78rem;color:rgba(255,255,255,0.4);letter-spacing:0.15em;text-transform:uppercase;margin-top:0.5rem}
 .splash-bar{width:160px;height:2px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:2rem;overflow:hidden}
-.splash-bar-fill{height:100%;background:var(--cyan);border-radius:2px;animation:splashLoad 2.4s ease forwards}
+.splash-bar-fill{height:100%;background:var(--cyan);border-radius:2px;animation:splashLoad 2.5s ease forwards}
 @keyframes splashLoad{from{width:0}to{width:100%}}
 #back-top{
   position:fixed;bottom:100px;right:24px;
@@ -3341,58 +3335,55 @@ function updateAvailability() {
 updateAvailability();
 setInterval(updateAvailability, 5 * 60 * 1000);
 
-// Splash backup — force hide after 3.5s
-setTimeout(()=>{const s=document.getElementById('splash');if(s){s.style.opacity='0';s.style.visibility='hidden';s.style.pointerEvents='none';}},3500);
+// ── SPLASH — JS hide, guaranteed ──
+(function(){
+  function hideSplash(){
+    var s = document.getElementById('splash');
+    if(!s) return;
+    s.style.transition = 'opacity 0.5s';
+    s.style.opacity = '0';
+    setTimeout(function(){ s.style.display = 'none'; }, 600);
+  }
+  setTimeout(hideSplash, 2800);
+})();
+
+// ── STATS — set immediately, no scroll needed ──
+(function(){
+  var stats = [
+    { id: null, sel: '.stat-count[data-target="1200"]', val: '1,200+' },
+    { id: null, sel: '.stat-count[data-target="98"]',   val: '98%'   },
+    { id: null, sel: '.stat-count[data-target="16"]',   val: '16+'   },
+    { id: null, sel: '.stat-count[data-target="7"]',    val: '7'     }
+  ];
+  function setStats(){
+    stats.forEach(function(s){
+      var el = document.querySelector(s.sel);
+      if(el) el.textContent = s.val;
+    });
+  }
+  // Set on DOM ready
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', setStats);
+  } else {
+    setStats();
+  }
+  // Also set after 1s as backup
+  setTimeout(setStats, 1000);
+})();
 
 // ── SCROLL PROGRESS BAR + BACK TO TOP ──
 window.addEventListener('scroll', () => {
   const scrollTop = window.scrollY;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  document.getElementById('progress-bar').style.width = ((scrollTop/docHeight)*100)+'%';
+  const pb = document.getElementById('progress-bar');
+  if(pb) pb.style.width = ((scrollTop/docHeight)*100)+'%';
   const bt = document.getElementById('back-top');
-  scrollTop > 400 ? bt.classList.add('show') : bt.classList.remove('show');
+  if(bt) {
+    if(scrollTop > 300) bt.classList.add('show');
+    else bt.classList.remove('show');
+  }
 });
 
-// ── STATS COUNTER ──
-// ── STATS COUNTER — reliable version ──
-function animateStats() {
-  document.querySelectorAll('.stat-count').forEach(el => {
-    if(el.dataset.animated) return; // don't re-animate
-    el.dataset.animated = '1';
-    const target = parseInt(el.dataset.target);
-    const suffix = el.dataset.suffix || '+';
-    let cur = 0;
-    const step = Math.ceil(target / 60);
-    const t = setInterval(() => {
-      cur = Math.min(cur + step, target);
-      el.textContent = cur.toLocaleString() + suffix;
-      if(cur >= target) clearInterval(t);
-    }, 25);
-  });
-}
-
-// Try IntersectionObserver first
-const statsEl = document.getElementById('stats');
-if(statsEl && 'IntersectionObserver' in window) {
-  const statObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting) {
-        animateStats();
-        statObserver.unobserve(entry.target);
-      }
-    });
-  }, {threshold: 0.1});
-  statObserver.observe(statsEl);
-} else {
-  // Fallback — just animate after 1 second
-  setTimeout(animateStats, 1000);
-}
-
-// Extra fallback — if still 0 after 4 seconds, force animate
-setTimeout(() => {
-  const first = document.querySelector('.stat-count');
-  if(first && (first.textContent === '0' || first.textContent === '0+')) animateStats();
-}, 4000);
 
 // ── FAQ TOGGLE ──
 function toggleFaq(el){
