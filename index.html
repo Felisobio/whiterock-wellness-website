@@ -1244,7 +1244,9 @@ footer{
         <div class="floating-card">
           <div class="fc-label">Today's availability</div>
           <div id="avail-content">
-            <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Loading availability...</div></div>
+            <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Dr. Paul — 6 slots available</div></div>
+            <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Massage — 6 slots available</div></div>
+            <div class="fc-row"><div class="fc-dot green"></div><div class="fc-text">Physio — 6 slots available</div></div>
           </div>
         </div>
       </div>
@@ -3206,11 +3208,7 @@ function copyNumber(elementId, btnId){
 }
 
 // ── SLOT TRACKING SYSTEM ──
-// 6 slots per specialist per day, resets at midnight
-// Syncs with Microsoft Lists via Power Automate on each booking
-
 const MAX_SLOTS = 6;
-const SPECIALISTS = ['paul', 'physio', 'massage'];
 
 function getTodayKey() {
   const d = new Date();
@@ -3221,31 +3219,35 @@ function getSlots() {
   try {
     const key = getTodayKey();
     const stored = localStorage.getItem(key);
-    if(stored) return JSON.parse(stored);
-    // New day — reset all slots to 6
-    const fresh = { paul: MAX_SLOTS, physio: MAX_SLOTS, massage: MAX_SLOTS, updated: Date.now() };
+    if(stored) {
+      const parsed = JSON.parse(stored);
+      // Validate it has all keys
+      if(typeof parsed.paul === 'number' && typeof parsed.physio === 'number' && typeof parsed.massage === 'number') {
+        return parsed;
+      }
+    }
+    // New day or invalid — reset
+    const fresh = { paul: MAX_SLOTS, physio: MAX_SLOTS, massage: MAX_SLOTS };
     localStorage.setItem(key, JSON.stringify(fresh));
-    // Clean up old keys
+    // Clean old keys
     Object.keys(localStorage).filter(k => k.startsWith('wrw_slots_') && k !== key)
       .forEach(k => localStorage.removeItem(k));
     return fresh;
   } catch(e) {
+    // localStorage not available — return defaults
     return { paul: MAX_SLOTS, physio: MAX_SLOTS, massage: MAX_SLOTS };
   }
 }
 
 function reduceSlot(specialistVal) {
   try {
-    const key = getTodayKey();
     const slots = getSlots();
-    // Map specialist selector value to slot key
-    const map = { chiro: 'paul', physio: 'physio', massage: 'massage', wellness: 'paul' };
-    const slotKey = map[specialistVal] || 'paul';
-    if(slots[slotKey] > 0) slots[slotKey]--;
-    slots.updated = Date.now();
-    localStorage.setItem(key, JSON.stringify(slots));
-    updateAvailability();
+    const map = { chiro:'paul', physio:'physio', massage:'massage', wellness:'paul' };
+    const key2 = map[specialistVal] || 'paul';
+    if(slots[key2] > 0) slots[key2]--;
+    localStorage.setItem(getTodayKey(), JSON.stringify(slots));
   } catch(e) {}
+  updateAvailability();
 }
 
 function getSlotDot(count) {
@@ -3279,10 +3281,9 @@ function updateAvailability() {
   const hour = now.getHours();
 
   if(!isClinicOpen()) {
-    const nextOpen = day === 5 && hour >= 18 ? 'Saturday 9:00 AM'
-      : day === 6 && hour >= 17 ? 'Sunday 10:00 AM'
-      : day === 0 && hour >= 15 ? 'Monday 8:00 AM'
-      : day === 0 ? 'Monday 8:00 AM'
+    const nextOpen = (day === 5 && hour >= 18) ? 'Saturday 9:00 AM'
+      : (day === 6 && hour >= 17) ? 'Sunday 10:00 AM'
+      : (day === 0) ? 'Monday 8:00 AM'
       : 'tomorrow 8:00 AM';
     el.innerHTML = `
       <div class="fc-row"><div class="fc-dot" style="background:#EF4444"></div><div class="fc-text">Clinic currently closed</div></div>
@@ -3307,7 +3308,7 @@ function updateAvailability() {
     </div>`;
 }
 
-// Run on load, refresh every 5 minutes
+// Run immediately — no waiting
 updateAvailability();
 setInterval(updateAvailability, 5 * 60 * 1000);
 
