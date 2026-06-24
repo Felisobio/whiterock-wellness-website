@@ -1142,17 +1142,17 @@ footer{
         <div class="spec-opt active" data-val="chiro" onclick="setSpec(this,'Chiropractic Adjustment')">
           <span class="si">🦴</span>
           <span class="sn">Chiropractor</span>
-          <span class="ss">Dr. Paul</span>
+          <span class="ss" id="ss-chiro">Dr. Paul Chima</span>
         </div>
         <div class="spec-opt" data-val="physio" onclick="setSpec(this,'Physiotherapy')">
           <span class="si">🏃</span>
           <span class="sn">Physiotherapist</span>
-          <span class="ss">Rehabilitation</span>
+          <span class="ss" id="ss-physio">Rehabilitation</span>
         </div>
         <div class="spec-opt" data-val="massage" onclick="setSpec(this,'Therapeutic Massage')">
           <span class="si">🤲</span>
           <span class="sn">Massage Therapist</span>
-          <span class="ss">Deep tissue</span>
+          <span class="ss" id="ss-massage">Deep tissue</span>
         </div>
       </div>
 
@@ -1169,18 +1169,35 @@ footer{
         <label>What's bothering you? *</label>
         <select id="fs">
           <option value="">Pick your main concern…</option>
-          <option>Back pain (lower / upper)</option>
-          <option>Neck pain or stiffness</option>
-          <option>Headaches or migraines</option>
-          <option>Sciatica / leg pain</option>
-          <option>Shoulder or arm pain</option>
-          <option>Knee or hip pain</option>
-          <option>Posture correction</option>
-          <option>Sports injury</option>
-          <option>General wellness & prevention</option>
-          <option>Post-surgery rehabilitation</option>
-          <option>Stress & muscle tension</option>
-          <option>Other / Not sure</option>
+          <optgroup label="── Spine Conditions ──">
+            <option>Scoliosis (curved spine)</option>
+            <option>Spondylosis (spinal degeneration)</option>
+            <option>Spondylolisthesis (slipped vertebra)</option>
+            <option>Spondylitis / Ankylosing Spondylitis</option>
+            <option>Slipped / Herniated Disc</option>
+          </optgroup>
+          <optgroup label="── Pain & Nerve Issues ──">
+            <option>Lower back pain</option>
+            <option>Upper back pain</option>
+            <option>Neck pain or stiffness</option>
+            <option>Sciatica (pain shooting down leg)</option>
+            <option>Shoulder or arm pain</option>
+            <option>Knee or hip pain</option>
+            <option>Headaches or migraines</option>
+          </optgroup>
+          <optgroup label="── Lifestyle & Wellness ──">
+            <option>Bad posture correction</option>
+            <option>Work / desk-related back pain</option>
+            <option>Sports injury</option>
+            <option>Pregnancy back pain</option>
+            <option>Poor sleep (spine-related)</option>
+            <option>Stress & muscle tension</option>
+          </optgroup>
+          <optgroup label="── Other ──">
+            <option>General wellness & prevention</option>
+            <option>Post-surgery rehabilitation</option>
+            <option>Not sure — need assessment</option>
+          </optgroup>
         </select>
       </div>
 
@@ -1203,7 +1220,7 @@ footer{
       </div>
 
       <div class="fg">
-        <label>Extra notes for Dr. Paul (optional)</label>
+        <label id="notes-label">Extra notes for Dr. Paul Chima (optional)</label>
         <textarea id="fn" placeholder="How long have you had this pain? Had any previous treatment? Let us know…"></textarea>
       </div>
 
@@ -2032,9 +2049,23 @@ const today = new Date().toISOString().split('T')[0];
 document.querySelectorAll('input[type=date]').forEach(e=>e.min=today);
 
 // Specialist selector
+const specLabels = {
+  chiro:  { notes:'Extra notes for Dr. Paul Chima (optional)',        ph:'How long have you had this pain? Had any previous treatment? Let us know…' },
+  physio: { notes:'Extra notes for your Physiotherapist (optional)',   ph:'Tell us about your injury, mobility issues, or rehabilitation goals…' },
+  massage:{ notes:'Extra notes for your Massage Therapist (optional)', ph:'Any specific areas of tension? Preferred pressure — light, medium or deep?' }
+};
+
 function setSpec(el, svcVal) {
   document.querySelectorAll('.spec-opt').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
+  const val = el.dataset.val;
+  // Update notes label + placeholder dynamically
+  const info = specLabels[val];
+  if(info){
+    document.getElementById('notes-label').textContent = info.notes;
+    document.getElementById('fn').placeholder = info.ph;
+  }
+  // Auto-select matching service in dropdown
   const sel = document.getElementById('fs');
   for(let o of sel.options){ if(o.text.toLowerCase().includes(svcVal.toLowerCase().split(' ')[0])){ sel.value=o.value; break; } }
 }
