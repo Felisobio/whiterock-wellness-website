@@ -2097,12 +2097,21 @@ footer{
     </div>
 
     <div>
-      <div class="map-embed">
-        <div class="map-pin-svg">📍</div>
-        <strong>No. 3 Ayobaba Tunde Crescent, Oniru, Lagos</strong>
-        <p style="font-size:0.8rem;color:var(--muted);text-align:center;max-width:250px">Embed your Google Maps iframe here by replacing this block</p>
-        <a href="https://maps.google.com/?q=Oniru+Lagos+Nigeria" target="_blank" class="btn-cyan" style="margin-top:1rem;font-size:0.85rem;padding:0.65rem 1.5rem">Open in Google Maps →</a>
+      <div style="width:100%;height:400px;border-radius:16px;overflow:hidden;border:2px solid var(--border)">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7!2d3.4425!3d6.4281!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf53b2b2b2b2b%3A0x0!2s3+Ayobaba+Tunde+Crescent%2C+Oniru%2C+Victoria+Island%2C+Lagos!5e0!3m2!1sen!2sng!4v1234567890"
+          width="100%"
+          height="400"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="WhiteRock Wellness Location">
+        </iframe>
       </div>
+      <a href="https://maps.google.com/?q=3+Ayobaba+Tunde+Crescent+Oniru+Victoria+Island+Lagos+Nigeria" target="_blank" class="btn-cyan" style="margin-top:1rem;font-size:0.85rem;padding:0.65rem 1.5rem;display:inline-block">
+        📍 Open in Google Maps →
+      </a>
     </div>
   </div>
 </div>
@@ -2252,13 +2261,13 @@ footer{
       <div style="padding:1rem;display:flex;flex-direction:column;gap:0.6rem">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <span style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em">Account Name</span>
-          <span style="font-size:0.9rem;font-weight:700;color:var(--navy)">Whiterock Wellness</span>
+          <span style="font-size:0.9rem;font-weight:700;color:var(--navy)">Billboxx / Whiterock Wellness Ltd</span>
         </div>
         <div style="height:1px;background:var(--border)"></div>
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div>
             <div style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px">Account Number</div>
-            <div style="font-size:1.4rem;font-weight:800;color:var(--navy);letter-spacing:0.1em" id="acc-wema">ADD WEMA NUMBER</div>
+            <div style="font-size:1.4rem;font-weight:800;color:var(--navy);letter-spacing:0.1em" id="acc-wema">9329104152</div>
           </div>
           <button onclick="copyNumber('acc-wema','copy-wema')" id="copy-wema" style="background:var(--royal);color:white;border:none;padding:0.45rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s;flex-shrink:0">Copy</button>
         </div>
