@@ -69,7 +69,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
 }
 .splash-bar-fill{
   height:100%;background:var(--cyan);border-radius:2px;
-  animation:splashLoad 1.8s ease forwards;
+  animation:splashLoad 2.5s ease forwards;
 }
 @keyframes splashLoad{from{width:0}to{width:100%}}
 
@@ -3350,9 +3350,19 @@ function updateAvailability() {
 // Run on load, refresh every 5 minutes
 updateAvailability();
 setInterval(updateAvailability, 5 * 60 * 1000);
-window.addEventListener('load', () => {
-  setTimeout(() => { document.getElementById('splash').classList.add('hidden'); }, 2000);
-});
+// ── SPLASH SCREEN — guaranteed to hide ──
+function hideSplash() {
+  const splash = document.getElementById('splash');
+  if(splash) {
+    splash.classList.add('hidden');
+    // Force hide after transition
+    setTimeout(() => { if(splash) splash.style.display = 'none'; }, 700);
+  }
+}
+// Try on load event
+window.addEventListener('load', () => setTimeout(hideSplash, 1800));
+// Guaranteed fallback — always hides after 3 seconds no matter what
+setTimeout(hideSplash, 3000);
 
 // ── SCROLL PROGRESS BAR + BACK TO TOP ──
 window.addEventListener('scroll', () => {
