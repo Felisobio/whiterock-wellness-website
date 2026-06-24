@@ -259,6 +259,88 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
 }
 @media(max-width:768px){#cookie{flex-direction:column;align-items:flex-start}}
 
+/* ── AI CHATBOT ── */
+#chat-bubble{position:fixed;bottom:90px;left:24px;z-index:600}
+#chat-toggle{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--royal),var(--cyan));
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 24px rgba(0,170,255,0.4);
+  transition:all 0.3s;position:relative;
+}
+#chat-toggle:hover{transform:scale(1.08)}
+#chat-toggle svg{width:26px;height:26px;fill:white;transition:all 0.3s}
+.chat-notif{
+  position:absolute;top:-4px;right:-4px;
+  width:18px;height:18px;border-radius:50%;
+  background:#EF4444;color:white;font-size:0.65rem;
+  font-weight:700;display:flex;align-items:center;justify-content:center;
+  border:2px solid white;
+}
+#chat-window{
+  position:absolute;bottom:70px;left:0;
+  width:340px;background:white;border-radius:18px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+  border:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+  transform:scale(0.85) translateY(20px);
+  opacity:0;visibility:hidden;
+  transform-origin:bottom left;
+  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+  max-height:520px;
+}
+#chat-window.open{transform:scale(1) translateY(0);opacity:1;visibility:visible}
+.chat-header{
+  background:linear-gradient(135deg,var(--navy),var(--royal));
+  padding:1rem 1.25rem;
+  display:flex;align-items:center;gap:0.75rem;
+}
+.chat-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(0,170,255,0.2);border:2px solid var(--cyan);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;
+}
+.chat-header-info h4{color:white;font-size:0.88rem;font-weight:700;margin-bottom:1px}
+.chat-header-info .chat-online{display:flex;align-items:center;gap:4px;color:rgba(255,255,255,0.55);font-size:0.7rem;margin-top:2px}
+.chat-online::before{content:'';width:6px;height:6px;border-radius:50%;background:#22C55E;display:inline-block;margin-right:3px}
+.chat-messages{
+  flex:1;overflow-y:auto;padding:1rem;
+  display:flex;flex-direction:column;gap:0.75rem;
+  min-height:200px;max-height:300px;
+  background:var(--offwhite);
+}
+.msg{display:flex;gap:0.5rem;align-items:flex-end;animation:msgIn 0.3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{flex-direction:row}
+.msg.user{flex-direction:row-reverse}
+.msg-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--royal),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.8rem;flex-shrink:0;color:white;font-weight:700;
+}
+.msg-bubble{max-width:78%;padding:0.65rem 0.9rem;border-radius:12px;font-size:0.82rem;line-height:1.55}
+.msg.bot .msg-bubble{background:white;color:var(--text);border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.msg.user .msg-bubble{background:var(--royal);color:white;border-bottom-right-radius:4px}
+.typing-indicator{display:flex;gap:4px;align-items:center;background:white;padding:0.65rem 0.9rem;border-radius:12px;border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.06);width:fit-content}
+.typing-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:typingBounce 1.2s infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.chat-quick-replies{padding:0.6rem 1rem;display:flex;gap:0.4rem;flex-wrap:wrap;background:var(--offwhite);border-top:1px solid var(--border)}
+.qr-btn{background:white;border:1px solid var(--border);color:var(--royal);padding:0.3rem 0.65rem;border-radius:20px;font-size:0.72rem;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif}
+.qr-btn:hover{background:var(--royal);color:white;border-color:var(--royal)}
+.chat-input-area{padding:0.75rem 1rem;display:flex;gap:0.5rem;align-items:center;background:white;border-top:1px solid var(--border)}
+.chat-input{flex:1;border:1.5px solid var(--border);border-radius:24px;padding:0.55rem 0.9rem;font-size:0.82rem;font-family:'Plus Jakarta Sans',sans-serif;outline:none;color:var(--text);background:var(--offwhite);transition:border-color 0.2s}
+.chat-input:focus{border-color:var(--cyan);background:white}
+.chat-send{width:36px;height:36px;border-radius:50%;background:var(--royal);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
+.chat-send:hover{background:var(--cyan)}
+.chat-send svg{width:16px;height:16px;fill:none;stroke:white;stroke-width:2.5}
+.chat-powered{text-align:center;padding:0.4rem;font-size:0.62rem;color:var(--muted);background:white;border-top:1px solid var(--border)}
+@media(max-width:400px){#chat-window{width:290px}#chat-bubble{left:12px}}
+
 /* ── NAV ── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:200;
@@ -929,7 +1011,39 @@ footer{
 </head>
 <body>
 
-<!-- SCROLL PROGRESS BAR -->
+<!-- AI CHATBOT -->
+<div id="chat-bubble">
+  <div id="chat-window">
+    <div class="chat-header">
+      <div class="chat-avatar">🤖</div>
+      <div class="chat-header-info">
+        <h4>WhiteRock Assistant</h4>
+        <div class="chat-online">Online now · Powered by AI</div>
+      </div>
+      <button onclick="toggleChat()" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:1.2rem;padding:4px">✕</button>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-quick-replies" id="quick-replies">
+      <button class="qr-btn" onclick="sendQuick('What services do you offer?')">Services</button>
+      <button class="qr-btn" onclick="sendQuick('How do I book an appointment?')">Book now</button>
+      <button class="qr-btn" onclick="sendQuick('Where are you located?')">Location</button>
+      <button class="qr-btn" onclick="sendQuick('Is chiropractic painful?')">Is it painful?</button>
+      <button class="qr-btn" onclick="sendQuick('What are your opening hours?')">Hours</button>
+    </div>
+    <div class="chat-input-area">
+      <input class="chat-input" id="chat-input" type="text" placeholder="Ask me anything…" onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" onclick="sendChat()">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="chat-powered">⚡ Powered by Claude AI · WhiteRock Wellness</div>
+  </div>
+
+  <button id="chat-toggle" onclick="toggleChat()">
+    <span class="chat-notif" id="chat-notif">1</span>
+    <svg class="chat-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </button>
+</div>
 <div id="progress-bar"></div>
 
 <!-- SPLASH SCREEN -->
@@ -1478,7 +1592,7 @@ footer{
         </li>
         <li class="book-step">
           <div class="step-n">4</div>
-          <div><strong>Show up & get aligned</strong>We confirm within 2 hours. Just bring yourself — we'll take care of the rest.</div>
+          <div><strong>Show up & get aligned</strong>We confirm within 30 minutes. Just bring yourself — we'll take care of the rest.</div>
         </li>
       </ul>
 
@@ -1496,7 +1610,7 @@ footer{
     <!-- FORM -->
     <div class="book-form">
       <h3>Request Appointment</h3>
-      <p>We confirm within 2 hours during clinic hours.</p>
+      <p>We confirm within 30 minutes during clinic hours.</p>
 
       <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.6rem">I want to see a:</p>
       <div class="spec-grid" id="spec-grid">
@@ -2112,7 +2226,7 @@ footer{
   <div class="modal-box">
     <span class="modal-emoji">🎉</span>
     <h3>You're all booked!</h3>
-    <p>Your appointment request has been received. Dr. Paul's team will confirm your slot via WhatsApp or call within 2 hours. See you at the clinic!</p>
+    <p>Your appointment request has been received. Dr. Paul's team will confirm your slot via WhatsApp or call within 30 minutes. See you at the clinic!</p>
     <div style="background:var(--sky);border-radius:10px;padding:1rem;margin-bottom:1.5rem;font-size:0.85rem;color:var(--royal)">
       📍 No. 3 Ayobaba Tunde Crescent, Oniru, Lagos<br>
       📞 +234 816 284 7976
@@ -2720,7 +2834,177 @@ function closeCond(){
   document.body.style.overflow='';
 }
 
-// ── MOBILE MENU ──
+// ─────────────────────────────────────────────
+// MICROSOFT LISTS — POWER AUTOMATE WEBHOOK
+// Replace the URL below with your Power Automate
+// HTTP trigger URL after setting it up
+// ─────────────────────────────────────────────
+const POWER_AUTOMATE_URL = 'YOUR_POWER_AUTOMATE_WEBHOOK_URL_HERE';
+
+async function sendToMicrosoftLists(bookingData) {
+  if(!POWER_AUTOMATE_URL || POWER_AUTOMATE_URL.includes('YOUR_POWER')) return;
+  try {
+    await fetch(POWER_AUTOMATE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bookingData)
+    });
+  } catch(e) {
+    console.log('Lists sync error:', e);
+  }
+}
+
+// ─────────────────────────────────────────────
+// AI CHATBOT
+// ─────────────────────────────────────────────
+let chatOpen = false;
+let chatHistory = [];
+let chatGreeted = false;
+
+const CLINIC_CONTEXT = `You are the friendly and knowledgeable virtual assistant for WhiteRock Wellness LTD, a chiropractic clinic in Lagos, Nigeria. 
+
+CLINIC DETAILS:
+- Name: WhiteRock Wellness LTD
+- Lead Chiropractor: Dr. Paul Johnson Chima (trained at a Chinese chiropractic institution, combining Eastern and Western techniques)
+- Tagline: "Wellness Through Alignment"
+- Address: No. 3 Ayobaba Tunde Crescent, Oniru, Lagos, Nigeria
+- Phone: +234 816 284 7976
+- Social: @whiterockwellness on Instagram, Facebook, TikTok, YouTube
+- Opening Hours: Monday–Friday 8am–6pm, Saturday 9am–5pm, Sunday 10am–3pm
+
+SERVICES:
+1. Chiropractic Adjustment (45 min) - precise spinal manipulation by Dr. Paul
+2. Physiotherapy (60 min) - rehabilitation and recovery
+3. Therapeutic Massage (30 min) - deep tissue and sports massage
+4. Headache & Migraine Clinic - cervical tension treatment
+5. Posture Correction - desk workers, drivers
+6. Initial Consultation (60 min) - full assessment with treatment plan
+
+CONDITIONS TREATED: Scoliosis, Spondylosis, Spondylolisthesis, Spondylitis, Lower back pain, Neck pain, Headaches, Sciatica, Slipped disc, Knee & hip pain, Poor sleep, Bad posture, Sports injuries, Work-related pain, Stress, Pregnancy back pain
+
+PAYMENT: Cash, Bank Transfer, Mobile Transfer (Opay, Kuda, PalmPay). No HMO currently.
+BANK: Providus Bank | Account Name: Whiterock Wellness | Account Number: 1305103047
+
+BOOKING: Patients can book on the website, call +234 816 284 7976, or WhatsApp the same number. Confirmation within 30 minutes during clinic hours.
+
+YOUR PERSONALITY:
+- Warm, friendly, professional — like a caring receptionist
+- Use simple English that everyday Nigerians understand
+- Keep responses concise — 2-4 sentences max unless detailed info is needed
+- Always encourage booking when appropriate
+- If you don't know something specific, say "Let me connect you with our team" and give the WhatsApp number
+- Never make up medical diagnoses or treatment promises
+- Occasionally use light Nigerian-friendly language but stay professional`;
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const win = document.getElementById('chat-window');
+  const notif = document.getElementById('chat-notif');
+  win.classList.toggle('open', chatOpen);
+  if(chatOpen) {
+    notif.style.display = 'none';
+    if(!chatGreeted) {
+      chatGreeted = true;
+      setTimeout(() => addBotMessage("👋 Hello! Welcome to WhiteRock Wellness. I'm your virtual assistant. How can I help you today?\n\nYou can ask me about our services, Dr. Paul, location, pricing, or anything else!"), 400);
+    }
+    setTimeout(() => document.getElementById('chat-input')?.focus(), 500);
+  }
+}
+
+function addBotMessage(text) {
+  const msgs = document.getElementById('chat-messages');
+  const msg = document.createElement('div');
+  msg.className = 'msg bot';
+  const time = new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'});
+  msg.innerHTML = `
+    <div class="msg-avatar">W</div>
+    <div>
+      <div class="msg-bubble">${text.replace(/\n/g,'<br>')}</div>
+      <div class="msg-time">${time}</div>
+    </div>`;
+  msgs.appendChild(msg);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addUserMessage(text) {
+  const msgs = document.getElementById('chat-messages');
+  const msg = document.createElement('div');
+  msg.className = 'msg user';
+  const time = new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'});
+  msg.innerHTML = `
+    <div>
+      <div class="msg-bubble">${text}</div>
+      <div class="msg-time">${time}</div>
+    </div>
+    <div class="msg-avatar" style="background:var(--muted)">U</div>`;
+  msgs.appendChild(msg);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('chat-messages');
+  const typing = document.createElement('div');
+  typing.className = 'msg bot';
+  typing.id = 'typing';
+  typing.innerHTML = `
+    <div class="msg-avatar">W</div>
+    <div class="typing-indicator">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>`;
+  msgs.appendChild(typing);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  document.getElementById('typing')?.remove();
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  addUserMessage(text);
+  chatHistory.push({role:'user', content: text});
+  showTyping();
+  // Hide quick replies after first message
+  document.getElementById('quick-replies').style.display = 'none';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 300,
+        system: CLINIC_CONTEXT,
+        messages: chatHistory
+      })
+    });
+    const data = await res.json();
+    removeTyping();
+    const reply = data.content?.[0]?.text || "I'm having a moment — please call us directly on +234 816 284 7976 or WhatsApp us!";
+    chatHistory.push({role:'assistant', content: reply});
+    addBotMessage(reply);
+  } catch(e) {
+    removeTyping();
+    addBotMessage("Sorry, I'm having a connection issue right now. Please contact us directly:\n📞 +234 816 284 7976\n💬 WhatsApp the same number");
+  }
+}
+
+function sendQuick(text) {
+  document.getElementById('chat-input').value = text;
+  sendChat();
+}
+
+// Show chat notification after 8 seconds
+setTimeout(() => {
+  if(!chatOpen) {
+    const notif = document.getElementById('chat-notif');
+    if(notif) notif.style.display = 'flex';
+  }
+}, 8000);
 function toggleMobileMenu(){
   const menu = document.getElementById('mobile-menu');
   const ham = document.getElementById('hamburger');
@@ -2888,6 +3172,21 @@ function submitForm(){
     `📅 Date: ${date}\n⏰ Time: ${time}\n\n`+
     `Please confirm my appointment. Thank you!`
   );
+
+  // Send to Microsoft Lists via Power Automate
+  const bookingData = {
+    PatientName: name,
+    Phone: phone,
+    Email: document.getElementById('fe').value || '',
+    Specialist: spec,
+    Concern: concern,
+    PreferredDate: date,
+    PreferredTime: time,
+    Notes: document.getElementById('fn').value || '',
+    SubmittedAt: new Date().toISOString(),
+    Source: 'WhiteRock Website'
+  };
+  sendToMicrosoftLists(bookingData);
 
   // Show success modal
   document.getElementById('modal').classList.add('show');
