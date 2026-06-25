@@ -147,6 +147,7 @@ nav{
 .fg .hint{font-size:0.72rem;color:var(--muted);margin-top:0.35rem;line-height:1.5}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.fg input,.fg select{height:48px}
 
 /* PAIN SCALE */
 .pain-scale{margin-bottom:1.25rem}
@@ -665,15 +666,15 @@ canvas#sigCanvas{width:100%;height:140px;cursor:crosshair;touch-action:none}
 
     <div class="fg">
       <label>Relevant medical history <span style="font-size:0.68rem;font-weight:400;text-transform:none;letter-spacing:0">(tick all that apply)</span></label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.5rem">
-        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Osteoporosis"> Osteoporosis / Bone loss</label>
-        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Arthritis"> Arthritis</label>
-        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Diabetes"> Diabetes</label>
-        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Hypertension"> High blood pressure</label>
-        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Stroke"> Prior stroke or heart condition</label>
-        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Cancer"> Cancer (any history)</label>
-        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Pregnancy"> Currently pregnant</label>
-        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="None"> None of the above</label>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.6rem;margin-top:0.6rem">
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Osteoporosis" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Osteoporosis / Bone loss</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Arthritis" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Arthritis</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Diabetes" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Diabetes</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Hypertension" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> High blood pressure</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Stroke" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Prior stroke or heart condition</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Cancer" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Cancer (any history)</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Pregnancy" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Currently pregnant</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--sky);border:1.5px solid rgba(0,170,255,0.25);border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='rgba(0,170,255,0.25)'"><input type="checkbox" name="history" value="None" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> None of the above</label>
       </div>
     </div>
   </div>
@@ -774,10 +775,7 @@ canvas#sigCanvas{width:100%;height:140px;cursor:crosshair;touch-action:none}
           <p>All personal and medical information collected through this form and during your treatment at WhiteRock Wellness LTD is held in strict confidence. Your data will be used <strong>solely for the purposes of clinical care, treatment planning, and operational records</strong> of this clinic. We do not share, sell, or disclose your information to third parties without your explicit written consent, except where required by Nigerian law or in a medical emergency requiring disclosure to emergency services. By submitting this form, you consent to WhiteRock Wellness retaining your records for a minimum of seven (7) years in accordance with standard medical practice obligations.</p>
         </div>
 
-        <div class="consent-clause">
-          <h4>Photography & Clinical Records</h4>
-          <p>For clinical documentation purposes, WhiteRock Wellness may capture posture photographs, scan images, or clinical notes. These records are confidential and stored securely. Any use of patient imagery for educational or marketing purposes will only occur with separate, explicit written consent from the patient.</p>
-        </div>
+
 
         <div class="consent-clause">
           <h4>Payment Terms</h4>
@@ -804,15 +802,9 @@ canvas#sigCanvas{width:100%;height:140px;cursor:crosshair;touch-action:none}
           <p>We respectfully request a minimum of <strong>24 hours notice</strong> for appointment cancellations or rescheduling. Late cancellations (within 24 hours) or no-shows may result in forfeiture of the session fee or deposit. This policy exists to respect the time of our clinical staff and other patients who may have required that appointment slot.</p>
         </div>
 
-        <div class="consent-clause">
-          <h4>Limitation of Liability</h4>
-          <p>To the maximum extent permitted under Nigerian law, WhiteRock Wellness LTD and its practitioners shall not be liable for any indirect, consequential, or incidental damages arising from treatment, including but not limited to loss of earnings, transportation costs, or psychological distress. The Clinic's total liability in any circumstance shall not exceed the amount paid by the patient for the specific session in question.</p>
-        </div>
 
-        <div class="consent-clause">
-          <h4>Governing Law & Dispute Resolution</h4>
-          <p>This Agreement shall be governed by and construed in accordance with the laws of the Federal Republic of Nigeria. Any dispute arising from this Agreement or your treatment at WhiteRock Wellness LTD shall first be subject to good-faith negotiation. Failing resolution, disputes shall be referred to mediation under the Lagos Multi-Door Courthouse (LMDC) or such other mutually agreed mediation body before any formal legal proceedings are instituted.</p>
-        </div>
+
+
 
         <div class="consent-clause">
           <h4>Declaration</h4>
