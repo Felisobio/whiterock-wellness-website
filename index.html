@@ -3341,8 +3341,6 @@ function fireBookingWhatsApp(){
 function showConsentPrompt(){
   document.getElementById('returning-check').style.display='none';
   document.getElementById('consent-prompt').style.display='block';
-  // Fire WhatsApp notification now — new patient is heading to consent form
-  setTimeout(()=>fireBookingWhatsApp(), 1000);
 }
 function showReturningPrompt(){
   document.getElementById('returning-check').style.display='none';
