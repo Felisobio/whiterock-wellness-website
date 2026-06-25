@@ -908,8 +908,8 @@ footer{
 .modal-bg.show{display:flex}
 .modal-box{
   background:white;border-radius:24px;
-  padding:3rem;max-width:420px;text-align:center;
-  animation:popIn 0.3s ease;
+  padding:1.5rem;max-width:460px;width:90vw;text-align:center;
+  animation:popIn 0.3s ease;overflow-y:auto;max-height:90vh;
 }
 @keyframes popIn{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}
 .modal-emoji{font-size:4rem;margin-bottom:1rem;display:block}
@@ -2332,7 +2332,7 @@ footer{
   </div>
 </div>
 <div class="modal-bg" id="modal">
-  <div class="modal-box" style="max-width:460px;width:90vw">
+  <div class="modal-box">
     <span class="modal-emoji">🎉</span>
     <h3>You're all booked!</h3>
     <p>Your appointment request has been received. Dr. Paul's team will confirm your slot via WhatsApp or call within <strong>30 minutes to 1 hour</strong>.</p>
@@ -3348,7 +3348,7 @@ function resetBookingModal(){
 }
 // Close modal on bg click
 document.getElementById('modal').addEventListener('click',function(e){
-  if(e.target===this) this.classList.remove('show');
+  if(e.target===this){this.classList.remove('show');resetBookingModal();}
 });
 
 // Nav scroll effect
