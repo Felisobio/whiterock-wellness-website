@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Consent Form – WhiteRock Wellness LTD</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0A1628;
+  --royal:#1A3FBF;
+  --cyan:#00AAFF;
+  --cyan-lt:#00D4FF;
+  --sky:#E8F4FF;
+  --white:#FFFFFF;
+  --offwhite:#F5F9FF;
+  --text:#0A1628;
+  --muted:#5A6A7A;
+  --border:rgba(26,63,191,0.12);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--offwhite);line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0A1628}
+::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:3px}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;height:72px;
+  background:rgba(10,22,40,0.97);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(0,170,255,0.15);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-text .t1{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.15rem;font-weight:800;color:#fff}
+.nav-logo-text .t1 span{color:#00AAFF}
+.nav-logo-text .t2{font-family:'Plus Jakarta Sans',sans-serif;font-size:0.58rem;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:0.18em;text-transform:uppercase;margin-top:1px}
+.back-link{color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.82rem;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s}
+.back-link:hover{color:var(--cyan)}
+
+/* HERO BANNER */
+.consent-hero{
+  background:linear-gradient(145deg,#030A18 0%,#0A1628 50%,#0D2050 100%);
+  padding:120px 5% 60px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.consent-hero::before{
+  content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(0,170,255,0.1) 0%,transparent 65%);
+  pointer-events:none;
+}
+.consent-hero .label{
+  font-size:0.72rem;font-weight:700;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--cyan);
+  display:inline-flex;align-items:center;gap:0.6rem;margin-bottom:1rem;
+}
+.consent-hero .label::before{content:'';width:20px;height:2px;background:var(--cyan)}
+.consent-hero .label::after{content:'';width:20px;height:2px;background:var(--cyan)}
+.consent-hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,4vw,3.2rem);
+  font-weight:700;color:white;
+  line-height:1.15;margin-bottom:1rem;
+}
+.consent-hero p{color:rgba(255,255,255,0.6);font-size:1rem;max-width:580px;margin:0 auto 2rem;line-height:1.8}
+.progress-steps{
+  display:flex;align-items:center;justify-content:center;gap:0;
+  max-width:500px;margin:0 auto;
+}
+.step-item{display:flex;align-items:center;gap:0}
+.step-circle{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.8rem;font-weight:700;
+  border:2px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.4);
+  transition:all 0.3s;
+}
+.step-circle.active{background:var(--cyan);border-color:var(--cyan);color:var(--navy)}
+.step-circle.done{background:rgba(34,197,94,0.2);border-color:#22C55E;color:#22C55E}
+.step-label{font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:4px;white-space:nowrap}
+.step-connector{width:60px;height:2px;background:rgba(255,255,255,0.1);flex-shrink:0}
+.step-connector.done{background:var(--cyan)}
+.step-wrap{display:flex;flex-direction:column;align-items:center}
+
+/* MAIN CONTAINER */
+.form-container{max-width:860px;margin:0 auto;padding:3rem 5% 6rem}
+
+/* SECTION CARDS */
+.form-section{
+  background:white;border-radius:20px;
+  border:1px solid var(--border);
+  padding:2.5rem;margin-bottom:1.5rem;
+  box-shadow:0 4px 20px rgba(26,63,191,0.06);
+}
+.section-header{
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:2rem;padding-bottom:1.25rem;
+  border-bottom:1px solid var(--border);
+}
+.section-num{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,var(--royal),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;font-weight:800;color:white;flex-shrink:0;
+}
+.section-title{font-size:1.1rem;font-weight:700;color:var(--navy)}
+.section-sub{font-size:0.8rem;color:var(--muted);margin-top:2px}
+
+/* PATIENT ID BADGE */
+.patient-id-badge{
+  background:linear-gradient(135deg,var(--navy),var(--royal));
+  border-radius:14px;padding:1.25rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2rem;
+}
+.pid-label{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:4px}
+.pid-number{font-size:2rem;font-weight:800;color:var(--cyan);letter-spacing:0.06em;font-family:'Playfair Display',serif}
+.pid-date{font-size:0.78rem;color:rgba(255,255,255,0.4);margin-top:4px}
+.pid-icon{font-size:2.5rem;opacity:0.3}
+
+/* FORM ELEMENTS */
+.fg{margin-bottom:1.25rem}
+.fg label{
+  display:block;font-size:0.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.08em;
+  color:var(--muted);margin-bottom:0.4rem;
+}
+.fg label .req{color:#EF4444}
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:0.8rem 1rem;
+  border:1.5px solid #E2EAF0;border-radius:10px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:0.9rem;color:var(--text);
+  outline:none;transition:border-color 0.2s,box-shadow 0.2s;background:var(--offwhite);
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  border-color:var(--cyan);background:white;
+  box-shadow:0 0 0 3px rgba(0,170,255,0.1);
+}
+.fg textarea{resize:vertical;min-height:80px}
+.fg .hint{font-size:0.72rem;color:var(--muted);margin-top:0.35rem;line-height:1.5}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+
+/* PAIN SCALE */
+.pain-scale{margin-bottom:1.25rem}
+.pain-scale label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem}
+.pain-label .req{color:#EF4444}
+.pain-options{display:grid;grid-template-columns:repeat(5,1fr);gap:0.5rem}
+.pain-opt{
+  border:2px solid #E2EAF0;border-radius:12px;
+  padding:0.75rem 0.5rem;text-align:center;cursor:pointer;
+  transition:all 0.2s;position:relative;
+}
+.pain-opt:hover{border-color:var(--cyan);background:var(--sky)}
+.pain-opt.selected{border-color:var(--pain-color,var(--cyan));background:var(--pain-bg,var(--sky))}
+.pain-opt .pain-emoji{font-size:1.6rem;display:block;margin-bottom:0.3rem}
+.pain-opt .pain-num{font-size:1.1rem;font-weight:800;color:var(--navy);display:block}
+.pain-opt .pain-desc{font-size:0.62rem;color:var(--muted);display:block;line-height:1.3;margin-top:2px}
+.pain-bar{
+  height:6px;border-radius:3px;margin-top:1rem;
+  background:linear-gradient(to right,#22C55E,#F59E0B,#EF4444);
+  position:relative;
+}
+.pain-bar-marker{
+  position:absolute;top:-5px;width:16px;height:16px;
+  border-radius:50%;background:white;
+  border:3px solid var(--royal);
+  transform:translateX(-50%);
+  transition:left 0.3s;
+  left:0%;
+}
+.pain-value-display{
+  display:flex;justify-content:space-between;
+  font-size:0.68rem;color:var(--muted);margin-top:0.4rem;
+}
+
+/* FILE UPLOAD */
+.upload-zone{
+  border:2px dashed #C8E8FF;border-radius:14px;
+  padding:2rem;text-align:center;
+  background:var(--sky);cursor:pointer;
+  transition:all 0.2s;position:relative;
+}
+.upload-zone:hover{border-color:var(--cyan);background:#D8EFFF}
+.upload-zone input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.upload-icon{font-size:2.5rem;margin-bottom:0.5rem;display:block}
+.upload-title{font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem}
+.upload-sub{font-size:0.8rem;color:var(--muted)}
+.upload-badge{
+  display:inline-block;margin-top:0.75rem;
+  font-size:0.72rem;font-weight:600;
+  padding:0.3rem 0.85rem;border-radius:20px;
+  background:rgba(26,63,191,0.1);color:var(--royal);
+  border:1px solid rgba(26,63,191,0.2);
+}
+#file-list{margin-top:1rem;display:flex;flex-direction:column;gap:0.5rem}
+.file-item{
+  display:flex;align-items:center;gap:0.75rem;
+  background:white;border:1px solid var(--border);
+  border-radius:8px;padding:0.6rem 1rem;font-size:0.82rem;
+}
+.file-item-name{flex:1;color:var(--navy);font-weight:500}
+.file-item-size{color:var(--muted);font-size:0.75rem}
+.file-item-remove{
+  background:none;border:none;cursor:pointer;
+  color:#EF4444;font-size:1rem;padding:2px 6px;border-radius:4px;
+}
+.file-item-remove:hover{background:#FEF2F2}
+
+/* CONSENT DOCUMENT */
+.consent-doc{
+  background:var(--offwhite);border-radius:14px;
+  border:1.5px solid var(--border);
+  padding:0;overflow:hidden;
+  font-size:0.88rem;line-height:1.85;color:#2A3A4A;
+}
+.consent-doc-header{
+  background:linear-gradient(135deg,var(--navy),var(--royal));
+  padding:2rem 2.5rem;text-align:center;
+}
+.consent-doc-header h2{
+  font-family:'Playfair Display',serif;
+  font-size:1.3rem;color:white;margin-bottom:0.25rem;
+}
+.consent-doc-header p{font-size:0.8rem;color:rgba(255,255,255,0.6);letter-spacing:0.06em}
+.consent-doc-body{padding:2rem 2.5rem;max-height:480px;overflow-y:auto}
+.consent-doc-body::-webkit-scrollbar{width:4px}
+.consent-doc-body::-webkit-scrollbar-track{background:#f0f0f0}
+.consent-doc-body::-webkit-scrollbar-thumb{background:var(--royal);border-radius:2px}
+.consent-clause{margin-bottom:1.75rem}
+.consent-clause h4{
+  font-size:0.82rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--royal);margin-bottom:0.6rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.consent-clause h4::before{
+  content:'';width:16px;height:2px;background:var(--royal);
+}
+.consent-clause p{color:#3A4A5A;line-height:1.85;font-size:0.875rem}
+.consent-clause p strong{color:var(--navy);font-weight:700}
+.warning-box{
+  background:rgba(239,68,68,0.06);
+  border-left:3px solid #EF4444;
+  border-radius:0 8px 8px 0;
+  padding:0.85rem 1rem;margin:0.75rem 0;
+  font-size:0.82rem;color:#7A1A1A;line-height:1.7;
+}
+.info-box{
+  background:rgba(0,170,255,0.06);
+  border-left:3px solid var(--cyan);
+  border-radius:0 8px 8px 0;
+  padding:0.85rem 1rem;margin:0.75rem 0;
+  font-size:0.82rem;color:#0A2A4A;line-height:1.7;
+}
+
+/* SIGNATURE AREA */
+.sig-area{
+  border:2px solid #E2EAF0;border-radius:12px;
+  padding:1.5rem;text-align:center;
+  background:var(--offwhite);margin-bottom:1rem;
+}
+.sig-canvas-wrap{
+  background:white;border:1.5px dashed #C8E8FF;
+  border-radius:8px;margin-bottom:0.75rem;overflow:hidden;
+}
+canvas#sigCanvas{width:100%;height:140px;cursor:crosshair;touch-action:none}
+.sig-actions{display:flex;gap:0.5rem;justify-content:center}
+.sig-btn{
+  background:var(--offwhite);border:1.5px solid #E2EAF0;
+  color:var(--muted);padding:0.4rem 1rem;border-radius:6px;
+  font-size:0.78rem;font-weight:600;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s;
+}
+.sig-btn:hover{border-color:var(--cyan);color:var(--royal)}
+.sig-label-hint{font-size:0.72rem;color:var(--muted);margin-top:0.5rem}
+
+/* CHECKBOX AGREEMENT */
+.check-group{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem}
+.check-item{display:flex;gap:0.85rem;align-items:flex-start}
+.check-item input[type=checkbox]{
+  width:20px;height:20px;border-radius:5px;
+  accent-color:var(--royal);flex-shrink:0;margin-top:2px;cursor:pointer;
+}
+.check-item label{font-size:0.85rem;color:#3A4A5A;line-height:1.6;cursor:pointer}
+.check-item label strong{color:var(--navy)}
+
+/* SUBMIT BUTTON */
+.submit-final{
+  width:100%;background:linear-gradient(135deg,var(--royal),var(--cyan));
+  color:white;border:none;padding:1.2rem;border-radius:14px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:1.05rem;font-weight:800;cursor:pointer;
+  transition:all 0.3s;margin-top:0.5rem;letter-spacing:0.02em;
+  box-shadow:0 8px 30px rgba(26,63,191,0.3);
+}
+.submit-final:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(26,63,191,0.4)}
+.submit-final:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.submit-note{
+  text-align:center;font-size:0.78rem;color:var(--muted);
+  margin-top:0.75rem;display:flex;align-items:center;justify-content:center;gap:0.4rem;
+}
+
+/* SUCCESS SCREEN */
+#success-screen{
+  display:none;text-align:center;padding:4rem 2rem;
+}
+#success-screen.show{display:block}
+.success-icon{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,#22C55E,#16A34A);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1.5rem;font-size:2.5rem;
+  box-shadow:0 12px 40px rgba(34,197,94,0.35);
+}
+.success-id{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--navy),var(--royal));
+  color:var(--cyan);font-size:1.4rem;font-weight:800;
+  padding:0.6rem 2rem;border-radius:10px;
+  font-family:'Playfair Display',serif;letter-spacing:0.08em;
+  margin:1rem 0;
+}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .frow,.frow3{grid-template-columns:1fr}
+  .pain-options{grid-template-columns:repeat(5,1fr)}
+  .pain-opt .pain-desc{display:none}
+  .consent-doc-body{padding:1.25rem}
+  .form-section{padding:1.5rem}
+  .patient-id-badge{flex-direction:column;text-align:center;gap:0.5rem}
+  .progress-steps{gap:0}
+  .step-connector{width:30px}
+}
+
+/* POLICY HIGHLIGHT */
+.policy-highlight{
+  background:linear-gradient(135deg,rgba(239,68,68,0.08),rgba(239,68,68,0.03));
+  border:1.5px solid rgba(239,68,68,0.25);
+  border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;
+}
+.policy-highlight h4{
+  color:#B91C1C;font-size:0.82rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;
+  display:flex;align-items:center;gap:0.4rem;
+}
+.policy-highlight p{font-size:0.82rem;color:#7A1A1A;line-height:1.75}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="40" width="40">
+      <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1ZM833.36,359.33v87.4c0,.15-.23.23-.35.12l-139.83-139.83c-19.5-19.53-45.51-30.19-73.12-30c-56.67.43-101.61,48.22-101.61,104.89v60.84c0,.19-.23.27-.35.15l-165.42-165.46h-2.24c45.28-.15,82.04-36.98,82.04-82.31v-87.36c0-.15.23-.27.35-.15l139.83,139.86c19.5,19.5,45.51,30.15,73.12,29.96,56.67-.39,101.61-48.18,101.61-104.85v-60.88c0-.15.23-.23.35-.12l165.42,165.46h2.24c-45.28.12-82.04,36.98-82.04,82.27Z"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span class="t1">White<span>Rock</span></span>
+      <span class="t2">Wellness LTD</span>
+    </div>
+  </a>
+  <a href="index.html" class="back-link">← Back to website</a>
+</nav>
+
+<!-- HERO -->
+<div class="consent-hero">
+  <div class="label">Patient Consent</div>
+  <h1>Patient Intake &<br>Consent Agreement</h1>
+  <p>Please complete all sections carefully and honestly. This information is strictly confidential and used only to provide you with the safest, most effective care possible.</p>
+  <div class="progress-steps">
+    <div class="step-wrap">
+      <div class="step-circle active" id="step1c">1</div>
+      <div class="step-label">Your Details</div>
+    </div>
+    <div class="step-connector" id="conn1"></div>
+    <div class="step-wrap">
+      <div class="step-circle" id="step2c">2</div>
+      <div class="step-label">Health Info</div>
+    </div>
+    <div class="step-connector" id="conn2"></div>
+    <div class="step-wrap">
+      <div class="step-circle" id="step3c">3</div>
+      <div class="step-label">Documents</div>
+    </div>
+    <div class="step-connector" id="conn3"></div>
+    <div class="step-wrap">
+      <div class="step-circle" id="step4c">4</div>
+      <div class="step-label">Consent</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="form-container">
+
+  <!-- SUCCESS SCREEN -->
+  <div id="success-screen">
+    <div class="form-section">
+      <div class="success-icon">✓</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy);margin-bottom:0.75rem">Consent Form Submitted!</h2>
+      <p style="color:var(--muted);font-size:0.95rem;max-width:440px;margin:0 auto 1.5rem;line-height:1.8">Thank you. Your patient record has been created and your therapist will be fully prepared before your arrival. Your unique patient ID is:</p>
+      <div class="success-id" id="success-pid">WRW–1200</div>
+      <p style="color:var(--muted);font-size:0.82rem;margin-top:0.5rem">Please keep this ID for your records.</p>
+      <div style="background:var(--offwhite);border-radius:14px;padding:1.5rem;margin:2rem auto;max-width:400px;border:1px solid var(--border)">
+        <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--cyan);margin-bottom:1rem">What happens next</div>
+        <div style="display:flex;flex-direction:column;gap:0.85rem">
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem;color:var(--text)">
+            <span style="width:24px;height:24px;background:var(--royal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">1</span>
+            Our team reviews your form and documents within 2 hours
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem;color:var(--text)">
+            <span style="width:24px;height:24px;background:var(--royal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">2</span>
+            Dr. Paul or your assigned therapist prepares your personalised plan
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem;color:var(--text)">
+            <span style="width:24px;height:24px;background:var(--royal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">3</span>
+            You receive a WhatsApp confirmation with your appointment details
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem;color:var(--text)">
+            <span style="width:24px;height:24px;background:#22C55E;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">✓</span>
+            Arrive at the clinic — everything is ready for you
+          </div>
+        </div>
+      </div>
+      <a href="index.html" style="display:inline-block;background:var(--royal);color:white;padding:0.85rem 2.5rem;border-radius:50px;font-weight:700;text-decoration:none;font-size:0.95rem">Return to WhiteRock Wellness →</a>
+    </div>
+  </div>
+
+  <form id="consent-form" onsubmit="return false">
+
+  <!-- SECTION 1: PATIENT DETAILS -->
+  <div class="form-section" id="sec1">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div>
+        <div class="section-title">Patient Details</div>
+        <div class="section-sub">Your unique patient ID is auto-generated below</div>
+      </div>
+    </div>
+
+    <!-- Patient ID badge -->
+    <div class="patient-id-badge">
+      <div>
+        <div class="pid-label">Your Patient ID</div>
+        <div class="pid-number" id="patient-id-display">WRW–1200</div>
+        <div class="pid-date" id="pid-date-display">Issued: —</div>
+      </div>
+      <div class="pid-icon">🪪</div>
+    </div>
+
+    <div class="frow">
+      <div class="fg">
+        <label>First Name <span class="req">*</span></label>
+        <input type="text" id="c-fname" placeholder="e.g. Amaka" required>
+      </div>
+      <div class="fg">
+        <label>Last Name <span class="req">*</span></label>
+        <input type="text" id="c-lname" placeholder="e.g. Okonkwo" required>
+      </div>
+    </div>
+
+    <div class="frow3">
+      <div class="fg">
+        <label>Date of Birth <span class="req">*</span></label>
+        <input type="date" id="c-dob" required>
+      </div>
+      <div class="fg">
+        <label>Age <span class="req">*</span></label>
+        <input type="number" id="c-age" placeholder="e.g. 34" min="1" max="120" required>
+      </div>
+      <div class="fg">
+        <label>Gender <span class="req">*</span></label>
+        <select id="c-gender" required>
+          <option value="">Select…</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Prefer not to say</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="frow">
+      <div class="fg">
+        <label>Phone / WhatsApp <span class="req">*</span></label>
+        <input type="tel" id="c-phone" placeholder="+234 800 000 0000" required>
+      </div>
+      <div class="fg">
+        <label>Email Address <span class="req">*</span></label>
+        <input type="email" id="c-email" placeholder="your@email.com" required>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>Home Address</label>
+      <input type="text" id="c-address" placeholder="e.g. 12 Adeola Odeku Street, Victoria Island, Lagos">
+    </div>
+
+    <div class="frow">
+      <div class="fg">
+        <label>Occupation</label>
+        <input type="text" id="c-occupation" placeholder="e.g. Software Engineer, Trader, Nurse">
+      </div>
+      <div class="fg">
+        <label>Emergency Contact Name & Phone <span class="req">*</span></label>
+        <input type="text" id="c-emergency" placeholder="e.g. Emeka Obi — 0812 345 6789" required>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>How did you hear about us?</label>
+      <select id="c-referral">
+        <option value="">Select…</option>
+        <option>Google Search</option>
+        <option>Instagram</option>
+        <option>TikTok</option>
+        <option>Facebook</option>
+        <option>YouTube</option>
+        <option>Friend or family referral</option>
+        <option>Doctor referral</option>
+        <option>WhatsApp</option>
+        <option>Walk-in / saw the clinic</option>
+        <option>Other</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- SECTION 2: HEALTH INFORMATION -->
+  <div class="form-section" id="sec2">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div>
+        <div class="section-title">Health & Complaint Information</div>
+        <div class="section-sub">Please be as detailed as possible — this helps your therapist prepare</div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>Primary Complaint / What is bothering you? <span class="req">*</span></label>
+      <select id="c-complaint" required>
+        <option value="">Select your main issue…</option>
+        <optgroup label="── Spine Conditions ──">
+          <option>Scoliosis (curved spine)</option>
+          <option>Kyphosis (hunchback / upper spine)</option>
+          <option>Lordosis / Lower back pain</option>
+          <option>Spondylosis (spinal degeneration / wear)</option>
+          <option>Spondylolisthesis (slipped vertebra)</option>
+          <option>Spondylitis / Ankylosing Spondylitis</option>
+          <option>Slipped / Herniated Disc</option>
+        </optgroup>
+        <optgroup label="── Pain & Nerve Issues ──">
+          <option>Upper back pain</option>
+          <option>Neck pain or stiffness</option>
+          <option>Sciatica (pain shooting down leg)</option>
+          <option>Shoulder or arm pain</option>
+          <option>Knee or hip pain</option>
+          <option>Headaches or migraines</option>
+          <option>Indigestion / Acid Reflux (nerve-related)</option>
+        </optgroup>
+        <optgroup label="── Lifestyle & Wellness ──">
+          <option>Bad posture correction</option>
+          <option>Work / desk-related back pain</option>
+          <option>Sports injury</option>
+          <option>Pregnancy back pain</option>
+          <option>Insomnia / Sleep disorder</option>
+          <option>Stress & muscle tension</option>
+          <option>Corporate Wellness & Retreat session</option>
+        </optgroup>
+        <optgroup label="── Other ──">
+          <option>General wellness & prevention</option>
+          <option>Post-surgery rehabilitation</option>
+          <option>Not sure — need full assessment</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="fg">
+      <label>Describe your symptoms in your own words <span class="req">*</span></label>
+      <textarea id="c-symptoms" placeholder="When did it start? Where exactly is the pain? Does it spread anywhere? What makes it better or worse? Have you had any treatment before for this?" style="min-height:110px" required></textarea>
+      <div class="hint">💡 The more detail you provide, the better prepared your therapist will be.</div>
+    </div>
+
+    <div class="fg">
+      <label>How long have you had this condition? <span class="req">*</span></label>
+      <select id="c-duration" required>
+        <option value="">Select…</option>
+        <option>Less than 1 week</option>
+        <option>1–4 weeks</option>
+        <option>1–3 months</option>
+        <option>3–6 months</option>
+        <option>6–12 months</option>
+        <option>1–3 years</option>
+        <option>More than 3 years</option>
+        <option>Since childhood</option>
+      </select>
+    </div>
+
+    <!-- PAIN TOLERANCE SCALE -->
+    <div class="pain-scale">
+      <label class="pain-label">Current Pain Level <span class="req">*</span> <span style="font-size:0.68rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">— Select the level that best describes your pain right now</span></label>
+      <div class="pain-options" id="pain-options">
+        <div class="pain-opt" data-level="1" data-color="#22C55E" data-bg="rgba(34,197,94,0.08)" onclick="selectPain(this)">
+          <span class="pain-emoji">😌</span>
+          <span class="pain-num">1–2</span>
+          <span class="pain-desc">Mild discomfort, barely noticeable</span>
+        </div>
+        <div class="pain-opt" data-level="2" data-color="#84CC16" data-bg="rgba(132,204,22,0.08)" onclick="selectPain(this)">
+          <span class="pain-emoji">🙂</span>
+          <span class="pain-num">3–4</span>
+          <span class="pain-desc">Annoying, manageable, distracting</span>
+        </div>
+        <div class="pain-opt" data-level="3" data-color="#F59E0B" data-bg="rgba(245,158,11,0.08)" onclick="selectPain(this)">
+          <span class="pain-emoji">😐</span>
+          <span class="pain-num">5–6</span>
+          <span class="pain-desc">Moderate, affects daily activity</span>
+        </div>
+        <div class="pain-opt" data-level="4" data-color="#F97316" data-bg="rgba(249,115,22,0.08)" onclick="selectPain(this)">
+          <span class="pain-emoji">😣</span>
+          <span class="pain-num">7–8</span>
+          <span class="pain-desc">Severe, difficult to concentrate</span>
+        </div>
+        <div class="pain-opt" data-level="5" data-color="#EF4444" data-bg="rgba(239,68,68,0.08)" onclick="selectPain(this)">
+          <span class="pain-emoji">😭</span>
+          <span class="pain-num">9–10</span>
+          <span class="pain-desc">Unbearable, incapacitating pain</span>
+        </div>
+      </div>
+      <div class="pain-bar"><div class="pain-bar-marker" id="pain-marker"></div></div>
+      <div class="pain-value-display"><span>No pain</span><span>Moderate</span><span>Worst imaginable</span></div>
+      <input type="hidden" id="c-pain-level" value="">
+    </div>
+
+    <div class="fg">
+      <label>Previous treatments or surgeries for this condition</label>
+      <textarea id="c-prev-treatment" placeholder="e.g. Physiotherapy in 2021, Paracetamol/NSAIDs, MRI scan (date), Surgery (type & year)…"></textarea>
+    </div>
+
+    <div class="frow">
+      <div class="fg">
+        <label>Do you have any known allergies? <span class="req">*</span></label>
+        <select id="c-allergies" required>
+          <option value="">Select…</option>
+          <option>No known allergies</option>
+          <option>Drug allergies</option>
+          <option>Food allergies</option>
+          <option>Latex allergy</option>
+          <option>Multiple allergies</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Are you currently on any medication?</label>
+        <input type="text" id="c-medication" placeholder="e.g. Ibuprofen, Amlodipine, or 'None'">
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>Relevant medical history <span style="font-size:0.68rem;font-weight:400;text-transform:none;letter-spacing:0">(tick all that apply)</span></label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.5rem">
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Osteoporosis"> Osteoporosis / Bone loss</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Arthritis"> Arthritis</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Diabetes"> Diabetes</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Hypertension"> High blood pressure</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Stroke"> Prior stroke or heart condition</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Cancer"> Cancer (any history)</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="Pregnancy"> Currently pregnant</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400"><input type="checkbox" name="history" value="None"> None of the above</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: DOCUMENT UPLOAD -->
+  <div class="form-section" id="sec3">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div>
+        <div class="section-title">Medical Documents (Optional)</div>
+        <div class="section-sub">Upload any X-rays, MRI scans, blood tests or referral letters</div>
+      </div>
+    </div>
+
+    <div class="upload-zone" id="upload-zone">
+      <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.heic,.dcm" onchange="handleFiles(this.files)">
+      <span class="upload-icon">📁</span>
+      <div class="upload-title">Tap to upload or drag & drop</div>
+      <div class="upload-sub">X-rays, MRI scans, reports, referral letters</div>
+      <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-top:0.75rem">
+        <span class="upload-badge">PDF</span>
+        <span class="upload-badge">JPG / PNG</span>
+        <span class="upload-badge">HEIC</span>
+        <span class="upload-badge">Max 50MB total</span>
+      </div>
+    </div>
+    <div id="file-list"></div>
+    <div id="file-size-warning" style="display:none;color:#EF4444;font-size:0.8rem;margin-top:0.5rem;font-weight:600">⚠ Total file size exceeds 50MB. Please remove some files.</div>
+    <div class="hint" style="margin-top:0.75rem">Having your documents available helps Dr. Paul and your therapist understand your condition more deeply before your first session. You can also bring physical copies on the day.</div>
+  </div>
+
+  <!-- SECTION 4: CONSENT DOCUMENT -->
+  <div class="form-section" id="sec4">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div>
+        <div class="section-title">Patient Consent & Agreement</div>
+        <div class="section-sub">Please read the full document carefully before signing</div>
+      </div>
+    </div>
+
+    <!-- The consent document -->
+    <div class="consent-doc">
+      <div class="consent-doc-header">
+        <h2>PATIENT INFORMED CONSENT AGREEMENT</h2>
+        <p>WHITEROCK WELLNESS LTD · NO. 3 AYOBABA TUNDE CRESCENT, ONIRU, LAGOS, NIGERIA</p>
+      </div>
+      <div class="consent-doc-body">
+
+        <div class="consent-clause">
+          <h4>Preamble</h4>
+          <p>This Patient Informed Consent Agreement ("Agreement") is entered into between <strong>WhiteRock Wellness LTD</strong> ("the Clinic", "we", "us"), a registered healthcare provider operating from No. 3 Ayobaba Tunde Crescent, Oniru, Lagos, Nigeria, and the undersigned patient ("the Patient", "you"). By submitting this form, you affirm that you have read, understood, and voluntarily agree to all terms contained herein. This Agreement constitutes a legally binding document and shall govern the entirety of your clinical relationship with WhiteRock Wellness LTD.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>About WhiteRock Wellness</h4>
+          <p>WhiteRock Wellness LTD is a specialist musculoskeletal clinic offering chiropractic care, physiotherapy, therapeutic massage, and allied wellness services. Our clinical team is led by <strong>Dr. Paul Johnson Chima</strong>, a chiropractor trained at a leading Chinese chiropractic institution, combining Eastern precision with Western evidence-based medicine. Our mission is to identify and eliminate the root cause of pain — not merely suppress symptoms — to restore patients to full function and optimal health.</p>
+          <div class="info-box">WhiteRock Wellness operates on the principle of <strong>root-cause correction</strong>. We treat the source of your condition, not just the symptoms. This approach requires honesty from patients about their full medical history and compliance with the prescribed treatment plan for best outcomes.</div>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Nature of Chiropractic Treatment & Expected Sensations</h4>
+          <p>Chiropractic care involves the <strong>manual manipulation and adjustment of the spine, joints, and associated soft tissues</strong> to correct misalignments (subluxations), relieve nerve compression, restore range of motion, and promote the body's natural healing capacity. The techniques employed at WhiteRock Wellness may include spinal high-velocity low-amplitude (HVLA) thrust adjustments, spinal mobilisation, decompression techniques, soft tissue manipulation, therapeutic massage, and rehabilitative exercises.</p>
+          <div class="warning-box">
+            <strong>IMPORTANT — PLEASE READ:</strong> Chiropractic adjustment and bone-setting procedures are clinical interventions that <strong>involve physical manipulation of your body</strong>. It is entirely normal — and clinically expected — to experience <strong>temporary discomfort, soreness, stiffness, clicking or popping sounds, and brief intensification of existing pain</strong> during and immediately following treatment. These sensations are a natural physiological response to the correction of long-standing structural dysfunction and are not indicative of injury. <strong>Most patients experience significant and lasting relief following the initial recovery period of 24–72 hours.</strong> The discomfort is temporary; the relief is the goal.
+          </div>
+          <p>You acknowledge that you have been fully informed of the physical nature of chiropractic treatment and that you voluntarily consent to receive such treatment, understanding that <strong>physical discomfort during and after the procedure is an inherent and expected component</strong> of the therapeutic process and does not constitute negligence, malpractice, or grounds for complaint or refund.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Known Risks & Contraindications</h4>
+          <p>As with all clinical interventions, chiropractic care carries a small but documented risk profile. By proceeding, you acknowledge awareness of the following potential — though rare — adverse effects:</p>
+          <p style="margin-top:0.6rem"><strong>(a)</strong> Temporary soreness, aching, or stiffness in the treated area lasting 24–72 hours after adjustment;<br>
+          <strong>(b)</strong> Temporary increase in pain intensity as the musculoskeletal system readjusts;<br>
+          <strong>(c)</strong> In extremely rare cases (&lt;1 in 5.85 million cervical adjustments), vertebrobasilar artery injury — a risk comparable to spontaneous occurrence in the general population;<br>
+          <strong>(d)</strong> Minor bruising at points of soft tissue treatment;<br>
+          <strong>(e)</strong> Temporary nerve sensitivity or numbness in adjacent areas.</p>
+          <p style="margin-top:0.6rem">You confirm that you have disclosed all relevant medical history, current medications, prior surgeries, and existing conditions that may affect treatment safety. WhiteRock Wellness cannot be held liable for adverse outcomes arising from <strong>undisclosed medical information</strong>.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Voluntary Consent & Right to Withdraw</h4>
+          <p>Your consent to treatment is entirely voluntary. You have the right to withdraw consent and discontinue treatment at any time during a session by clearly communicating this to your treating practitioner. However, you acknowledge that <strong>partial or incomplete treatment courses may reduce the efficacy of care and are not grounds for a fee refund</strong>. WhiteRock Wellness reserves the right to decline or discontinue treatment if, in the clinical judgment of the practitioner, continuation would be unsafe or contraindicated.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Medical History Accuracy</h4>
+          <p>You warrant that all medical information provided in this form and during clinical consultations is <strong>accurate, complete, and truthful</strong> to the best of your knowledge. You understand that withholding, misrepresenting, or omitting material medical information constitutes a breach of this Agreement and may result in harm, for which WhiteRock Wellness LTD and its practitioners cannot be held responsible. You agree to promptly notify your practitioner of any changes to your health status, medications, or circumstances that may be relevant to your care.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Treatment Plan & Clinical Discretion</h4>
+          <p>WhiteRock Wellness LTD retains full clinical discretion in determining the appropriate treatment modalities, frequency, and duration of care based on the patient's presenting condition. Recommendations provided by the clinical team are based on professional assessment and international chiropractic standards. <strong>The number of sessions required varies by individual condition, severity, duration, and patient compliance</strong>, and the Clinic makes no guarantee of specific outcomes within a prescribed timeframe, though the clinical team will always endeavour to achieve the best possible result.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Confidentiality & Data Protection</h4>
+          <p>All personal and medical information collected through this form and during your treatment at WhiteRock Wellness LTD is held in strict confidence. Your data will be used <strong>solely for the purposes of clinical care, treatment planning, and operational records</strong> of this clinic. We do not share, sell, or disclose your information to third parties without your explicit written consent, except where required by Nigerian law or in a medical emergency requiring disclosure to emergency services. By submitting this form, you consent to WhiteRock Wellness retaining your records for a minimum of seven (7) years in accordance with standard medical practice obligations.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Photography & Clinical Records</h4>
+          <p>For clinical documentation purposes, WhiteRock Wellness may capture posture photographs, scan images, or clinical notes. These records are confidential and stored securely. Any use of patient imagery for educational or marketing purposes will only occur with separate, explicit written consent from the patient.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Payment Terms</h4>
+          <p>All consultation and treatment fees are due at the time of service unless alternative arrangements have been expressly agreed in writing by clinic management. The initial consultation fee is <strong>₦20,000 per session</strong>. Subsequent session fees may vary depending on the treatment modality and duration. Payment may be made by cash or bank transfer. WhiteRock Wellness does not currently accept HMO coverage.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>⛔ STRICT NO-REFUND POLICY</h4>
+          <div class="warning-box">
+            <strong>NO REFUND POLICY — PLEASE READ CAREFULLY BEFORE PROCEEDING.</strong><br><br>
+            All fees paid to WhiteRock Wellness LTD are <strong>strictly non-refundable</strong>. This policy applies without exception to:<br><br>
+            <strong>(i)</strong> Consultation fees paid prior to or at the time of assessment;<br>
+            <strong>(ii)</strong> Session fees paid for treatment sessions commenced or partially completed;<br>
+            <strong>(iii)</strong> Package or prepaid session fees, regardless of how many sessions have been attended;<br>
+            <strong>(iv)</strong> Fees paid where the patient voluntarily withdraws from treatment mid-session or mid-course;<br>
+            <strong>(v)</strong> Fees paid where the patient experiences expected discomfort or temporary pain during or following adjustment — as explicitly disclosed in this Agreement.<br><br>
+            The rationale for this policy is as follows: WhiteRock Wellness LTD commits significant clinical time, expertise, practitioner preparation, facility resources, and administrative effort to each patient encounter from the point of booking confirmation. These resources are expended regardless of whether the patient ultimately finds the session comfortable. <strong>Post-treatment discomfort is a clinically normal and expected outcome of chiropractic and bone-setting procedures and does not constitute a service failure.</strong><br><br>
+            In the event of a verified administrative error or a genuine contraindicated treatment that could not have been reasonably identified without the patient's disclosed history, the Clinic reserves the discretion — but not the obligation — to offer a session credit. <strong>Cash refunds will not be issued under any circumstances.</strong>
+          </div>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Appointment Cancellation Policy</h4>
+          <p>We respectfully request a minimum of <strong>24 hours notice</strong> for appointment cancellations or rescheduling. Late cancellations (within 24 hours) or no-shows may result in forfeiture of the session fee or deposit. This policy exists to respect the time of our clinical staff and other patients who may have required that appointment slot.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Limitation of Liability</h4>
+          <p>To the maximum extent permitted under Nigerian law, WhiteRock Wellness LTD and its practitioners shall not be liable for any indirect, consequential, or incidental damages arising from treatment, including but not limited to loss of earnings, transportation costs, or psychological distress. The Clinic's total liability in any circumstance shall not exceed the amount paid by the patient for the specific session in question.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Governing Law & Dispute Resolution</h4>
+          <p>This Agreement shall be governed by and construed in accordance with the laws of the Federal Republic of Nigeria. Any dispute arising from this Agreement or your treatment at WhiteRock Wellness LTD shall first be subject to good-faith negotiation. Failing resolution, disputes shall be referred to mediation under the Lagos Multi-Door Courthouse (LMDC) or such other mutually agreed mediation body before any formal legal proceedings are instituted.</p>
+        </div>
+
+        <div class="consent-clause">
+          <h4>Declaration</h4>
+          <p>By electronically signing this Agreement, you declare that:<br><br>
+          <strong>(a)</strong> You are 18 years of age or older, or are the parent/legal guardian of the patient named herein;<br>
+          <strong>(b)</strong> You have read, understood, and voluntarily agree to all terms of this Agreement without coercion;<br>
+          <strong>(c)</strong> All information provided is accurate and complete to the best of your knowledge;<br>
+          <strong>(d)</strong> You understand and accept the nature of chiropractic treatment including the likelihood of physical discomfort;<br>
+          <strong>(e)</strong> You understand and accept the strict no-refund policy of WhiteRock Wellness LTD;<br>
+          <strong>(f)</strong> You consent to receive chiropractic, physiotherapy, and/or allied wellness treatment from WhiteRock Wellness LTD and its clinical team.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Checkboxes -->
+    <div style="margin-top:1.75rem">
+      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:1rem">Please confirm each statement by ticking the box:</div>
+      <div class="check-group">
+        <div class="check-item">
+          <input type="checkbox" id="chk1" required>
+          <label for="chk1">I have read and fully understood the Patient Informed Consent Agreement above in its entirety, including the nature of chiropractic treatment and the expected physical discomfort associated with bone-setting and spinal adjustment procedures.</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="chk2" required>
+          <label for="chk2">I understand and explicitly accept the <strong>strict no-refund policy</strong> of WhiteRock Wellness LTD. I acknowledge that all fees paid are non-refundable under any circumstances, including post-treatment discomfort.</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="chk3" required>
+          <label for="chk3">I confirm that all medical history, personal information, and health details provided in this form are <strong>accurate, complete, and truthful</strong> to the best of my knowledge.</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="chk4" required>
+          <label for="chk4">I voluntarily consent to receive chiropractic, physiotherapy, massage, and allied wellness treatment from WhiteRock Wellness LTD and its clinical team, and I understand that I may withdraw this consent during any session by communicating clearly with my practitioner.</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="chk5" required>
+          <label for="chk5">I am 18 years of age or older (or I am completing this form as the legal guardian of the named patient), and I agree that this electronic submission constitutes my legally binding signature and agreement to all terms herein.</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div style="margin-top:1.5rem">
+      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.75rem">Patient Signature <span style="color:#EF4444">*</span></div>
+      <div class="sig-area">
+        <div class="sig-canvas-wrap">
+          <canvas id="sigCanvas" width="800" height="140"></canvas>
+        </div>
+        <div class="sig-actions">
+          <button type="button" class="sig-btn" onclick="clearSig()">Clear signature</button>
+          <button type="button" class="sig-btn" onclick="document.getElementById('sigCanvas').style.cursor='crosshair'">Draw mode</button>
+        </div>
+        <div class="sig-label-hint">Draw your signature above using your finger (mobile) or mouse (desktop)</div>
+      </div>
+    </div>
+
+    <!-- Dated -->
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--offwhite);border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;border:1px solid var(--border)">
+      <div style="font-size:0.82rem;color:var(--muted)">Date of Agreement</div>
+      <div style="font-size:0.95rem;font-weight:700;color:var(--navy)" id="consent-date-display">—</div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div style="margin-top:2rem">
+      <button type="button" class="submit-final" onclick="submitConsent()" id="submit-btn">
+        Submit Patient Consent Form →
+      </button>
+      <div class="submit-note">
+        🔒 Your information is encrypted and stored securely. We never share your data with third parties.
+      </div>
+    </div>
+  </div>
+
+  </form>
+</div>
+
+<script>
+// ── PATIENT ID GENERATOR ──
+function generatePatientID(){
+  const base = 1200;
+  const rand = Math.floor(Math.random()*80);
+  return base + rand;
+}
+const patientNum = generatePatientID();
+const patientIDStr = 'WRW–' + patientNum;
+
+const now = new Date();
+const dateStr = now.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+const timeStr = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+document.getElementById('patient-id-display').textContent = patientIDStr;
+document.getElementById('pid-date-display').textContent = 'Issued: ' + dateStr + ' at ' + timeStr;
+document.getElementById('consent-date-display').textContent = dateStr;
+document.getElementById('success-pid').textContent = patientIDStr;
+
+// ── PAIN SCALE ──
+let selectedPain = '';
+function selectPain(el){
+  document.querySelectorAll('.pain-opt').forEach(o=>{
+    o.classList.remove('selected');
+    o.style.removeProperty('--pain-color');
+    o.style.removeProperty('--pain-bg');
+    o.style.borderColor='#E2EAF0';
+    o.style.background='';
+  });
+  el.classList.add('selected');
+  const color = el.dataset.color;
+  const bg = el.dataset.bg;
+  el.style.borderColor = color;
+  el.style.background = bg;
+  const level = parseInt(el.dataset.level);
+  const pct = ((level-1)/4)*100;
+  document.getElementById('pain-marker').style.left = pct + '%';
+  selectedPain = el.querySelector('.pain-num').textContent;
+  document.getElementById('c-pain-level').value = selectedPain;
+}
+
+// ── FILE UPLOAD ──
+let uploadedFiles = [];
+const MAX_SIZE = 50 * 1024 * 1024;
+
+function handleFiles(files){
+  for(let f of files){
+    if(!uploadedFiles.find(u=>u.name===f.name&&u.size===f.size)){
+      uploadedFiles.push(f);
+    }
+  }
+  renderFiles();
+}
+function renderFiles(){
+  const list = document.getElementById('file-list');
+  const warn = document.getElementById('file-size-warning');
+  list.innerHTML = '';
+  let total = 0;
+  uploadedFiles.forEach((f,i)=>{
+    total += f.size;
+    const size = f.size > 1024*1024 ? (f.size/1024/1024).toFixed(1)+' MB' : Math.round(f.size/1024)+' KB';
+    const div = document.createElement('div');
+    div.className = 'file-item';
+    div.innerHTML = `<span>📄</span><span class="file-item-name">${f.name}</span><span class="file-item-size">${size}</span><button class="file-item-remove" onclick="removeFile(${i})" title="Remove">✕</button>`;
+    list.appendChild(div);
+  });
+  warn.style.display = total > MAX_SIZE ? 'block' : 'none';
+}
+function removeFile(i){
+  uploadedFiles.splice(i,1);
+  renderFiles();
+}
+
+// Drag and drop
+const zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.style.borderColor='var(--cyan)';zone.style.background='#D8EFFF'});
+zone.addEventListener('dragleave',()=>{zone.style.borderColor='#C8E8FF';zone.style.background='var(--sky)'});
+zone.addEventListener('drop',e=>{
+  e.preventDefault();
+  zone.style.borderColor='#C8E8FF';zone.style.background='var(--sky)';
+  handleFiles(e.dataTransfer.files);
+});
+
+// ── SIGNATURE CANVAS ──
+const canvas = document.getElementById('sigCanvas');
+const ctx = canvas.getContext('2d');
+let drawing = false;
+let hasSig = false;
+
+function resizeCanvas(){
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const ratio = window.devicePixelRatio||1;
+  canvas.width = rect.width * ratio;
+  canvas.height = 140 * ratio;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = '140px';
+  ctx.scale(ratio,ratio);
+  ctx.strokeStyle = '#0A1628';
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function getPos(e, canvas){
+  const rect = canvas.getBoundingClientRect();
+  const ratio = window.devicePixelRatio||1;
+  if(e.touches){
+    return {x:(e.touches[0].clientX-rect.left),y:(e.touches[0].clientY-rect.top)};
+  }
+  return {x:(e.clientX-rect.left),y:(e.clientY-rect.top)};
+}
+
+canvas.addEventListener('mousedown',e=>{drawing=true;const p=getPos(e,canvas);ctx.beginPath();ctx.moveTo(p.x,p.y)});
+canvas.addEventListener('mousemove',e=>{if(!drawing)return;const p=getPos(e,canvas);ctx.lineTo(p.x,p.y);ctx.stroke();hasSig=true});
+canvas.addEventListener('mouseup',()=>drawing=false);
+canvas.addEventListener('mouseleave',()=>drawing=false);
+canvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;const p=getPos(e,canvas);ctx.beginPath();ctx.moveTo(p.x,p.y)},{passive:false});
+canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;const p=getPos(e,canvas);ctx.lineTo(p.x,p.y);ctx.stroke();hasSig=true},{passive:false});
+canvas.addEventListener('touchend',()=>drawing=false);
+
+function clearSig(){ctx.clearRect(0,0,canvas.width,canvas.height);hasSig=false}
+
+// ── FORM SUBMISSION ──
+function submitConsent(){
+  const required = [
+    {id:'c-fname',name:'First Name'},
+    {id:'c-lname',name:'Last Name'},
+    {id:'c-dob',name:'Date of Birth'},
+    {id:'c-age',name:'Age'},
+    {id:'c-gender',name:'Gender'},
+    {id:'c-phone',name:'Phone'},
+    {id:'c-email',name:'Email'},
+    {id:'c-emergency',name:'Emergency Contact'},
+    {id:'c-complaint',name:'Primary Complaint'},
+    {id:'c-symptoms',name:'Symptoms Description'},
+    {id:'c-duration',name:'Duration'},
+    {id:'c-allergies',name:'Allergies'},
+  ];
+  let ok = true;
+  required.forEach(r=>{
+    const el = document.getElementById(r.id);
+    if(!el||!el.value.trim()){
+      if(el) el.style.borderColor='#EF4444';
+      ok = false;
+    } else {
+      if(el) el.style.borderColor='#E2EAF0';
+    }
+  });
+  if(!selectedPain){
+    document.querySelector('.pain-options').style.outline='2px solid #EF4444';
+    document.querySelector('.pain-options').style.borderRadius='12px';
+    ok=false;
+  } else {
+    document.querySelector('.pain-options').style.outline='none';
+  }
+  const chks = ['chk1','chk2','chk3','chk4','chk5'];
+  chks.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el.checked){ok=false;el.parentElement.style.background='rgba(239,68,68,0.06)';el.parentElement.style.borderRadius='6px';el.parentElement.style.padding='4px';}
+    else {el.parentElement.style.background='';el.parentElement.style.padding='';}
+  });
+  if(!hasSig){
+    document.querySelector('.sig-area').style.border='2px solid #EF4444';
+    ok=false;
+  } else {
+    document.querySelector('.sig-area').style.border='';
+  }
+  if(!ok){
+    alert('Please complete all required fields, select your pain level, tick all consent boxes, and provide your signature before submitting.');
+    window.scrollTo({top:document.getElementById('sec1').offsetTop-100,behavior:'smooth'});
+    return;
+  }
+  // Check file size
+  let totalSize = uploadedFiles.reduce((a,f)=>a+f.size,0);
+  if(totalSize > MAX_SIZE){alert('Your uploaded files exceed 50MB. Please remove some files.');return;}
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  // Build WhatsApp notification
+  const name = document.getElementById('c-fname').value+' '+document.getElementById('c-lname').value;
+  const phone = document.getElementById('c-phone').value;
+  const complaint = document.getElementById('c-complaint').value;
+  const pain = selectedPain;
+  const waMsg = encodeURIComponent(
+    `🏥 NEW PATIENT CONSENT SUBMITTED\n\n`+
+    `Patient ID: ${patientIDStr}\n`+
+    `Name: ${name}\n`+
+    `Phone: ${phone}\n`+
+    `Complaint: ${complaint}\n`+
+    `Pain Level: ${pain}/10\n`+
+    `Submitted: ${dateStr}\n\n`+
+    `Please review the full patient record in the staff portal.`
+  );
+
+  setTimeout(()=>{
+    // Hide form, show success
+    document.getElementById('consent-form').style.display='none';
+    const ss = document.getElementById('success-screen');
+    ss.style.display='block';
+    ss.classList.add('show');
+    window.scrollTo({top:0,behavior:'smooth'});
+    // Notify clinic via WhatsApp
+    window.open('https://wa.me/2348162847976?text='+waMsg,'_blank');
+  }, 1200);
+}
+
+// Auto-fill age from DOB
+document.getElementById('c-dob').addEventListener('change',function(){
+  const dob = new Date(this.value);
+  const today = new Date();
+  let age = today.getFullYear()-dob.getFullYear();
+  const m = today.getMonth()-dob.getMonth();
+  if(m<0||(m===0&&today.getDate()<dob.getDate())) age--;
+  if(age>0&&age<120) document.getElementById('c-age').value=age;
+});
+
+// Set date min to today for any date inputs
+const todayISO = new Date().toISOString().split('T')[0];
+document.querySelectorAll('input[type=date]').forEach(e=>{ if(e.id!=='c-dob') e.min=todayISO; });
+</script>
+</body>
+</html>
