@@ -3262,6 +3262,9 @@ function setSpec(el, svcVal) {
 }
 
 // Form submit
+// Store booking details globally so WhatsApp can use them later
+let bookingWaMsg = '';
+
 function submitForm(){
   const req = [
     {id:'ff',name:'First Name'},{id:'fl',name:'Last Name'},
@@ -3275,22 +3278,34 @@ function submitForm(){
   });
   if(!ok){alert('Please fill in all required fields marked with *');return;}
 
-  // Build WhatsApp message
   const name = (document.getElementById('ff').value+' '+document.getElementById('fl').value).trim();
   const phone = document.getElementById('fp').value;
   const concern = document.getElementById('fs').value;
   const date = document.getElementById('fd').value;
   const time = document.getElementById('ft').value;
   const spec = document.querySelector('.spec-opt.active .sn')?.textContent || 'Chiropractor';
-  const waMsg = encodeURIComponent(
-    `Hello WhiteRock Wellness! 👋\n\nI just submitted a booking request:\n\n`+
-    `👤 Name: ${name}\n📞 Phone: ${phone}\n`+
-    `🩺 Specialist: ${spec}\n💬 Concern: ${concern}\n`+
-    `📅 Date: ${date}\n⏰ Time: ${time}\n\n`+
-    `Please confirm my appointment. Thank you!`
+
+  // Save WhatsApp message globally — fired later after patient completes their flow
+  bookingWaMsg = encodeURIComponent(
+    `Hello WhiteRock Wellness! 👋
+
+New booking request:
+
+`+
+    `👤 Name: ${name}
+📞 Phone: ${phone}
+`+
+    `🩺 Specialist: ${spec}
+💬 Concern: ${concern}
+`+
+    `📅 Date: ${date}
+⏰ Time: ${time}
+
+`+
+    `Please confirm their appointment. Thank you!`
   );
 
-  // Send to Microsoft Lists via Power Automate
+  // Send to Microsoft Lists via Power Automate — silent, no WhatsApp yet
   const bookingData = {
     PatientName: name,
     Phone: phone,
@@ -3305,32 +3320,29 @@ function submitForm(){
   };
   sendToMicrosoftLists(bookingData);
 
-  // Show success modal immediately — patient stays on page
+  // Show success popup — NO WhatsApp here
   document.getElementById('modal').classList.add('show');
 
-  // Send WhatsApp notification silently in background — patient never sees it
-  setTimeout(()=>{
-    const waFrame = document.createElement('a');
-    waFrame.href = 'https://wa.me/2348162847976?text='+waMsg;
-    waFrame.target = '_blank';
-    waFrame.rel = 'noopener';
-    waFrame.style.display = 'none';
-    document.body.appendChild(waFrame);
-    waFrame.click();
-    setTimeout(()=>document.body.removeChild(waFrame), 3000);
-  }, 3000);
-
-  // Reset form
+  // Reset form fields
   ['ff','fl','fp','fe','fs','fd','ft','fn'].forEach(id=>{
     const el=document.getElementById(id);
     if(el) el.value='';
   });
 }
 
+// Called when patient confirms they are returning
+function fireBookingWhatsApp(){
+  if(bookingWaMsg){
+    window.open('https://wa.me/2348162847976?text='+bookingWaMsg, '_blank');
+  }
+}
+
 
 function showConsentPrompt(){
   document.getElementById('returning-check').style.display='none';
   document.getElementById('consent-prompt').style.display='block';
+  // Fire WhatsApp notification now — new patient is heading to consent form
+  setTimeout(()=>fireBookingWhatsApp(), 1000);
 }
 function showReturningPrompt(){
   document.getElementById('returning-check').style.display='none';
@@ -3360,9 +3372,10 @@ async function confirmReturning(){
     const data = await res.json();
 
     if(data.found === true) {
-      // Patient found — show welcome back
+      // Patient found — show welcome back then fire WhatsApp
       document.getElementById('returning-prompt').style.display = 'none';
       document.getElementById('returning-confirmed').style.display = 'block';
+      setTimeout(()=>fireBookingWhatsApp(), 1500);
     } else {
       // Not found — send to consent form
       status.style.background = 'rgba(239,68,68,0.08)';
