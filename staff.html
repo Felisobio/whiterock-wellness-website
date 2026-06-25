@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhiteRock Wellness — Staff Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0A1628;--royal:#1A3FBF;--cyan:#00AAFF;
+  --sky:#E8F4FF;--offwhite:#F5F9FF;--white:#FFFFFF;
+  --text:#0A1628;--muted:#5A6A7A;--border:rgba(26,63,191,0.12);
+  --success:#22C55E;--warning:#F59E0B;--danger:#EF4444;
+}
+html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--offwhite);line-height:1.5;overflow-x:hidden}
+
+/* ── LOGIN ── */
+#login-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#030A18 0%,#0A1628 50%,#0D2050 100%);
+  padding:1rem;
+}
+.login-card{
+  background:white;border-radius:20px;padding:2.5rem;
+  width:100%;max-width:420px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.4);
+}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:2rem;justify-content:center}
+.login-logo-text{font-size:1.3rem;font-weight:800;color:var(--navy)}
+.login-logo-text span{color:var(--cyan)}
+.login-card h2{font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:0.3rem;text-align:center}
+.login-card p{font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:1.75rem}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.35rem}
+.form-group input{width:100%;padding:0.75rem 1rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem;color:var(--text);outline:none;transition:border-color 0.2s}
+.form-group input:focus{border-color:var(--cyan)}
+.login-btn{width:100%;background:var(--royal);color:white;border:none;padding:0.85rem;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:0.5rem}
+.login-btn:hover{background:var(--cyan);color:var(--navy)}
+.login-btn:disabled{opacity:0.6;cursor:not-allowed}
+.login-error{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);color:#991B1B;font-size:0.82rem;padding:0.65rem 1rem;border-radius:8px;margin-top:0.75rem;display:none;text-align:center}
+
+/* ── DASHBOARD ── */
+#dashboard{display:none}
+.app{display:flex;flex-direction:column;min-height:100vh}
+.topbar{
+  background:var(--navy);height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 1.5rem;position:sticky;top:0;z-index:100;
+  border-bottom:1px solid rgba(0,170,255,0.15);
+}
+.topbar-logo{color:var(--cyan);font-size:0.9rem;font-weight:700;letter-spacing:-0.01em}
+.topbar-logo span{color:rgba(255,255,255,0.5);font-weight:400}
+.topbar-right{display:flex;align-items:center;gap:0.75rem}
+.topbar-user{text-align:right}
+.topbar-name{font-size:0.82rem;color:white;font-weight:600}
+.topbar-role{font-size:0.7rem;color:rgba(255,255,255,0.4)}
+.user-avatar{width:34px;height:34px;border-radius:50%;background:var(--royal);border:2px solid rgba(0,170,255,0.3);display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;cursor:pointer}
+.signout-btn{background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);font-size:0.75rem;padding:0.3rem 0.75rem;border-radius:6px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s}
+.signout-btn:hover{border-color:var(--danger);color:var(--danger)}
+
+.app-body{display:flex;flex:1}
+.sidebar{
+  width:200px;background:white;border-right:1px solid var(--border);
+  padding:1rem 0;flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;
+}
+.nav-section{padding:0.5rem 1rem 0.25rem;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+.nav-item{
+  display:flex;align-items:center;gap:0.6rem;
+  padding:0.6rem 1rem;font-size:0.84rem;color:var(--muted);
+  cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;
+}
+.nav-item:hover{background:var(--offwhite);color:var(--navy)}
+.nav-item.active{background:var(--sky);color:var(--royal);border-left-color:var(--cyan);font-weight:600}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-badge{margin-left:auto;background:var(--danger);color:white;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:10px}
+
+.main-content{flex:1;padding:1.5rem;overflow-y:auto}
+.page{display:none}
+.page.active{display:block}
+.page-title{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem}
+.page-sub{font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem}
+
+/* ── METRICS ── */
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.metric-card{background:white;border-radius:12px;border:1px solid var(--border);padding:1.1rem 1.25rem}
+.metric-label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.4rem}
+.metric-value{font-size:1.8rem;font-weight:800;color:var(--navy);line-height:1}
+.metric-sub{font-size:0.75rem;color:var(--muted);margin-top:0.3rem}
+.metric-sub.good{color:var(--success)}
+.metric-sub.warn{color:var(--warning)}
+.metric-sub.bad{color:var(--danger)}
+
+/* ── CARDS ── */
+.card{background:white;border-radius:12px;border:1px solid var(--border);padding:1.25rem;margin-bottom:1rem}
+.card-title{font-size:0.88rem;font-weight:700;color:var(--navy);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+
+/* ── TABLE ── */
+.data-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.data-table th{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.5rem 0.75rem;text-align:left;border-bottom:1px solid var(--border);background:var(--offwhite)}
+.data-table td{padding:0.7rem 0.75rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--offwhite)}
+.patient-init{width:30px;height:30px;border-radius:50%;background:var(--sky);color:var(--royal);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0}
+
+/* ── BADGES ── */
+.badge{font-size:0.7rem;font-weight:700;padding:2px 10px;border-radius:20px;display:inline-block;white-space:nowrap}
+.badge-pending{background:#FEF3C7;color:#92400E}
+.badge-allocated{background:#DBEAFE;color:#1E40AF}
+.badge-active{background:#D1FAE5;color:#065F46}
+.badge-discharged{background:#F3F4F6;color:#6B7280}
+.badge-excellent{background:#D1FAE5;color:#065F46}
+.badge-good{background:#DBEAFE;color:#1E40AF}
+.badge-review{background:#FEE2E2;color:#991B1B}
+
+/* ── KPI ── */
+.kpi-therapist-card{background:white;border-radius:12px;border:1px solid var(--border);padding:1.25rem;margin-bottom:0.75rem}
+.kpi-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.kpi-info{display:flex;align-items:center;gap:0.75rem}
+.kpi-avatar{width:40px;height:40px;border-radius:50%;background:var(--sky);color:var(--royal);display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;flex-shrink:0}
+.kpi-name{font-size:0.9rem;font-weight:700;color:var(--navy)}
+.kpi-role-label{font-size:0.72rem;color:var(--muted)}
+.kpi-score-big{font-size:1.8rem;font-weight:800;line-height:1}
+.score-bar-wrap{background:var(--offwhite);border-radius:4px;height:8px;overflow:hidden;margin:0.75rem 0 0.5rem}
+.score-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.kpi-stats{display:flex;gap:1.5rem;font-size:0.78rem;color:var(--muted)}
+.stars-display{color:var(--warning);letter-spacing:1px;font-size:0.85rem}
+.feedback-list{margin-top:1rem;border-top:1px solid var(--border);padding-top:0.75rem}
+.feedback-item{padding:0.6rem 0;border-bottom:1px solid var(--border);font-size:0.8rem}
+.feedback-item:last-child{border-bottom:none}
+.feedback-meta{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem}
+.feedback-patient{font-weight:600;color:var(--navy);font-size:0.75rem}
+.feedback-date{color:var(--muted);font-size:0.72rem}
+.feedback-stars{color:var(--warning);font-size:0.72rem}
+.feedback-comment{color:var(--muted);font-size:0.78rem;line-height:1.5;font-style:italic}
+.feedback-locked{display:flex;align-items:center;gap:0.4rem;color:var(--muted);font-size:0.78rem;padding:0.5rem;background:var(--offwhite);border-radius:6px;margin-top:0.5rem}
+
+/* ── PERIODIC REVIEW ── */
+.review-card{background:white;border-radius:12px;border:1px solid var(--border);padding:1.25rem;margin-bottom:0.75rem}
+.review-card.overdue{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.02)}
+.review-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.5rem}
+.review-name{font-size:0.9rem;font-weight:700;color:var(--navy)}
+.review-type{font-size:0.72rem;color:var(--muted)}
+.review-due{font-size:0.75rem;font-weight:600}
+.review-due.overdue{color:var(--danger)}
+.review-due.upcoming{color:var(--warning)}
+.review-due.ok{color:var(--success)}
+.review-body{font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:0.75rem}
+.review-actions{display:flex;gap:0.5rem}
+.btn-sm{font-size:0.75rem;padding:0.35rem 0.85rem;border-radius:6px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;border:1px solid var(--border);background:white;color:var(--navy);transition:all 0.15s}
+.btn-sm:hover{background:var(--sky);border-color:var(--cyan);color:var(--royal)}
+.btn-sm.danger{border-color:rgba(239,68,68,0.3);color:var(--danger)}
+.btn-sm.danger:hover{background:rgba(239,68,68,0.06)}
+.btn-primary{background:var(--royal);color:white;border:none;padding:0.55rem 1.25rem;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-primary:hover{background:var(--cyan);color:var(--navy)}
+
+/* ── ALLOCATION ── */
+.alloc-card{background:white;border-radius:12px;border:1.5px solid #FEF3C7;padding:1.25rem;margin-bottom:0.75rem}
+.alloc-patient{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem}
+.alloc-details{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.75rem;font-size:0.8rem}
+.alloc-detail-item{background:var(--offwhite);border-radius:6px;padding:0.4rem 0.6rem}
+.alloc-detail-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:2px}
+.alloc-detail-val{color:var(--navy);font-weight:500}
+.alloc-form{display:flex;gap:0.5rem;align-items:center}
+.alloc-select{flex:1;padding:0.55rem 0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none}
+.alloc-select:focus{border-color:var(--cyan)}
+.alloc-comment{width:100%;padding:0.55rem 0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none;resize:none;margin-top:0.5rem}
+.alloc-comment:focus{border-color:var(--cyan)}
+
+/* ── APPROVAL ── */
+.approval-card{background:white;border-radius:12px;border:1.5px solid rgba(26,63,191,0.2);padding:1.25rem;margin-bottom:0.75rem}
+.approval-meta{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem}
+.approval-note{background:var(--offwhite);border-radius:8px;padding:0.75rem;font-size:0.82rem;color:var(--text);line-height:1.6;margin-bottom:0.75rem;border-left:3px solid var(--royal)}
+.approval-actions{display:flex;gap:0.5rem}
+
+/* ── SESSION PANEL ── */
+.session-patient-card{background:var(--sky);border-radius:10px;padding:1rem;margin-bottom:0.75rem;border:1px solid rgba(0,170,255,0.2)}
+.session-form textarea{width:100%;padding:0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.84rem;outline:none;resize:vertical;min-height:100px;margin-bottom:0.75rem}
+.session-form textarea:focus{border-color:var(--cyan)}
+.session-form label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.35rem}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--muted)}
+.empty-state svg{width:40px;height:40px;stroke:var(--muted);fill:none;stroke-width:1.5;margin:0 auto 1rem;display:block}
+.empty-state p{font-size:0.88rem}
+
+/* ── LOADING ── */
+.loading{text-align:center;padding:2rem;color:var(--muted);font-size:0.85rem}
+.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 0.75rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  .two-col,.three-col{grid-template-columns:1fr}
+  .sidebar{width:160px}
+}
+@media(max-width:600px){
+  .sidebar{display:none}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="36" width="36">
+        <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1Z"/>
+      </svg>
+      <div class="login-logo-text">White<span>Rock</span> Wellness</div>
+    </div>
+    <h2>Staff Portal</h2>
+    <p>Sign in with your work email and password</p>
+    <div class="form-group">
+      <label>Work Email</label>
+      <input type="email" id="login-email" placeholder="you@whiterock-wellness.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Sign in →</button>
+    <div class="login-error" id="login-error">Incorrect email or password. Please try again.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="app">
+
+    <div class="topbar">
+      <div class="topbar-logo">WhiteRock <span>Staff Portal</span></div>
+      <div class="topbar-right">
+        <div class="topbar-user">
+          <div class="topbar-name" id="topbar-name">—</div>
+          <div class="topbar-role" id="topbar-role">—</div>
+        </div>
+        <div class="user-avatar" id="user-avatar">?</div>
+        <button class="signout-btn" onclick="signOut()">Sign out</button>
+      </div>
+    </div>
+
+    <div class="app-body">
+      <div class="sidebar" id="sidebar">
+        <div class="nav-section">Main</div>
+        <div class="nav-item active" onclick="showPage('overview',this)">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Overview
+        </div>
+        <div class="nav-item" onclick="showPage('patients',this)">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Patients
+        </div>
+        <div class="nav-item" id="nav-allocations" onclick="showPage('allocations',this)">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Allocations
+          <span class="nav-badge" id="alloc-badge" style="display:none">0</span>
+        </div>
+        <div class="nav-item" onclick="showPage('sessions',this)">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Sessions
+        </div>
+        <div class="nav-item" onclick="showPage('kpi',this)">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          KPI
+        </div>
+        <div class="nav-item" id="nav-periodic" onclick="showPage('periodic',this)">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Periodic review
+        </div>
+        <div class="nav-item" id="nav-approval" onclick="showPage('approval',this)">
+          <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Approval queue
+          <span class="nav-badge" id="approval-badge" style="display:none">0</span>
+        </div>
+      </div>
+
+      <div class="main-content">
+
+        <!-- OVERVIEW -->
+        <div class="page active" id="page-overview">
+          <div class="page-title">Overview</div>
+          <div class="page-sub" id="overview-greeting">Welcome back</div>
+          <div class="metrics-grid" id="overview-metrics">
+            <div class="loading"><div class="spinner"></div>Loading…</div>
+          </div>
+          <div class="two-col">
+            <div class="card">
+              <div class="card-title">Recent patients</div>
+              <div id="recent-patients-list"><div class="loading"><div class="spinner"></div></div></div>
+            </div>
+            <div class="card" id="kpi-overview-card">
+              <div class="card-title">Team KPI snapshot</div>
+              <div id="kpi-snapshot-list"><div class="loading"><div class="spinner"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PATIENTS -->
+        <div class="page" id="page-patients">
+          <div class="page-title">Patients</div>
+          <div class="page-sub">All patient records from consent form submissions</div>
+          <div class="card" style="padding:0;overflow:hidden">
+            <div style="padding:1rem;border-bottom:1px solid var(--border);display:flex;gap:0.5rem;align-items:center">
+              <input type="text" id="patient-search" placeholder="Search by name, ID or complaint…" style="flex:1;padding:0.55rem 0.85rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.84rem;outline:none" oninput="filterPatients(this.value)">
+              <select id="patient-filter" onchange="filterPatients(document.getElementById('patient-search').value)" style="padding:0.55rem 0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none">
+                <option value="">All statuses</option>
+                <option value="Pending Allocation">Pending</option>
+                <option value="Allocated">Allocated</option>
+                <option value="Active">Active</option>
+                <option value="Discharged">Discharged</option>
+              </select>
+            </div>
+            <div id="patients-table-wrap">
+              <div class="loading"><div class="spinner"></div>Loading patients…</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ALLOCATIONS -->
+        <div class="page" id="page-allocations">
+          <div class="page-title">Allocation queue</div>
+          <div class="page-sub">Patients pending therapist assignment</div>
+          <div id="allocations-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+        </div>
+
+        <!-- SESSIONS -->
+        <div class="page" id="page-sessions">
+          <div class="page-title">Session notes</div>
+          <div class="page-sub">Write treatment plans and session findings for your patients</div>
+          <div id="sessions-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+        </div>
+
+        <!-- KPI -->
+        <div class="page" id="page-kpi">
+          <div class="page-title">KPI dashboard</div>
+          <div class="page-sub" id="kpi-page-sub">Therapist satisfaction scores from patient feedback</div>
+          <div id="kpi-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+        </div>
+
+        <!-- PERIODIC REVIEW -->
+        <div class="page" id="page-periodic">
+          <div class="page-title">Periodic reviews</div>
+          <div class="page-sub">Monthly and quarterly performance reviews based on KPI data</div>
+          <div id="periodic-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+        </div>
+
+        <!-- APPROVAL QUEUE -->
+        <div class="page" id="page-approval">
+          <div class="page-title">Approval queue</div>
+          <div class="page-sub">Session notes from Junior and Intern therapists awaiting sign-off</div>
+          <div id="approval-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const LOGIN_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e771521392984479b30fcefa0e541868/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hv_AthaGan6qz_hfTmCC7qGCJ81GswoxGtZPo0WuvV0';
+const LISTS_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/217c95c781d94a49af324744020b0a1e/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=7gBGcRAOp4V6FOXuhsFARqz6yS-ICKWcuIoAMGKFBXs';
+
+// Management accounts — full access to feedback comments
+const MANAGEMENT_EMAILS = [
+  'drpaul@whiterock-wellness.com',
+  'obiefunafelis@whiterock-wellness.com'
+];
+
+let currentUser = null;
+let allPatients = [];
+let allFeedback = [];
+
+// ── LOGIN ──
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const password = document.getElementById('login-password').value;
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+
+  if(!email || !password){ err.style.display='block'; err.textContent='Please enter your email and password.'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  err.style.display = 'none';
+
+  try {
+    const res = await fetch(LOGIN_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email, password})
+    });
+    const data = await res.json();
+
+    if(data.success){
+      currentUser = {
+        email,
+        name: data.name,
+        role: data.role,
+        isManagement: MANAGEMENT_EMAILS.includes(email)
+      };
+      initDashboard();
+    } else {
+      err.style.display = 'block';
+      err.textContent = 'Incorrect email or password. Please try again.';
+      btn.disabled = false;
+      btn.textContent = 'Sign in →';
+    }
+  } catch(e){
+    err.style.display = 'block';
+    err.textContent = 'Could not connect. Please check your internet and try again.';
+    btn.disabled = false;
+    btn.textContent = 'Sign in →';
+  }
+}
+
+function signOut(){
+  currentUser = null;
+  allPatients = [];
+  allFeedback = [];
+  document.getElementById('login-email').value = '';
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-btn').disabled = false;
+  document.getElementById('login-btn').textContent = 'Sign in →';
+  document.getElementById('login-error').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+// ── INIT DASHBOARD ──
+function initDashboard(){
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+
+  const initials = currentUser.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('topbar-name').textContent = currentUser.name;
+  document.getElementById('topbar-role').textContent = currentUser.role;
+  document.getElementById('user-avatar').textContent = initials;
+  document.getElementById('overview-greeting').textContent = `Welcome back, ${currentUser.name.split(' ')[0]}`;
+
+  // Hide management-only nav items for non-management
+  const isLead = currentUser.role === 'Lead' || currentUser.role === 'Admin';
+  if(!isLead){
+    document.getElementById('nav-allocations').style.display = 'none';
+    document.getElementById('nav-periodic').style.display = 'none';
+    document.getElementById('nav-approval').style.display = 'none';
+  }
+
+  loadOverview();
+}
+
+// ── NAVIGATION ──
+function showPage(name, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+
+  // Load page data
+  if(name==='patients') loadPatients();
+  if(name==='allocations') loadAllocations();
+  if(name==='sessions') loadSessions();
+  if(name==='kpi') loadKPI();
+  if(name==='periodic') loadPeriodic();
+  if(name==='approval') loadApproval();
+}
+
+// ── HELPERS ──
+function getInitials(name){
+  if(!name) return '?';
+  return name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+}
+
+function getStatusBadge(status){
+  const map = {
+    'Pending Allocation':'badge-pending',
+    'Allocated':'badge-allocated',
+    'Active':'badge-active',
+    'Discharged':'badge-discharged'
+  };
+  return `<span class="badge ${map[status]||'badge-pending'}">${status||'Pending'}</span>`;
+}
+
+function getKPIBadge(score){
+  if(score >= 85) return `<span class="badge badge-excellent">Excellent</span>`;
+  if(score >= 70) return `<span class="badge badge-good">Good</span>`;
+  return `<span class="badge badge-review">Review needed</span>`;
+}
+
+function getKPIColor(score){
+  if(score >= 85) return '#22C55E';
+  if(score >= 70) return '#3B82F6';
+  return '#EF4444';
+}
+
+function getStars(rating){
+  const full = Math.round(rating);
+  return '★'.repeat(full) + '☆'.repeat(5-full);
+}
+
+function calcKPI(ratings){
+  if(!ratings || ratings.length === 0) return 0;
+  const sum = ratings.reduce((a,b)=>a+b,0);
+  return Math.round((sum / (5 * ratings.length)) * 100);
+}
+
+// ── MOCK DATA (replace with real Lists calls via Power Automate) ──
+function getMockPatients(){
+  return [
+    {id:'WRW-1247',name:'Amaka Okonkwo',phone:'08012345678',complaint:'Lower back pain',status:'Pending Allocation',therapist:'',date:'2026-06-25',painLevel:'7-8'},
+    {id:'WRW-1246',name:'Emeka Taiwo',phone:'08023456789',complaint:'Sciatica',status:'Active',therapist:'Dr. Paul Chima',date:'2026-06-24',painLevel:'8-9'},
+    {id:'WRW-1245',name:'Bola Adeyemi',phone:'08034567890',complaint:'Neck pain',status:'Allocated',therapist:'Sarah Obi',date:'2026-06-23',painLevel:'5-6'},
+    {id:'WRW-1244',name:'Chisom Nwosu',phone:'08045678901',complaint:'Scoliosis',status:'Active',therapist:'Dr. Paul Chima',date:'2026-06-22',painLevel:'6-7'},
+    {id:'WRW-1243',name:'Tunde Bakare',phone:'08056789012',complaint:'Headaches',status:'Pending Allocation',therapist:'',date:'2026-06-21',painLevel:'4-5'},
+    {id:'WRW-1242',name:'Ngozi Eze',phone:'08067890123',complaint:'Knee pain',status:'Discharged',therapist:'James Eze',date:'2026-06-18',painLevel:'5-6'},
+  ];
+}
+
+function getMockFeedback(){
+  return [
+    {patient:'Emeka Taiwo',therapist:'Dr. Paul Chima',rating:5,comment:'Excellent treatment. Felt immediate relief after the first session.',date:'2026-06-24'},
+    {patient:'Chisom Nwosu',therapist:'Dr. Paul Chima',rating:4,comment:'Very thorough and professional. Pain has reduced significantly.',date:'2026-06-22'},
+    {patient:'Bola Adeyemi',therapist:'Sarah Obi',rating:4,comment:'Good session. She explained everything clearly.',date:'2026-06-23'},
+    {patient:'Amaka Okonkwo',therapist:'Sarah Obi',rating:3,comment:'Treatment was okay but had to wait a bit long.',date:'2026-06-20'},
+    {patient:'Ngozi Eze',therapist:'James Eze',rating:3,comment:'Decent session but felt a bit rushed.',date:'2026-06-18'},
+    {patient:'Tunde Bakare',therapist:'James Eze',rating:2,comment:'Needs to listen more carefully to patient concerns.',date:'2026-06-15'},
+  ];
+}
+
+function getMockStaff(){
+  return [
+    {name:'Dr. Paul Chima',role:'Lead',specialty:'Chiropractor'},
+    {name:'Sarah Obi',role:'Mid-level',specialty:'Physiotherapist'},
+    {name:'James Eze',role:'Junior',specialty:'Massage Therapist'},
+  ];
+}
+
+// ── OVERVIEW ──
+function loadOverview(){
+  const patients = getMockPatients();
+  const feedback = getMockFeedback();
+  const isLead = currentUser.role === 'Lead' || currentUser.role === 'Admin';
+
+  // Metrics
+  const pending = patients.filter(p=>p.status==='Pending Allocation').length;
+  const active = patients.filter(p=>p.status==='Active').length;
+  const myPatients = isLead ? patients : patients.filter(p=>p.therapist===currentUser.name);
+  const myFeedback = feedback.filter(f=>f.therapist===currentUser.name);
+  const myKPI = calcKPI(myFeedback.map(f=>f.rating));
+
+  let metricsHTML = '';
+  if(isLead){
+    metricsHTML = `
+      <div class="metric-card"><div class="metric-label">Total patients</div><div class="metric-value">${patients.length}</div><div class="metric-sub good">+3 this week</div></div>
+      <div class="metric-card"><div class="metric-label">Pending allocation</div><div class="metric-value">${pending}</div><div class="metric-sub ${pending>0?'warn':'good'}">${pending>0?'Needs attention':'All assigned'}</div></div>
+      <div class="metric-card"><div class="metric-label">Active cases</div><div class="metric-value">${active}</div><div class="metric-sub">In treatment</div></div>
+      <div class="metric-card"><div class="metric-label">Clinic satisfaction</div><div class="metric-value">${calcKPI(feedback.map(f=>f.rating))}%</div><div class="metric-sub good">From patient feedback</div></div>
+    `;
+  } else {
+    metricsHTML = `
+      <div class="metric-card"><div class="metric-label">My patients</div><div class="metric-value">${myPatients.length}</div><div class="metric-sub">Assigned to you</div></div>
+      <div class="metric-card"><div class="metric-label">My KPI score</div><div class="metric-value" style="color:${getKPIColor(myKPI)}">${myKPI}%</div><div class="metric-sub">${myKPI>=85?'Excellent':myKPI>=70?'Good':'Review needed'}</div></div>
+      <div class="metric-card"><div class="metric-label">Sessions rated</div><div class="metric-value">${myFeedback.length}</div><div class="metric-sub">Patient ratings received</div></div>
+      <div class="metric-card"><div class="metric-label">Avg rating</div><div class="metric-value">${myFeedback.length?( myFeedback.reduce((a,b)=>a+b.rating,0)/myFeedback.length).toFixed(1):'-'}</div><div class="metric-sub">Out of 5.0</div></div>
+    `;
+  }
+  document.getElementById('overview-metrics').innerHTML = metricsHTML;
+
+  // Recent patients
+  const recentList = (isLead ? patients : myPatients).slice(0,4);
+  document.getElementById('recent-patients-list').innerHTML = recentList.length ? recentList.map(p=>`
+    <div style="display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0;border-bottom:1px solid var(--border)">
+      <div class="patient-init">${getInitials(p.name)}</div>
+      <div style="flex:1">
+        <div style="font-size:0.84rem;font-weight:600;color:var(--navy)">${p.name}</div>
+        <div style="font-size:0.72rem;color:var(--muted)">${p.complaint} · ${p.id}</div>
+      </div>
+      ${getStatusBadge(p.status)}
+    </div>
+  `).join('') : '<div class="empty-state"><p>No patients yet</p></div>';
+
+  // KPI snapshot — management sees all, others see only themselves
+  if(isLead){
+    const staff = getMockStaff();
+    document.getElementById('kpi-snapshot-list').innerHTML = staff.map(s=>{
+      const sf = feedback.filter(f=>f.therapist===s.name);
+      const kpi = calcKPI(sf.map(f=>f.rating));
+      return `
+        <div style="display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0;border-bottom:1px solid var(--border)">
+          <div class="patient-init" style="background:var(--sky)">${getInitials(s.name)}</div>
+          <div style="flex:1">
+            <div style="font-size:0.84rem;font-weight:600;color:var(--navy)">${s.name}</div>
+            <div style="font-size:0.72rem;color:var(--muted)">${s.role} · ${sf.length} ratings</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:0.9rem;font-weight:700;color:${getKPIColor(kpi)}">${kpi}%</div>
+            ${getKPIBadge(kpi)}
+          </div>
+        </div>
+      `;
+    }).join('');
+  } else {
+    document.getElementById('kpi-overview-card').style.display = 'none';
+  }
+}
+
+// ── PATIENTS ──
+function loadPatients(){
+  allPatients = getMockPatients();
+  renderPatientsTable(allPatients);
+}
+
+function filterPatients(search){
+  const status = document.getElementById('patient-filter').value;
+  const filtered = allPatients.filter(p=>{
+    const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase()) || p.complaint.toLowerCase().includes(search.toLowerCase());
+    const matchStatus = !status || p.status === status;
+    return matchSearch && matchStatus;
+  });
+  renderPatientsTable(filtered);
+}
+
+function renderPatientsTable(patients){
+  const isLead = currentUser.role === 'Lead' || currentUser.role === 'Admin';
+  const list = isLead ? patients : patients.filter(p=>p.therapist===currentUser.name);
+  if(!list.length){
+    document.getElementById('patients-table-wrap').innerHTML = '<div class="empty-state"><p>No patients found</p></div>';
+    return;
+  }
+  document.getElementById('patients-table-wrap').innerHTML = `
+    <table class="data-table">
+      <thead><tr>
+        <th>Patient</th><th>ID</th><th>Complaint</th><th>Pain</th><th>Therapist</th><th>Status</th><th>Date</th>
+      </tr></thead>
+      <tbody>${list.map(p=>`
+        <tr>
+          <td><div style="display:flex;align-items:center;gap:0.5rem"><div class="patient-init">${getInitials(p.name)}</div><span style="font-weight:600">${p.name}</span></div></td>
+          <td style="color:var(--muted);font-size:0.78rem">${p.id}</td>
+          <td>${p.complaint}</td>
+          <td style="text-align:center">${p.painLevel}</td>
+          <td style="color:var(--muted)">${p.therapist||'—'}</td>
+          <td>${getStatusBadge(p.status)}</td>
+          <td style="color:var(--muted);font-size:0.78rem">${p.date}</td>
+        </tr>
+      `).join('')}</tbody>
+    </table>
+  `;
+}
+
+// ── ALLOCATIONS ──
+function loadAllocations(){
+  const patients = getMockPatients().filter(p=>p.status==='Pending Allocation');
+  const staff = getMockStaff().filter(s=>s.role!=='Intern');
+  if(!patients.length){
+    document.getElementById('allocations-list').innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>No patients pending allocation</p></div>`;
+    return;
+  }
+  document.getElementById('allocations-list').innerHTML = patients.map(p=>`
+    <div class="alloc-card">
+      <div class="alloc-patient">
+        <div class="patient-init" style="width:38px;height:38px;font-size:0.82rem">${getInitials(p.name)}</div>
+        <div>
+          <div style="font-size:0.9rem;font-weight:700;color:var(--navy)">${p.name}</div>
+          <div style="font-size:0.75rem;color:var(--muted)">${p.id} · Submitted ${p.date}</div>
+        </div>
+      </div>
+      <div class="alloc-details">
+        <div class="alloc-detail-item"><div class="alloc-detail-label">Complaint</div><div class="alloc-detail-val">${p.complaint}</div></div>
+        <div class="alloc-detail-item"><div class="alloc-detail-label">Pain level</div><div class="alloc-detail-val">${p.painLevel}/10</div></div>
+      </div>
+      <div class="alloc-form">
+        <select class="alloc-select" id="therapist-${p.id}">
+          <option value="">Select therapist…</option>
+          ${staff.map(s=>`<option value="${s.name}">${s.name} (${s.role})</option>`).join('')}
+        </select>
+        <button class="btn-primary" onclick="allocate('${p.id}','${p.name}')">Assign →</button>
+      </div>
+      <textarea class="alloc-comment" id="comment-${p.id}" placeholder="Allocation note — e.g. severity assessment, reason for assignment…" rows="2"></textarea>
+    </div>
+  `).join('');
+
+  document.getElementById('alloc-badge').textContent = patients.length;
+  document.getElementById('alloc-badge').style.display = patients.length ? 'inline-block' : 'none';
+}
+
+function allocate(patientId, patientName){
+  const therapist = document.getElementById(`therapist-${patientId}`).value;
+  const comment = document.getElementById(`comment-${patientId}`).value;
+  if(!therapist){ alert('Please select a therapist.'); return; }
+  alert(`✓ ${patientName} has been allocated to ${therapist}.${comment?'\n\nNote: '+comment:''}\n\n(This will update the patient record in Microsoft Lists once the Sessions flow is connected.)`);
+}
+
+// ── SESSIONS ──
+function loadSessions(){
+  const patients = getMockPatients().filter(p=>p.therapist===currentUser.name && p.status==='Active');
+  if(!patients.length){
+    document.getElementById('sessions-list').innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>No active patients assigned to you</p></div>`;
+    return;
+  }
+  document.getElementById('sessions-list').innerHTML = patients.map(p=>`
+    <div class="card">
+      <div class="session-patient-card">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <div class="patient-init">${getInitials(p.name)}</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:700;color:var(--navy)">${p.name}</div>
+            <div style="font-size:0.72rem;color:var(--muted)">${p.id} · ${p.complaint} · Pain ${p.painLevel}/10</div>
+          </div>
+        </div>
+      </div>
+      <div class="session-form">
+        <label>Treatment plan</label>
+        <textarea id="plan-${p.id}" placeholder="Describe the treatment plan for this patient…"></textarea>
+        <label>Session findings</label>
+        <textarea id="findings-${p.id}" placeholder="What did you observe and do during this session?"></textarea>
+        <label>Proactive next steps</label>
+        <textarea id="nextsteps-${p.id}" placeholder="What should happen at the next session?" rows="2" style="min-height:70px"></textarea>
+        <div style="display:flex;gap:0.5rem;margin-top:0.25rem">
+          <button class="btn-primary" onclick="saveSession('${p.id}','${p.name}')">Save session notes</button>
+          ${currentUser.role==='Junior'||currentUser.role==='Intern'?`<span style="font-size:0.75rem;color:var(--muted);align-self:center">⚠ Your notes will be sent for Lead approval</span>`:''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function saveSession(patientId, patientName){
+  const plan = document.getElementById(`plan-${patientId}`).value;
+  const findings = document.getElementById(`findings-${patientId}`).value;
+  const nextsteps = document.getElementById(`nextsteps-${patientId}`).value;
+  if(!findings){ alert('Please enter session findings before saving.'); return; }
+  const needsApproval = currentUser.role==='Junior'||currentUser.role==='Intern';
+  alert(`✓ Session notes saved for ${patientName}.${needsApproval?'\n\nYour notes have been sent to the Lead for approval.':'\n\nNotes saved and active.'}`);
+}
+
+// ── KPI ──
+function loadKPI(){
+  const feedback = getMockFeedback();
+  const staff = getMockStaff();
+  const isManagement = currentUser.isManagement;
+  const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
+
+  if(isLead){
+    document.getElementById('kpi-page-sub').textContent = 'All therapist satisfaction scores from patient feedback';
+    document.getElementById('kpi-list').innerHTML = staff.map(s=>{
+      const sf = feedback.filter(f=>f.therapist===s.name);
+      const kpi = calcKPI(sf.map(f=>f.rating));
+      const avg = sf.length ? (sf.reduce((a,b)=>a+b.rating,0)/sf.length).toFixed(1) : 0;
+      return `
+        <div class="kpi-therapist-card">
+          <div class="kpi-header">
+            <div class="kpi-info">
+              <div class="kpi-avatar">${getInitials(s.name)}</div>
+              <div>
+                <div class="kpi-name">${s.name}</div>
+                <div class="kpi-role-label">${s.role} · ${s.specialty} · ${sf.length} sessions rated</div>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div class="kpi-score-big" style="color:${getKPIColor(kpi)}">${kpi}%</div>
+              ${getKPIBadge(kpi)}
+            </div>
+          </div>
+          <div class="score-bar-wrap"><div class="score-bar-fill" style="width:${kpi}%;background:${getKPIColor(kpi)}"></div></div>
+          <div class="kpi-stats">
+            <span class="stars-display">${getStars(parseFloat(avg))}</span>
+            <span>Avg ${avg} / 5</span>
+            <span>·</span>
+            <span>${sf.length} ratings</span>
+            <span>·</span>
+            <span>Formula: (${sf.reduce((a,b)=>a+b.rating,0)} ÷ ${5*sf.length}) × 100</span>
+          </div>
+          ${isManagement ? `
+          <div class="feedback-list">
+            <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.5rem">Patient feedback comments</div>
+            ${sf.map(f=>`
+              <div class="feedback-item">
+                <div class="feedback-meta">
+                  <span class="feedback-patient">${f.patient}</span>
+                  <span class="feedback-date">· ${f.date}</span>
+                  <span class="feedback-stars">${getStars(f.rating)} ${f.rating}/5</span>
+                </div>
+                <div class="feedback-comment">"${f.comment}"</div>
+              </div>
+            `).join('')}
+          </div>` : ''}
+        </div>
+      `;
+    }).join('');
+  } else {
+    // Non-management sees only their own score — no comments
+    const myFeedback = feedback.filter(f=>f.therapist===currentUser.name);
+    const kpi = calcKPI(myFeedback.map(f=>f.rating));
+    const avg = myFeedback.length ? (myFeedback.reduce((a,b)=>a+b.rating,0)/myFeedback.length).toFixed(1) : 0;
+    document.getElementById('kpi-page-sub').textContent = 'Your personal satisfaction score from patient ratings';
+    document.getElementById('kpi-list').innerHTML = `
+      <div class="kpi-therapist-card">
+        <div class="kpi-header">
+          <div class="kpi-info">
+            <div class="kpi-avatar">${getInitials(currentUser.name)}</div>
+            <div>
+              <div class="kpi-name">${currentUser.name}</div>
+              <div class="kpi-role-label">${currentUser.role} · ${myFeedback.length} sessions rated</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="kpi-score-big" style="color:${getKPIColor(kpi)}">${kpi}%</div>
+            ${getKPIBadge(kpi)}
+          </div>
+        </div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" style="width:${kpi}%;background:${getKPIColor(kpi)}"></div></div>
+        <div class="kpi-stats">
+          <span class="stars-display">${getStars(parseFloat(avg))}</span>
+          <span>Avg ${avg} / 5</span>
+          <span>·</span>
+          <span>${myFeedback.length} ratings</span>
+        </div>
+        <div class="feedback-locked">
+          🔒 Patient feedback comments are visible to management only
+        </div>
+      </div>
+      <div class="card" style="background:var(--sky);border-color:rgba(0,170,255,0.2)">
+        <div style="font-size:0.85rem;color:var(--royal);line-height:1.7">
+          <strong>How your KPI is calculated:</strong><br>
+          Every patient rates their session from 1 to 5 stars after each visit.<br>
+          Your score = (Total stars ÷ (5 × number of sessions)) × 100<br><br>
+          <strong>Benchmarks:</strong> 85%+ Excellent · 70–84% Good · Below 70% = Review needed
+        </div>
+      </div>
+    `;
+  }
+}
+
+// ── PERIODIC REVIEW ──
+function loadPeriodic(){
+  const staff = getMockStaff();
+  const feedback = getMockFeedback();
+  const reviews = staff.map(s=>{
+    const sf = feedback.filter(f=>f.therapist===s.name);
+    const kpi = calcKPI(sf.map(f=>f.rating));
+    const isOverdue = kpi < 70;
+    return {
+      name:s.name, role:s.role, kpi,
+      type: kpi < 70 ? 'Performance review' : 'Monthly check-in',
+      due: isOverdue ? '20 Jun 2026' : '28 Jun 2026',
+      overdue: isOverdue,
+      notes: kpi < 70
+        ? `KPI at ${kpi}% — below threshold. Urgent review required. ${sf.filter(f=>f.rating<=3).length} patient comments flagged for follow-up.`
+        : `KPI at ${kpi}% — ${kpi>=85?'Excellent':'Good'}. Review session quality notes and patient feedback before meeting.`
+    };
+  });
+
+  document.getElementById('periodic-list').innerHTML = reviews.map(r=>`
+    <div class="review-card ${r.overdue?'overdue':''}">
+      <div class="review-header">
+        <div>
+          <div class="review-name">${r.name} — ${r.type}</div>
+          <div class="review-type">${r.role} · KPI: <strong style="color:${getKPIColor(r.kpi)}">${r.kpi}%</strong></div>
+        </div>
+        <div class="review-due ${r.overdue?'overdue':'upcoming'}">${r.overdue?'Overdue · ':'Due '}${r.due}</div>
+      </div>
+      <div class="review-body">${r.notes}</div>
+      <div class="review-actions">
+        <button class="btn-sm" onclick="showPage('kpi',document.querySelector('[onclick*=kpi]'))">View KPI</button>
+        <button class="btn-sm">Schedule meeting</button>
+        <button class="btn-sm" onclick="markReviewed('${r.name}')">Mark reviewed ✓</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function markReviewed(name){
+  alert(`✓ ${name}'s review marked as complete.`);
+}
+
+// ── APPROVAL QUEUE ──
+function loadApproval(){
+  // Mock pending approvals from Junior/Intern staff
+  const pending = [
+    {therapist:'James Eze',role:'Junior',patient:'Ngozi Eze',patientId:'WRW-1242',date:'2026-06-24',plan:'Spinal adjustment and massage therapy',findings:'Patient shows improvement in mobility. Lower back tension reduced by approximately 40%. Continues to experience some discomfort when standing for long periods.',nextsteps:'Continue with 2x weekly adjustments. Add core strengthening exercises.'},
+  ];
+
+  if(!pending.length){
+    document.getElementById('approval-list').innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><p>No notes pending approval</p></div>`;
+    return;
+  }
+
+  document.getElementById('approval-badge').textContent = pending.length;
+  document.getElementById('approval-badge').style.display = 'inline-block';
+
+  document.getElementById('approval-list').innerHTML = pending.map(a=>`
+    <div class="approval-card">
+      <div class="approval-meta">
+        <div class="patient-init">${getInitials(a.therapist)}</div>
+        <div>
+          <div style="font-size:0.88rem;font-weight:700;color:var(--navy)">${a.therapist} <span style="font-weight:400;color:var(--muted)">· ${a.role}</span></div>
+          <div style="font-size:0.75rem;color:var(--muted)">For patient: ${a.patient} (${a.patientId}) · ${a.date}</div>
+        </div>
+      </div>
+      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.4rem">Treatment plan</div>
+      <div class="approval-note">${a.plan}</div>
+      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.4rem">Session findings</div>
+      <div class="approval-note">${a.findings}</div>
+      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.4rem">Next steps</div>
+      <div class="approval-note">${a.nextsteps}</div>
+      <div class="approval-actions">
+        <button class="btn-primary" onclick="approveNote('${a.therapist}','${a.patient}')">Approve ✓</button>
+        <button class="btn-sm danger" onclick="rejectNote('${a.therapist}','${a.patient}')">Request changes</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function approveNote(therapist, patient){
+  alert(`✓ Session notes by ${therapist} for ${patient} have been approved and are now active.`);
+}
+function rejectNote(therapist, patient){
+  alert(`Changes requested for ${therapist}'s notes on ${patient}. They will be notified to revise.`);
+}
+</script>
+</body>
+</html>
