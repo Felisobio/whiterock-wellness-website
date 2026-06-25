@@ -530,11 +530,7 @@ canvas#sigCanvas{width:100%;height:140px;cursor:crosshair;touch-action:none}
       </div>
     </div>
 
-    <div class="frow3">
-      <div class="fg">
-        <label>Date of Birth <span class="req">*</span></label>
-        <input type="date" id="c-dob" required>
-      </div>
+    <div class="frow">
       <div class="fg">
         <label>Age <span class="req">*</span></label>
         <input type="number" id="c-age" placeholder="e.g. 34" min="1" max="120" required>
@@ -1082,7 +1078,6 @@ function submitConsent(){
   const required = [
     {id:'c-fname',name:'First Name'},
     {id:'c-lname',name:'Last Name'},
-    {id:'c-dob',name:'Date of Birth'},
     {id:'c-age',name:'Age'},
     {id:'c-gender',name:'Gender'},
     {id:'c-phone',name:'Phone'},
@@ -1220,7 +1215,7 @@ function clickStep(n){
 function validateStep1(){
   const req=[
     {id:'c-fname',name:'First Name'},{id:'c-lname',name:'Last Name'},
-    {id:'c-dob',name:'Date of Birth'},{id:'c-age',name:'Age'},
+    {id:'c-age',name:'Age'},
     {id:'c-gender',name:'Gender'},{id:'c-phone',name:'Phone'},
     {id:'c-email',name:'Email'},{id:'c-emergency',name:'Emergency Contact'},
   ];
@@ -1257,18 +1252,334 @@ function validateStep2(){
 }
 
 
-document.getElementById('c-dob').addEventListener('change',function(){
-  const dob = new Date(this.value);
-  const today = new Date();
-  let age = today.getFullYear()-dob.getFullYear();
-  const m = today.getMonth()-dob.getMonth();
-  if(m<0||(m===0&&today.getDate()<dob.getDate())) age--;
-  if(age>0&&age<120) document.getElementById('c-age').value=age;
-});
-
 // Set date min to today for any date inputs
 const todayISO = new Date().toISOString().split('T')[0];
-document.querySelectorAll('input[type=date]').forEach(e=>{ if(e.id!=='c-dob') e.min=todayISO; });
+document.querySelectorAll('input[type=date]').forEach(e=>{ e.min=todayISO; });
 </script>
+<!-- CONSENT PAGE HELP BOT -->
+<style>
+#help-bubble{position:fixed;bottom:28px;right:28px;z-index:900}
+#help-toggle{
+  width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,var(--royal),var(--cyan));
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 28px rgba(0,170,255,0.45);
+  transition:all 0.3s;position:relative;
+}
+#help-toggle:hover{transform:scale(1.08)}
+#help-toggle svg{width:26px;height:26px;fill:white}
+.help-notif{
+  position:absolute;top:-4px;right:-4px;
+  width:20px;height:20px;border-radius:50%;
+  background:#EF4444;color:white;font-size:0.65rem;
+  font-weight:800;display:flex;align-items:center;justify-content:center;
+  border:2px solid white;animation:helpPulse 2s infinite;
+}
+@keyframes helpPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+#help-window{
+  position:absolute;bottom:70px;right:0;
+  width:340px;background:white;border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.18);
+  border:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+  transform:scale(0.88) translateY(16px);
+  opacity:0;visibility:hidden;
+  transform-origin:bottom right;
+  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+  max-height:540px;
+}
+#help-window.open{transform:scale(1) translateY(0);opacity:1;visibility:visible}
+.help-header{
+  background:linear-gradient(135deg,var(--navy),var(--royal));
+  padding:1rem 1.25rem;
+  display:flex;align-items:center;gap:0.75rem;flex-shrink:0;
+}
+.help-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(0,170,255,0.2);border:2px solid var(--cyan);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;
+}
+.help-header h4{color:white;font-size:0.88rem;font-weight:700;margin-bottom:2px}
+.help-online{display:flex;align-items:center;gap:4px;color:rgba(255,255,255,0.55);font-size:0.7rem}
+.help-online::before{content:'';width:6px;height:6px;border-radius:50%;background:#22C55E;display:inline-block;margin-right:2px}
+.help-msgs{
+  flex:1;overflow-y:auto;padding:1rem;
+  display:flex;flex-direction:column;gap:0.75rem;
+  min-height:200px;max-height:310px;
+  background:var(--offwhite);
+}
+.help-msgs::-webkit-scrollbar{width:4px}
+.help-msgs::-webkit-scrollbar-thumb{background:var(--royal);border-radius:2px}
+.hmsg{display:flex;gap:0.5rem;align-items:flex-end;animation:msgIn 0.3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.hmsg.bot{flex-direction:row}
+.hmsg.user{flex-direction:row-reverse}
+.hmsg-av{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--royal),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;flex-shrink:0;color:white;font-weight:700;
+}
+.hmsg-bubble{
+  max-width:82%;padding:0.65rem 0.9rem;border-radius:12px;
+  font-size:0.81rem;line-height:1.55;
+}
+.hmsg.bot .hmsg-bubble{
+  background:white;color:var(--text);
+  border-bottom-left-radius:4px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.07);
+}
+.hmsg.user .hmsg-bubble{
+  background:var(--royal);color:white;
+  border-bottom-right-radius:4px;
+}
+.help-typing{
+  display:flex;gap:4px;align-items:center;
+  background:white;padding:0.65rem 0.9rem;
+  border-radius:12px;border-bottom-left-radius:4px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.06);width:fit-content;
+}
+.help-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:typB 1.2s infinite}
+.help-dot:nth-child(2){animation-delay:0.2s}
+.help-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typB{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.help-quickreplies{
+  padding:0.6rem 0.75rem;display:flex;gap:0.4rem;
+  flex-wrap:wrap;background:var(--offwhite);
+  border-top:1px solid var(--border);flex-shrink:0;
+}
+.hqr{
+  background:white;border:1px solid var(--border);
+  color:var(--royal);padding:0.28rem 0.65rem;
+  border-radius:20px;font-size:0.7rem;font-weight:600;
+  cursor:pointer;transition:all 0.2s;
+  font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;
+}
+.hqr:hover{background:var(--royal);color:white;border-color:var(--royal)}
+.help-input-area{
+  padding:0.7rem 0.9rem;display:flex;gap:0.5rem;
+  align-items:center;background:white;
+  border-top:1px solid var(--border);flex-shrink:0;
+}
+.help-input{
+  flex:1;border:1.5px solid var(--border);border-radius:24px;
+  padding:0.52rem 0.85rem;font-size:0.81rem;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  outline:none;color:var(--text);background:var(--offwhite);
+  transition:border-color 0.2s;
+}
+.help-input:focus{border-color:var(--cyan);background:white}
+.help-send{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--royal);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;flex-shrink:0;
+}
+.help-send:hover{background:var(--cyan)}
+.help-send svg{width:15px;height:15px;fill:none;stroke:white;stroke-width:2.5}
+.help-powered{
+  text-align:center;padding:0.35rem;
+  font-size:0.6rem;color:var(--muted);
+  background:white;border-top:1px solid var(--border);flex-shrink:0;
+}
+@media(max-width:400px){#help-window{width:292px}#help-bubble{right:14px;bottom:18px}}
+</style>
+
+<div id="help-bubble">
+  <div id="help-window">
+    <div class="help-header">
+      <div class="help-avatar">💬</div>
+      <div>
+        <h4>Form Help Assistant</h4>
+        <div class="help-online">Here to help · WhiteRock Wellness</div>
+      </div>
+      <button onclick="toggleHelp()" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:1.1rem;padding:4px;line-height:1">✕</button>
+    </div>
+    <div class="help-msgs" id="help-msgs"></div>
+    <div class="help-quickreplies" id="help-qr">
+      <button class="hqr" onclick="askHelp('What is a Patient ID?')">Patient ID?</button>
+      <button class="hqr" onclick="askHelp('What should I put for emergency contact?')">Emergency contact</button>
+      <button class="hqr" onclick="askHelp('What is the pain level scale?')">Pain scale</button>
+      <button class="hqr" onclick="askHelp('Can I skip uploading documents?')">Skip documents?</button>
+      <button class="hqr" onclick="askHelp('What is the no-refund policy?')">No-refund policy</button>
+      <button class="hqr" onclick="askHelp('Is my information kept private?')">Privacy</button>
+    </div>
+    <div class="help-input-area">
+      <input class="help-input" id="help-input" type="text" placeholder="Ask anything about this form…" onkeydown="if(event.key==='Enter')sendHelp()">
+      <button class="help-send" onclick="sendHelp()">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="help-powered">⚡ Powered by Claude AI · WhiteRock Wellness</div>
+  </div>
+  <button id="help-toggle" onclick="toggleHelp()">
+    <span class="help-notif" id="help-notif">?</span>
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </button>
+</div>
+
+<script>
+// ── CONSENT HELP BOT ──
+let helpOpen = false;
+let helpHistory = [];
+let helpGreeted = false;
+
+const HELP_CONTEXT = `You are a warm, helpful assistant on the WhiteRock Wellness patient consent form page. Your ONLY job is to help patients understand and fill in this specific form correctly. You have deep knowledge of every field on the form.
+
+FORM FIELDS — answer questions about each:
+
+SECTION 1 — PATIENT DETAILS:
+- First Name / Last Name: Legal full name as it appears on ID. Used to create the patient record.
+- Age: Current age in years. Just a number, e.g. "34". Required for clinical safety assessment.
+- Gender: Male, Female, or Prefer not to say. Used for treatment planning as some conditions differ by gender.
+- Phone/WhatsApp: Active Nigerian number including country code (e.g. +234 816 284 7976). We use this to confirm your appointment and send your post-session survey.
+- Email Address: Valid email. We send your consent confirmation and appointment details here.
+- Home Address: Where you live — helps us understand travel distance and area. Not mandatory but helpful.
+- Occupation: Your job or daily activity (e.g. "Bank executive", "Teacher", "Trader"). Helps therapist understand posture habits and likely causes of pain.
+- Emergency Contact: Name AND phone number of someone we can reach if needed during your visit. Format: "John Obi — 0812 345 6789". Required for safety.
+- How did you hear about us?: Optional. Helps us know which platforms our patients come from.
+
+SECTION 2 — HEALTH & COMPLAINT:
+- Primary Complaint: Choose from the dropdown the condition closest to what you're experiencing. If unsure, pick "Not sure — need assessment".
+- Symptoms description: Describe in your own words — when it started, where the pain is, does it travel to other areas, what makes it worse or better, any previous treatment. The more detail the better — Dr. Paul reads this before your session.
+- Duration: How long you've had this issue. Be as accurate as possible — chronic conditions (over 6 months) may need a different treatment approach than acute ones.
+- Pain level scale: Pick the emoji that matches your current pain right now:
+  * 1-2 (😌 Mild): Slight discomfort, barely affects daily life
+  * 3-4 (🙂 Annoying): Noticeable but manageable
+  * 5-6 (😐 Moderate): Affects what you can do, hard to ignore
+  * 7-8 (😣 Severe): Very painful, difficult to concentrate or function
+  * 9-10 (😭 Unbearable): Incapacitating, worst pain imaginable
+- Previous treatments: List anything you've tried — physiotherapy, painkillers, injections, surgery, massage, etc. Include dates if you remember. Helps avoid repeat approaches.
+- Allergies: Any known allergies — drug, food, latex etc. Important for clinical safety.
+- Current medication: Any drugs you take regularly, including supplements, blood pressure medication, diabetes drugs, pain relief, etc. Write "None" if you take nothing.
+- Medical history checkboxes: Tick all conditions you have or have had. These affect which treatment techniques are safe for you. Osteoporosis and cancer history especially affect how Dr. Paul adjusts.
+
+SECTION 3 — DOCUMENTS:
+- Upload is completely optional but highly recommended if you have X-rays, MRI scans, blood test results, or referral letters from a hospital.
+- Accepted file types: PDF, JPG, PNG, HEIC (iPhone photo format).
+- Maximum total size: 50MB across all files combined.
+- If files are too large, try compressing images or uploading fewer files. You can also bring physical copies on the day.
+- Documents are confidential and only seen by your clinical team.
+
+SECTION 4 — CONSENT:
+- The consent document must be read fully. It explains what chiropractic treatment involves, the expected sensations (including temporary pain and clicking sounds during adjustment — this is normal and expected), risks, and your rights.
+- Five checkboxes: All five must be ticked. Each confirms a key part of your agreement.
+- Signature: Draw your signature using your finger (on phone) or mouse (on computer) in the white box. If you make a mistake, click "Clear signature" and redraw.
+- The no-refund policy means: once you have paid for a session, we cannot refund it even if you experience discomfort. Discomfort is a normal part of bone-setting treatment and does not mean anything went wrong.
+
+PATIENT ID:
+- Your Patient ID (e.g. WRW–1203) is automatically generated when you open the form. You do not need to create it — it is already shown at the top of the form.
+- Keep your Patient ID after submission — it is how we identify your record in our system.
+
+NAVIGATION:
+- Use the "Continue →" button at the bottom of each section to move forward.
+- Use "← Back" to go back to a previous section without losing your answers.
+- Once a section is completed (shown with ✓ in the progress bar), you can tap that step number in the sticky bar at the top to jump directly to it.
+
+PRIVACY:
+- All your information is strictly confidential.
+- It is stored securely and only shared with your treating clinician at WhiteRock Wellness.
+- We never sell, share, or disclose your data to third parties.
+- Data is retained for 7 years as required by medical record standards.
+
+WHITEROCK WELLNESS:
+- Address: No. 3 Ayobaba Tunde Crescent, Oniru, Lagos, Nigeria
+- Phone/WhatsApp: +234 816 284 7976
+- Hours: Monday–Friday 8am–6pm, Saturday 9am–5pm, Sunday 10am–3pm
+- Lead Chiropractor: Dr. Paul Johnson Chima
+
+YOUR TONE: Warm, clear, reassuring. Use simple English. Keep answers concise — 2 to 4 sentences unless the patient needs more detail. If a question is completely unrelated to the form or the clinic, politely say you can only help with questions about this consent form and direct them to call +234 816 284 7976 for other queries.`;
+
+function toggleHelp(){
+  helpOpen = !helpOpen;
+  const win = document.getElementById('help-window');
+  const notif = document.getElementById('help-notif');
+  win.classList.toggle('open', helpOpen);
+  if(helpOpen){
+    notif.style.display='none';
+    if(!helpGreeted){
+      helpGreeted=true;
+      setTimeout(()=>addHelpBot("👋 Hello! I'm here to help you fill this consent form.\n\nAsk me anything — what a field means, what to write, what the consent clauses mean, or anything else about the form. I'll explain it clearly!"), 350);
+    }
+    setTimeout(()=>document.getElementById('help-input')?.focus(), 450);
+  }
+}
+
+function addHelpBot(text){
+  const msgs = document.getElementById('help-msgs');
+  const el = document.createElement('div');
+  el.className='hmsg bot';
+  el.innerHTML=`<div class="hmsg-av">W</div><div class="hmsg-bubble">${text.replace(/\n/g,'<br>')}</div>`;
+  msgs.appendChild(el);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function addHelpUser(text){
+  const msgs = document.getElementById('help-msgs');
+  const el = document.createElement('div');
+  el.className='hmsg user';
+  el.innerHTML=`<div class="hmsg-bubble">${text}</div><div class="hmsg-av" style="background:var(--muted)">U</div>`;
+  msgs.appendChild(el);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showHelpTyping(){
+  const msgs=document.getElementById('help-msgs');
+  const t=document.createElement('div');
+  t.className='hmsg bot';t.id='help-typing';
+  t.innerHTML=`<div class="hmsg-av">W</div><div class="help-typing"><div class="help-dot"></div><div class="help-dot"></div><div class="help-dot"></div></div>`;
+  msgs.appendChild(t);msgs.scrollTop=msgs.scrollHeight;
+}
+function removeHelpTyping(){document.getElementById('help-typing')?.remove();}
+
+async function sendHelp(){
+  const input=document.getElementById('help-input');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  addHelpUser(text);
+  helpHistory.push({role:'user',content:text});
+  showHelpTyping();
+  document.getElementById('help-qr').style.display='none';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:350,
+        system:HELP_CONTEXT,
+        messages:helpHistory
+      })
+    });
+    const data=await res.json();
+    removeHelpTyping();
+    const reply=data.content?.[0]?.text||"I'm having a moment — please call us on +234 816 284 7976 for help.";
+    helpHistory.push({role:'assistant',content:reply});
+    addHelpBot(reply);
+  }catch(e){
+    removeHelpTyping();
+    addHelpBot("Sorry, I'm having a connection issue. Please call us directly:\n📞 +234 816 284 7976");
+  }
+}
+
+function askHelp(text){
+  if(!helpOpen) toggleHelp();
+  setTimeout(()=>{
+    document.getElementById('help-input').value=text;
+    sendHelp();
+  }, helpGreeted?100:600);
+}
+
+setTimeout(()=>{
+  if(!helpOpen){
+    const n=document.getElementById('help-notif');
+    if(n){n.textContent='?';n.style.display='flex';}
+  }
+},5000);
+</script>
+
 </body>
 </html>
