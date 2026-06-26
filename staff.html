@@ -435,20 +435,19 @@ function handleAuthResponse(response){
 
 function verifyAndLoad(email, msName){
   const emailLower = email.toLowerCase();
+
+  // Check if management account
+  const isManagement = MANAGEMENT_EMAILS.includes(emailLower);
+
+  // Check if in STAFF_ROLES for a specific role/name
   const staffRecord = STAFF_ROLES[emailLower];
 
-  if(!staffRecord){
-    // Not a registered staff member
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('access-denied').style.display = 'flex';
-    return;
-  }
-
+  // Allow ALL accounts in the tenant — assign role based on STAFF_ROLES or default to Mid-level
   currentUser = {
     email: emailLower,
-    name: staffRecord.name || msName,
-    role: staffRecord.role,
-    isManagement: MANAGEMENT_EMAILS.includes(emailLower)
+    name: staffRecord ? staffRecord.name : msName,
+    role: staffRecord ? staffRecord.role : 'Mid-level',
+    isManagement: isManagement
   };
 
   initDashboard();
