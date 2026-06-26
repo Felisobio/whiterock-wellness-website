@@ -2010,31 +2010,7 @@ footer{
 </div>
 </section>
 
-<script>
-async function loadHealthTips(){
-  try {
-    var grid = document.getElementById('tips-grid');
-    var gradients = [
-      'linear-gradient(135deg,#0A2040,#00AAFF)',
-      'linear-gradient(135deg,#0D2050,#1A3FBF)',
-      'linear-gradient(135deg,#051530,#00AAFF)'
-    ];
-    // Call our own Netlify function — no CORS issues
-    var res = await fetch('/.netlify/functions/get-posts');
-    if(!res.ok) return;
-    var posts = await res.json();
-    for(var i=0; i<posts.length; i++){
-      var tip = posts[i];
-      var card = document.createElement('div');
-      card.className = 'tip-card';
-      var grad = gradients[i % gradients.length];
-      card.innerHTML = '<div class="tip-img" style="background:'+grad+'"><svg viewBox="0 0 80 80" width="60" height="60" fill="none"><circle cx="40" cy="35" r="20" fill="rgba(0,170,255,0.2)" stroke="#00AAFF" stroke-width="2"/><path d="M40 20 L40 50 M28 35 L52 35" stroke="#00AAFF" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="tip-body"><div class="tip-tag">'+tip.category+'</div><h3>'+tip.title+'</h3><p>'+tip.excerpt+'</p></div>';
-      grid.insertBefore(card, grid.firstChild);
-    }
-  } catch(e){ console.log('Tips error:', e); }
-}
-loadHealthTips();
-</script>
+
 
 
 <script>
