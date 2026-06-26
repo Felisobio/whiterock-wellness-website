@@ -363,6 +363,8 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 
 <script>
 const GET_PATIENTS_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/908a72e119d34d46be0537c6ccf5acf6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8IEi3jdhIOOnCzdlgT-n29nbJJbLt0WzBzSSq_3aVDw';
+const UPDATE_PATIENT_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3e392ef2d3034bea80d577dde7f14436/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bv0HbzeLgNthPzZgBP7Mh2XfqP7-gNiOc-H8IAugn3M';
+const SAVE_SESSION_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/df1f1bf9929241dca0a8c3e8a5588b8a/triggers/manual/paths/invoke?api-version=1';
 const CLIENT_ID = '4b13835c-69e6-4cf9-9823-25cf48f0f5a7';
 const TENANT_ID = '89eeb06b-f74d-4def-9463-ffa01a2e8366';
 const AUTHORITY = `https://login.microsoftonline.com/${TENANT_ID}`;
@@ -527,12 +529,12 @@ async function fetchPatients(){
       occupation: p.Occupation || '',
       complaint: p.PrimaryComplaint || '',
       symptoms: p.Symtomps || '',
-      duration: p.Duration || '',
+      duration: typeof p.Duration === 'object' ? (p.Duration?.Value || '') : (p.Duration || ''),
       painLevel: p.PainLevel || '-',
       painAreas: p.PainAreas || '',
-      status: p.Status || 'Pending Allocation',
+      status: typeof p.Status === 'object' ? (p.Status?.Value || 'Pending Allocation') : (p.Status || 'Pending Allocation'),
       therapist: p.AssignedTherapist || '',
-      date: p.SubmittedAt ? p.SubmittedAt.split('T')[0] : ''
+      date: p.SubmittedAt ? p.SubmittedAt.split('T')[0] : (p.Created ? p.Created.split('T')[0] : '')
     }));
   } catch(e) {
     console.log('Failed to fetch patients:', e);
@@ -648,7 +650,7 @@ function renderPatientsTable(patients){
 
 async function loadAllocations(){
   const all = await fetchPatients().catch(() => getMockPatients());
-  const patients = all.filter(p=>p.status==='Pending Allocation');
+  const patients = all.filter(p=>!p.therapist || p.therapist==='' || p.status==='Pending Allocation');
   const staff = getMockStaff();
   document.getElementById('alloc-badge').textContent = patients.length;
   document.getElementById('alloc-badge').style.display = patients.length?'inline-block':'none';
@@ -674,10 +676,41 @@ async function loadAllocations(){
   `).join('') : '<div class="empty-state"><p>No patients pending allocation</p></div>';
 }
 
-function allocate(patientId, patientName){
-  const therapist = document.getElementById(`therapist-${patientId}`).value;
+async function allocate(patientId, patientName){
+  const therapist = document.getElementById('therapist-'+patientId).value;
+  const comment = document.getElementById('comment-'+patientId) ? document.getElementById('comment-'+patientId).value : '';
   if(!therapist){ alert('Please select a therapist.'); return; }
-  alert(`✓ ${patientName} allocated to ${therapist}.`);
+  
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  try {
+    const res = await fetch(UPDATE_PATIENT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        patientId: patientId,
+        therapist: therapist,
+        status: 'Allocated',
+        note: comment
+      })
+    });
+    const data = await res.json();
+    if(data.success){
+      btn.textContent = '✓ Allocated!';
+      btn.style.background = '#22C55E';
+      setTimeout(()=>{ loadAllocations(); }, 1500);
+    } else {
+      alert('Something went wrong. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Assign →';
+    }
+  } catch(e){
+    alert('Connection error. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Assign →';
+  }
 }
 
 async function loadSessions(){
@@ -707,10 +740,54 @@ async function loadSessions(){
   `).join('') : '<div class="empty-state"><p>No active patients assigned to you</p></div>';
 }
 
-function saveSession(id, name){
-  const findings = document.getElementById(`findings-${id}`).value;
-  if(!findings){ alert('Please enter session findings.'); return; }
-  alert(`✓ Session notes saved for ${name}.`);
+async function saveSession(patientId, patientName){
+  const plan = document.getElementById('plan-'+patientId) ? document.getElementById('plan-'+patientId).value : '';
+  const findings = document.getElementById('findings-'+patientId).value;
+  const nextSteps = document.getElementById('next-'+patientId) ? document.getElementById('next-'+patientId).value : '';
+  
+  if(!findings){ alert('Please enter session findings before saving.'); return; }
+  
+  const needsApproval = currentUser.role === 'Junior' || currentUser.role === 'Intern';
+  const status = needsApproval ? 'Pending Approval' : 'Approved';
+
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  try {
+    const res = await fetch(SAVE_SESSION_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        patientName: patientName,
+        patientId: patientId,
+        therapist: currentUser.name,
+        plan: plan,
+        findings: findings,
+        nextSteps: nextSteps,
+        status: status,
+        sessionDate: new Date().toISOString().split('T')[0]
+      })
+    });
+    const data = await res.json();
+    if(data.success){
+      btn.textContent = '✓ Saved!';
+      btn.style.background = '#22C55E';
+      if(needsApproval){
+        setTimeout(()=>{ alert('Your session notes have been sent to the Lead for approval.'); btn.disabled=false; btn.textContent='Save session notes'; btn.style.background=''; }, 1000);
+      } else {
+        setTimeout(()=>{ btn.disabled=false; btn.textContent='Save session notes'; btn.style.background=''; }, 2000);
+      }
+    } else {
+      alert('Something went wrong. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Save session notes';
+    }
+  } catch(e){
+    alert('Connection error. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Save session notes';
+  }
 }
 
 function loadKPI(){
@@ -796,28 +873,21 @@ function loadPeriodic(){
   }).join('');
 }
 
-function loadApproval(){
-  const pending = [{therapist:'James Eze',role:'Junior',patient:'Ngozi Eze',patientId:'WRW-1242',date:'2026-06-24',plan:'Spinal adjustment and massage therapy',findings:'Patient shows improvement in mobility. Lower back tension reduced by approximately 40%. Continues to experience some discomfort when standing for long periods.',nextsteps:'Continue with 2x weekly adjustments. Add core strengthening exercises.'}];
-  document.getElementById('approval-badge').textContent = pending.length;
-  document.getElementById('approval-badge').style.display = pending.length?'inline-block':'none';
-  document.getElementById('approval-list').innerHTML = pending.length ? pending.map(a=>`
-    <div class="approval-card">
-      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem">
-        <div class="patient-init">${getInitials(a.therapist)}</div>
-        <div><div style="font-size:0.88rem;font-weight:700;color:var(--navy)">${a.therapist} <span style="font-weight:400;color:var(--muted)">· ${a.role}</span></div><div style="font-size:0.75rem;color:var(--muted)">For: ${a.patient} (${a.patientId}) · ${a.date}</div></div>
-      </div>
-      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.4rem">Treatment plan</div>
-      <div class="approval-note">${a.plan}</div>
-      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.4rem">Session findings</div>
-      <div class="approval-note">${a.findings}</div>
-      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.4rem">Next steps</div>
-      <div class="approval-note">${a.nextsteps}</div>
-      <div style="display:flex;gap:0.5rem">
-        <button class="btn-primary" onclick="alert('Notes approved ✓')">Approve ✓</button>
-        <button class="btn-sm danger" onclick="alert('Changes requested.')">Request changes</button>
-      </div>
-    </div>
-  `).join('') : '<div class="empty-state"><p>No notes pending approval</p></div>';
+async function loadApproval(){
+  document.getElementById('approval-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading…</div>';
+  
+  // Fetch sessions pending approval from Sessions list
+  try {
+    const res = await fetch(GET_PATIENTS_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({listName: 'Sessions', filter: 'Pending Approval'})
+    });
+    // For now show empty state until Sessions flow is connected
+  } catch(e){}
+
+  document.getElementById('approval-badge').style.display = 'none';
+  document.getElementById('approval-list').innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><p>No notes pending approval</p></div>';
 }
 </script>
 </body>
