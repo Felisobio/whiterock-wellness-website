@@ -3,19 +3,43 @@ const path = require('path');
 
 exports.handler = async function(event, context) {
   try {
-    const postsDir = path.join('/var/task', 'posts');
-    
-    if(!fs.existsSync(postsDir)){
+    // Try multiple possible paths where Netlify stores the repo files
+    const possiblePaths = [
+      path.join('/var/task', 'posts'),
+      path.join(process.cwd(), 'posts'),
+      path.join(__dirname, '..', '..', 'posts'),
+      path.join(__dirname, '..', 'posts'),
+      '/opt/build/repo/posts'
+    ];
+
+    var postsDir = null;
+    for(var p of possiblePaths){
+      if(fs.existsSync(p)){
+        postsDir = p;
+        break;
+      }
+    }
+
+    // Debug — return which path was found
+    if(!postsDir){
       return {
         statusCode: 200,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify([])
+        body: JSON.stringify({ debug: 'no posts dir found', cwd: process.cwd(), dirname: __dirname, tried: possiblePaths })
       };
     }
 
     const files = fs.readdirSync(postsDir)
       .filter(function(f){ return f.endsWith('.md'); })
       .reverse();
+
+    if(!files.length){
+      return {
+        statusCode: 200,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        body: JSON.stringify({ debug: 'posts dir found but empty', path: postsDir })
+      };
+    }
 
     var posts = [];
 
@@ -54,7 +78,7 @@ exports.handler = async function(event, context) {
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify([])
+      body: JSON.stringify({ error: err.message, cwd: process.cwd(), dirname: __dirname })
     };
   }
 };
