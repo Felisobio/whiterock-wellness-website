@@ -506,6 +506,32 @@ function getKPIColor(s){ if(s>=85) return '#22C55E'; if(s>=70) return '#3B82F6';
 function getStars(r){ const f=Math.round(r); return '★'.repeat(f)+'☆'.repeat(5-f); }
 function calcKPI(ratings){ if(!ratings||!ratings.length) return 0; return Math.round((ratings.reduce((a,b)=>a+b,0)/(5*ratings.length))*100); }
 
+async function fetchPatients(){
+  try {
+    const res = await fetch(GET_PATIENTS_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({})
+    });
+    const data = await res.json();
+    // Map SharePoint columns to our patient object
+    return data.map(p => ({
+      id: p.PatientID || p.Title || 'WRW-???',
+      name: p.PatientName || p.Title || 'Unknown',
+      phone: p.Phone || '',
+      email: p.Email || '',
+      complaint: p.PrimaryComplaint || p.Symptoms || '',
+      status: p.Status || 'Pending Allocation',
+      therapist: p.AssignedTherapist || '',
+      date: p.SubmittedAt ? p.SubmittedAt.split('T')[0] : '',
+      painLevel: p.PainLevel || '-'
+    }));
+  } catch(e) {
+    console.log('Failed to fetch patients:', e);
+    return [];
+  }
+}
+
 function getMockPatients(){
   return [
     {id:'WRW-1247',name:'Amaka Okonkwo',phone:'08012345678',complaint:'Lower back pain',status:'Pending Allocation',therapist:'',date:'2026-06-25',painLevel:'7-8'},
@@ -536,8 +562,9 @@ function getMockStaff(){
   ];
 }
 
-function loadOverview(){
-  const patients = getMockPatients();
+async function loadOverview(){
+  const patients = await fetchPatients().catch(() => getMockPatients());
+  allPatients = patients;
   const feedback = getMockFeedback();
   const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
   const pending = patients.filter(p=>p.status==='Pending Allocation').length;
@@ -581,8 +608,9 @@ function loadOverview(){
   }
 }
 
-function loadPatients(){
-  allPatients = getMockPatients();
+async function loadPatients(){
+  document.getElementById('patients-table-wrap').innerHTML = '<div class="loading"><div class="spinner"></div>Loading patients from Microsoft Lists…</div>';
+  allPatients = await fetchPatients().catch(() => getMockPatients());
   renderPatientsTable(allPatients);
 }
 
@@ -610,8 +638,9 @@ function renderPatientsTable(patients){
   ` : '<div class="empty-state"><p>No patients found</p></div>';
 }
 
-function loadAllocations(){
-  const patients = getMockPatients().filter(p=>p.status==='Pending Allocation');
+async function loadAllocations(){
+  const all = await fetchPatients().catch(() => getMockPatients());
+  const patients = all.filter(p=>p.status==='Pending Allocation');
   const staff = getMockStaff();
   document.getElementById('alloc-badge').textContent = patients.length;
   document.getElementById('alloc-badge').style.display = patients.length?'inline-block':'none';
@@ -643,8 +672,9 @@ function allocate(patientId, patientName){
   alert(`✓ ${patientName} allocated to ${therapist}.`);
 }
 
-function loadSessions(){
-  const patients = getMockPatients().filter(p=>p.therapist===currentUser.name&&p.status==='Active');
+async function loadSessions(){
+  const all = await fetchPatients().catch(() => getMockPatients());
+  const patients = all.filter(p=>p.therapist===currentUser.name&&p.status==='Active');
   document.getElementById('sessions-list').innerHTML = patients.length ? patients.map(p=>`
     <div class="card">
       <div class="session-patient-card">
