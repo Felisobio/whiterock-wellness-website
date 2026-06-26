@@ -516,15 +516,22 @@ async function fetchPatients(){
     const data = await res.json();
     // Map SharePoint columns to our patient object
     return data.map(p => ({
-      id: p.PatientID || p.Title || 'WRW-???',
+      id: p.PatientID || 'WRW-???',
       name: p.PatientName || p.Title || 'Unknown',
       phone: p.Phone || '',
       email: p.Email || '',
-      complaint: p.PrimaryComplaint || p.Symptoms || '',
+      age: p.Age || '',
+      gender: p.Gender || '',
+      address: p.Address || '',
+      occupation: p.Occupation || '',
+      complaint: p.PrimaryComplaint || '',
+      symptoms: p.Symtomps || '',
+      duration: p.Duration || '',
+      painLevel: p.PainLevel || '-',
+      painAreas: p.PainAreas || '',
       status: p.Status || 'Pending Allocation',
       therapist: p.AssignedTherapist || '',
-      date: p.SubmittedAt ? p.SubmittedAt.split('T')[0] : '',
-      painLevel: p.PainLevel || '-'
+      date: p.SubmittedAt ? p.SubmittedAt.split('T')[0] : ''
     }));
   } catch(e) {
     console.log('Failed to fetch patients:', e);
