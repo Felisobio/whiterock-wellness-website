@@ -483,7 +483,7 @@ function initDashboard(){
     document.getElementById('nav-approval').style.display = 'none';
   }
 
-  loadOverview();
+  loadOverview().catch(e=>console.log("Overview error:",e));
 }
 
 function showPage(name, el){
@@ -491,9 +491,9 @@ function showPage(name, el){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   if(el) el.classList.add('active');
-  if(name==='patients') loadPatients();
-  if(name==='allocations') loadAllocations();
-  if(name==='sessions') loadSessions();
+  if(name==='patients') loadPatients().catch(e=>console.log(e));
+  if(name==='allocations') loadAllocations().catch(e=>console.log(e));
+  if(name==='sessions') loadSessions().catch(e=>console.log(e));
   if(name==='kpi') loadKPI();
   if(name==='periodic') loadPeriodic();
   if(name==='approval') loadApproval();
