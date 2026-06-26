@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1972,17 +1971,11 @@ footer{
   <div class="label">Health Tips</div>
   <h2 class="section-h">From Dr. Paul's desk —<br>wellness made simple.</h2>
   <p class="section-sub">Practical advice to keep your spine healthy between sessions. Follow us on social media for more daily tips.</p>
-  <div class="tips-grid">
-
+  <div class="tips-grid" id="tips-grid">
+    <!-- Tips loaded dynamically from posts folder -->
     <div class="tip-card">
       <div class="tip-img" style="background:linear-gradient(135deg,#0A1628,#1A3FBF)">
-        <svg viewBox="0 0 80 80" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="28" y="10" width="24" height="8" rx="4" fill="rgba(0,170,255,0.4)"/>
-          <path d="M40 18 Q40 35 40 55 Q40 65 40 72" stroke="#00AAFF" stroke-width="3" stroke-linecap="round"/>
-          <rect x="25" y="26" width="30" height="7" rx="3" fill="rgba(0,170,255,0.3)"/>
-          <rect x="25" y="38" width="30" height="7" rx="3" fill="rgba(0,170,255,0.3)"/>
-          <rect x="25" y="50" width="30" height="7" rx="3" fill="rgba(0,170,255,0.3)"/>
-        </svg>
+        <svg viewBox="0 0 80 80" width="60" height="60" fill="none"><rect x="28" y="10" width="24" height="8" rx="4" fill="rgba(0,170,255,0.4)"/><path d="M40 18 Q40 35 40 55 Q40 65 40 72" stroke="#00AAFF" stroke-width="3" stroke-linecap="round"/><rect x="25" y="26" width="30" height="7" rx="3" fill="rgba(0,170,255,0.3)"/><rect x="25" y="38" width="30" height="7" rx="3" fill="rgba(0,170,255,0.3)"/><rect x="25" y="50" width="30" height="7" rx="3" fill="rgba(0,170,255,0.3)"/></svg>
       </div>
       <div class="tip-body">
         <div class="tip-tag">Posture</div>
@@ -1991,17 +1984,9 @@ footer{
         <a href="https://www.instagram.com/whiterockwellness?igsh=MWhvc2J6bWdyZ3lkZg==" target="_blank" class="tip-link">Read more on Instagram →</a>
       </div>
     </div>
-
     <div class="tip-card">
       <div class="tip-img" style="background:linear-gradient(135deg,#0D2050,#00AAFF)">
-        <svg viewBox="0 0 80 80" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="40" cy="30" rx="18" ry="20" fill="rgba(255,255,255,0.15)"/>
-          <path d="M32 18 L28 8" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-          <path d="M40 15 L40 5" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-          <path d="M48 18 L52 8" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-          <rect x="33" y="49" width="14" height="22" rx="5" fill="rgba(255,255,255,0.15)"/>
-          <path d="M40 49 Q40 42 40 38" stroke="white" stroke-width="2" stroke-dasharray="3,2" opacity="0.5"/>
-        </svg>
+        <svg viewBox="0 0 80 80" width="60" height="60" fill="none"><ellipse cx="40" cy="30" rx="18" ry="20" fill="rgba(255,255,255,0.15)"/><path d="M32 18 L28 8" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/><path d="M40 15 L40 5" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/><path d="M48 18 L52 8" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/><rect x="33" y="49" width="14" height="22" rx="5" fill="rgba(255,255,255,0.15)"/></svg>
       </div>
       <div class="tip-body">
         <div class="tip-tag">Headaches</div>
@@ -2010,15 +1995,9 @@ footer{
         <a href="https://www.tiktok.com/@whiterockwellness?_r=1&_t=ZS-97U7HjlDVez" target="_blank" class="tip-link">Watch on TikTok →</a>
       </div>
     </div>
-
     <div class="tip-card">
       <div class="tip-img" style="background:linear-gradient(135deg,#051020,#1A3FBF)">
-        <svg viewBox="0 0 80 80" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 50 C20 35 30 25 40 20 C50 25 60 35 60 50" stroke="#00AAFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <ellipse cx="40" cy="52" rx="20" ry="8" fill="rgba(0,170,255,0.2)"/>
-          <path d="M30 38 Q35 30 40 28 Q45 30 50 38" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>
-          <circle cx="40" cy="55" r="5" fill="rgba(0,170,255,0.5)"/>
-        </svg>
+        <svg viewBox="0 0 80 80" width="60" height="60" fill="none"><path d="M20 50 C20 35 30 25 40 20 C50 25 60 35 60 50" stroke="#00AAFF" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="40" cy="52" rx="20" ry="8" fill="rgba(0,170,255,0.2)"/><circle cx="40" cy="55" r="5" fill="rgba(0,170,255,0.5)"/></svg>
       </div>
       <div class="tip-body">
         <div class="tip-tag">Sleep</div>
@@ -2027,11 +2006,63 @@ footer{
         <a href="https://www.facebook.com/share/1BNdHGuDKB/?mibextid=wwXIfr" target="_blank" class="tip-link">Read more on Facebook →</a>
       </div>
     </div>
-
   </div>
 </div>
 </section>
 
+<script>
+async function loadHealthTips(){
+  try {
+    var grid = document.getElementById('tips-grid');
+    var gradients = [
+      'linear-gradient(135deg,#0A2040,#00AAFF)',
+      'linear-gradient(135deg,#0D2050,#1A3FBF)',
+      'linear-gradient(135deg,#051530,#00AAFF)'
+    ];
+    // Call our own Netlify function — no CORS issues
+    var res = await fetch('/.netlify/functions/get-posts');
+    if(!res.ok) return;
+    var posts = await res.json();
+    for(var i=0; i<posts.length; i++){
+      var tip = posts[i];
+      var card = document.createElement('div');
+      card.className = 'tip-card';
+      var grad = gradients[i % gradients.length];
+      card.innerHTML = '<div class="tip-img" style="background:'+grad+'"><svg viewBox="0 0 80 80" width="60" height="60" fill="none"><circle cx="40" cy="35" r="20" fill="rgba(0,170,255,0.2)" stroke="#00AAFF" stroke-width="2"/><path d="M40 20 L40 50 M28 35 L52 35" stroke="#00AAFF" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="tip-body"><div class="tip-tag">'+tip.category+'</div><h3>'+tip.title+'</h3><p>'+tip.excerpt+'</p></div>';
+      grid.insertBefore(card, grid.firstChild);
+    }
+  } catch(e){ console.log('Tips error:', e); }
+}
+loadHealthTips();
+</script>
+
+
+<script>
+async function loadHealthTips(){
+  try {
+    var grid = document.getElementById('tips-grid');
+    if(!grid) return;
+    var gradients = [
+      'linear-gradient(135deg,#0A2040,#00AAFF)',
+      'linear-gradient(135deg,#0D2050,#1A3FBF)',
+      'linear-gradient(135deg,#051530,#00AAFF)'
+    ];
+    var res = await fetch('/.netlify/functions/get-posts');
+    if(!res.ok) return;
+    var posts = await res.json();
+    if(!posts || !posts.length) return;
+    for(var i=0; i<posts.length; i++){
+      var tip = posts[i];
+      var card = document.createElement('div');
+      card.className = 'tip-card';
+      var grad = gradients[i % gradients.length];
+      card.innerHTML = '<div class="tip-img" style="background:'+grad+'"><svg viewBox="0 0 80 80" width="60" height="60" fill="none"><circle cx="40" cy="35" r="20" fill="rgba(0,170,255,0.2)" stroke="#00AAFF" stroke-width="2"/><path d="M40 20 L40 50 M28 35 L52 35" stroke="#00AAFF" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="tip-body"><div class="tip-tag">'+tip.category+'</div><h3>'+tip.title+'</h3><p>'+tip.excerpt+'</p></div>';
+      grid.insertBefore(card, grid.firstChild);
+    }
+  } catch(e){}
+}
+loadHealthTips();
+</script>
 <!-- SOCIAL GALLERY WALL -->
 <section id="gallery" style="padding:80px 0">
   <div style="padding:0 5%;max-width:1300px;margin:0 auto">
@@ -2231,6 +2262,7 @@ footer{
         <li><a href="#testimonials">Reviews</a></li>
         <li><a href="#booking">Book Appointment</a></li>
         <li><a href="#careers">Join Our Team</a></li>
+        <li><a href="consent.html">Patient Consent Form</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -2253,6 +2285,9 @@ footer{
   <div class="footer-bottom">
     <p>© 2025 WhiteRock Wellness LTD. All rights reserved.</p>
     <span class="tagline-footer">Wellness Through Alignment ✦</span>
+  </div>
+  <div style="background:#060E1A;padding:0.6rem;text-align:center">
+    <a href="staff.html" style="font-size:0.7rem;color:rgba(255,255,255,0.18);text-decoration:none;letter-spacing:0.05em">Staff portal</a>
   </div>
 </footer>
 
