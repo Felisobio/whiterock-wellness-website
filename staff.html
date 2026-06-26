@@ -456,6 +456,29 @@ function verifyAndLoad(email, msName){
   initDashboard();
 }
 
+async function fetchTenantUsers(){
+  try {
+    // Get access token using existing MSAL instance
+    const account = msalInstance.getAllAccounts()[0];
+    if(!account) return [];
+    
+    const tokenResponse = await msalInstance.acquireTokenSilent({
+      scopes: ['User.Read.All'],
+      account: account
+    });
+    
+    const res = await fetch('https://graph.microsoft.com/v1.0/users?$select=displayName,mail,userPrincipalName,jobTitle&$top=50', {
+      headers: { 'Authorization': 'Bearer ' + tokenResponse.accessToken }
+    });
+    
+    const data = await res.json();
+    return data.value || [];
+  } catch(e) {
+    console.log('Could not fetch tenant users:', e);
+    return [];
+  }
+}
+
 function signOut(){
   msalInstance.logoutPopup().then(()=>{
     currentUser = null;
@@ -654,6 +677,13 @@ async function loadAllocations(){
   const staff = getMockStaff();
   document.getElementById('alloc-badge').textContent = patients.length;
   document.getElementById('alloc-badge').style.display = patients.length?'inline-block':'none';
+
+  // Fetch real users from Microsoft tenant
+  const tenantUsers = await fetchTenantUsers();
+  const userOptions = tenantUsers.length > 0
+    ? tenantUsers.map(u => `<option value="${u.displayName}">${u.displayName}${u.jobTitle ? ' — '+u.jobTitle : ''}</option>`).join('')
+    : getMockStaff().map(s=>`<option value="${s.name}">${s.name} (${s.role})</option>`).join('');
+
   document.getElementById('allocations-list').innerHTML = patients.length ? patients.map(p=>`
     <div class="alloc-card">
       <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem">
@@ -667,7 +697,7 @@ async function loadAllocations(){
       <div style="display:flex;gap:0.5rem;align-items:center">
         <select class="alloc-select" id="therapist-${p.id}">
           <option value="">Select therapist…</option>
-          ${staff.map(s=>`<option value="${s.name}">${s.name} (${s.role})</option>`).join('')}
+          ${userOptions}
         </select>
         <button class="btn-primary" onclick="allocate('${p.id}','${p.name}')">Assign →</button>
       </div>
