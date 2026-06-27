@@ -844,17 +844,22 @@ function renderPatientsTable(patients){
       <td style="text-align:center">${p.painLevel}</td><td style="color:var(--muted)">${p.therapist||'—'}</td>
       <td>${getStatusBadge(p.status)}</td><td style="color:var(--muted);font-size:0.78rem">${p.date}</td>
       ${isLead ? `<td>
-        ${p.status==='Active' ? `
-          <button onclick="showReassign('${p.id}','${p.name}')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid var(--royal);color:var(--royal);background:white;cursor:pointer;margin-right:3px">Reassign</button>
-          <button onclick="updatePatientStatus('${p.id}','${p.name}','Closed')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #EF4444;color:#EF4444;background:white;cursor:pointer;margin-right:3px">Close</button>
-          <button onclick="updatePatientStatus('${p.id}','${p.name}','Discharged')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #6B7280;color:#6B7280;background:white;cursor:pointer">Discharge</button>
-        ` : ''}
-        ${p.status==='Closed' ? `
-          <button onclick="showReassign('${p.id}','${p.name}')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid var(--royal);color:var(--royal);background:white;cursor:pointer;margin-right:3px">Reassign</button>
-          <button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer">Reopen</button>
-        ` : ''}
-        ${p.status==='Pending Allocation'||p.status==='' ? `<span style="font-size:0.7rem;color:var(--muted)">Not allocated</span>` : ''}
-        ${p.status==='Discharged' ? `<span style="font-size:0.7rem;color:var(--muted)">Complete</span>` : ''}
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:90px">
+          <button onclick="showReassign('${p.id}','${p.name}')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid var(--royal);color:var(--royal);background:white;cursor:pointer;width:100%">
+            ${p.therapist ? 'Reassign' : 'Assign'}
+          </button>
+          ${p.status==='Active' ? `
+          <button onclick="updatePatientStatus('${p.id}','${p.name}','Closed')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #EF4444;color:#EF4444;background:white;cursor:pointer;width:100%">Close</button>
+          <button onclick="updatePatientStatus('${p.id}','${p.name}','Discharged')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #6B7280;color:#6B7280;background:white;cursor:pointer;width:100%">Discharge</button>
+          ` : ''}
+          ${p.status==='Closed' ? `
+          <button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer;width:100%">Reopen</button>
+          ` : ''}
+          ${p.status==='Allocated' ? `
+          <button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer;width:100%">Activate</button>
+          ` : ''}
+          ${p.status==='Discharged' ? `<span style="font-size:0.7rem;color:var(--muted);text-align:center;display:block">Complete</span>` : ''}
+        </div>
       </td>` : ''}
     </tr>`).join('')}</tbody></table>
   ` : '<div class="empty-state"><p>No patients found</p></div>';
