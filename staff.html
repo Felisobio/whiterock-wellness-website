@@ -87,6 +87,28 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
   padding:1rem 0;flex-shrink:0;position:sticky;top:56px;
   height:calc(100vh - 56px);overflow-y:auto;
 }
+@media(max-width:768px){
+  .sidebar{
+    position:fixed;top:56px;left:-220px;width:220px;
+    height:calc(100vh - 56px);z-index:300;
+    transition:left 0.3s ease;box-shadow:4px 0 20px rgba(0,0,0,0.15);
+  }
+  .sidebar.open{left:0}
+  .main-content{padding:1rem}
+  .metrics-grid{grid-template-columns:1fr 1fr!important}
+  .two-col{grid-template-columns:1fr!important}
+}
+.mob-menu-btn{
+  display:none;background:none;border:none;cursor:pointer;
+  padding:6px;color:white;
+}
+.mob-menu-btn svg{width:22px;height:22px;stroke:white;fill:none;stroke-width:2}
+@media(max-width:768px){.mob-menu-btn{display:flex;align-items:center}}
+.sidebar-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);
+  z-index:299;top:56px;
+}
+.sidebar-overlay.show{display:block}
 .nav-section{padding:0.5rem 1rem 0.25rem;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
 .nav-item{
   display:flex;align-items:center;gap:0.6rem;
@@ -259,7 +281,12 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 <div id="dashboard">
   <div class="app">
     <div class="topbar">
-      <div class="topbar-logo">WhiteRock <span>Staff Portal</span></div>
+      <div style="display:flex;align-items:center;gap:0.75rem">
+        <button class="mob-menu-btn" onclick="toggleSidebar()">
+          <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar-logo">WhiteRock <span>Staff Portal</span></div>
+      </div>
       <div class="topbar-right">
         <div class="topbar-user">
           <div class="topbar-name" id="topbar-name">—</div>
@@ -270,6 +297,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
       </div>
     </div>
 
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
     <div class="app-body">
       <div class="sidebar">
         <div class="nav-section">Main</div>
@@ -492,6 +520,13 @@ async function fetchTenantUsers(){
   }
 }
 
+function toggleSidebar(){
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+}
+
 function signOut(){
   msalInstance.logoutPopup().then(()=>{
     currentUser = null;
@@ -530,6 +565,11 @@ function showPage(name, el){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   if(el) el.classList.add('active');
+  // Close sidebar on mobile
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if(sidebar) sidebar.classList.remove('open');
+  if(overlay) overlay.classList.remove('show');
   if(name==='patients') loadPatients().catch(e=>console.log(e));
   if(name==='allocations') loadAllocations().catch(e=>console.log(e));
   if(name==='sessions') loadSessions().catch(e=>console.log(e));
@@ -918,7 +958,12 @@ async function saveSession(patientId, patientName){
         const phone = patient.phone.replace(/[^0-9]/g,'');
         const waPhone = phone.startsWith('0') ? '234'+phone.substring(1) : phone;
         setTimeout(()=>{
-          window.open('https://wa.me/'+waPhone+'?text='+waMsg, '_blank');
+          // Try WhatsApp app first, fall back to web
+          const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+          const waUrl = isMobile 
+            ? 'whatsapp://send?phone='+waPhone+'&text='+waMsg
+            : 'https://web.whatsapp.com/send?phone='+waPhone+'&text='+waMsg;
+          window.open(waUrl, '_blank');
         }, 1500);
       }
 
