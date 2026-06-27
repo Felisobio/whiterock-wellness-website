@@ -623,12 +623,12 @@ function mobNav(name){
   // Close more menu
   document.getElementById('mob-more-menu').classList.remove('open');
   // Update bottom nav active state
-  document.querySelectorAll('.mob-nav-item').forEach(b=>b.classList.remove('active'));
-  const btn = document.getElementById('mob-nav-'+name);
+  document.querySelectorAll('.mob-nav-item').forEach(function(b){ b.classList.remove('active'); });
+  var btn = document.getElementById('mob-nav-'+name);
   if(btn) btn.classList.add('active');
   else document.getElementById('mob-nav-more').classList.add('active');
-  // Show the page
-  showPage(name, document.querySelector('[onclick*="showPage(''+name+''"]'));
+  // Show the page directly
+  showPage(name, null);
 }
 
 // Hide management-only items in mobile more menu for non-management
