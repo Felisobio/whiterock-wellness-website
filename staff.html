@@ -277,12 +277,14 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 .mob-nav-more-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .mob-nav-more-item:hover{background:var(--offwhite)}
 @media(max-width:768px){
-  #mobile-bottom-nav{display:block}
+  #mobile-bottom-nav{display:block!important}
   .sidebar{display:none!important}
   .mob-menu-btn{display:none!important}
-  .main-content{padding:1rem;padding-bottom:80px}
+  .main-content{padding:1rem;padding-bottom:90px}
   .metrics-grid{grid-template-columns:1fr 1fr!important}
   .two-col{grid-template-columns:1fr!important}
+  .data-table{font-size:0.72rem}
+  .data-table th,.data-table td{padding:0.5rem 0.4rem}
 }
 </style>
 </head>
@@ -680,6 +682,9 @@ function initDashboard(){
 
   loadOverview().catch(e=>console.log("Overview error:",e));
   updateMobileNav();
+  // Show mobile bottom nav explicitly
+  var mobileNav = document.getElementById('mobile-bottom-nav');
+  if(mobileNav) mobileNav.style.display = window.innerWidth <= 768 ? 'block' : 'none';
 }
 
 function showPage(name, el){
