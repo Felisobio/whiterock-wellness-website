@@ -363,6 +363,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 
 <script>
 const GET_PATIENTS_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/908a72e119d34d46be0537c6ccf5acf6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8IEi3jdhIOOnCzdlgT-n29nbJJbLt0WzBzSSq_3aVDw';
+const GET_FEEDBACK_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a0b25f698c1d4700ab23bcfc15a2b6a0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=3RCnApnmMMEkJS-L5WrCHByyTmff8_d0iBE85sDvVsg';
 const UPDATE_PATIENT_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3e392ef2d3034bea80d577dde7f14436/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bv0HbzeLgNthPzZgBP7Mh2XfqP7-gNiOc-H8IAugn3M';
 const SAVE_SESSION_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/df1f1bf9929241dca0a8c3e8a5588b8a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=pXOQmWA8hEfPZD9wIkjacQGkWnluY1ejlW9hy8AqTBI';
 const CLIENT_ID = '4b13835c-69e6-4cf9-9823-25cf48f0f5a7';
@@ -532,7 +533,7 @@ function showPage(name, el){
   if(name==='patients') loadPatients().catch(e=>console.log(e));
   if(name==='allocations') loadAllocations().catch(e=>console.log(e));
   if(name==='sessions') loadSessions().catch(e=>console.log(e));
-  if(name==='kpi') loadKPI();
+  if(name==='kpi') loadKPI().catch(e=>console.log(e));
   if(name==='periodic') loadPeriodic();
   if(name==='approval') loadApproval();
 }
@@ -610,11 +611,12 @@ function getMockStaff(){
 async function loadOverview(){
   const patients = await fetchPatients().catch(() => getMockPatients());
   allPatients = patients;
-  const feedback = getMockFeedback();
   const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
   const pending = patients.filter(p=>p.status==='Pending Allocation').length;
   const active = patients.filter(p=>p.status==='Active').length;
-  const myFeedback = feedback.filter(f=>f.therapist===currentUser.name);
+  const realFeedback = await fetchFeedback().catch(()=>[]);
+  const feedbackData = realFeedback.length > 0 ? realFeedback : getMockFeedback();
+  const myFeedback = feedbackData.filter(f=>f.therapist && f.therapist.toLowerCase()===currentUser.name.toLowerCase());
   const myKPI = calcKPI(myFeedback.map(f=>f.rating));
   const myPatients = isLead ? patients : patients.filter(p=>p.therapist===currentUser.name);
 
@@ -622,7 +624,7 @@ async function loadOverview(){
     <div class="metric-card"><div class="metric-label">Total patients</div><div class="metric-value">${patients.length}</div><div class="metric-sub good">+3 this week</div></div>
     <div class="metric-card"><div class="metric-label">Pending allocation</div><div class="metric-value">${pending}</div><div class="metric-sub ${pending>0?'warn':'good'}">${pending>0?'Needs attention':'All assigned'}</div></div>
     <div class="metric-card"><div class="metric-label">Active cases</div><div class="metric-value">${active}</div><div class="metric-sub">In treatment</div></div>
-    <div class="metric-card"><div class="metric-label">Clinic satisfaction</div><div class="metric-value">${calcKPI(feedback.map(f=>f.rating))}%</div><div class="metric-sub good">From patient feedback</div></div>
+    <div class="metric-card"><div class="metric-label">Clinic satisfaction</div><div class="metric-value">${calcKPI(feedbackData.map(f=>f.rating))}%</div><div class="metric-sub good">From patient feedback</div></div>
   ` : `
     <div class="metric-card"><div class="metric-label">My patients</div><div class="metric-value">${myPatients.length}</div><div class="metric-sub">Assigned to you</div></div>
     <div class="metric-card"><div class="metric-label">My KPI score</div><div class="metric-value" style="color:${getKPIColor(myKPI)}">${myKPI}%</div><div class="metric-sub">${myKPI>=85?'Excellent':myKPI>=70?'Good':'Review needed'}</div></div>
@@ -640,7 +642,7 @@ async function loadOverview(){
 
   if(isLead){
     document.getElementById('kpi-snapshot-list').innerHTML = getMockStaff().map(s=>{
-      const sf = feedback.filter(f=>f.therapist===s.name);
+      const sf = feedbackData.filter(f=>f.therapist===s.name);
       const kpi = calcKPI(sf.map(f=>f.rating));
       return `<div style="display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0;border-bottom:1px solid var(--border)">
         <div class="patient-init" style="background:var(--sky)">${getInitials(s.name)}</div>
@@ -727,6 +729,28 @@ async function loadAllocations(){
       <textarea class="alloc-comment" id="comment-${p.id}" placeholder="Allocation note — severity assessment, reason for assignment…" rows="2"></textarea>
     </div>
   `).join('') : '<div class="empty-state"><p>No patients pending allocation</p></div>';
+}
+
+async function fetchFeedback(){
+  try {
+    const res = await fetch(GET_FEEDBACK_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({})
+    });
+    const data = await res.json();
+    return Array.isArray(data) ? data.map(f=>({
+      patient: f.Title || '',
+      patientId: f.PatientID || '',
+      therapist: f.Therapist || '',
+      rating: parseFloat(f.Rating) || 0,
+      comment: f.Comment || '',
+      date: f.SessionDate || ''
+    })) : [];
+  } catch(e){
+    console.log('Feedback fetch error:', e);
+    return [];
+  }
 }
 
 async function updatePatientStatus(patientId, patientName, newStatus){
@@ -883,6 +907,21 @@ async function saveSession(patientId, patientName){
     if(data.success){
       btn.textContent = '✓ Saved!';
       btn.style.background = '#22C55E';
+      
+      // Send WhatsApp survey link to patient
+      const surveyUrl = 'https://whiterock-wellness.com/survey.html?id='+encodeURIComponent(patientId)+'&patient='+encodeURIComponent(patientName)+'&therapist='+encodeURIComponent(currentUser.name)+'&date='+new Date().toISOString().split('T')[0];
+      const waMsg = encodeURIComponent('Hello '+patientName+', thank you for visiting WhiteRock Wellness today! Please rate your session with '+currentUser.name+': '+surveyUrl+' Thank you!');
+      
+      // Get patient phone from allPatients
+      const patient = allPatients.find(p=>p.id===patientId||p.name===patientName);
+      if(patient && patient.phone && !needsApproval){
+        const phone = patient.phone.replace(/[^0-9]/g,'');
+        const waPhone = phone.startsWith('0') ? '234'+phone.substring(1) : phone;
+        setTimeout(()=>{
+          window.open('https://wa.me/'+waPhone+'?text='+waMsg, '_blank');
+        }, 1500);
+      }
+
       if(needsApproval){
         setTimeout(()=>{ alert('Your session notes have been sent to the Lead for approval.'); btn.disabled=false; btn.textContent='Save session notes'; btn.style.background=''; }, 1000);
       } else {
@@ -900,15 +939,22 @@ async function saveSession(patientId, patientName){
   }
 }
 
-function loadKPI(){
-  const feedback = getMockFeedback();
-  const staff = getMockStaff();
+async function loadKPI(){
+  document.getElementById('kpi-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading KPI data…</div>';
+  const realFeedback = await fetchFeedback().catch(()=>[]);
+  const kpiFeedback = realFeedback.length > 0 ? realFeedback : getMockFeedback();
   const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
+  
+  // Build staff list from real feedback data
+  const therapistNames = [...new Set(kpiFeedback.map(f=>f.therapist).filter(Boolean))];
+  const staff = therapistNames.length > 0 
+    ? therapistNames.map(name=>({name, role:'Therapist', specialty:''}))
+    : getMockStaff();
 
   if(isLead){
     document.getElementById('kpi-page-sub').textContent = 'All therapist satisfaction scores from patient feedback';
     document.getElementById('kpi-list').innerHTML = staff.map(s=>{
-      const sf = feedback.filter(f=>f.therapist===s.name);
+      const sf = kpiFeedback.filter(f=>f.therapist===s.name);
       const kpi = calcKPI(sf.map(f=>f.rating));
       const avg = sf.length?(sf.reduce((a,b)=>a+b.rating,0)/sf.length).toFixed(1):0;
       return `<div class="kpi-therapist-card">
@@ -932,7 +978,7 @@ function loadKPI(){
       </div>`;
     }).join('');
   } else {
-    const myFeedback = feedback.filter(f=>f.therapist===currentUser.name);
+    const myFeedback = kpiFeedback.filter(f=>f.therapist===currentUser.name);
     const kpi = calcKPI(myFeedback.map(f=>f.rating));
     const avg = myFeedback.length?(myFeedback.reduce((a,b)=>a+b.rating,0)/myFeedback.length).toFixed(1):0;
     document.getElementById('kpi-page-sub').textContent = 'Your personal satisfaction score from patient ratings';
@@ -963,9 +1009,9 @@ function loadKPI(){
 
 function loadPeriodic(){
   const staff = getMockStaff();
-  const feedback = getMockFeedback();
+  const periodicFeedback = getMockFeedback();
   document.getElementById('periodic-list').innerHTML = staff.map(s=>{
-    const sf = feedback.filter(f=>f.therapist===s.name);
+    const sf = periodicFeedback.filter(f=>f.therapist===s.name);
     const kpi = calcKPI(sf.map(f=>f.rating));
     const overdue = kpi < 70;
     return `<div class="review-card ${overdue?'overdue':''}">
