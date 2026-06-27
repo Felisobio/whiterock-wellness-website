@@ -12,6 +12,7 @@
   gtag('js', new Date());
   gtag('config', 'G-XXXXXXXXXX');
 </script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -927,6 +928,14 @@ footer{
 }
 .modal-close:hover{background:var(--cyan);color:var(--navy)}
 
+/* ── INTL TEL INPUT OVERRIDES ── */
+.iti{width:100%!important;display:block}
+.iti__flag-container{z-index:100}
+.iti__selected-flag{background:transparent!important;border-right:1px solid #E2EAF0;padding:0 8px}
+.iti input,.iti input[type=tel]{padding-left:90px!important;width:100%!important}
+.iti__country-list{z-index:1000;max-height:200px}
+.iti__dial-code{color:var(--navy);font-weight:600}
+
 /* ── RESPONSIVE ── */
 @media(max-width:1024px){
   .hero-grid,.why-grid,.doc-grid,.book-grid,.contact-grid{grid-template-columns:1fr;gap:3rem}
@@ -1090,7 +1099,7 @@ footer{
   <a href="#" class="nav-logo">
     <!-- Real WhiteRock icon mark from Asset_4.svg — recoloured white/cyan for dark nav -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="44" width="auto">
-      <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1ZM833.36,359.33v87.4c0,.15-.23.23-.35.12l-139.83-139.83c-19.5-19.53-45.51-30.19-73.12-30c-56.67.43-101.61,48.22-101.61,104.89v60.84c0,.19-.23.27-.35.15l-165.42-165.46h-2.24c45.28-.15,82.04-36.98,82.04-82.31v-87.36c0-.15.23-.27.35-.15l139.83,139.86c19.5,19.5,45.51,30.15,73.12,29.96,56.67-.39,101.61-48.18,101.61-104.85v-60.88c0-.15.23-.23.35-.12l165.42,165.46h2.24c-45.28.12-82.04,36.98-82.04,82.27Z" transform="translate(0, 0)"/>
+      <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1ZM833.36,359.33v87.4c0,.15-.23.23-.35.12l-139.83-139.83c-19.5-19.53-45.51-30.19-73.12-30c-56.67.43-101.61,48.22-101.61,104.89v60.84c0,.19-.23.27-.35.15l-165.42-165.46h-2.24c45.28-.15,82.04-36.98,82.04-82.31v-87.36c0-.15.23-.27.35-.15l139.83,139.86c19.5,19.5,45.51,30.15,73.12,29.96,56.67-.39,101.61-48.18,101.61-104.85v-60.88c0-.15.23-.23.35-.12l165.42,165.46h2.24c-45.28.12-82.04,36.98-82.04,82.27Z"/>
     </svg>
     <div class="nav-logo-text">
       <span class="t1">White<span>Rock</span></span>
@@ -1679,7 +1688,7 @@ footer{
         <div class="fg"><label>Last Name *</label><input type="text" id="fl" placeholder="e.g. Okonkwo"></div>
       </div>
       <div class="frow">
-        <div class="fg"><label>Phone / WhatsApp *</label><input type="tel" id="fp" placeholder="+234 800 000 0000"></div>
+        <div class="fg"><label>Phone / WhatsApp *</label><input type="tel" id="fp" placeholder="800 000 0000" style="width:100%"></div>
         <div class="fg"><label>Email</label><input type="email" id="fe" placeholder="your@email.com"></div>
       </div>
 
@@ -2363,7 +2372,7 @@ loadHealthTips();
     </div>
     <div id="returning-prompt" style="display:none;background:var(--offwhite);border:1.5px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:1rem;text-align:left">
       <div style="font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">Welcome back! Enter your phone number or email:</div>
-      <input type="text" id="returning-lookup" placeholder="e.g. +234 816 284 7976  or  you@email.com" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none;margin-bottom:0.5rem;box-sizing:border-box">
+      <input type="tel" id="returning-lookup" placeholder="800 000 0000 or email" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none;margin-bottom:0.5rem;box-sizing:border-box">
       <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem">We will check our records — if found, no consent form needed.</div>
       <div id="lookup-status" style="display:none;font-size:0.78rem;padding:0.5rem 0.75rem;border-radius:6px;margin-bottom:0.5rem;text-align:center"></div>
       <button id="lookup-btn" onclick="confirmReturning()" style="width:100%;background:var(--royal);color:white;border:none;padding:0.75rem;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer">Search our records →</button>
@@ -3379,36 +3388,54 @@ async function confirmReturning(){
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ lookup: val, SubmittedAt: new Date().toISOString() })
     });
-    const data = await res.json();
 
-    if(data.found === true) {
-      // Patient found — show welcome back then fire WhatsApp
+    // Power Automate can return various formats — handle all of them
+    let found = false;
+    try {
+      const data = await res.json();
+      // Check multiple possible response formats from Power Automate
+      if(data && (
+        data.found === true ||
+        data.Found === true ||
+        (data.PatientName && data.PatientName.length > 0) ||
+        (data.value && data.value.length > 0) ||
+        (Array.isArray(data) && data.length > 0) ||
+        (data.id) || (data.ID) || (data.PatientID)
+      )){
+        found = true;
+      }
+    } catch(parseErr){
+      // Response not JSON — check HTTP status
+      // 200 with body = found, 404/empty = not found
+      found = false;
+    }
+
+    if(found){
       document.getElementById('returning-prompt').style.display = 'none';
       document.getElementById('returning-confirmed').style.display = 'block';
       setTimeout(()=>fireBookingWhatsApp(), 1500);
     } else {
-      // Not found — send to consent form
       status.style.background = 'rgba(239,68,68,0.08)';
       status.style.color = '#991B1B';
-      status.textContent = 'We could not find your record. Please complete the consent form.';
+      status.textContent = 'We could not find your record. Please complete the consent form as a new patient.';
       btn.disabled = false;
       btn.textContent = 'Search our records →';
       setTimeout(()=>{
         document.getElementById('returning-prompt').style.display = 'none';
         document.getElementById('consent-prompt').style.display = 'block';
-      }, 2000);
+      }, 2500);
     }
   } catch(err) {
-    // Network error — fail gracefully, send to consent form
+    // Network/CORS error — cannot determine, send to consent form to be safe
     status.style.background = 'rgba(239,68,68,0.08)';
     status.style.color = '#991B1B';
-    status.textContent = 'Could not connect. Please complete the consent form.';
+    status.textContent = 'Could not connect to our records. Please complete the consent form.';
     btn.disabled = false;
     btn.textContent = 'Search our records →';
     setTimeout(()=>{
       document.getElementById('returning-prompt').style.display = 'none';
       document.getElementById('consent-prompt').style.display = 'block';
-    }, 2000);
+    }, 2500);
   }
 }
 function resetBookingModal(){
@@ -3435,6 +3462,62 @@ window.addEventListener('scroll',()=>{
     nav.style.borderBottomColor='rgba(0,170,255,0.15)';
   }
 });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
+<script>
+// ── PHONE INPUTS WITH COUNTRY CODE ──
+function initPhoneInput(inputId, hiddenId){
+  var input = document.getElementById(inputId);
+  if(!input) return null;
+  // Create hidden field to store full number
+  var hidden = document.createElement('input');
+  hidden.type = 'hidden';
+  hidden.id = hiddenId;
+  input.parentNode.appendChild(hidden);
+  var iti = window.intlTelInput(input, {
+    initialCountry: 'ng',
+    preferredCountries: ['ng','gh','ke','za','gb','us'],
+    separateDialCode: true,
+    utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
+  });
+  input.addEventListener('change', function(){ hidden.value = iti.getNumber(); });
+  input.addEventListener('keyup', function(){ hidden.value = iti.getNumber(); });
+  return iti;
+}
+
+var itiBooking = null;
+var itiLookup = null;
+
+document.addEventListener('DOMContentLoaded', function(){
+  // Booking form phone
+  itiBooking = initPhoneInput('fp', 'fp-full');
+  // Returning patient lookup
+  itiLookup = initPhoneInput('returning-lookup', 'returning-lookup-full');
+});
+
+// Override submitForm to use full number
+var _origSubmitForm = submitForm;
+submitForm = function(){
+  var fullPhone = document.getElementById('fp-full');
+  if(fullPhone && fullPhone.value) {
+    document.getElementById('fp').value = fullPhone.value;
+  } else if(itiBooking) {
+    document.getElementById('fp').value = itiBooking.getNumber();
+  }
+  _origSubmitForm();
+};
+
+// Override confirmReturning to use full number
+var _origConfirmReturning = confirmReturning;
+confirmReturning = async function(){
+  var fullLookup = document.getElementById('returning-lookup-full');
+  if(fullLookup && fullLookup.value) {
+    document.getElementById('returning-lookup').value = fullLookup.value;
+  } else if(itiLookup) {
+    document.getElementById('returning-lookup').value = itiLookup.getNumber();
+  }
+  await _origConfirmReturning();
+};
 </script>
 </body>
 </html>
