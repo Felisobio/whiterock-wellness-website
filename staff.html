@@ -1333,35 +1333,40 @@ async function loadKPI(){
     return scores;
   }
 
-  const cards = therapistNames.map(name=>{
-    const tf = allFeedback.filter(f=>f.therapist===name);
-    const kpi = calcTherapistKPI(allFeedback, name);
-    const avg = tf.length>0?(tf.reduce((a,b)=>a+b.rating,0)/tf.length).toFixed(1):'-';
-    const badge = kpi>=85?'<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:#EAF3DE;color:#27500A">Excellent</span>':kpi>=70?'<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:#E6F1FB;color:#0C447C">Good</span>':'<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:#FCEBEB;color:#791F1F">Review needed</span>';
-    const scoreColor = kpi>=85?'#22C55E':kpi>=70?'#2a78d6':'#EF4444';
-    const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-
-    // Trend vs last month
-    const thisMonth = allFeedback.filter(f=>f.therapist===name&&f.date&&new Date(f.date).getMonth()===new Date().getMonth());
-    const lastMonth = allFeedback.filter(f=>f.therapist===name&&f.date&&new Date(f.date).getMonth()===(new Date().getMonth()-1+12)%12);
-    const thisKPI = thisMonth.length>0?Math.round((thisMonth.reduce((a,b)=>a+b.rating,0)/(5*thisMonth.length))*100):kpi;
-    const lastKPI = lastMonth.length>0?Math.round((lastMonth.reduce((a,b)=>a+b.rating,0)/(5*lastMonth.length))*100):kpi;
-    const diff = thisKPI - lastKPI;
-    const trendPill = diff>0?`<div class="kpi-trend-pill" style="background:#EAF3DE;color:#27500A">↑ +${diff}%</div>`:diff<0?`<div class="kpi-trend-pill" style="background:#FCEBEB;color:#791F1F">↓ ${diff}%</div>`:`<div class="kpi-trend-pill" style="background:var(--offwhite);color:var(--muted)">→ 0%</div>`;
-
-    return `<div class="kpi-t-card" onclick="openKPIDetail('${name}')" id="kpi-card-${name.replace(/\s/g,'_')}">
-      ${trendPill}
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-        <div style="width:34px;height:34px;border-radius:50%;background:#E6F1FB;color:#185FA5;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">${initials}</div>
-        <div><div style="font-size:12px;font-weight:700;color:var(--navy);line-height:1.3">${name}</div><div style="font-size:10px;color:var(--muted)">${tf.length} sessions rated</div></div>
-      </div>
-      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
-        <div style="font-size:22px;font-weight:700;color:${scoreColor}">${kpi}%</div>
-        ${badge}
-      </div>
-      <div style="font-size:10px;color:var(--muted)">${avg} avg stars · ${tf.length} ratings</div>
-      <canvas id="kpi-spark-${name.replace(/\s/g,'_')}" style="height:28px;width:100%;margin-top:8px" aria-hidden="true"></canvas>
-    </div>`;
+  const cardPalettes = [
+    {bg:'linear-gradient(135deg,#0A1628 0%,#1A3FBF 100%)',avBg:'rgba(0,170,255,0.2)',avColor:'#00AAFF',scoreColor:'#00AAFF',textColor:'#FFFFFF',mutedColor:'rgba(255,255,255,0.6)'},
+    {bg:'linear-gradient(135deg,#0F6E56 0%,#1D9E75 100%)',avBg:'rgba(255,255,255,0.2)',avColor:'#FFFFFF',scoreColor:'#FFFFFF',textColor:'#FFFFFF',mutedColor:'rgba(255,255,255,0.6)'},
+    {bg:'linear-gradient(135deg,#185FA5 0%,#378ADD 100%)',avBg:'rgba(255,255,255,0.2)',avColor:'#FFFFFF',scoreColor:'#FFFFFF',textColor:'#FFFFFF',mutedColor:'rgba(255,255,255,0.6)'},
+    {bg:'linear-gradient(135deg,#534AB7 0%,#7F77DD 100%)',avBg:'rgba(255,255,255,0.2)',avColor:'#FFFFFF',scoreColor:'#FFFFFF',textColor:'#FFFFFF',mutedColor:'rgba(255,255,255,0.6)'},
+    {bg:'linear-gradient(135deg,#993C1D 0%,#D85A30 100%)',avBg:'rgba(255,255,255,0.2)',avColor:'#FFFFFF',scoreColor:'#FFFFFF',textColor:'#FFFFFF',mutedColor:'rgba(255,255,255,0.6)'},
+  ];
+  const cards = therapistNames.map(function(name, tIdx){
+    var tf = allFeedback.filter(function(f){ return f.therapist===name; });
+    var kpi = calcTherapistKPI(allFeedback, name);
+    var avg = tf.length>0?(tf.reduce(function(a,b){ return a+b.rating; },0)/tf.length).toFixed(1):'-';
+    var pal = cardPalettes[tIdx % cardPalettes.length];
+    var badge = kpi>=85?'<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.2);color:white">Excellent</span>':kpi>=70?'<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.2);color:white">Good</span>':'<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(255,80,80,0.3);color:white">Review needed</span>';
+    var initials = name.split(' ').map(function(w){ return w[0]; }).join('').substring(0,2).toUpperCase();
+    var thisMonth = allFeedback.filter(function(f){ return f.therapist===name&&f.date&&new Date(f.date).getMonth()===new Date().getMonth(); });
+    var lastMonth = allFeedback.filter(function(f){ return f.therapist===name&&f.date&&new Date(f.date).getMonth()===(new Date().getMonth()-1+12)%12; });
+    var thisKPI = thisMonth.length>0?Math.round((thisMonth.reduce(function(a,b){ return a+b.rating; },0)/(5*thisMonth.length))*100):kpi;
+    var lastKPI = lastMonth.length>0?Math.round((lastMonth.reduce(function(a,b){ return a+b.rating; },0)/(5*lastMonth.length))*100):kpi;
+    var diff = thisKPI - lastKPI;
+    var trendText = diff>0?'↑ +'+diff+'%':diff<0?'↓ '+diff+'%':'→ 0%';
+    var safeId = name.replace(/ /g,'_');
+    return '<div class="kpi-t-card" onclick="openKPIDetail(this.dataset.name)" id="kpi-card-'+safeId+'" data-name="'+name+'" style="background:'+pal.bg+';border:none">'+
+      '<div style="position:absolute;top:10px;right:10px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.15);color:white">'+trendText+'</div>'+
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">'+
+        '<div style="width:36px;height:36px;border-radius:50%;background:'+pal.avBg+';color:'+pal.avColor+';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">'+initials+'</div>'+
+        '<div><div style="font-size:12px;font-weight:700;color:'+pal.textColor+';line-height:1.3">'+name+'</div><div style="font-size:10px;color:'+pal.mutedColor+'">'+tf.length+' sessions rated</div></div>'+
+      '</div>'+
+      '<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">'+
+        '<div style="font-size:26px;font-weight:700;color:'+pal.scoreColor+'">'+kpi+'%</div>'+
+        badge+
+      '</div>'+
+      '<div style="font-size:10px;color:'+pal.mutedColor+'">'+avg+' avg stars · '+tf.length+' ratings</div>'+
+      '<canvas id="kpi-spark-'+safeId+'" style="height:28px;width:100%;margin-top:8px" aria-hidden="true"></canvas>'+
+    '</div>';
   }).join('');
 
   document.getElementById('kpi-cards-grid').innerHTML = cards || '<div class="empty-state"><p>No feedback data yet.</p></div>';
@@ -1387,9 +1392,9 @@ async function loadKPI(){
       const pts=validData.map((s,i)=>({x:(i/(validData.length-1))*w,y:28-((s-mn)/(mx-mn))*28}));
       ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
       pts.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));
-      ctx.strokeStyle='#2a78d6'; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.strokeStyle='rgba(255,255,255,0.8)'; ctx.lineWidth=1.5; ctx.stroke();
       ctx.lineTo(pts[pts.length-1].x,28); ctx.lineTo(0,28); ctx.closePath();
-      ctx.fillStyle='#2a78d6'+'22'; ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.fill();
     });
   },200);
 
@@ -1537,7 +1542,121 @@ function exportKPICSV(){
 }
 
 function exportKPIPPT(){
-  alert('PPT export coming soon. Will include clinic overview, therapist trends and summary table. CSV export is available now.');
+  const feedback = window._kpiFeedback || [];
+  const therapists = window._kpiTherapists || [];
+  
+  if(!therapists.length){ alert('No data to export yet.'); return; }
+
+  // Load PptxGenJS dynamically
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
+  script.onload = function(){
+    try {
+      const pptx = new PptxGenJS();
+      pptx.layout = 'LAYOUT_WIDE';
+      pptx.author = 'WhiteRock Wellness';
+      pptx.title = 'KPI Report';
+
+      const WR_NAVY = '0A1628';
+      const WR_CYAN = '00AAFF';
+      const WR_ROYAL = '1A3FBF';
+
+      // Slide 1 - Cover
+      const cover = pptx.addSlide();
+      cover.background = {color: WR_NAVY};
+      cover.addText('WhiteRock Wellness', {x:1, y:1.5, w:11, h:1, fontSize:36, bold:true, color:WR_CYAN, fontFace:'Calibri'});
+      cover.addText('KPI Performance Report', {x:1, y:2.7, w:11, h:0.8, fontSize:24, color:'FFFFFF', fontFace:'Calibri'});
+      cover.addText('Period: Jan – Jun 2026  |  Generated: '+new Date().toLocaleDateString(), {x:1, y:3.6, w:11, h:0.5, fontSize:14, color:'8899AA', fontFace:'Calibri'});
+
+      // Slide 2 - Clinic Overview
+      const overview = pptx.addSlide();
+      overview.background = {color: 'F5F9FF'};
+      overview.addText('Clinic Overview', {x:0.5, y:0.3, w:12, h:0.6, fontSize:22, bold:true, color:WR_NAVY, fontFace:'Calibri'});
+      
+      const totalRatings = feedback.length;
+      const clinicScore = totalRatings>0?Math.round((feedback.reduce((a,b)=>a+b.rating,0)/(5*totalRatings))*100):0;
+      const excellent = therapists.filter(n=>calcTherapistKPI(feedback,n)>=85).length;
+      const needsReview = therapists.filter(n=>calcTherapistKPI(feedback,n)<70).length;
+
+      const stats = [
+        {label:'Clinic Satisfaction', val:clinicScore+'%', color:WR_ROYAL},
+        {label:'Sessions Rated', val:totalRatings.toString(), color:WR_NAVY},
+        {label:'Excellent Performers', val:excellent.toString(), color:'1baf7a'.toUpperCase()},
+        {label:'Needs Review', val:needsReview.toString(), color:'EF4444'},
+      ];
+      stats.forEach((s,i)=>{
+        const x = 0.3 + i*3.2;
+        overview.addShape(pptx.ShapeType.roundRect, {x:x, y:1.2, w:3, h:1.8, fill:{color:'FFFFFF'}, line:{color:'E2EAF0',width:1}, rectRadius:0.1});
+        overview.addText(s.label, {x:x+0.15, y:1.3, w:2.7, h:0.4, fontSize:11, color:'5A6A7A', fontFace:'Calibri'});
+        overview.addText(s.val, {x:x+0.15, y:1.7, w:2.7, h:0.9, fontSize:28, bold:true, color:s.color, fontFace:'Calibri'});
+      });
+
+      // One slide per therapist
+      therapists.forEach((name,idx)=>{
+        const tf = feedback.filter(f=>f.therapist===name);
+        const kpi = calcTherapistKPI(feedback,name);
+        const avg = tf.length>0?(tf.reduce((a,b)=>a+b.rating,0)/tf.length).toFixed(1):'-';
+        const scoreColor = kpi>=85?'22C55E':kpi>=70?'2a78d6':'EF4444';
+        const badgeText = kpi>=85?'Excellent':kpi>=70?'Good':'Review Needed';
+        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+
+        const slide = pptx.addSlide();
+        slide.background = {color:'F5F9FF'};
+        // Header bar
+        slide.addShape(pptx.ShapeType.rect, {x:0, y:0, w:13.33, h:1.2, fill:{color:WR_NAVY}});
+        slide.addText(initials, {x:0.2, y:0.15, w:0.8, h:0.8, fontSize:18, bold:true, color:WR_CYAN, fontFace:'Calibri'});
+        slide.addText(name, {x:1.2, y:0.15, w:8, h:0.45, fontSize:18, bold:true, color:'FFFFFF', fontFace:'Calibri'});
+        slide.addText('Therapist Performance Report', {x:1.2, y:0.65, w:8, h:0.35, fontSize:12, color:'8899AA', fontFace:'Calibri'});
+        slide.addText(kpi+'%', {x:10.5, y:0.1, w:2.5, h:1, fontSize:36, bold:true, color:scoreColor, fontFace:'Calibri', align:'right'});
+
+        // Stats row
+        const tStats = [
+          {l:'Sessions Rated', v:tf.length.toString()},
+          {l:'Avg Stars', v:avg+'/5'},
+          {l:'KPI Score', v:kpi+'%'},
+          {l:'Badge', v:badgeText},
+        ];
+        tStats.forEach((s,i)=>{
+          const x = 0.3+i*3.2;
+          slide.addShape(pptx.ShapeType.roundRect, {x:x, y:1.4, w:3, h:1.2, fill:{color:'FFFFFF'}, line:{color:'E2EAF0',width:1}, rectRadius:0.1});
+          slide.addText(s.l, {x:x+0.1, y:1.5, w:2.8, h:0.3, fontSize:10, color:'5A6A7A', fontFace:'Calibri'});
+          slide.addText(s.v, {x:x+0.1, y:1.8, w:2.8, h:0.6, fontSize:18, bold:true, color:WR_NAVY, fontFace:'Calibri'});
+        });
+
+        // Recent comments
+        slide.addText('Recent Patient Feedback', {x:0.3, y:2.8, w:12, h:0.4, fontSize:13, bold:true, color:WR_NAVY, fontFace:'Calibri'});
+        const recent = tf.slice(0,4);
+        recent.forEach((f,i)=>{
+          const y = 3.3 + i*0.75;
+          const stars = '★'.repeat(Math.round(f.rating))+'☆'.repeat(5-Math.round(f.rating));
+          slide.addShape(pptx.ShapeType.roundRect, {x:0.3, y:y, w:12.5, h:0.65, fill:{color:'FFFFFF'}, line:{color:'E2EAF0',width:0.5}, rectRadius:0.05});
+          slide.addText(stars+' '+f.rating+'/5  |  '+(f.patient||'Patient')+'  |  '+(f.comment||'No comment'), {x:0.5, y:y+0.1, w:12, h:0.45, fontSize:10, color:'3A4A5A', fontFace:'Calibri'});
+        });
+      });
+
+      // Final slide - Summary table
+      const summary = pptx.addSlide();
+      summary.background = {color:'F5F9FF'};
+      summary.addText('Summary — All Therapists', {x:0.5, y:0.3, w:12, h:0.6, fontSize:22, bold:true, color:WR_NAVY, fontFace:'Calibri'});
+      const tableRows = [
+        [{text:'Therapist',options:{bold:true,color:'FFFFFF',fill:{color:WR_NAVY}}},{text:'Sessions',options:{bold:true,color:'FFFFFF',fill:{color:WR_NAVY}}},{text:'Avg Stars',options:{bold:true,color:'FFFFFF',fill:{color:WR_NAVY}}},{text:'KPI Score',options:{bold:true,color:'FFFFFF',fill:{color:WR_NAVY}}},{text:'Badge',options:{bold:true,color:'FFFFFF',fill:{color:WR_NAVY}}}],
+        ...therapists.map(name=>{
+          const tf = feedback.filter(f=>f.therapist===name);
+          const kpi = calcTherapistKPI(feedback,name);
+          const avg = tf.length>0?(tf.reduce((a,b)=>a+b.rating,0)/tf.length).toFixed(1):'-';
+          const badge = kpi>=85?'Excellent':kpi>=70?'Good':'Review Needed';
+          return [{text:name},{text:tf.length.toString()},{text:avg+'/5'},{text:kpi+'%',options:{bold:true}},{text:badge}];
+        })
+      ];
+      summary.addTable(tableRows, {x:0.5, y:1.1, w:12, colW:[4,1.8,1.8,1.8,2.4], fontSize:11, fontFace:'Calibri', border:{type:'solid',color:'E2EAF0',pt:0.5}});
+
+      pptx.writeFile({fileName:'WhiteRock_KPI_'+new Date().toISOString().split('T')[0]+'.pptx'});
+    } catch(err){
+      alert('PPT generation error: '+err.message);
+    }
+  };
+  script.onerror = function(){ alert('Could not load PPT library. Please try again.'); };
+  document.head.appendChild(script);
 }
 </script>
 </body>
