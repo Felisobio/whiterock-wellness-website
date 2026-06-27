@@ -718,22 +718,24 @@ async function loadAllocations(){
 }
 
 async function updatePatientStatus(patientId, patientName, newStatus){
-  if(!confirm(`Are you sure you want to set ${patientName} to "${newStatus}"?`)) return;
+  if(!confirm('Are you sure you want to set '+patientName+' to "'+newStatus+'"?')) return;
   try {
     const res = await fetch(UPDATE_PATIENT_URL, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         patientId: patientId,
-        therapist: 'keep',
         status: newStatus,
         note: ''
       })
     });
     const data = await res.json();
     if(data.success){
-      alert(`✓ ${patientName} status updated to "${newStatus}"`);
-      loadPatients().catch(e=>console.log(e));
+      alert('✓ '+patientName+' status updated to "'+newStatus+'"');
+      // Reload whichever panel is currently active
+      const activePage = document.querySelector('.page.active');
+      if(activePage && activePage.id === 'page-sessions') loadSessions().catch(e=>console.log(e));
+      else if(activePage && activePage.id === 'page-patients') loadPatients().catch(e=>console.log(e));
     } else {
       alert('Something went wrong. Please try again.');
     }
@@ -785,10 +787,11 @@ async function loadSessions(){
   const patients = isLead 
     ? all.filter(p=>p.status==='Active')
     : all.filter(p=>p.therapist===currentUser.name && p.status==='Active');
-  // Also show Closed patients so therapist can reopen them
+  // Also fetch closed patients for this therapist so they can reopen
+  const allForSessions = await fetchPatients().catch(()=>getMockPatients());
   const allAssigned = isLead
-    ? await fetchPatients().catch(()=>getMockPatients()).then(all=>all.filter(p=>p.status==='Active'||p.status==='Closed'))
-    : await fetchPatients().catch(()=>getMockPatients()).then(all=>all.filter(p=>p.therapist===currentUser.name&&(p.status==='Active'||p.status==='Closed')));
+    ? allForSessions.filter(p=>p.status==='Active'||p.status==='Closed')
+    : allForSessions.filter(p=>p.therapist===currentUser.name&&(p.status==='Active'||p.status==='Closed'));
 
   document.getElementById('sessions-list').innerHTML = allAssigned.length ? allAssigned.map(p=>`
     <div class="card" style="${p.status==='Closed'?'opacity:0.7;border-color:rgba(107,114,128,0.3)':''}">
