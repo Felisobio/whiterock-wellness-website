@@ -377,9 +377,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
         <div class="nav-item" onclick="showPage('kpi',this)">
           <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>KPI
         </div>
-        <div class="nav-item" id="nav-periodic" onclick="showPage('periodic',this)">
-          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Periodic review
-        </div>
+        
         <div class="nav-item" id="nav-approval" onclick="showPage('approval',this)">
           <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Approval queue
           <span class="nav-badge" id="approval-badge" style="display:none">0</span>
@@ -598,11 +596,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 
         </div>
 
-        <div class="page" id="page-periodic">
-          <div class="page-title">Periodic reviews</div>
-          <div class="page-sub">Monthly and quarterly performance reviews based on KPI data</div>
-          <div id="periodic-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
-        </div>
+        
 
         <div class="page" id="page-approval">
           <div class="page-title">Approval queue</div>
@@ -650,9 +644,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
     <button class="mob-drawer-item" id="mob-item-kpi" onclick="mobNav('kpi')">
       <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>KPI
     </button>
-    <button class="mob-drawer-item" id="mob-item-periodic" onclick="mobNav('periodic')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Periodic Review
-    </button>
+    
     <button class="mob-drawer-item" id="mob-item-approval" onclick="mobNav('approval')">
       <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Approval Queue
     </button>
@@ -817,7 +809,7 @@ function updateMobileNav(){
   if(du) du.textContent = currentUser.name;
   if(dr) dr.textContent = currentUser.role + ' — WhiteRock Wellness';
   // Hide management-only items for non-management
-  var mgmtItems = ['mob-item-allocations','mob-item-periodic','mob-item-approval'];
+  var mgmtItems = ['mob-item-allocations','mob-item-approval'];
   mgmtItems.forEach(function(id){
     var el = document.getElementById(id);
     if(el) el.style.display = isLead ? 'flex' : 'none';
@@ -859,7 +851,6 @@ function initDashboard(){
   const isLead = currentUser.role === 'Lead' || currentUser.role === 'Admin';
   if(!isLead){
     document.getElementById('nav-allocations').style.display = 'none';
-    document.getElementById('nav-periodic').style.display = 'none';
     document.getElementById('nav-approval').style.display = 'none';
   }
 
@@ -884,7 +875,7 @@ function showPage(name, el){
   if(name==='allocations') loadAllocations().catch(e=>console.log(e));
   if(name==='sessions') loadSessions().catch(e=>console.log(e));
   if(name==='kpi') loadKPI().catch(e=>console.log(e));
-  if(name==='periodic') loadPeriodic();
+  
   if(name==='approval') loadApproval();
 }
 
@@ -1829,9 +1820,21 @@ function exportKPIPPT(){
   var selMonthNums=selM.map(function(v,i){return v?i:-1;}).filter(function(i){return i>=0;});
   var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   if(!filtered.length){alert('No therapists selected.');return;}
+  // If already loaded, run directly
+  if(typeof PptxGenJS !== 'undefined'){
+    kpiGeneratePPT(filtered, feedback, selMonthNums, monthNames, excl);
+    return;
+  }
   var scr=document.createElement('script');
   scr.src='https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
   scr.onload=function(){
+    kpiGeneratePPT(filtered, feedback, selMonthNums, monthNames, excl);
+  };
+  scr.onerror=function(){alert('Could not load PPT library. Please check your internet connection and try again.');};
+  document.head.appendChild(scr);
+}
+
+function kpiGeneratePPT(filtered, feedback, selMonthNums, monthNames, excl){
     try{
       var pptx=new PptxGenJS();
       pptx.layout='LAYOUT_WIDE';
@@ -1928,9 +1931,7 @@ function exportKPIPPT(){
       document.getElementById('kpi-ppt-preview').style.display='none';
     }catch(err){alert('PPT error: '+err.message);console.error(err);}
   };
-  scr.onerror=function(){alert('Could not load PPT library. Please try again.');};
-  document.head.appendChild(scr);
-}
+
 
 </script>
 </body>
