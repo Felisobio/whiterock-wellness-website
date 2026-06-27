@@ -771,6 +771,7 @@ async function allocate(patientId, patientName){
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         patientId: patientId,
+        patientName: patientName,
         therapist: therapist,
         status: 'Active',
         note: comment
