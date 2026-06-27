@@ -377,7 +377,7 @@ const MANAGEMENT_EMAILS = [
 
 // Staff roles — map email to role (add all staff here)
 const STAFF_ROLES = {
-  'drpaul@whiterock-wellness.com': { role: 'Lead', name: 'Dr. Paul Chima' },
+  'drpaul@whiterock-wellness.com': { role: 'Lead', name: 'pauljohnson chima' },
   'obiefunafelis@whiterock-wellness.com': { role: 'Admin', name: 'Felicitas' }
 };
 
@@ -803,7 +803,13 @@ async function loadSessions(){
   const allForSessions = await fetchPatients().catch(()=>getMockPatients());
   const allAssigned = isLead
     ? allForSessions.filter(p=>p.status==='Active'||p.status==='Closed')
-    : allForSessions.filter(p=>p.therapist===currentUser.name&&(p.status==='Active'||p.status==='Closed'));
+    : allForSessions.filter(p=>{
+        const therapistMatch = p.therapist && (
+          p.therapist.toLowerCase() === currentUser.name.toLowerCase() ||
+          p.therapist.toLowerCase().includes(currentUser.email.split('@')[0].toLowerCase())
+        );
+        return therapistMatch && (p.status==='Active'||p.status==='Closed');
+      });
 
   document.getElementById('sessions-list').innerHTML = allAssigned.length ? allAssigned.map(p=>`
     <div class="card" style="${p.status==='Closed'?'opacity:0.7;border-color:rgba(107,114,128,0.3)':''}">
