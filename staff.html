@@ -238,6 +238,17 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 @media(max-width:600px){.sidebar{display:none}.metrics-grid{grid-template-columns:1fr 1fr}}
 
 /* ── KPI DASHBOARD ── */
+.kpi-chip{padding:4px 10px;border-radius:20px;border:1px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;background:white;user-select:none;transition:all 0.15s}
+.kpi-chip:hover{border-color:var(--royal)}
+.kpi-chip-month.on{background:#1A3FBF;color:white;border-color:#1A3FBF}
+.kpi-chip-metric.on{background:#085041;color:white;border-color:#085041}
+.kpi-t-card{border-radius:14px;padding:1.1rem;cursor:pointer;position:relative;overflow:hidden;transition:filter 0.15s;border:none}
+.kpi-t-card:hover{filter:brightness(1.08)}
+.kpi-t-card.kpi-active{outline:3px solid #00AAFF}
+.kpi-slide-thumb{border:1px solid #B5D4F4;border-radius:8px;aspect-ratio:16/9;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:9px;color:#185FA5;text-align:center;padding:6px;cursor:pointer;transition:all 0.15s}
+.kpi-slide-thumb:hover{border-color:#1A3FBF}
+.kpi-slide-thumb.excluded{opacity:0.3;background:#f0f0f0;color:#888}
+.kpi-ppt-tag{font-size:11px;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px}
 .kpi-period-btn{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:white;font-size:12px;cursor:pointer;font-family:inherit;color:var(--navy)}
 .kpi-period-btn:hover{background:var(--offwhite)}
 .active-period{background:#E6F1FB!important;border-color:#2a78d6!important;color:#185FA5!important;font-weight:600}
@@ -417,88 +428,128 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
         </div>
 
         <div class="page" id="page-kpi">
+          <!-- TOP ROW -->
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1.25rem">
             <div>
               <div class="page-title" style="margin-bottom:2px">KPI dashboard</div>
               <div class="page-sub">Therapist satisfaction · from patient feedback</div>
             </div>
             <div id="kpi-mgmt-actions" style="display:none;gap:8px;flex-wrap:wrap">
-              <button onclick="exportKPICSV()" style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid #1baf7a;background:white;color:#0F6E56;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
+              <button onclick="exportKPICSV()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid #1D9E75;background:white;color:#085041;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 Export CSV
               </button>
-              <button onclick="exportKPIPPT()" style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid #2a78d6;background:white;color:#185FA5;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
+              <button onclick="showKPIPPTPreview()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid #1A3FBF;background:white;color:#0C447C;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                 Export PPT
               </button>
             </div>
           </div>
 
-          <!-- Date filter -->
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem">
-            <span style="font-size:12px;color:var(--muted)">Period:</span>
-            <button onclick="setKPIPeriod('h1',this)" class="kpi-period-btn active-period">Jan – Jun 2026</button>
-            <button onclick="setKPIPeriod('q1',this)" class="kpi-period-btn">Q1 2026</button>
-            <button onclick="setKPIPeriod('q2',this)" class="kpi-period-btn">Q2 2026</button>
-            <button onclick="setKPIPeriod('30d',this)" class="kpi-period-btn">Last 30 days</button>
+          <!-- UNIFIED FILTER PANEL -->
+          <div style="background:white;border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:1.25rem">
+            <div style="display:flex;align-items:flex-start;gap:1.25rem;flex-wrap:wrap">
+              <!-- Therapists -->
+              <div style="flex:1;min-width:140px">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px">Therapists</div>
+                <div id="kpi-therapist-chips" style="display:flex;flex-wrap:wrap;gap:5px"></div>
+              </div>
+              <div style="width:1px;background:var(--border);align-self:stretch"></div>
+              <!-- Months -->
+              <div style="flex:1;min-width:200px">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px">Months</div>
+                <div id="kpi-month-chips" style="display:flex;flex-wrap:wrap;gap:5px">
+                  <div class="kpi-chip kpi-chip-month on" data-m="0" onclick="kpiToggleChip(this,'m')">Jan</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="1" onclick="kpiToggleChip(this,'m')">Feb</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="2" onclick="kpiToggleChip(this,'m')">Mar</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="3" onclick="kpiToggleChip(this,'m')">Apr</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="4" onclick="kpiToggleChip(this,'m')">May</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="5" onclick="kpiToggleChip(this,'m')">Jun</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="6" onclick="kpiToggleChip(this,'m')">Jul</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="7" onclick="kpiToggleChip(this,'m')">Aug</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="8" onclick="kpiToggleChip(this,'m')">Sep</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="9" onclick="kpiToggleChip(this,'m')">Oct</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="10" onclick="kpiToggleChip(this,'m')">Nov</div>
+                  <div class="kpi-chip kpi-chip-month on" data-m="11" onclick="kpiToggleChip(this,'m')">Dec</div>
+                </div>
+              </div>
+              <div style="width:1px;background:var(--border);align-self:stretch"></div>
+              <!-- Card metrics -->
+              <div style="flex:1;min-width:140px">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px">Show on card</div>
+                <div style="display:flex;flex-wrap:wrap;gap:5px">
+                  <div class="kpi-chip kpi-chip-metric on" data-k="score" onclick="kpiToggleChip(this,'k')">Score</div>
+                  <div class="kpi-chip kpi-chip-metric on" data-k="sessions" onclick="kpiToggleChip(this,'k')">Sessions</div>
+                  <div class="kpi-chip kpi-chip-metric on" data-k="stars" onclick="kpiToggleChip(this,'k')">Stars</div>
+                  <div class="kpi-chip kpi-chip-metric on" data-k="trend" onclick="kpiToggleChip(this,'k')">Trend</div>
+                  <div class="kpi-chip kpi-chip-metric on" data-k="chart" onclick="kpiToggleChip(this,'k')">Chart</div>
+                </div>
+              </div>
+              <!-- Actions -->
+              <div style="display:flex;flex-direction:column;gap:5px;justify-content:center">
+                <button onclick="kpiSelectAll()" style="padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:white;font-size:11px;cursor:pointer;font-family:inherit;color:var(--navy)">Select all</button>
+                <button onclick="kpiClearMonths()" style="padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:white;font-size:11px;cursor:pointer;font-family:inherit;color:var(--navy)">Clear months</button>
+                <div id="kpi-filter-note" style="font-size:10px;color:var(--muted);text-align:center"></div>
+              </div>
+            </div>
           </div>
 
-          <!-- Clinic overview stats -->
+          <!-- CLINIC STATS -->
           <div id="kpi-clinic-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem"></div>
 
-          <!-- Flag modal -->
+          <!-- FLAG MODAL -->
           <div id="kpi-flag-modal" style="display:none;background:white;border:1px solid #EF4444;border-radius:12px;padding:1rem;margin-bottom:1rem">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-              <span style="font-size:13px;font-weight:700;color:var(--navy)" id="flag-modal-title">Flag for performance review</span>
+              <span style="font-size:13px;font-weight:700;color:var(--navy)" id="kpi-flag-title">Flag for performance review</span>
             </div>
-            <textarea id="flag-note" style="width:100%;font-size:12px;padding:8px;border-radius:8px;border:1px solid #E2EAF0;resize:none;height:70px;font-family:inherit" placeholder="Add a note (optional) — will be sent to the therapist..."></textarea>
+            <textarea id="kpi-flag-note" style="width:100%;font-size:12px;padding:8px;border-radius:8px;border:1px solid #E2EAF0;resize:none;height:70px;font-family:inherit" placeholder="Add a note (optional)..."></textarea>
             <div style="display:flex;gap:8px;margin-top:8px">
-              <button onclick="sendFlagNotification()" style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid #EF4444;background:white;color:#EF4444;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">Send review notification</button>
+              <button onclick="kpiSendFlag()" style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid #EF4444;background:white;color:#EF4444;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">Send review notification</button>
               <button onclick="document.getElementById('kpi-flag-modal').style.display='none'" style="padding:6px 12px;border-radius:8px;border:1px solid #E2EAF0;background:white;font-size:12px;cursor:pointer;font-family:inherit">Cancel</button>
             </div>
           </div>
 
-          <!-- Therapist cards grid -->
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px">Tap a card to view trend</div>
-          <div id="kpi-cards-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem"></div>
+          <!-- THERAPIST CARDS GRID -->
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px">Tap a card to view monthly trend</div>
+          <div id="kpi-cards-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem"></div>
 
-          <!-- Detail panel -->
-          <div id="kpi-detail-panel" style="display:none;background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+          <!-- DETAIL PANEL -->
+          <div id="kpi-detail-panel" style="display:none;background:white;border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:1.25rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
               <div style="display:flex;align-items:center;gap:10px">
-                <div id="kpi-d-avatar" style="width:44px;height:44px;border-radius:50%;background:#E6F1FB;color:#185FA5;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700"></div>
+                <div id="kpi-d-avatar" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700"></div>
                 <div>
                   <div id="kpi-d-name" style="font-size:15px;font-weight:700;color:var(--navy)"></div>
                   <div id="kpi-d-sub" style="font-size:12px;color:var(--muted)"></div>
                 </div>
               </div>
               <div style="display:flex;gap:8px">
-                <button id="kpi-flag-btn" onclick="openFlagModal()" style="display:none;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;border:1px solid #EF4444;background:white;color:#EF4444;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">
+                <button id="kpi-flag-btn" onclick="kpiOpenFlag()" style="display:none;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;border:1px solid #EF4444;background:white;color:#EF4444;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-                  Flag for review
+                  Flag
                 </button>
                 <button onclick="closeKPIDetail()" style="padding:6px 10px;border-radius:8px;border:1px solid #E2EAF0;background:white;font-size:11px;cursor:pointer;font-family:inherit">Close</button>
               </div>
             </div>
             <!-- Mini stats -->
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem">
-              <div style="background:var(--offwhite);border-radius:8px;padding:0.6rem 0.75rem"><div id="kpi-d-score" style="font-size:20px;font-weight:700;color:var(--navy)"></div><div style="font-size:10px;color:var(--muted)">Current KPI</div></div>
+              <div style="background:var(--offwhite);border-radius:8px;padding:0.6rem 0.75rem"><div id="kpi-d-score" style="font-size:20px;font-weight:700"></div><div style="font-size:10px;color:var(--muted)">KPI score</div></div>
               <div style="background:var(--offwhite);border-radius:8px;padding:0.6rem 0.75rem"><div id="kpi-d-sessions" style="font-size:20px;font-weight:700;color:var(--navy)"></div><div style="font-size:10px;color:var(--muted)">Sessions rated</div></div>
               <div style="background:var(--offwhite);border-radius:8px;padding:0.6rem 0.75rem"><div id="kpi-d-avg" style="font-size:20px;font-weight:700;color:var(--navy)"></div><div style="font-size:10px;color:var(--muted)">Avg stars</div></div>
               <div style="background:var(--offwhite);border-radius:8px;padding:0.6rem 0.75rem"><div id="kpi-d-trend" style="font-size:20px;font-weight:700"></div><div style="font-size:10px;color:var(--muted)">vs last month</div></div>
             </div>
             <!-- Benchmark legend -->
             <div style="display:flex;gap:16px;margin-bottom:6px;flex-wrap:wrap">
-              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;border-top:2px dashed #1baf7a"></div>Excellent (85%)</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;border-top:2px dashed #1D9E75"></div>Excellent (85%)</div>
               <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;border-top:2px dashed #EF4444"></div>Review needed (70%)</div>
-              <div style="font-size:11px;color:var(--muted);margin-left:auto">Tap any bar to see that month's feedback</div>
+              <div style="font-size:11px;color:var(--muted);margin-left:auto">Tap any bar to see feedback</div>
             </div>
             <div style="position:relative;height:200px;margin-bottom:1rem">
-              <canvas id="kpi-detail-chart" role="img" aria-label="Monthly KPI bar chart">Monthly KPI trend</canvas>
+              <canvas id="kpi-detail-chart" role="img" aria-label="Monthly KPI chart">Monthly KPI trend</canvas>
             </div>
-            <!-- Month drill-down -->
-            <div id="kpi-month-drill" style="display:none;border-top:1px solid var(--border);padding-top:1rem;margin-top:0.5rem">
+            <!-- Month drill -->
+            <div id="kpi-month-drill" style="display:none;border-top:1px solid var(--border);padding-top:1rem">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
                 <div>
                   <div id="kpi-drill-title" style="font-size:13px;font-weight:700;color:var(--navy)"></div>
@@ -507,6 +558,24 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
                 <button onclick="document.getElementById('kpi-month-drill').style.display='none'" style="padding:4px 10px;border-radius:6px;border:1px solid #E2EAF0;background:white;font-size:11px;cursor:pointer;font-family:inherit">Close</button>
               </div>
               <div id="kpi-comments-list"></div>
+            </div>
+          </div>
+
+          <!-- PPT PREVIEW -->
+          <div id="kpi-ppt-preview" style="display:none;background:#E8F4FF;border:1px solid #B5D4F4;border-radius:14px;padding:1.25rem;margin-bottom:1.25rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+              <div style="font-size:14px;font-weight:700;color:#0C447C">Configure PPT export</div>
+              <button onclick="document.getElementById('kpi-ppt-preview').style.display='none'" style="padding:4px 10px;border-radius:6px;border:1px solid #B5D4F4;background:white;font-size:11px;cursor:pointer;font-family:inherit;color:#185FA5">Cancel</button>
+            </div>
+            <div id="kpi-ppt-summary" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem"></div>
+            <div style="font-size:11px;color:#185FA5;margin-bottom:8px;font-weight:600">Slides to include (tap to exclude):</div>
+            <div id="kpi-slide-preview" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:1rem"></div>
+            <div style="display:flex;gap:8px">
+              <button onclick="exportKPIPPT()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 14px;border-radius:8px;border:none;background:#1A3FBF;color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download PPT
+              </button>
+              <button onclick="document.getElementById('kpi-ppt-preview').style.display='none'" style="padding:8px 16px;border-radius:8px;border:1px solid #B5D4F4;background:white;font-size:12px;cursor:pointer;font-family:inherit;color:#185FA5">Cancel</button>
             </div>
           </div>
 
@@ -1292,372 +1361,541 @@ async function saveSession(patientId, patientName){
 }
 
 async function loadKPI(){
-  const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
+  var isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
   if(isLead) document.getElementById('kpi-mgmt-actions').style.display='flex';
 
-  document.getElementById('kpi-cards-grid').innerHTML='<div class="loading"><div class="spinner"></div>Loading KPI data…</div>';
+  document.getElementById('kpi-cards-grid').innerHTML='<div class="loading"><div class="spinner"></div>Loading KPI data...</div>';
 
-  const realFeedback = await fetchFeedback().catch(()=>[]);
-  const allFeedback = realFeedback.length > 0 ? realFeedback : getMockFeedback();
+  var realFeedback = await fetchFeedback().catch(function(){ return []; });
+  window._kpiFeedback = realFeedback.length>0?realFeedback:getMockFeedback();
+  var allFeedback = window._kpiFeedback;
 
-  // Build therapist list from feedback
-  const therapistNames = [...new Set(allFeedback.map(f=>f.therapist).filter(Boolean))];
-  if(therapistNames.length === 0){
-    document.getElementById('kpi-cards-grid').innerHTML='<div class="empty-state"><p>No feedback data yet. Ratings will appear here after patients complete their surveys.</p></div>';
+  var therapistNames = [...new Set(allFeedback.map(function(f){ return f.therapist; }).filter(Boolean))];
+  window._kpiTherapists = therapistNames;
+
+  if(!therapistNames.length){
+    document.getElementById('kpi-cards-grid').innerHTML='<div class="empty-state"><p>No feedback data yet. Ratings appear here after patients complete surveys.</p></div>';
     return;
   }
 
-  // Calculate clinic-wide stats
-  const totalRatings = allFeedback.length;
-  const clinicScore = totalRatings > 0 ? Math.round((allFeedback.reduce((a,b)=>a+b.rating,0)/(5*totalRatings))*100) : 0;
-  const excellent = therapistNames.filter(n=>calcTherapistKPI(allFeedback,n)>=85).length;
-  const needsReview = therapistNames.filter(n=>calcTherapistKPI(allFeedback,n)<70).length;
-
-  // Render clinic stats
-  document.getElementById('kpi-clinic-stats').innerHTML = `
-    <div class="kpi-stat-card"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Clinic satisfaction</div><div style="font-size:24px;font-weight:700;color:#2a78d6">${clinicScore}%</div><div style="font-size:11px;color:var(--muted)">${totalRatings} ratings total</div></div>
-    <div class="kpi-stat-card"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Sessions rated</div><div style="font-size:24px;font-weight:700;color:var(--navy)">${totalRatings}</div><div style="font-size:11px;color:var(--muted)">${therapistNames.length} active therapists</div></div>
-    <div class="kpi-stat-card"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Excellent performers</div><div style="font-size:24px;font-weight:700;color:#22C55E">${excellent}</div><div style="font-size:11px;color:var(--muted)">85%+ threshold</div></div>
-    <div class="kpi-stat-card"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Needs review</div><div style="font-size:24px;font-weight:700;color:#EF4444">${needsReview}</div><div style="font-size:11px;color:var(--muted)">Below 70%</div></div>
-  `;
-
-  // Render therapist cards
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-  function getMonthlyScores(name){
-    const scores = [];
-    for(let m=0;m<6;m++){
-      const mf = allFeedback.filter(f=>f.therapist===name && f.date && new Date(f.date).getMonth()===((new Date().getMonth()-5+m+12)%12));
-      scores.push(mf.length>0?Math.round((mf.reduce((a,b)=>a+b.rating,0)/(5*mf.length))*100):null);
-    }
-    return scores;
+  // Init month selections (all on)
+  if(!window._kpiSelMonths){
+    window._kpiSelMonths = Array(12).fill(true);
+  }
+  if(!window._kpiSelTherapists){
+    window._kpiSelTherapists = {};
+    therapistNames.forEach(function(n){ window._kpiSelTherapists[n]=true; });
+  }
+  if(!window._kpiMetrics){
+    window._kpiMetrics = {score:true,sessions:true,stars:true,trend:true,chart:true};
+  }
+  if(!window._kpiExcludedSlides){
+    window._kpiExcludedSlides = {};
   }
 
-  const cardPalettes = [
-    {bg:'linear-gradient(135deg,#0A1628 0%,#1A3FBF 100%)',avBg:'rgba(0,170,255,0.2)',avColor:'#00AAFF',scoreColor:'#00AAFF',textColor:'#FFFFFF',mutedColor:'rgba(255,255,255,0.6)'},
-    {bg:'linear-gradient(135deg,#0F6E56 0%,#1D9E75 100%)',avBg:'rgba(255,255,255,0.2)',avColor:'#FFFFFF',scoreColor:'#FFFFFF',textColor:'#FFFFFF',mutedColor:'rgba(255,255,255,0.6)'},
-    {bg:'linear-gradient(135deg,#185FA5 0%,#378ADD 100%)',avBg:'rgba(255,255,255,0.2)',avColor:'#FFFFFF',scoreColor:'#FFFFFF',textColor:'#FFFFFF',mutedColor:'rgba(255,255,255,0.6)'},
-    {bg:'linear-gradient(135deg,#534AB7 0%,#7F77DD 100%)',avBg:'rgba(255,255,255,0.2)',avColor:'#FFFFFF',scoreColor:'#FFFFFF',textColor:'#FFFFFF',mutedColor:'rgba(255,255,255,0.6)'},
-    {bg:'linear-gradient(135deg,#993C1D 0%,#D85A30 100%)',avBg:'rgba(255,255,255,0.2)',avColor:'#FFFFFF',scoreColor:'#FFFFFF',textColor:'#FFFFFF',mutedColor:'rgba(255,255,255,0.6)'},
-  ];
-  const cards = therapistNames.map(function(name, tIdx){
-    var tf = allFeedback.filter(function(f){ return f.therapist===name; });
-    var kpi = calcTherapistKPI(allFeedback, name);
-    var avg = tf.length>0?(tf.reduce(function(a,b){ return a+b.rating; },0)/tf.length).toFixed(1):'-';
-    var pal = cardPalettes[tIdx % cardPalettes.length];
-    var badge = kpi>=85?'<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.2);color:white">Excellent</span>':kpi>=70?'<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.2);color:white">Good</span>':'<span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(255,80,80,0.3);color:white">Review needed</span>';
-    var initials = name.split(' ').map(function(w){ return w[0]; }).join('').substring(0,2).toUpperCase();
-    var thisMonth = allFeedback.filter(function(f){ return f.therapist===name&&f.date&&new Date(f.date).getMonth()===new Date().getMonth(); });
-    var lastMonth = allFeedback.filter(function(f){ return f.therapist===name&&f.date&&new Date(f.date).getMonth()===(new Date().getMonth()-1+12)%12; });
-    var thisKPI = thisMonth.length>0?Math.round((thisMonth.reduce(function(a,b){ return a+b.rating; },0)/(5*thisMonth.length))*100):kpi;
-    var lastKPI = lastMonth.length>0?Math.round((lastMonth.reduce(function(a,b){ return a+b.rating; },0)/(5*lastMonth.length))*100):kpi;
-    var diff = thisKPI - lastKPI;
-    var trendText = diff>0?'↑ +'+diff+'%':diff<0?'↓ '+diff+'%':'→ 0%';
-    var safeId = name.replace(/ /g,'_');
-    return '<div class="kpi-t-card" onclick="openKPIDetail(this.dataset.name)" id="kpi-card-'+safeId+'" data-name="'+name+'" style="background:'+pal.bg+';border:none">'+
-      '<div style="position:absolute;top:10px;right:10px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.15);color:white">'+trendText+'</div>'+
-      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">'+
-        '<div style="width:36px;height:36px;border-radius:50%;background:'+pal.avBg+';color:'+pal.avColor+';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">'+initials+'</div>'+
-        '<div><div style="font-size:12px;font-weight:700;color:'+pal.textColor+';line-height:1.3">'+name+'</div><div style="font-size:10px;color:'+pal.mutedColor+'">'+tf.length+' sessions rated</div></div>'+
-      '</div>'+
-      '<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">'+
-        '<div style="font-size:26px;font-weight:700;color:'+pal.scoreColor+'">'+kpi+'%</div>'+
-        badge+
-      '</div>'+
-      '<div style="font-size:10px;color:'+pal.mutedColor+'">'+avg+' avg stars · '+tf.length+' ratings</div>'+
-      '<canvas id="kpi-spark-'+safeId+'" style="height:28px;width:100%;margin-top:8px" aria-hidden="true"></canvas>'+
-    '</div>';
-  }).join('');
-
-  document.getElementById('kpi-cards-grid').innerHTML = cards || '<div class="empty-state"><p>No feedback data yet.</p></div>';
-
-  // Draw sparklines
-  setTimeout(()=>{
-    therapistNames.forEach(name=>{
-      const tf = allFeedback.filter(f=>f.therapist===name);
-      const monthlyData = [];
-      for(let m=5;m>=0;m--){
-        const mth = (new Date().getMonth()-m+12)%12;
-        const mf = tf.filter(f=>f.date&&new Date(f.date).getMonth()===mth);
-        monthlyData.push(mf.length>0?Math.round((mf.reduce((a,b)=>a+b.rating,0)/(5*mf.length))*100):null);
-      }
-      const validData = monthlyData.filter(v=>v!==null);
-      if(validData.length<2) return;
-      const canvas = document.getElementById('kpi-spark-'+name.replace(/\s/g,'_'));
-      if(!canvas) return;
-      const w = canvas.parentElement.offsetWidth-32;
-      canvas.width=w; canvas.height=28;
-      const ctx=canvas.getContext('2d');
-      const mn=Math.min(...validData)-5, mx=Math.max(...validData)+5;
-      const pts=validData.map((s,i)=>({x:(i/(validData.length-1))*w,y:28-((s-mn)/(mx-mn))*28}));
-      ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
-      pts.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));
-      ctx.strokeStyle='rgba(255,255,255,0.8)'; ctx.lineWidth=1.5; ctx.stroke();
-      ctx.lineTo(pts[pts.length-1].x,28); ctx.lineTo(0,28); ctx.closePath();
-      ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.fill();
+  // Build therapist chips
+  var tchips = document.getElementById('kpi-therapist-chips');
+  if(tchips && tchips.children.length===0){
+    therapistNames.forEach(function(name){
+      var chip = document.createElement('div');
+      chip.className = 'kpi-chip on';
+      chip.style.background = '#0A1628';
+      chip.style.color = 'white';
+      chip.style.borderColor = '#0A1628';
+      chip.textContent = name.split(' ')[0];
+      chip.dataset.name = name;
+      chip.onclick = function(){
+        this.classList.toggle('on');
+        var isOn = this.classList.contains('on');
+        this.style.background = isOn?'#0A1628':'white';
+        this.style.color = isOn?'white':'var(--muted)';
+        this.style.borderColor = isOn?'#0A1628':'var(--border)';
+        window._kpiSelTherapists[this.dataset.name] = isOn;
+        kpiRenderCards();
+      };
+      tchips.appendChild(chip);
     });
-  },200);
+  }
 
-  // Store feedback for detail view
-  window._kpiFeedback = allFeedback;
-  window._kpiTherapists = therapistNames;
+  kpiUpdateClinicStats(allFeedback, therapistNames);
+  kpiRenderCards();
 }
 
 function calcTherapistKPI(feedback, name){
-  const tf = feedback.filter(f=>f.therapist===name);
+  var tf = feedback.filter(function(f){ return f.therapist===name; });
   if(!tf.length) return 0;
-  return Math.round((tf.reduce((a,b)=>a+b.rating,0)/(5*tf.length))*100);
+  return Math.round((tf.reduce(function(a,b){ return a+b.rating; },0)/(5*tf.length))*100);
 }
 
-let kpiDetailChart = null;
-let kpiActiveTherapist = null;
+function kpiUpdateClinicStats(allFeedback, therapistNames){
+  var totalRatings = allFeedback.length;
+  var clinicScore = totalRatings>0?Math.round((allFeedback.reduce(function(a,b){ return a+b.rating; },0)/(5*totalRatings))*100):0;
+  var excellent = therapistNames.filter(function(n){ return calcTherapistKPI(allFeedback,n)>=85; }).length;
+  var needsReview = therapistNames.filter(function(n){ return calcTherapistKPI(allFeedback,n)<70; }).length;
 
-function openKPIDetail(name){
-  const allFeedback = window._kpiFeedback || getMockFeedback();
-  const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
-  const tf = allFeedback.filter(f=>f.therapist===name);
-  const kpi = calcTherapistKPI(allFeedback, name);
-  const avg = tf.length>0?(tf.reduce((a,b)=>a+b.rating,0)/tf.length).toFixed(1):'-';
-  const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-  const scoreColor = kpi>=85?'#22C55E':kpi>=70?'#2a78d6':'#EF4444';
+  // Rich color palette for stat cards
+  var statCards = [
+    {label:'Clinic satisfaction',val:clinicScore+'%',sub:totalRatings+' ratings total',bg:'#0A1628',valColor:'#00AAFF',subColor:'rgba(255,255,255,0.5)'},
+    {label:'Sessions rated',val:totalRatings.toString(),sub:therapistNames.length+' active therapists',bg:'#E8F4FF',valColor:'#0C447C',subColor:'#378ADD'},
+    {label:'Excellent performers',val:excellent.toString(),sub:'85%+ threshold',bg:'#E1F5EE',valColor:'#085041',subColor:'#1D9E75'},
+    {label:'Needs review',val:needsReview.toString(),sub:'Below 70%',bg:needsReview>0?'#FCEBEB':'#F5F9FF',valColor:needsReview>0?'#A32D2D':'#5A6A7A',subColor:needsReview>0?'#E24B4A':'#8899AA'},
+  ];
 
-  document.querySelectorAll('.kpi-t-card').forEach(c=>c.classList.remove('kpi-active'));
-  const card = document.getElementById('kpi-card-'+name.replace(/\s/g,'_'));
+  document.getElementById('kpi-clinic-stats').innerHTML = statCards.map(function(s){
+    return '<div style="background:'+s.bg+';border-radius:12px;padding:0.9rem 1rem;border:none">'
+      +'<div style="font-size:11px;color:'+s.subColor+';margin-bottom:4px">'+s.label+'</div>'
+      +'<div style="font-size:26px;font-weight:700;color:'+s.valColor+';line-height:1">'+s.val+'</div>'
+      +'<div style="font-size:11px;color:'+s.subColor+';margin-top:4px">'+s.sub+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+// Card palettes using full WhiteRock + sky blue palette
+var kpiCardPalettes = [
+  {bg:'#0A1628',avBg:'rgba(0,170,255,0.2)',avColor:'#00AAFF',scoreColor:'#00AAFF',mutedColor:'rgba(255,255,255,0.55)'},
+  {bg:'#085041',avBg:'rgba(255,255,255,0.15)',avColor:'#9FE1CB',scoreColor:'#9FE1CB',mutedColor:'rgba(255,255,255,0.55)'},
+  {bg:'#0C447C',avBg:'rgba(0,170,255,0.2)',avColor:'#85B7EB',scoreColor:'#85B7EB',mutedColor:'rgba(255,255,255,0.55)'},
+  {bg:'#3C3489',avBg:'rgba(255,255,255,0.15)',avColor:'#AFA9EC',scoreColor:'#AFA9EC',mutedColor:'rgba(255,255,255,0.55)'},
+  {bg:'#712B13',avBg:'rgba(255,200,150,0.2)',avColor:'#F5C4B3',scoreColor:'#F5C4B3',mutedColor:'rgba(255,255,255,0.55)'},
+  {bg:'#185FA5',avBg:'rgba(180,220,255,0.2)',avColor:'#B5D4F4',scoreColor:'#B5D4F4',mutedColor:'rgba(255,255,255,0.55)'},
+];
+
+function kpiRenderCards(){
+  var allFeedback = window._kpiFeedback||[];
+  var therapistNames = window._kpiTherapists||[];
+  var selT = window._kpiSelTherapists||{};
+  var selM = window._kpiSelMonths||Array(12).fill(true);
+  var metrics = window._kpiMetrics||{score:true,sessions:true,stars:true,trend:true,chart:true};
+
+  var filtered = therapistNames.filter(function(n){ return selT[n]; });
+  var selMonthNums = selM.map(function(v,i){ return v?i:-1; }).filter(function(i){ return i>=0; });
+
+  // Update filter note
+  var note = document.getElementById('kpi-filter-note');
+  if(note) note.textContent = filtered.length+' therapist'+(filtered.length!==1?'s':'')+' · '+selMonthNums.length+' month'+(selMonthNums.length!==1?'s':'');
+
+  if(!filtered.length){
+    document.getElementById('kpi-cards-grid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;font-size:13px;color:var(--muted)">No therapists selected.</div>';
+    return;
+  }
+
+  document.getElementById('kpi-cards-grid').innerHTML = filtered.map(function(name, fi){
+    var pal = kpiCardPalettes[fi % kpiCardPalettes.length];
+    var tf = allFeedback.filter(function(f){ return f.therapist===name; });
+    var filtTf = tf.filter(function(f){ return f.date && selMonthNums.indexOf(new Date(f.date).getMonth())>=0; });
+    var kpi = filtTf.length>0?Math.round((filtTf.reduce(function(a,b){ return a+b.rating; },0)/(5*filtTf.length))*100):calcTherapistKPI(allFeedback,name);
+    var avg = tf.length>0?(tf.reduce(function(a,b){ return a+b.rating; },0)/tf.length).toFixed(1):'-';
+    var initials = name.split(' ').map(function(w){ return w[0]; }).join('').substring(0,2).toUpperCase();
+    var badgeText = kpi>=85?'Excellent':kpi>=70?'Good':'Review needed';
+    var badgeBg = kpi>=85?'rgba(29,158,117,0.25)':kpi>=70?'rgba(0,170,255,0.15)':'rgba(240,80,80,0.25)';
+
+    // Trend
+    var now = new Date();
+    var thisM = tf.filter(function(f){ return f.date&&new Date(f.date).getMonth()===now.getMonth(); });
+    var lastM = tf.filter(function(f){ return f.date&&new Date(f.date).getMonth()===(now.getMonth()-1+12)%12; });
+    var diff = thisM.length>0&&lastM.length>0?
+      Math.round((thisM.reduce(function(a,b){return a+b.rating;},0)/(5*thisM.length))*100)-
+      Math.round((lastM.reduce(function(a,b){return a+b.rating;},0)/(5*lastM.length))*100):0;
+    var trendText = diff>0?'↑ +'+diff+'%':diff<0?'↓ '+diff+'%':'→ 0%';
+    var safeId = name.replace(/ /g,'_');
+
+    var html = '<div class="kpi-t-card" data-name="'+name+'" onclick="kpiOpenDetail(this.dataset.name)" id="kpi-card-'+safeId+'" style="background:'+pal.bg+'">'
+      +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">'
+        +'<div style="width:36px;height:36px;border-radius:50%;background:'+pal.avBg+';color:'+pal.avColor+';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">'+initials+'</div>'
+        +(metrics.trend?'<div style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.8)">'+trendText+'</div>':'')
+      +'</div>'
+      +'<div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);line-height:1.3;margin-bottom:1px">'+name+'</div>'
+      +'<div style="font-size:10px;color:'+pal.mutedColor+';margin-bottom:6px">'+tf.length+' sessions rated</div>'
+      +(metrics.score?'<div style="font-size:30px;font-weight:700;line-height:1;color:'+pal.scoreColor+'">'+kpi+'%</div>':'')
+      +'<div style="font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px;background:'+badgeBg+';color:'+pal.avColor+';display:inline-block;margin:4px 0 8px">'+badgeText+'</div>';
+
+    if(metrics.sessions||metrics.stars){
+      html += '<div style="display:flex;gap:14px;margin-bottom:6px">';
+      if(metrics.sessions) html += '<div style="font-size:10px;color:'+pal.mutedColor+'"><span style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);display:block">'+filtTf.length+'</span>Selected</div>';
+      if(metrics.stars) html += '<div style="font-size:10px;color:'+pal.mutedColor+'"><span style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);display:block">'+avg+'</span>Avg stars</div>';
+      html += '</div>';
+    }
+    if(metrics.chart) html += '<div style="height:48px;position:relative"><canvas id="kpi-spark-'+safeId+'" role="img" aria-label="Mini chart">Trend</canvas></div>';
+    html += '</div>';
+    return html;
+  }).join('');
+
+  if(metrics.chart){
+    setTimeout(function(){
+      filtered.forEach(function(name){
+        var tf = allFeedback.filter(function(f){ return f.therapist===name; });
+        var selM = window._kpiSelMonths;
+        var selectedData = [0,1,2,3,4,5,6,7,8,9,10,11].filter(function(m){ return selM[m]; }).map(function(m){
+          var mf = tf.filter(function(f){ return f.date&&new Date(f.date).getMonth()===m; });
+          return {s:mf.length>0?Math.round((mf.reduce(function(a,b){return a+b.rating;},0)/(5*mf.length))*100):null, m:m};
+        }).filter(function(d){ return d.s!==null; });
+        if(selectedData.length<1) return;
+        var canvas = document.getElementById('kpi-spark-'+name.replace(/ /g,'_'));
+        if(!canvas) return;
+        var w = canvas.parentElement.offsetWidth;
+        canvas.width=w; canvas.height=48;
+        var ctx = canvas.getContext('2d');
+        var mn = Math.min.apply(null,selectedData.map(function(d){return d.s;}))-8;
+        var mx = Math.max.apply(null,selectedData.map(function(d){return d.s;}))+8;
+        var barW = Math.max(8,Math.floor((w-selectedData.length*2)/selectedData.length));
+        selectedData.forEach(function(item,j){
+          var bh = Math.max(4,Math.round(((item.s-mn)/(mx-mn))*36));
+          var x = j*(barW+2);
+          ctx.fillStyle = j===selectedData.length-1?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.3)';
+          ctx.beginPath();
+          ctx.roundRect(x,48-bh,barW,bh,[2,2,0,0]);
+          ctx.fill();
+          var months=['J','F','M','A','M','J','J','A','S','O','N','D'];
+          ctx.fillStyle='rgba(255,255,255,0.4)';
+          ctx.font='7px sans-serif';
+          ctx.textAlign='center';
+          ctx.fillText(months[item.m],x+barW/2,47);
+        });
+        if(selectedData.length>0){
+          var last=selectedData[selectedData.length-1];
+          var bh=Math.max(4,Math.round(((last.s-mn)/(mx-mn))*36));
+          ctx.fillStyle='rgba(255,255,255,0.85)';
+          ctx.font='bold 9px sans-serif';
+          ctx.textAlign='center';
+          ctx.fillText(last.s+'%',(selectedData.length-1)*(barW+2)+barW/2,48-bh-3);
+        }
+      });
+    },150);
+  }
+}
+
+function kpiToggleChip(el, type){
+  el.classList.toggle('on');
+  if(type==='m'){
+    var idx = parseInt(el.dataset.m);
+    if(!window._kpiSelMonths) window._kpiSelMonths = Array(12).fill(true);
+    window._kpiSelMonths[idx] = el.classList.contains('on');
+    el.style.background = el.classList.contains('on')?'#1A3FBF':'white';
+    el.style.color = el.classList.contains('on')?'white':'var(--muted)';
+    el.style.borderColor = el.classList.contains('on')?'#1A3FBF':'var(--border)';
+  } else if(type==='k'){
+    if(!window._kpiMetrics) window._kpiMetrics = {score:true,sessions:true,stars:true,trend:true,chart:true};
+    window._kpiMetrics[el.dataset.k] = el.classList.contains('on');
+    el.style.background = el.classList.contains('on')?'#085041':'white';
+    el.style.color = el.classList.contains('on')?'white':'var(--muted)';
+    el.style.borderColor = el.classList.contains('on')?'#085041':'var(--border)';
+  }
+  kpiRenderCards();
+}
+
+function kpiSelectAll(){
+  window._kpiSelMonths = Array(12).fill(true);
+  document.querySelectorAll('.kpi-chip-month').forEach(function(c){
+    c.classList.add('on');
+    c.style.background='#1A3FBF'; c.style.color='white'; c.style.borderColor='#1A3FBF';
+  });
+  kpiRenderCards();
+}
+
+function kpiClearMonths(){
+  window._kpiSelMonths = Array(12).fill(false);
+  document.querySelectorAll('.kpi-chip-month').forEach(function(c){
+    c.classList.remove('on');
+    c.style.background='white'; c.style.color='var(--muted)'; c.style.borderColor='var(--border)';
+  });
+  kpiRenderCards();
+}
+
+var kpiDetailChart = null;
+var kpiActiveTherapist = null;
+
+function kpiOpenDetail(name){
+  var allFeedback = window._kpiFeedback||[];
+  var isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
+  var tf = allFeedback.filter(function(f){ return f.therapist===name; });
+  var selM = window._kpiSelMonths||Array(12).fill(true);
+  var selMonthNums = selM.map(function(v,i){ return v?i:-1; }).filter(function(i){ return i>=0; });
+  var filtTf = tf.filter(function(f){ return f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0; });
+  var kpi = filtTf.length>0?Math.round((filtTf.reduce(function(a,b){return a+b.rating;},0)/(5*filtTf.length))*100):calcTherapistKPI(allFeedback,name);
+  var avg = tf.length>0?(tf.reduce(function(a,b){return a+b.rating;},0)/tf.length).toFixed(1):'-';
+  var initials = name.split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+  var scoreColor = kpi>=85?'#1D9E75':kpi>=70?'#1A3FBF':'#EF4444';
+
+  document.querySelectorAll('.kpi-t-card').forEach(function(c){c.classList.remove('kpi-active');});
+  var card = document.getElementById('kpi-card-'+name.replace(/ /g,'_'));
   if(card) card.classList.add('kpi-active');
 
-  document.getElementById('kpi-d-avatar').textContent=initials;
+  var av = document.getElementById('kpi-d-avatar');
+  av.textContent=initials; av.style.background='#0A1628'; av.style.color='#00AAFF';
   document.getElementById('kpi-d-name').textContent=name;
-  document.getElementById('kpi-d-sub').textContent=tf.length+' sessions rated';
+  document.getElementById('kpi-d-sub').textContent=filtTf.length+' sessions in selected months · '+selMonthNums.length+' months selected';
   document.getElementById('kpi-d-score').textContent=kpi+'%';
   document.getElementById('kpi-d-score').style.color=scoreColor;
   document.getElementById('kpi-d-sessions').textContent=tf.length;
   document.getElementById('kpi-d-avg').textContent=avg;
 
-  const thisMonth = tf.filter(f=>f.date&&new Date(f.date).getMonth()===new Date().getMonth());
-  const lastMonth = tf.filter(f=>f.date&&new Date(f.date).getMonth()===(new Date().getMonth()-1+12)%12);
-  const diff = thisMonth.length>0&&lastMonth.length>0?
-    Math.round((thisMonth.reduce((a,b)=>a+b.rating,0)/(5*thisMonth.length))*100)-Math.round((lastMonth.reduce((a,b)=>a+b.rating,0)/(5*lastMonth.length))*100):0;
-  const trendEl = document.getElementById('kpi-d-trend');
-  trendEl.textContent=(diff>=0?'+':'')+diff+'%';
-  trendEl.style.color=diff>0?'#22C55E':diff<0?'#EF4444':'var(--muted)';
+  var now = new Date();
+  var thisM = tf.filter(function(f){return f.date&&new Date(f.date).getMonth()===now.getMonth();});
+  var lastM = tf.filter(function(f){return f.date&&new Date(f.date).getMonth()===(now.getMonth()-1+12)%12;});
+  var diff = thisM.length>0&&lastM.length>0?
+    Math.round((thisM.reduce(function(a,b){return a+b.rating;},0)/(5*thisM.length))*100)-
+    Math.round((lastM.reduce(function(a,b){return a+b.rating;},0)/(5*lastM.length))*100):0;
+  var tEl = document.getElementById('kpi-d-trend');
+  tEl.textContent=(diff>=0?'+':'')+diff+'%';
+  tEl.style.color=diff>0?'#1D9E75':diff<0?'#EF4444':'var(--muted)';
 
-  // Show flag button for management
-  const flagBtn = document.getElementById('kpi-flag-btn');
-  if(isLead){ flagBtn.style.display='flex'; }
-  else { flagBtn.style.display='none'; }
+  var flagBtn = document.getElementById('kpi-flag-btn');
+  if(isLead) flagBtn.style.display='flex'; else flagBtn.style.display='none';
   kpiActiveTherapist = name;
 
   document.getElementById('kpi-month-drill').style.display='none';
   document.getElementById('kpi-detail-panel').style.display='block';
 
-  // Build monthly data for last 6 months
-  const monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const labels=[], scores=[], counts=[];
-  for(let m=5;m>=0;m--){
-    const mth=(new Date().getMonth()-m+12)%12;
-    const mf=tf.filter(f=>f.date&&new Date(f.date).getMonth()===mth);
-    labels.push(monthNames[mth]);
-    scores.push(mf.length>0?Math.round((mf.reduce((a,b)=>a+b.rating,0)/(5*mf.length))*100):0);
+  // Build monthly chart for selected months only
+  var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var labels=[],scores=[],counts=[];
+  selMonthNums.forEach(function(m){
+    var mf = tf.filter(function(f){return f.date&&new Date(f.date).getMonth()===m;});
+    labels.push(monthNames[m]);
+    scores.push(mf.length>0?Math.round((mf.reduce(function(a,b){return a+b.rating;},0)/(5*mf.length))*100):0);
     counts.push(mf.length);
-  }
+  });
 
   if(kpiDetailChart) kpiDetailChart.destroy();
-  const ctx=document.getElementById('kpi-detail-chart').getContext('2d');
-  kpiDetailChart=new Chart(ctx,{
+  kpiDetailChart = new Chart(document.getElementById('kpi-detail-chart').getContext('2d'),{
     type:'bar',
-    data:{labels,datasets:[{label:'KPI %',data:scores,backgroundColor:scores.map(s=>s>=85?'#22C55E':s>=70?'#2a78d6':'#EF4444'),borderRadius:4,borderSkipped:false}]},
+    data:{labels:labels,datasets:[{label:'KPI %',data:scores,backgroundColor:scores.map(function(s){return s>=85?'#1D9E75':s>=70?'#1A3FBF':'#EF4444';}),borderRadius:4,borderSkipped:false}]},
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>'KPI: '+ctx.parsed.y+'% · '+counts[ctx.dataIndex]+' sessions'}}
-      },
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return 'KPI: '+ctx.parsed.y+'% · '+counts[ctx.dataIndex]+' sessions';}}}},
       scales:{
-        y:{min:0,max:100,ticks:{callback:v=>v+'%',color:'#5A6A7A',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}},
-        x:{ticks:{color:'#5A6A7A',font:{size:11}},grid:{display:false}}
+        y:{min:0,max:100,ticks:{callback:function(v){return v+'%'},color:'#5A6A7A',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}},
+        x:{ticks:{color:'#5A6A7A',font:{size:11},autoSkip:false},grid:{display:false}}
       },
       onClick:function(e,els){
         if(!els.length) return;
-        const idx=els[0].index;
-        const month=labels[idx];
-        const mth=(new Date().getMonth()-5+idx+12)%12;
-        const mf=tf.filter(f=>f.date&&new Date(f.date).getMonth()===mth);
+        var idx=els[0].index, month=labels[idx], mNum=selMonthNums[idx];
+        var mf=tf.filter(function(f){return f.date&&new Date(f.date).getMonth()===mNum;});
         document.getElementById('kpi-drill-title').textContent=month+' '+new Date().getFullYear();
-        document.getElementById('kpi-drill-meta').textContent=counts[idx]+' sessions · avg '+(mf.length>0?(mf.reduce((a,b)=>a+b.rating,0)/mf.length).toFixed(1):'-')+' stars';
-        const list=document.getElementById('kpi-comments-list');
-        if(!mf.length){
-          list.innerHTML='<div style="font-size:12px;color:var(--muted);padding:0.5rem 0">No ratings recorded for this month.</div>';
-        } else {
-          list.innerHTML=mf.map(f=>{
-            const stars='★'.repeat(Math.round(f.rating))+'☆'.repeat(5-Math.round(f.rating));
-            const showComment = isLead && f.comment;
-            return '<div class="kpi-comment-item"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:12px;font-weight:700;color:var(--navy)">'+(f.patient||'Patient')+'</span><span style="color:#F59E0B;font-size:11px">'+stars+'</span><span style="font-size:10px;color:var(--muted)">'+f.rating+'/5</span></div>'+(showComment?'<div style="font-size:12px;color:var(--muted);font-style:italic">"'+f.comment+'"</div>':'')+'</div>';
-          }).join('');
-          if(!isLead) list.innerHTML += '<div style="font-size:11px;color:var(--muted);margin-top:0.5rem;padding:0.5rem;background:var(--offwhite);border-radius:6px">🔒 Patient comments visible to management only</div>';
-        }
+        document.getElementById('kpi-drill-meta').textContent=counts[idx]+' sessions · avg '+(mf.length>0?(mf.reduce(function(a,b){return a+b.rating;},0)/mf.length).toFixed(1):'-')+' stars';
+        var list=document.getElementById('kpi-comments-list');
+        list.innerHTML=mf.length?mf.map(function(f){
+          var stars='★'.repeat(Math.round(f.rating))+'☆'.repeat(5-Math.round(f.rating));
+          var showCmt=isLead&&f.comment;
+          return '<div style="padding:0.65rem 0;border-bottom:1px solid var(--border)">'
+            +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">'
+              +'<span style="font-size:12px;font-weight:700;color:var(--navy)">'+(f.patient||'Patient')+'</span>'
+              +'<span style="color:#EDA100;font-size:11px">'+stars+'</span>'
+              +'<span style="font-size:10px;color:var(--muted)">'+f.rating+'/5</span>'
+            +'</div>'
+            +(showCmt?'<div style="font-size:12px;color:var(--muted);font-style:italic">"'+f.comment+'"</div>':'')
+            +'</div>';
+        }).join(''):'<div style="font-size:12px;color:var(--muted);padding:0.5rem 0">No ratings for this month.</div>';
+        if(!isLead) list.innerHTML+='<div style="font-size:11px;color:var(--muted);margin-top:6px;padding:6px 10px;background:var(--offwhite);border-radius:6px">Comments visible to management only</div>';
         document.getElementById('kpi-month-drill').style.display='block';
       }
     }
   });
-
   document.getElementById('kpi-detail-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function closeKPIDetail(){
   document.getElementById('kpi-detail-panel').style.display='none';
-  document.querySelectorAll('.kpi-t-card').forEach(c=>c.classList.remove('kpi-active'));
-  if(kpiDetailChart){ kpiDetailChart.destroy(); kpiDetailChart=null; }
+  document.querySelectorAll('.kpi-t-card').forEach(function(c){c.classList.remove('kpi-active');});
+  if(kpiDetailChart){kpiDetailChart.destroy();kpiDetailChart=null;}
   kpiActiveTherapist=null;
 }
 
-function openFlagModal(){
-  document.getElementById('flag-modal-title').textContent='Flag '+kpiActiveTherapist+' for performance review';
+function kpiOpenFlag(){
+  document.getElementById('kpi-flag-title').textContent='Flag '+kpiActiveTherapist+' for performance review';
   document.getElementById('kpi-flag-modal').style.display='block';
 }
 
-function sendFlagNotification(){
-  const note = document.getElementById('flag-note').value;
-  alert('✓ Review notification sent to '+kpiActiveTherapist+'.'+(note?' Note included: "'+note+'"':''));
+function kpiSendFlag(){
+  var note=document.getElementById('kpi-flag-note').value;
+  alert('Review notification sent to '+kpiActiveTherapist+'.'+(note?' Note: "'+note+'"':''));
   document.getElementById('kpi-flag-modal').style.display='none';
-  document.getElementById('flag-note').value='';
+  document.getElementById('kpi-flag-note').value='';
 }
 
-function setKPIPeriod(period, btn){
-  document.querySelectorAll('.kpi-period-btn').forEach(b=>b.classList.remove('active-period'));
+function showKPIPPTPreview(){
+  var allFeedback=window._kpiFeedback||[];
+  var therapistNames=window._kpiTherapists||[];
+  var selT=window._kpiSelTherapists||{};
+  var selM=window._kpiSelMonths||Array(12).fill(true);
+  var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var filtered=therapistNames.filter(function(n){return selT[n];});
+  var selMonthNames=monthNames.filter(function(m,i){return selM[i];});
+
+  var summary=document.getElementById('kpi-ppt-summary');
+  summary.innerHTML=
+    filtered.map(function(n){
+      return '<div class="kpi-ppt-tag" style="background:#0A1628;color:#00AAFF;font-size:11px;padding:3px 10px;border-radius:20px">'+n.split(' ')[0]+'</div>';
+    }).join('')+
+    selMonthNames.map(function(m){
+      return '<div class="kpi-ppt-tag" style="background:#1A3FBF;color:white;font-size:11px;padding:3px 10px;border-radius:20px">'+m+'</div>';
+    }).join('')+
+    '<div class="kpi-ppt-tag" style="background:#085041;color:#9FE1CB;font-size:11px;padding:3px 10px;border-radius:20px">'+Object.values(window._kpiMetrics||{}).filter(Boolean).length+' metrics</div>';
+
+  var slides=[
+    {icon:'🏠',label:'Cover slide',key:'cover'},
+    {icon:'📊',label:'Clinic overview',key:'overview'},
+    {icon:'📈',label:'Comparison histogram',key:'histogram'},
+    {icon:'👤',label:'Per-therapist ('+filtered.length+')',key:'individual'},
+    {icon:'📋',label:'Summary table',key:'table'},
+  ];
+  var excl=window._kpiExcludedSlides||{};
+  document.getElementById('kpi-slide-preview').innerHTML=slides.map(function(s){
+    var ex=excl[s.key];
+    var thumb = document.createElement('div');
+    return '<div class="kpi-slide-thumb'+(ex?' excluded':'')+'" data-slidekey="'+s.key+'" onclick="kpiToggleSlide(this)">'
+      +'<span style="font-size:20px">'+s.icon+'</span>'
+      +'<span style="font-size:9px;font-weight:600;color:'+(ex?'#888':'#185FA5')+'">'+s.label+'</span>'
+      +'<span style="font-size:9px;color:'+(ex?'#888':'#1D9E75')+'">'+(ex?'excluded':'included')+'</span>'
+      +'</div>';
+  }).join('');
+  document.getElementById('kpi-ppt-preview').style.display='block';
+}
+
+function kpiToggleSlide(el,key){
+  if(!window._kpiExcludedSlides) window._kpiExcludedSlides={};
+  window._kpiExcludedSlides[key]=!window._kpiExcludedSlides[key];
+  el.classList.toggle('excluded');
+  var spans=el.querySelectorAll('span');
+  if(window._kpiExcludedSlides[key]){
+    spans[1].style.color='#888'; spans[2].textContent='excluded'; spans[2].style.color='#888';
+  } else {
+    spans[1].style.color='#185FA5'; spans[2].textContent='included'; spans[2].style.color='#1D9E75';
+  }
+}
+
+function setKPIPeriod(period,btn){
+  document.querySelectorAll('.kpi-period-btn').forEach(function(b){b.classList.remove('active-period');});
   btn.classList.add('active-period');
-  loadKPI().catch(e=>console.log(e));
+  loadKPI().catch(function(e){console.log(e);});
 }
 
 function exportKPICSV(){
-  const feedback = window._kpiFeedback || getMockFeedback();
-  if(!feedback.length){ alert('No data to export.'); return; }
-  const headers = ['Patient','PatientID','Therapist','Rating','Comment','Session Date'];
-  const rows = feedback.map(f=>[f.patient||'',f.patientId||'',f.therapist||'',f.rating||'','"'+(f.comment||'')+'"',f.date||'']);
-  const csv = [headers.join(','), ...rows.map(r=>r.join(','))].join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download='WhiteRock_KPI_'+new Date().toISOString().split('T')[0]+'.csv';
-  a.click(); URL.revokeObjectURL(url);
+  var feedback=window._kpiFeedback||[];
+  if(!feedback.length){alert('No data to export.');return;}
+  var headers=['Patient','PatientID','Therapist','Rating','Comment','Session Date'];
+  var rows=feedback.map(function(f){return [f.patient||'',f.patientId||'',f.therapist||'',f.rating||'','"'+(f.comment||'')+'"',f.date||''];});
+  var csv=[headers.join(',')].concat(rows.map(function(r){return r.join(',');})).join('\n');
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='WhiteRock_KPI_'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();URL.revokeObjectURL(url);
 }
 
 function exportKPIPPT(){
-  const feedback = window._kpiFeedback || [];
-  const therapists = window._kpiTherapists || [];
-  
-  if(!therapists.length){ alert('No data to export yet.'); return; }
-
-  // Load PptxGenJS dynamically
-  const script = document.createElement('script');
-  script.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
-  script.onload = function(){
-    try {
-      const pptx = new PptxGenJS();
-      pptx.layout = 'LAYOUT_WIDE';
-      pptx.author = 'WhiteRock Wellness';
-      pptx.title = 'KPI Report';
-
-      const WR_NAVY = '0A1628';
-      const WR_CYAN = '00AAFF';
-      const WR_ROYAL = '1A3FBF';
-
-      // Slide 1 - Cover
-      const cover = pptx.addSlide();
-      cover.background = {color: WR_NAVY};
-      cover.addText('WhiteRock Wellness', {x:1, y:1.5, w:11, h:1, fontSize:36, bold:true, color:WR_CYAN, fontFace:'Calibri'});
-      cover.addText('KPI Performance Report', {x:1, y:2.7, w:11, h:0.8, fontSize:24, color:'FFFFFF', fontFace:'Calibri'});
-      cover.addText('Period: Jan – Jun 2026  |  Generated: '+new Date().toLocaleDateString(), {x:1, y:3.6, w:11, h:0.5, fontSize:14, color:'8899AA', fontFace:'Calibri'});
-
-      // Slide 2 - Clinic Overview
-      const overview = pptx.addSlide();
-      overview.background = {color: 'F5F9FF'};
-      overview.addText('Clinic Overview', {x:0.5, y:0.3, w:12, h:0.6, fontSize:22, bold:true, color:WR_NAVY, fontFace:'Calibri'});
-      
-      const totalRatings = feedback.length;
-      const clinicScore = totalRatings>0?Math.round((feedback.reduce((a,b)=>a+b.rating,0)/(5*totalRatings))*100):0;
-      const excellent = therapists.filter(n=>calcTherapistKPI(feedback,n)>=85).length;
-      const needsReview = therapists.filter(n=>calcTherapistKPI(feedback,n)<70).length;
-
-      const stats = [
-        {label:'Clinic Satisfaction', val:clinicScore+'%', color:WR_ROYAL},
-        {label:'Sessions Rated', val:totalRatings.toString(), color:WR_NAVY},
-        {label:'Excellent Performers', val:excellent.toString(), color:'1baf7a'.toUpperCase()},
-        {label:'Needs Review', val:needsReview.toString(), color:'EF4444'},
-      ];
-      stats.forEach((s,i)=>{
-        const x = 0.3 + i*3.2;
-        overview.addShape(pptx.ShapeType.roundRect, {x:x, y:1.2, w:3, h:1.8, fill:{color:'FFFFFF'}, line:{color:'E2EAF0',width:1}, rectRadius:0.1});
-        overview.addText(s.label, {x:x+0.15, y:1.3, w:2.7, h:0.4, fontSize:11, color:'5A6A7A', fontFace:'Calibri'});
-        overview.addText(s.val, {x:x+0.15, y:1.7, w:2.7, h:0.9, fontSize:28, bold:true, color:s.color, fontFace:'Calibri'});
-      });
-
-      // One slide per therapist
-      therapists.forEach((name,idx)=>{
-        const tf = feedback.filter(f=>f.therapist===name);
-        const kpi = calcTherapistKPI(feedback,name);
-        const avg = tf.length>0?(tf.reduce((a,b)=>a+b.rating,0)/tf.length).toFixed(1):'-';
-        const scoreColor = kpi>=85?'22C55E':kpi>=70?'2a78d6':'EF4444';
-        const badgeText = kpi>=85?'Excellent':kpi>=70?'Good':'Review Needed';
-        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-
-        const slide = pptx.addSlide();
-        slide.background = {color:'F5F9FF'};
-        // Header bar
-        slide.addShape(pptx.ShapeType.rect, {x:0, y:0, w:13.33, h:1.2, fill:{color:WR_NAVY}});
-        slide.addText(initials, {x:0.2, y:0.15, w:0.8, h:0.8, fontSize:18, bold:true, color:WR_CYAN, fontFace:'Calibri'});
-        slide.addText(name, {x:1.2, y:0.15, w:8, h:0.45, fontSize:18, bold:true, color:'FFFFFF', fontFace:'Calibri'});
-        slide.addText('Therapist Performance Report', {x:1.2, y:0.65, w:8, h:0.35, fontSize:12, color:'8899AA', fontFace:'Calibri'});
-        slide.addText(kpi+'%', {x:10.5, y:0.1, w:2.5, h:1, fontSize:36, bold:true, color:scoreColor, fontFace:'Calibri', align:'right'});
-
-        // Stats row
-        const tStats = [
-          {l:'Sessions Rated', v:tf.length.toString()},
-          {l:'Avg Stars', v:avg+'/5'},
-          {l:'KPI Score', v:kpi+'%'},
-          {l:'Badge', v:badgeText},
-        ];
-        tStats.forEach((s,i)=>{
-          const x = 0.3+i*3.2;
-          slide.addShape(pptx.ShapeType.roundRect, {x:x, y:1.4, w:3, h:1.2, fill:{color:'FFFFFF'}, line:{color:'E2EAF0',width:1}, rectRadius:0.1});
-          slide.addText(s.l, {x:x+0.1, y:1.5, w:2.8, h:0.3, fontSize:10, color:'5A6A7A', fontFace:'Calibri'});
-          slide.addText(s.v, {x:x+0.1, y:1.8, w:2.8, h:0.6, fontSize:18, bold:true, color:WR_NAVY, fontFace:'Calibri'});
+  var feedback=window._kpiFeedback||[];
+  var therapists=window._kpiTherapists||[];
+  var selT=window._kpiSelTherapists||{};
+  var selM=window._kpiSelMonths||Array(12).fill(true);
+  var excl=window._kpiExcludedSlides||{};
+  var filtered=therapists.filter(function(n){return selT[n];});
+  var selMonthNums=selM.map(function(v,i){return v?i:-1;}).filter(function(i){return i>=0;});
+  var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if(!filtered.length){alert('No therapists selected.');return;}
+  var scr=document.createElement('script');
+  scr.src='https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
+  scr.onload=function(){
+    try{
+      var pptx=new PptxGenJS();
+      pptx.layout='LAYOUT_WIDE';
+      pptx.title='WhiteRock KPI Report';
+      var NAVY='0A1628',CYAN='00AAFF',ROYAL='1A3FBF',TEAL='085041';
+      if(!excl.cover){
+        var cv=pptx.addSlide();
+        cv.background={color:NAVY};
+        cv.addText('WhiteRock Wellness',{x:1,y:1.5,w:11,h:1,fontSize:36,bold:true,color:CYAN,fontFace:'Calibri'});
+        cv.addText('KPI Performance Report',{x:1,y:2.7,w:11,h:0.8,fontSize:24,color:'FFFFFF',fontFace:'Calibri'});
+        cv.addText('Period: '+selMonthNums.map(function(m){return monthNames[m];}).join(', ')+'  |  '+new Date().toLocaleDateString(),{x:1,y:3.6,w:11,h:0.5,fontSize:13,color:'8899AA',fontFace:'Calibri'});
+      }
+      if(!excl.overview){
+        var ov=pptx.addSlide();
+        ov.background={color:'F5F9FF'};
+        ov.addShape(pptx.ShapeType.rect,{x:0,y:0,w:13.33,h:0.9,fill:{color:NAVY}});
+        ov.addText('Clinic Overview',{x:0.4,y:0.15,w:12,h:0.6,fontSize:20,bold:true,color:'FFFFFF',fontFace:'Calibri'});
+        var tot=feedback.length;
+        var cs=tot>0?Math.round((feedback.reduce(function(a,b){return a+b.rating;},0)/(5*tot))*100):0;
+        var ex=therapists.filter(function(n){return calcTherapistKPI(feedback,n)>=85;}).length;
+        var nr=therapists.filter(function(n){return calcTherapistKPI(feedback,n)<70;}).length;
+        [[cs+'%','Clinic satisfaction',ROYAL],[''+tot,'Sessions rated',NAVY],[''+ex,'Excellent (85%+)','1D9E75'],[''+nr,'Needs review','EF4444']].forEach(function(s,i){
+          var x=0.3+i*3.2;
+          ov.addShape(pptx.ShapeType.roundRect,{x:x,y:1.1,w:3,h:1.6,fill:{color:'FFFFFF'},line:{color:'E2EAF0',width:1},rectRadius:0.1});
+          ov.addText(s[1],{x:x+0.15,y:1.2,w:2.7,h:0.35,fontSize:11,color:'5A6A7A',fontFace:'Calibri'});
+          ov.addText(s[0],{x:x+0.15,y:1.55,w:2.7,h:0.9,fontSize:28,bold:true,color:s[2],fontFace:'Calibri'});
         });
-
-        // Recent comments
-        slide.addText('Recent Patient Feedback', {x:0.3, y:2.8, w:12, h:0.4, fontSize:13, bold:true, color:WR_NAVY, fontFace:'Calibri'});
-        const recent = tf.slice(0,4);
-        recent.forEach((f,i)=>{
-          const y = 3.3 + i*0.75;
-          const stars = '★'.repeat(Math.round(f.rating))+'☆'.repeat(5-Math.round(f.rating));
-          slide.addShape(pptx.ShapeType.roundRect, {x:0.3, y:y, w:12.5, h:0.65, fill:{color:'FFFFFF'}, line:{color:'E2EAF0',width:0.5}, rectRadius:0.05});
-          slide.addText(stars+' '+f.rating+'/5  |  '+(f.patient||'Patient')+'  |  '+(f.comment||'No comment'), {x:0.5, y:y+0.1, w:12, h:0.45, fontSize:10, color:'3A4A5A', fontFace:'Calibri'});
+      }
+      if(!excl.histogram){
+        var hs=pptx.addSlide();
+        hs.background={color:'F5F9FF'};
+        hs.addShape(pptx.ShapeType.rect,{x:0,y:0,w:13.33,h:0.9,fill:{color:NAVY}});
+        hs.addText('Therapist Performance Comparison',{x:0.4,y:0.15,w:12,h:0.6,fontSize:20,bold:true,color:'FFFFFF',fontFace:'Calibri'});
+        var labels=filtered;
+        var kpiScores=filtered.map(function(n){
+          var tf=feedback.filter(function(f){return f.therapist===n&&f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0;});
+          return tf.length>0?Math.round((tf.reduce(function(a,b){return a+b.rating;},0)/(5*tf.length))*100):0;
         });
-      });
-
-      // Final slide - Summary table
-      const summary = pptx.addSlide();
-      summary.background = {color:'F5F9FF'};
-      summary.addText('Summary — All Therapists', {x:0.5, y:0.3, w:12, h:0.6, fontSize:22, bold:true, color:WR_NAVY, fontFace:'Calibri'});
-      const tableRows = [
-        [{text:'Therapist',options:{bold:true,color:'FFFFFF',fill:{color:WR_NAVY}}},{text:'Sessions',options:{bold:true,color:'FFFFFF',fill:{color:WR_NAVY}}},{text:'Avg Stars',options:{bold:true,color:'FFFFFF',fill:{color:WR_NAVY}}},{text:'KPI Score',options:{bold:true,color:'FFFFFF',fill:{color:WR_NAVY}}},{text:'Badge',options:{bold:true,color:'FFFFFF',fill:{color:WR_NAVY}}}],
-        ...therapists.map(name=>{
-          const tf = feedback.filter(f=>f.therapist===name);
-          const kpi = calcTherapistKPI(feedback,name);
-          const avg = tf.length>0?(tf.reduce((a,b)=>a+b.rating,0)/tf.length).toFixed(1):'-';
-          const badge = kpi>=85?'Excellent':kpi>=70?'Good':'Review Needed';
-          return [{text:name},{text:tf.length.toString()},{text:avg+'/5'},{text:kpi+'%',options:{bold:true}},{text:badge}];
-        })
-      ];
-      summary.addTable(tableRows, {x:0.5, y:1.1, w:12, colW:[4,1.8,1.8,1.8,2.4], fontSize:11, fontFace:'Calibri', border:{type:'solid',color:'E2EAF0',pt:0.5}});
-
+        var sessionCounts=filtered.map(function(n){return feedback.filter(function(f){return f.therapist===n;}).length;});
+        var avgStars=filtered.map(function(n){
+          var tf=feedback.filter(function(f){return f.therapist===n;});
+          return tf.length>0?parseFloat((tf.reduce(function(a,b){return a+b.rating;},0)/tf.length).toFixed(1)):0;
+        });
+        hs.addChart(pptx.ChartType.bar,[
+          {name:'KPI Score (%)',labels:labels,values:kpiScores},
+          {name:'Sessions rated',labels:labels,values:sessionCounts},
+          {name:'Avg stars x20',labels:labels,values:avgStars.map(function(v){return Math.round(v*20);})}
+        ],{x:0.4,y:1.0,w:12.5,h:5.5,barDir:'col',barGrouping:'clustered',chartColors:[ROYAL,'1D9E75',CYAN],showLegend:true,legendPos:'b',showValue:true,dataLabelFontSize:9,valAxisMaxVal:100,valAxisMajorUnit:20,plotAreaFill:{color:'F5F9FF'}});
+      }
+      if(!excl.individual){
+        filtered.forEach(function(name){
+          var tf=feedback.filter(function(f){return f.therapist===name;});
+          var filtTf=tf.filter(function(f){return f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0;});
+          var kpi=filtTf.length>0?Math.round((filtTf.reduce(function(a,b){return a+b.rating;},0)/(5*filtTf.length))*100):calcTherapistKPI(feedback,name);
+          var avg=tf.length>0?(tf.reduce(function(a,b){return a+b.rating;},0)/tf.length).toFixed(1):'-';
+          var sc=kpi>=85?'1D9E75':kpi>=70?ROYAL:'EF4444';
+          var badge=kpi>=85?'Excellent':kpi>=70?'Good':'Review Needed';
+          var initials=name.split(' ').map(function(w){return w[0];}).join('').substring(0,2);
+          var sl=pptx.addSlide();
+          sl.background={color:'F5F9FF'};
+          sl.addShape(pptx.ShapeType.rect,{x:0,y:0,w:13.33,h:1.2,fill:{color:NAVY}});
+          sl.addText(initials,{x:0.2,y:0.15,w:0.8,h:0.8,fontSize:18,bold:true,color:CYAN,fontFace:'Calibri'});
+          sl.addText(name,{x:1.2,y:0.15,w:8,h:0.45,fontSize:18,bold:true,color:'FFFFFF',fontFace:'Calibri'});
+          sl.addText(badge+' · '+kpi+'%',{x:1.2,y:0.65,w:8,h:0.35,fontSize:12,color:'8899AA',fontFace:'Calibri'});
+          sl.addText(kpi+'%',{x:10.5,y:0.1,w:2.5,h:1,fontSize:36,bold:true,color:sc,fontFace:'Calibri',align:'right'});
+          [{l:'Sessions',v:''+filtTf.length},{l:'Avg stars',v:avg+'/5'},{l:'KPI',v:kpi+'%'},{l:'Status',v:badge}].forEach(function(s,i){
+            var x=0.3+i*3.2;
+            sl.addShape(pptx.ShapeType.roundRect,{x:x,y:1.4,w:3,h:1.2,fill:{color:'FFFFFF'},line:{color:'E2EAF0',width:1},rectRadius:0.1});
+            sl.addText(s.l,{x:x+0.1,y:1.5,w:2.8,h:0.3,fontSize:10,color:'5A6A7A',fontFace:'Calibri'});
+            sl.addText(s.v,{x:x+0.1,y:1.8,w:2.8,h:0.6,fontSize:18,bold:true,color:NAVY,fontFace:'Calibri'});
+          });
+          var selMonthChartData=[{name:'KPI %',labels:selMonthNums.map(function(m){return monthNames[m];}),values:selMonthNums.map(function(m){var mf=tf.filter(function(f){return f.date&&new Date(f.date).getMonth()===m;});return mf.length>0?Math.round((mf.reduce(function(a,b){return a+b.rating;},0)/(5*mf.length))*100):0;})}];
+          sl.addChart(pptx.ChartType.bar,selMonthChartData,{x:0.3,y:2.8,w:12.5,h:3.2,barDir:'col',barGrouping:'clustered',chartColors:[ROYAL],showValue:true,dataLabelFontSize:9,valAxisMaxVal:100,valAxisMajorUnit:20,plotAreaFill:{color:'F5F9FF'}});
+        });
+      }
+      if(!excl.table){
+        var ts=pptx.addSlide();
+        ts.background={color:'F5F9FF'};
+        ts.addShape(pptx.ShapeType.rect,{x:0,y:0,w:13.33,h:0.9,fill:{color:NAVY}});
+        ts.addText('Summary — All Therapists',{x:0.4,y:0.15,w:12,h:0.6,fontSize:20,bold:true,color:'FFFFFF',fontFace:'Calibri'});
+        var trows=[[{text:'Therapist',options:{bold:true,color:'FFFFFF',fill:{color:ROYAL}}},{text:'Sessions',options:{bold:true,color:'FFFFFF',fill:{color:ROYAL},align:'center'}},{text:'Avg Stars',options:{bold:true,color:'FFFFFF',fill:{color:ROYAL},align:'center'}},{text:'KPI Score',options:{bold:true,color:'FFFFFF',fill:{color:ROYAL},align:'center'}},{text:'Status',options:{bold:true,color:'FFFFFF',fill:{color:ROYAL},align:'center'}}]];
+        filtered.forEach(function(name){
+          var tf=feedback.filter(function(f){return f.therapist===name;});
+          var filtTf=tf.filter(function(f){return f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0;});
+          var kpi=filtTf.length>0?Math.round((filtTf.reduce(function(a,b){return a+b.rating;},0)/(5*filtTf.length))*100):calcTherapistKPI(feedback,name);
+          var avg=tf.length>0?(tf.reduce(function(a,b){return a+b.rating;},0)/tf.length).toFixed(1):'-';
+          var badge=kpi>=85?'Excellent':kpi>=70?'Good':'Review Needed';
+          var bc=kpi>=85?'1D9E75':kpi>=70?ROYAL:'EF4444';
+          trows.push([{text:name},{text:''+filtTf.length,options:{align:'center'}},{text:avg+'/5',options:{align:'center'}},{text:kpi+'%',options:{bold:true,align:'center',color:bc}},{text:badge,options:{align:'center',color:bc,bold:true}}]);
+        });
+        ts.addTable(trows,{x:0.5,y:1.1,w:12.3,colW:[4.5,1.8,1.8,2,2.2],fontSize:10,fontFace:'Calibri',border:{type:'solid',color:'E2EAF0',pt:0.5},rowH:0.45});
+      }
       pptx.writeFile({fileName:'WhiteRock_KPI_'+new Date().toISOString().split('T')[0]+'.pptx'});
-    } catch(err){
-      alert('PPT generation error: '+err.message);
-    }
+      document.getElementById('kpi-ppt-preview').style.display='none';
+    }catch(err){alert('PPT error: '+err.message);console.error(err);}
   };
-  script.onerror = function(){ alert('Could not load PPT library. Please try again.'); };
-  document.head.appendChild(script);
+  scr.onerror=function(){alert('Could not load PPT library. Please try again.');};
+  document.head.appendChild(scr);
 }
+
 </script>
 </body>
 </html>
