@@ -89,11 +89,13 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 }
 @media(max-width:768px){
   .sidebar{
-    position:fixed;top:56px;left:-220px;width:220px;
-    height:calc(100vh - 56px);z-index:300;
-    transition:left 0.3s ease;box-shadow:4px 0 20px rgba(0,0,0,0.15);
+    position:fixed;top:56px;left:-240px;width:220px;
+    height:calc(100vh - 56px);z-index:9999;
+    transition:left 0.3s ease;
+    box-shadow:4px 0 20px rgba(0,0,0,0.3);
+    background:white;
   }
-  .sidebar.open{left:0}
+  .sidebar.open{left:0 !important}
   .main-content{padding:1rem}
   .metrics-grid{grid-template-columns:1fr 1fr!important}
   .two-col{grid-template-columns:1fr!important}
@@ -106,7 +108,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 @media(max-width:768px){.mob-menu-btn{display:flex;align-items:center}}
 .sidebar-overlay{
   display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);
-  z-index:299;top:56px;
+  z-index:9998;top:56px;
 }
 .sidebar-overlay.show{display:block}
 .nav-section{padding:0.5rem 1rem 0.25rem;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
