@@ -240,6 +240,50 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 
 @media(max-width:900px){.metrics-grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.sidebar{width:160px}}
 @media(max-width:600px){.sidebar{display:none}.metrics-grid{grid-template-columns:1fr 1fr}}
+
+/* ── MOBILE BOTTOM NAV ── */
+#mobile-bottom-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  background:white;border-top:1px solid var(--border);
+  z-index:9999;padding:0.5rem 0;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.1);
+}
+.mob-nav-items{
+  display:flex;justify-content:space-around;align-items:center;
+}
+.mob-nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:0.3rem 0.5rem;cursor:pointer;border:none;background:none;
+  color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:0.6rem;font-weight:600;min-width:50px;
+}
+.mob-nav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mob-nav-item.active{color:var(--royal)}
+.mob-nav-more{position:relative}
+.mob-nav-more-menu{
+  display:none;position:fixed;bottom:70px;right:0;left:0;
+  background:white;border-top:1px solid var(--border);
+  padding:0.5rem 0;z-index:9999;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.15);
+}
+.mob-nav-more-menu.open{display:block}
+.mob-nav-more-item{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.85rem 1.5rem;font-size:0.9rem;
+  color:var(--navy);cursor:pointer;border:none;background:none;
+  width:100%;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;
+}
+.mob-nav-more-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.mob-nav-more-item:hover{background:var(--offwhite)}
+@media(max-width:768px){
+  #mobile-bottom-nav{display:block}
+  .sidebar{display:none!important}
+  .mob-menu-btn{display:none!important}
+  .main-content{padding:1rem;padding-bottom:80px}
+  .metrics-grid{grid-template-columns:1fr 1fr!important}
+  .two-col{grid-template-columns:1fr!important}
+}
 </style>
 </head>
 <body>
@@ -389,6 +433,55 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
       </div>
     </div>
   </div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <div id="mobile-bottom-nav">
+    <!-- More menu -->
+    <div class="mob-nav-more-menu" id="mob-more-menu">
+      <button class="mob-nav-more-item" onclick="mobNav('sessions')">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Sessions
+      </button>
+      <button class="mob-nav-more-item" onclick="mobNav('kpi')">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        KPI
+      </button>
+      <button class="mob-nav-more-item" id="mob-more-allocations" onclick="mobNav('allocations')">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Allocations
+      </button>
+      <button class="mob-nav-more-item" id="mob-more-periodic" onclick="mobNav('periodic')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Periodic review
+      </button>
+      <button class="mob-nav-more-item" id="mob-more-approval" onclick="mobNav('approval')">
+        <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Approval queue
+      </button>
+    </div>
+    <div class="mob-nav-items">
+      <button class="mob-nav-item active" id="mob-nav-overview" onclick="mobNav('overview')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Overview
+      </button>
+      <button class="mob-nav-item" id="mob-nav-patients" onclick="mobNav('patients')">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Patients
+      </button>
+      <button class="mob-nav-item" id="mob-nav-sessions" onclick="mobNav('sessions')">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Sessions
+      </button>
+      <button class="mob-nav-item" id="mob-nav-kpi" onclick="mobNav('kpi')">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        KPI
+      </button>
+      <button class="mob-nav-item" id="mob-nav-more" onclick="toggleMoreMenu()">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+        More
+      </button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -522,6 +615,32 @@ async function fetchTenantUsers(){
   }
 }
 
+function toggleMoreMenu(){
+  document.getElementById('mob-more-menu').classList.toggle('open');
+}
+
+function mobNav(name){
+  // Close more menu
+  document.getElementById('mob-more-menu').classList.remove('open');
+  // Update bottom nav active state
+  document.querySelectorAll('.mob-nav-item').forEach(b=>b.classList.remove('active'));
+  const btn = document.getElementById('mob-nav-'+name);
+  if(btn) btn.classList.add('active');
+  else document.getElementById('mob-nav-more').classList.add('active');
+  // Show the page
+  showPage(name, document.querySelector('[onclick*="showPage(''+name+''"]'));
+}
+
+// Hide management-only items in mobile more menu for non-management
+function updateMobileNav(){
+  const isLead = currentUser && (currentUser.role==='Lead'||currentUser.role==='Admin');
+  const items = ['mob-more-allocations','mob-more-periodic','mob-more-approval'];
+  items.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.style.display = isLead ? 'flex' : 'none';
+  });
+}
+
 function toggleSidebar(){
   const sidebar = document.querySelector('.sidebar');
   const overlay = document.getElementById('sidebar-overlay');
@@ -560,6 +679,7 @@ function initDashboard(){
   }
 
   loadOverview().catch(e=>console.log("Overview error:",e));
+  updateMobileNav();
 }
 
 function showPage(name, el){
