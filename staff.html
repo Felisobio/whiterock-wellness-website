@@ -1528,8 +1528,7 @@ function exportKPICSV(){
   if(!feedback.length){ alert('No data to export.'); return; }
   const headers = ['Patient','PatientID','Therapist','Rating','Comment','Session Date'];
   const rows = feedback.map(f=>[f.patient||'',f.patientId||'',f.therapist||'',f.rating||'','"'+(f.comment||'')+'"',f.date||'']);
-  const csv = [headers.join(','), ...rows.map(r=>r.join(','))].join('
-');
+  const csv = [headers.join(','), ...rows.map(r=>r.join(','))].join('\n');
   const blob = new Blob([csv], {type:'text/csv'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1538,5 +1537,8 @@ function exportKPICSV(){
 }
 
 function exportKPIPPT(){
-  alert('PPT export is being prepared. This will generate a slide deck with:\n\n• Clinic overview slide\n• One slide per therapist with KPI trend\n• Summary comparison table\n\nComing in next update — CSV export is available now.');
+  alert('PPT export coming soon. Will include clinic overview, therapist trends and summary table. CSV export is available now.');
 }
+</script>
+</body>
+</html>
