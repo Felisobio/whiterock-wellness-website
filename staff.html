@@ -364,7 +364,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 <script>
 const GET_PATIENTS_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/908a72e119d34d46be0537c6ccf5acf6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8IEi3jdhIOOnCzdlgT-n29nbJJbLt0WzBzSSq_3aVDw';
 const UPDATE_PATIENT_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3e392ef2d3034bea80d577dde7f14436/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bv0HbzeLgNthPzZgBP7Mh2XfqP7-gNiOc-H8IAugn3M';
-const SAVE_SESSION_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/df1f1bf9929241dca0a8c3e8a5588b8a/triggers/manual/paths/invoke?api-version=1';
+const SAVE_SESSION_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/df1f1bf9929241dca0a8c3e8a5588b8a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=pXOQmWA8hEfPZD9wIkjacQGkWnluY1ejlW9hy8AqTBI';
 const CLIENT_ID = '4b13835c-69e6-4cf9-9823-25cf48f0f5a7';
 const TENANT_ID = '89eeb06b-f74d-4def-9463-ffa01a2e8366';
 const AUTHORITY = `https://login.microsoftonline.com/${TENANT_ID}`;
@@ -458,20 +458,32 @@ function verifyAndLoad(email, msName){
 
 async function fetchTenantUsers(){
   try {
-    // Get access token using existing MSAL instance
     const account = msalInstance.getAllAccounts()[0];
     if(!account) return [];
     
-    const tokenResponse = await msalInstance.acquireTokenSilent({
-      scopes: ['User.Read.All'],
-      account: account
-    });
+    // Try with User.ReadBasic.All first (works with delegated permissions)
+    let tokenResponse;
+    try {
+      tokenResponse = await msalInstance.acquireTokenSilent({
+        scopes: ['https://graph.microsoft.com/User.ReadBasic.All'],
+        account: account
+      });
+    } catch(e) {
+      // If silent fails try popup
+      tokenResponse = await msalInstance.acquireTokenPopup({
+        scopes: ['https://graph.microsoft.com/User.ReadBasic.All']
+      });
+    }
     
-    const res = await fetch('https://graph.microsoft.com/v1.0/users?$select=displayName,mail,userPrincipalName,jobTitle&$top=50', {
+    const res = await fetch('https://graph.microsoft.com/v1.0/users?$select=displayName,mail,jobTitle&$top=100&$orderby=displayName', {
       headers: { 'Authorization': 'Bearer ' + tokenResponse.accessToken }
     });
     
     const data = await res.json();
+    if(data.error) {
+      console.log('Graph error:', data.error);
+      return [];
+    }
     return data.value || [];
   } catch(e) {
     console.log('Could not fetch tenant users:', e);
