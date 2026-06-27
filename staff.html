@@ -526,7 +526,7 @@ function showPage(name, el){
 }
 
 function getInitials(name){ return name ? name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase() : '?'; }
-function getStatusBadge(s){ const m={'Pending Allocation':'badge-pending','Allocated':'badge-allocated','Active':'badge-active','Discharged':'badge-discharged'}; return `<span class="badge ${m[s]||'badge-pending'}">${s||'Pending'}</span>`; }
+function getStatusBadge(s){ const m={'Pending Allocation':'badge-pending','Allocated':'badge-allocated','Active':'badge-active','Discharged':'badge-discharged','Closed':'badge-discharged'}; return `<span class="badge ${m[s]||'badge-pending'}">${s||'Pending'}</span>`; }
 function getKPIBadge(s){ if(s>=85) return `<span class="badge badge-excellent">Excellent</span>`; if(s>=70) return `<span class="badge badge-good">Good</span>`; return `<span class="badge badge-review">Review needed</span>`; }
 function getKPIColor(s){ if(s>=85) return '#22C55E'; if(s>=70) return '#3B82F6'; return '#EF4444'; }
 function getStars(r){ const f=Math.round(r); return '★'.repeat(f)+'☆'.repeat(5-f); }
@@ -661,12 +661,23 @@ function renderPatientsTable(patients){
   const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
   const list = isLead ? patients : patients.filter(p=>p.therapist===currentUser.name);
   document.getElementById('patients-table-wrap').innerHTML = list.length ? `
-    <table class="data-table"><thead><tr><th>Patient</th><th>ID</th><th>Complaint</th><th>Pain</th><th>Therapist</th><th>Status</th><th>Date</th></tr></thead>
+    <table class="data-table"><thead><tr><th>Patient</th><th>ID</th><th>Complaint</th><th>Pain</th><th>Therapist</th><th>Status</th><th>Date</th>${isLead?'<th>Actions</th>':''}</tr></thead>
     <tbody>${list.map(p=>`<tr>
       <td><div style="display:flex;align-items:center;gap:0.5rem"><div class="patient-init">${getInitials(p.name)}</div><span style="font-weight:600">${p.name}</span></div></td>
       <td style="color:var(--muted);font-size:0.78rem">${p.id}</td><td>${p.complaint}</td>
       <td style="text-align:center">${p.painLevel}</td><td style="color:var(--muted)">${p.therapist||'—'}</td>
       <td>${getStatusBadge(p.status)}</td><td style="color:var(--muted);font-size:0.78rem">${p.date}</td>
+      ${isLead ? `<td>
+        ${p.status==='Active' ? `
+          <button onclick="updatePatientStatus('${p.id}','${p.name}','Closed')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #EF4444;color:#EF4444;background:white;cursor:pointer;margin-right:3px">Close</button>
+          <button onclick="updatePatientStatus('${p.id}','${p.name}','Discharged')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #6B7280;color:#6B7280;background:white;cursor:pointer">Discharge</button>
+        ` : ''}
+        ${p.status==='Closed' ? `
+          <button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer">Reopen</button>
+        ` : ''}
+        ${p.status==='Pending Allocation'||p.status==='' ? `<span style="font-size:0.7rem;color:var(--muted)">Not allocated</span>` : ''}
+        ${p.status==='Discharged' ? `<span style="font-size:0.7rem;color:var(--muted)">Complete</span>` : ''}
+      </td>` : ''}
     </tr>`).join('')}</tbody></table>
   ` : '<div class="empty-state"><p>No patients found</p></div>';
 }
@@ -706,6 +717,31 @@ async function loadAllocations(){
   `).join('') : '<div class="empty-state"><p>No patients pending allocation</p></div>';
 }
 
+async function updatePatientStatus(patientId, patientName, newStatus){
+  if(!confirm(`Are you sure you want to set ${patientName} to "${newStatus}"?`)) return;
+  try {
+    const res = await fetch(UPDATE_PATIENT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        patientId: patientId,
+        therapist: 'keep',
+        status: newStatus,
+        note: ''
+      })
+    });
+    const data = await res.json();
+    if(data.success){
+      alert(`✓ ${patientName} status updated to "${newStatus}"`);
+      loadPatients().catch(e=>console.log(e));
+    } else {
+      alert('Something went wrong. Please try again.');
+    }
+  } catch(e){
+    alert('Connection error. Please try again.');
+  }
+}
+
 async function allocate(patientId, patientName){
   const therapist = document.getElementById('therapist-'+patientId).value;
   const comment = document.getElementById('comment-'+patientId) ? document.getElementById('comment-'+patientId).value : '';
@@ -722,7 +758,7 @@ async function allocate(patientId, patientName){
       body: JSON.stringify({
         patientId: patientId,
         therapist: therapist,
-        status: 'Allocated',
+        status: 'Active',
         note: comment
       })
     });
@@ -745,15 +781,34 @@ async function allocate(patientId, patientName){
 
 async function loadSessions(){
   const all = await fetchPatients().catch(() => getMockPatients());
-  const patients = all.filter(p=>p.therapist===currentUser.name&&p.status==='Active');
-  document.getElementById('sessions-list').innerHTML = patients.length ? patients.map(p=>`
-    <div class="card">
-      <div class="session-patient-card">
-        <div style="display:flex;align-items:center;gap:0.6rem">
-          <div class="patient-init">${getInitials(p.name)}</div>
-          <div><div style="font-size:0.88rem;font-weight:700;color:var(--navy)">${p.name}</div><div style="font-size:0.72rem;color:var(--muted)">${p.id} · ${p.complaint} · Pain ${p.painLevel}/10</div></div>
+  const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
+  const patients = isLead 
+    ? all.filter(p=>p.status==='Active')
+    : all.filter(p=>p.therapist===currentUser.name && p.status==='Active');
+  // Also show Closed patients so therapist can reopen them
+  const allAssigned = isLead
+    ? await fetchPatients().catch(()=>getMockPatients()).then(all=>all.filter(p=>p.status==='Active'||p.status==='Closed'))
+    : await fetchPatients().catch(()=>getMockPatients()).then(all=>all.filter(p=>p.therapist===currentUser.name&&(p.status==='Active'||p.status==='Closed')));
+
+  document.getElementById('sessions-list').innerHTML = allAssigned.length ? allAssigned.map(p=>`
+    <div class="card" style="${p.status==='Closed'?'opacity:0.7;border-color:rgba(107,114,128,0.3)':''}">
+      <div class="session-patient-card" style="${p.status==='Closed'?'background:rgba(107,114,128,0.1);border-color:rgba(107,114,128,0.2)':''}">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:0.6rem">
+            <div class="patient-init">${getInitials(p.name)}</div>
+            <div>
+              <div style="font-size:0.88rem;font-weight:700;color:var(--navy)">${p.name}</div>
+              <div style="font-size:0.72rem;color:var(--muted)">${p.id} · ${p.complaint} · Pain ${p.painLevel}/10</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center">
+            ${getStatusBadge(p.status)}
+            ${p.status==='Active' ? `<button onclick="updatePatientStatus('${p.id}','${p.name}','Closed')" style="font-size:0.7rem;padding:3px 10px;border-radius:5px;border:1px solid #EF4444;color:#EF4444;background:white;cursor:pointer">Close</button>` : ''}
+            ${p.status==='Closed' ? `<button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 10px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer">Reopen</button>` : ''}
+          </div>
         </div>
       </div>
+      ${p.status==='Active' ? `
       <div class="session-form">
         <label>Treatment plan</label>
         <textarea id="plan-${p.id}" placeholder="Describe the treatment plan…"></textarea>
@@ -765,9 +820,12 @@ async function loadSessions(){
           <button class="btn-primary" onclick="saveSession('${p.id}','${p.name}')">Save session notes</button>
           ${currentUser.role==='Junior'||currentUser.role==='Intern'?`<span style="font-size:0.75rem;color:var(--muted)">⚠ Notes sent for Lead approval</span>`:''}
         </div>
-      </div>
+      </div>` : `
+      <div style="padding:0.75rem;font-size:0.82rem;color:var(--muted);font-style:italic">
+        Patient is closed — click Reopen to resume sessions.
+      </div>`}
     </div>
-  `).join('') : '<div class="empty-state"><p>No active patients assigned to you</p></div>';
+  `).join('') : '<div class="empty-state"><p>No patients assigned to you</p></div>';
 }
 
 async function saveSession(patientId, patientName){
