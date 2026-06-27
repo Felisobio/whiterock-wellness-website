@@ -238,15 +238,15 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 @media(max-width:600px){.sidebar{display:none}.metrics-grid{grid-template-columns:1fr 1fr}}
 
 /* ── KPI DASHBOARD ── */
-.kpi-chip{padding:4px 10px;border-radius:20px;border:1px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;background:white;user-select:none;transition:all 0.15s}
-.kpi-chip:hover{border-color:var(--royal)}
-.kpi-chip-month.on{background:#1A3FBF;color:white;border-color:#1A3FBF}
-.kpi-chip-metric.on{background:#085041;color:white;border-color:#085041}
+.kpi-dd-item{padding:7px 12px;border-radius:8px;font-size:12px;font-weight:500;color:#0A1628;cursor:pointer;user-select:none;transition:all 0.12s;margin-bottom:2px}
+.kpi-dd-item:hover{background:#E8F4FF}
+.kpi-dd-item.on{background:#1A3FBF;color:white;font-weight:600}
+.kpi-dd-item.on:hover{background:#0A1628}
 .kpi-t-card{border-radius:14px;padding:1.1rem;cursor:pointer;position:relative;overflow:hidden;transition:filter 0.15s;border:none}
-.kpi-t-card:hover{filter:brightness(1.08)}
-.kpi-t-card.kpi-active{outline:3px solid #00AAFF}
-.kpi-slide-thumb{border:1px solid #B5D4F4;border-radius:8px;aspect-ratio:16/9;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:9px;color:#185FA5;text-align:center;padding:6px;cursor:pointer;transition:all 0.15s}
-.kpi-slide-thumb:hover{border-color:#1A3FBF}
+.kpi-t-card:hover{filter:brightness(1.1)}
+.kpi-t-card.kpi-active{outline:3px solid #00AAFF;outline-offset:2px}
+.kpi-slide-thumb{border:1px solid rgba(26,63,191,0.2);border-radius:8px;aspect-ratio:16/9;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:9px;color:#1A3FBF;text-align:center;padding:6px;cursor:pointer;transition:all 0.15s}
+.kpi-slide-thumb:hover{border-color:#1A3FBF;background:#E8F4FF}
 .kpi-slide-thumb.excluded{opacity:0.3;background:#f0f0f0;color:#888}
 .kpi-ppt-tag{font-size:11px;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px}
 .kpi-period-btn{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:white;font-size:12px;cursor:pointer;font-family:inherit;color:var(--navy)}
@@ -446,51 +446,68 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
             </div>
           </div>
 
-          <!-- UNIFIED FILTER PANEL -->
-          <div style="background:white;border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:1.25rem">
-            <div style="display:flex;align-items:flex-start;gap:1.25rem;flex-wrap:wrap">
-              <!-- Therapists -->
-              <div style="flex:1;min-width:140px">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px">Therapists</div>
-                <div id="kpi-therapist-chips" style="display:flex;flex-wrap:wrap;gap:5px"></div>
-              </div>
-              <div style="width:1px;background:var(--border);align-self:stretch"></div>
-              <!-- Months -->
-              <div style="flex:1;min-width:200px">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px">Months</div>
-                <div id="kpi-month-chips" style="display:flex;flex-wrap:wrap;gap:5px">
-                  <div class="kpi-chip kpi-chip-month on" data-m="0" onclick="kpiToggleChip(this,'m')">Jan</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="1" onclick="kpiToggleChip(this,'m')">Feb</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="2" onclick="kpiToggleChip(this,'m')">Mar</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="3" onclick="kpiToggleChip(this,'m')">Apr</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="4" onclick="kpiToggleChip(this,'m')">May</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="5" onclick="kpiToggleChip(this,'m')">Jun</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="6" onclick="kpiToggleChip(this,'m')">Jul</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="7" onclick="kpiToggleChip(this,'m')">Aug</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="8" onclick="kpiToggleChip(this,'m')">Sep</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="9" onclick="kpiToggleChip(this,'m')">Oct</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="10" onclick="kpiToggleChip(this,'m')">Nov</div>
-                  <div class="kpi-chip kpi-chip-month on" data-m="11" onclick="kpiToggleChip(this,'m')">Dec</div>
+          <!-- UNIFIED FILTER PANEL - DROPDOWN STYLE -->
+          <div style="background:#E8F4FF;border:1px solid rgba(26,63,191,0.15);border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.25rem">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <!-- Therapists dropdown -->
+              <div style="position:relative">
+                <button onclick="kpiToggleDropdown('therapists')" style="display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:10px;border:none;background:#1A3FBF;color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                  Therapists <span id="kpi-t-count" style="background:rgba(255,255,255,0.25);border-radius:20px;padding:1px 7px;font-size:10px">all</span>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div id="kpi-dd-therapists" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:white;border:1px solid rgba(26,63,191,0.2);border-radius:12px;padding:8px;z-index:500;min-width:180px;box-shadow:0 8px 24px rgba(10,22,40,0.12)">
+                  <div id="kpi-therapist-chips" style="display:flex;flex-direction:column;gap:4px"></div>
                 </div>
               </div>
-              <div style="width:1px;background:var(--border);align-self:stretch"></div>
-              <!-- Card metrics -->
-              <div style="flex:1;min-width:140px">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px">Show on card</div>
-                <div style="display:flex;flex-wrap:wrap;gap:5px">
-                  <div class="kpi-chip kpi-chip-metric on" data-k="score" onclick="kpiToggleChip(this,'k')">Score</div>
-                  <div class="kpi-chip kpi-chip-metric on" data-k="sessions" onclick="kpiToggleChip(this,'k')">Sessions</div>
-                  <div class="kpi-chip kpi-chip-metric on" data-k="stars" onclick="kpiToggleChip(this,'k')">Stars</div>
-                  <div class="kpi-chip kpi-chip-metric on" data-k="trend" onclick="kpiToggleChip(this,'k')">Trend</div>
-                  <div class="kpi-chip kpi-chip-metric on" data-k="chart" onclick="kpiToggleChip(this,'k')">Chart</div>
+
+              <!-- Months dropdown -->
+              <div style="position:relative">
+                <button onclick="kpiToggleDropdown('months')" style="display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:10px;border:none;background:#1A3FBF;color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Months <span id="kpi-m-count" style="background:rgba(255,255,255,0.25);border-radius:20px;padding:1px 7px;font-size:10px">12</span>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div id="kpi-dd-months" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:white;border:1px solid rgba(26,63,191,0.2);border-radius:12px;padding:8px;z-index:500;min-width:200px;box-shadow:0 8px 24px rgba(10,22,40,0.12)">
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+                    <div class="kpi-dd-item on" data-m="0" onclick="kpiToggleMonth(this)">Jan</div>
+                    <div class="kpi-dd-item on" data-m="1" onclick="kpiToggleMonth(this)">Feb</div>
+                    <div class="kpi-dd-item on" data-m="2" onclick="kpiToggleMonth(this)">Mar</div>
+                    <div class="kpi-dd-item on" data-m="3" onclick="kpiToggleMonth(this)">Apr</div>
+                    <div class="kpi-dd-item on" data-m="4" onclick="kpiToggleMonth(this)">May</div>
+                    <div class="kpi-dd-item on" data-m="5" onclick="kpiToggleMonth(this)">Jun</div>
+                    <div class="kpi-dd-item on" data-m="6" onclick="kpiToggleMonth(this)">Jul</div>
+                    <div class="kpi-dd-item on" data-m="7" onclick="kpiToggleMonth(this)">Aug</div>
+                    <div class="kpi-dd-item on" data-m="8" onclick="kpiToggleMonth(this)">Sep</div>
+                    <div class="kpi-dd-item on" data-m="9" onclick="kpiToggleMonth(this)">Oct</div>
+                    <div class="kpi-dd-item on" data-m="10" onclick="kpiToggleMonth(this)">Nov</div>
+                    <div class="kpi-dd-item on" data-m="11" onclick="kpiToggleMonth(this)">Dec</div>
+                  </div>
+                  <div style="display:flex;gap:6px;margin-top:8px;border-top:1px solid rgba(26,63,191,0.1);padding-top:8px">
+                    <button onclick="kpiSelectAll()" style="flex:1;padding:4px;border-radius:6px;border:1px solid rgba(26,63,191,0.2);background:#E8F4FF;color:#1A3FBF;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">All</button>
+                    <button onclick="kpiClearMonths()" style="flex:1;padding:4px;border-radius:6px;border:1px solid rgba(26,63,191,0.2);background:#E8F4FF;color:#1A3FBF;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">Clear</button>
+                  </div>
                 </div>
               </div>
-              <!-- Actions -->
-              <div style="display:flex;flex-direction:column;gap:5px;justify-content:center">
-                <button onclick="kpiSelectAll()" style="padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:white;font-size:11px;cursor:pointer;font-family:inherit;color:var(--navy)">Select all</button>
-                <button onclick="kpiClearMonths()" style="padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:white;font-size:11px;cursor:pointer;font-family:inherit;color:var(--navy)">Clear months</button>
-                <div id="kpi-filter-note" style="font-size:10px;color:var(--muted);text-align:center"></div>
+
+              <!-- Show on card dropdown -->
+              <div style="position:relative">
+                <button onclick="kpiToggleDropdown('metrics')" style="display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:10px;border:none;background:#1A3FBF;color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                  Show on card
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div id="kpi-dd-metrics" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:white;border:1px solid rgba(26,63,191,0.2);border-radius:12px;padding:8px;z-index:500;min-width:160px;box-shadow:0 8px 24px rgba(10,22,40,0.12)">
+                  <div class="kpi-dd-item on" data-k="score" onclick="kpiToggleMetric(this)">KPI score</div>
+                  <div class="kpi-dd-item on" data-k="sessions" onclick="kpiToggleMetric(this)">Sessions</div>
+                  <div class="kpi-dd-item on" data-k="stars" onclick="kpiToggleMetric(this)">Avg stars</div>
+                  <div class="kpi-dd-item on" data-k="trend" onclick="kpiToggleMetric(this)">Trend arrow</div>
+                  <div class="kpi-dd-item on" data-k="chart" onclick="kpiToggleMetric(this)">Mini chart</div>
+                </div>
               </div>
+
+              <!-- Filter note -->
+              <div id="kpi-filter-note" style="font-size:11px;color:#1A3FBF;font-weight:600;margin-left:auto;background:rgba(26,63,191,0.1);padding:5px 12px;border-radius:20px"></div>
             </div>
           </div>
 
@@ -1398,19 +1415,15 @@ async function loadKPI(){
   if(tchips && tchips.children.length===0){
     therapistNames.forEach(function(name){
       var chip = document.createElement('div');
-      chip.className = 'kpi-chip on';
-      chip.style.background = '#0A1628';
-      chip.style.color = 'white';
-      chip.style.borderColor = '#0A1628';
-      chip.textContent = name.split(' ')[0];
+      chip.className = 'kpi-dd-item on';
+      chip.textContent = name;
       chip.dataset.name = name;
       chip.onclick = function(){
         this.classList.toggle('on');
-        var isOn = this.classList.contains('on');
-        this.style.background = isOn?'#0A1628':'white';
-        this.style.color = isOn?'white':'var(--muted)';
-        this.style.borderColor = isOn?'#0A1628':'var(--border)';
-        window._kpiSelTherapists[this.dataset.name] = isOn;
+        window._kpiSelTherapists[this.dataset.name] = this.classList.contains('on');
+        var selCount = Object.values(window._kpiSelTherapists).filter(Boolean).length;
+        var tcount = document.getElementById('kpi-t-count');
+        if(tcount) tcount.textContent = selCount===Object.keys(window._kpiSelTherapists).length?'all':selCount;
         kpiRenderCards();
       };
       tchips.appendChild(chip);
@@ -1436,9 +1449,9 @@ function kpiUpdateClinicStats(allFeedback, therapistNames){
   // Rich color palette for stat cards
   var statCards = [
     {label:'Clinic satisfaction',val:clinicScore+'%',sub:totalRatings+' ratings total',bg:'#0A1628',valColor:'#00AAFF',subColor:'rgba(255,255,255,0.5)'},
-    {label:'Sessions rated',val:totalRatings.toString(),sub:therapistNames.length+' active therapists',bg:'#E8F4FF',valColor:'#0C447C',subColor:'#378ADD'},
-    {label:'Excellent performers',val:excellent.toString(),sub:'85%+ threshold',bg:'#E1F5EE',valColor:'#085041',subColor:'#1D9E75'},
-    {label:'Needs review',val:needsReview.toString(),sub:'Below 70%',bg:needsReview>0?'#FCEBEB':'#F5F9FF',valColor:needsReview>0?'#A32D2D':'#5A6A7A',subColor:needsReview>0?'#E24B4A':'#8899AA'},
+    {label:'Sessions rated',val:totalRatings.toString(),sub:therapistNames.length+' active therapists',bg:'#E8F4FF',valColor:'#1A3FBF',subColor:'#1A3FBF'},
+    {label:'Excellent performers',val:excellent.toString(),sub:'85%+ threshold',bg:'#E8F4FF',valColor:'#0A1628',subColor:'#1A3FBF'},
+    {label:'Needs review',val:needsReview.toString(),sub:'Below 70%',bg:needsReview>0?'#0A1628':'#E8F4FF',valColor:needsReview>0?'#00AAFF':'#1A3FBF',subColor:needsReview>0?'rgba(255,255,255,0.5)':'#1A3FBF'},
   ];
 
   document.getElementById('kpi-clinic-stats').innerHTML = statCards.map(function(s){
@@ -1450,14 +1463,14 @@ function kpiUpdateClinicStats(allFeedback, therapistNames){
   }).join('');
 }
 
-// Card palettes using full WhiteRock + sky blue palette
+// Card palettes using WhiteRock brand colors
 var kpiCardPalettes = [
-  {bg:'#0A1628',avBg:'rgba(0,170,255,0.2)',avColor:'#00AAFF',scoreColor:'#00AAFF',mutedColor:'rgba(255,255,255,0.55)'},
-  {bg:'#085041',avBg:'rgba(255,255,255,0.15)',avColor:'#9FE1CB',scoreColor:'#9FE1CB',mutedColor:'rgba(255,255,255,0.55)'},
-  {bg:'#0C447C',avBg:'rgba(0,170,255,0.2)',avColor:'#85B7EB',scoreColor:'#85B7EB',mutedColor:'rgba(255,255,255,0.55)'},
-  {bg:'#3C3489',avBg:'rgba(255,255,255,0.15)',avColor:'#AFA9EC',scoreColor:'#AFA9EC',mutedColor:'rgba(255,255,255,0.55)'},
-  {bg:'#712B13',avBg:'rgba(255,200,150,0.2)',avColor:'#F5C4B3',scoreColor:'#F5C4B3',mutedColor:'rgba(255,255,255,0.55)'},
-  {bg:'#185FA5',avBg:'rgba(180,220,255,0.2)',avColor:'#B5D4F4',scoreColor:'#B5D4F4',mutedColor:'rgba(255,255,255,0.55)'},
+  {bg:'#0A1628',avBg:'rgba(0,170,255,0.2)',avColor:'#00AAFF',scoreColor:'#00AAFF',mutedColor:'rgba(255,255,255,0.5)'},
+  {bg:'#1A3FBF',avBg:'rgba(0,212,255,0.2)',avColor:'#00D4FF',scoreColor:'#00D4FF',mutedColor:'rgba(255,255,255,0.5)'},
+  {bg:'#0A1628',avBg:'rgba(26,63,191,0.4)',avColor:'#8899FF',scoreColor:'#8899FF',mutedColor:'rgba(255,255,255,0.5)'},
+  {bg:'#1A3FBF',avBg:'rgba(0,170,255,0.15)',avColor:'#00AAFF',scoreColor:'#00AAFF',mutedColor:'rgba(255,255,255,0.5)'},
+  {bg:'#0A1628',avBg:'rgba(0,212,255,0.15)',avColor:'#00D4FF',scoreColor:'#00D4FF',mutedColor:'rgba(255,255,255,0.5)'},
+  {bg:'#1A3FBF',avBg:'rgba(255,255,255,0.15)',avColor:'white',scoreColor:'white',mutedColor:'rgba(255,255,255,0.5)'},
 ];
 
 function kpiRenderCards(){
@@ -1564,40 +1577,63 @@ function kpiRenderCards(){
   }
 }
 
-function kpiToggleChip(el, type){
-  el.classList.toggle('on');
-  if(type==='m'){
-    var idx = parseInt(el.dataset.m);
-    if(!window._kpiSelMonths) window._kpiSelMonths = Array(12).fill(true);
-    window._kpiSelMonths[idx] = el.classList.contains('on');
-    el.style.background = el.classList.contains('on')?'#1A3FBF':'white';
-    el.style.color = el.classList.contains('on')?'white':'var(--muted)';
-    el.style.borderColor = el.classList.contains('on')?'#1A3FBF':'var(--border)';
-  } else if(type==='k'){
-    if(!window._kpiMetrics) window._kpiMetrics = {score:true,sessions:true,stars:true,trend:true,chart:true};
-    window._kpiMetrics[el.dataset.k] = el.classList.contains('on');
-    el.style.background = el.classList.contains('on')?'#085041':'white';
-    el.style.color = el.classList.contains('on')?'white':'var(--muted)';
-    el.style.borderColor = el.classList.contains('on')?'#085041':'var(--border)';
+function kpiToggleDropdown(name){
+  var ids = ['therapists','months','metrics'];
+  ids.forEach(function(id){
+    var dd = document.getElementById('kpi-dd-'+id);
+    if(dd) dd.style.display = (id===name && dd.style.display==='none')?'block':'none';
+  });
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(e){
+  if(!e.target.closest || !e.target.closest('[onclick*="kpiToggleDropdown"]')){
+    ['therapists','months','metrics'].forEach(function(id){
+      var dd = document.getElementById('kpi-dd-'+id);
+      if(dd && !e.target.closest('#kpi-dd-'+id)) dd.style.display='none';
+    });
   }
+});
+
+function kpiToggleMonth(el){
+  el.classList.toggle('on');
+  var idx = parseInt(el.dataset.m);
+  if(!window._kpiSelMonths) window._kpiSelMonths = Array(12).fill(true);
+  window._kpiSelMonths[idx] = el.classList.contains('on');
+  kpiUpdateMonthCount();
   kpiRenderCards();
+}
+
+function kpiToggleMetric(el){
+  el.classList.toggle('on');
+  if(!window._kpiMetrics) window._kpiMetrics = {score:true,sessions:true,stars:true,trend:true,chart:true};
+  window._kpiMetrics[el.dataset.k] = el.classList.contains('on');
+  kpiRenderCards();
+}
+
+function kpiUpdateMonthCount(){
+  var selM = window._kpiSelMonths||Array(12).fill(true);
+  var count = selM.filter(Boolean).length;
+  var el = document.getElementById('kpi-m-count');
+  if(el) el.textContent = count===12?'all':count;
+}
+
+function kpiToggleChip(el, type){
+  // Legacy fallback
+  kpiToggleMonth(el);
 }
 
 function kpiSelectAll(){
   window._kpiSelMonths = Array(12).fill(true);
-  document.querySelectorAll('.kpi-chip-month').forEach(function(c){
-    c.classList.add('on');
-    c.style.background='#1A3FBF'; c.style.color='white'; c.style.borderColor='#1A3FBF';
-  });
+  document.querySelectorAll('.kpi-dd-item[data-m]').forEach(function(c){ c.classList.add('on'); });
+  kpiUpdateMonthCount();
   kpiRenderCards();
 }
 
 function kpiClearMonths(){
   window._kpiSelMonths = Array(12).fill(false);
-  document.querySelectorAll('.kpi-chip-month').forEach(function(c){
-    c.classList.remove('on');
-    c.style.background='white'; c.style.color='var(--muted)'; c.style.borderColor='var(--border)';
-  });
+  document.querySelectorAll('.kpi-dd-item[data-m]').forEach(function(c){ c.classList.remove('on'); });
+  kpiUpdateMonthCount();
   kpiRenderCards();
 }
 
