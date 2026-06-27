@@ -106,11 +106,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 }
 .mob-menu-btn svg{width:22px;height:22px;stroke:white;fill:none;stroke-width:2}
 @media(max-width:768px){.mob-menu-btn{display:flex;align-items:center}}
-.sidebar-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);
-  z-index:9998;top:56px;
-}
-.sidebar-overlay.show{display:block}
+
 .nav-section{padding:0.5rem 1rem 0.25rem;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
 .nav-item{
   display:flex;align-items:center;gap:0.6rem;
@@ -241,46 +237,41 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 @media(max-width:900px){.metrics-grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.sidebar{width:160px}}
 @media(max-width:600px){.sidebar{display:none}.metrics-grid{grid-template-columns:1fr 1fr}}
 
-/* ── MOBILE BOTTOM NAV ── */
-#mobile-bottom-nav{
-  display:none;
-  position:fixed;bottom:0;left:0;right:0;
-  background:white;border-top:1px solid var(--border);
-  z-index:9999;padding:0.5rem 0;
-  box-shadow:0 -4px 20px rgba(0,0,0,0.1);
+/* ── MOBILE HAMBURGER DRAWER ── */
+.mob-drawer{
+  position:fixed;top:0;left:0;bottom:0;width:280px;
+  background:white;z-index:99999;
+  transform:translateX(-100%);transition:transform 0.3s ease;
+  box-shadow:4px 0 30px rgba(0,0,0,0.2);
+  overflow-y:auto;padding-top:56px;
 }
-.mob-nav-items{
-  display:flex;justify-content:space-around;align-items:center;
+.mob-drawer.open{transform:translateX(0)}
+.mob-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.5);z-index:99998;
 }
-.mob-nav-item{
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-  padding:0.3rem 0.5rem;cursor:pointer;border:none;background:none;
-  color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:0.6rem;font-weight:600;min-width:50px;
+.mob-overlay.show{display:block}
+.mob-drawer-header{
+  padding:1.25rem 1.25rem 0.5rem;
+  border-bottom:1px solid var(--border);margin-bottom:0.5rem;
 }
-.mob-nav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.mob-nav-item.active{color:var(--royal)}
-.mob-nav-more{position:relative}
-.mob-nav-more-menu{
-  display:none;position:fixed;bottom:70px;right:0;left:0;
-  background:white;border-top:1px solid var(--border);
-  padding:0.5rem 0;z-index:9999;
-  box-shadow:0 -4px 20px rgba(0,0,0,0.15);
-}
-.mob-nav-more-menu.open{display:block}
-.mob-nav-more-item{
+.mob-drawer-user{font-size:0.88rem;font-weight:700;color:var(--navy)}
+.mob-drawer-role{font-size:0.72rem;color:var(--muted)}
+.mob-drawer-item{
   display:flex;align-items:center;gap:0.75rem;
-  padding:0.85rem 1.5rem;font-size:0.9rem;
+  padding:0.85rem 1.25rem;font-size:0.9rem;
   color:var(--navy);cursor:pointer;border:none;background:none;
   width:100%;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;
+  text-align:left;border-left:3px solid transparent;
 }
-.mob-nav-more-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.mob-nav-more-item:hover{background:var(--offwhite)}
+.mob-drawer-item:hover{background:var(--offwhite);color:var(--royal)}
+.mob-drawer-item.active{background:var(--sky);color:var(--royal);border-left-color:var(--cyan);font-weight:600}
+.mob-drawer-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.mob-drawer-divider{height:1px;background:var(--border);margin:0.5rem 0}
+.mob-drawer-signout{color:#EF4444!important}
 @media(max-width:768px){
-  #mobile-bottom-nav{display:block!important}
   .sidebar{display:none!important}
-  .mob-menu-btn{display:none!important}
-  .main-content{padding:1rem;padding-bottom:90px}
+  .main-content{padding:1rem}
   .metrics-grid{grid-template-columns:1fr 1fr!important}
   .two-col{grid-template-columns:1fr!important}
   .data-table{font-size:0.72rem}
@@ -345,7 +336,6 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
       </div>
     </div>
 
-    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
     <div class="app-body">
       <div class="sidebar">
         <div class="nav-section">Main</div>
@@ -436,53 +426,53 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
     </div>
   </div>
 
-  <!-- MOBILE BOTTOM NAV -->
-  <div id="mobile-bottom-nav">
-    <!-- More menu -->
-    <div class="mob-nav-more-menu" id="mob-more-menu">
-      <button class="mob-nav-more-item" onclick="mobNav('sessions')">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Sessions
-      </button>
-      <button class="mob-nav-more-item" onclick="mobNav('kpi')">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        KPI
-      </button>
-      <button class="mob-nav-more-item" id="mob-more-allocations" onclick="mobNav('allocations')">
-        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Allocations
-      </button>
-      <button class="mob-nav-more-item" id="mob-more-periodic" onclick="mobNav('periodic')">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Periodic review
-      </button>
-      <button class="mob-nav-more-item" id="mob-more-approval" onclick="mobNav('approval')">
-        <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Approval queue
-      </button>
+  <!-- REASSIGN MODAL -->
+  <div id="reassign-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;align-items:center;justify-content:center;padding:1rem">
+    <div style="background:white;border-radius:16px;padding:1.5rem;width:100%;max-width:400px">
+      <h3 style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem">Reassign Patient</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem" id="reassign-patient-name"></p>
+      <select id="reassign-select" style="width:100%;padding:0.65rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;margin-bottom:0.75rem;outline:none">
+        <option value="">Select new therapist…</option>
+      </select>
+      <div style="display:flex;gap:0.5rem">
+        <button onclick="confirmReassign()" class="btn-primary" style="flex:1">Confirm Reassign</button>
+        <button onclick="closeReassign()" class="btn-sm" style="flex:1">Cancel</button>
+      </div>
     </div>
-    <div class="mob-nav-items">
-      <button class="mob-nav-item active" id="mob-nav-overview" onclick="mobNav('overview')">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Overview
-      </button>
-      <button class="mob-nav-item" id="mob-nav-patients" onclick="mobNav('patients')">
-        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Patients
-      </button>
-      <button class="mob-nav-item" id="mob-nav-sessions" onclick="mobNav('sessions')">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Sessions
-      </button>
-      <button class="mob-nav-item" id="mob-nav-kpi" onclick="mobNav('kpi')">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        KPI
-      </button>
-      <button class="mob-nav-item" id="mob-nav-more" onclick="toggleMoreMenu()">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-        More
-      </button>
+  </div>
+
+  <!-- MOBILE DRAWER -->
+  <div class="mob-overlay" id="mob-overlay" onclick="closeDrawer()"></div>
+  <div class="mob-drawer" id="mob-drawer">
+    <div class="mob-drawer-header">
+      <div class="mob-drawer-user" id="mob-drawer-user">Staff</div>
+      <div class="mob-drawer-role" id="mob-drawer-role">WhiteRock Wellness</div>
     </div>
+    <button class="mob-drawer-item active" id="mob-item-overview" onclick="mobNav('overview')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Overview
+    </button>
+    <button class="mob-drawer-item" id="mob-item-patients" onclick="mobNav('patients')">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Patients
+    </button>
+    <button class="mob-drawer-item" id="mob-item-allocations" onclick="mobNav('allocations')">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Allocations
+    </button>
+    <button class="mob-drawer-item" id="mob-item-sessions" onclick="mobNav('sessions')">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Sessions
+    </button>
+    <button class="mob-drawer-item" id="mob-item-kpi" onclick="mobNav('kpi')">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>KPI
+    </button>
+    <button class="mob-drawer-item" id="mob-item-periodic" onclick="mobNav('periodic')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Periodic Review
+    </button>
+    <button class="mob-drawer-item" id="mob-item-approval" onclick="mobNav('approval')">
+      <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Approval Queue
+    </button>
+    <div class="mob-drawer-divider"></div>
+    <button class="mob-drawer-item mob-drawer-signout" onclick="signOut()">
+      <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign out
+    </button>
   </div>
 </div>
 
@@ -622,32 +612,37 @@ function toggleMoreMenu(){
 }
 
 function mobNav(name){
-  // Close more menu
-  document.getElementById('mob-more-menu').classList.remove('open');
-  // Update bottom nav active state
-  document.querySelectorAll('.mob-nav-item').forEach(function(b){ b.classList.remove('active'); });
-  var btn = document.getElementById('mob-nav-'+name);
+  closeDrawer();
+  // Update drawer active state
+  document.querySelectorAll('.mob-drawer-item').forEach(function(b){ b.classList.remove('active'); });
+  var btn = document.getElementById('mob-item-'+name);
   if(btn) btn.classList.add('active');
-  else document.getElementById('mob-nav-more').classList.add('active');
-  // Show the page directly
   showPage(name, null);
 }
 
 // Hide management-only items in mobile more menu for non-management
 function updateMobileNav(){
   const isLead = currentUser && (currentUser.role==='Lead'||currentUser.role==='Admin');
-  const items = ['mob-more-allocations','mob-more-periodic','mob-more-approval'];
-  items.forEach(id=>{
-    const el = document.getElementById(id);
+  // Set drawer user info
+  var du = document.getElementById('mob-drawer-user');
+  var dr = document.getElementById('mob-drawer-role');
+  if(du) du.textContent = currentUser.name;
+  if(dr) dr.textContent = currentUser.role + ' — WhiteRock Wellness';
+  // Hide management-only items for non-management
+  var mgmtItems = ['mob-item-allocations','mob-item-periodic','mob-item-approval'];
+  mgmtItems.forEach(function(id){
+    var el = document.getElementById(id);
     if(el) el.style.display = isLead ? 'flex' : 'none';
   });
 }
 
 function toggleSidebar(){
-  const sidebar = document.querySelector('.sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  sidebar.classList.toggle('open');
-  overlay.classList.toggle('show');
+  document.getElementById('mob-drawer').classList.toggle('open');
+  document.getElementById('mob-overlay').classList.toggle('show');
+}
+function closeDrawer(){
+  document.getElementById('mob-drawer').classList.remove('open');
+  document.getElementById('mob-overlay').classList.remove('show');
 }
 
 function signOut(){
@@ -850,10 +845,12 @@ function renderPatientsTable(patients){
       <td>${getStatusBadge(p.status)}</td><td style="color:var(--muted);font-size:0.78rem">${p.date}</td>
       ${isLead ? `<td>
         ${p.status==='Active' ? `
+          <button onclick="showReassign('${p.id}','${p.name}')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid var(--royal);color:var(--royal);background:white;cursor:pointer;margin-right:3px">Reassign</button>
           <button onclick="updatePatientStatus('${p.id}','${p.name}','Closed')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #EF4444;color:#EF4444;background:white;cursor:pointer;margin-right:3px">Close</button>
           <button onclick="updatePatientStatus('${p.id}','${p.name}','Discharged')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #6B7280;color:#6B7280;background:white;cursor:pointer">Discharge</button>
         ` : ''}
         ${p.status==='Closed' ? `
+          <button onclick="showReassign('${p.id}','${p.name}')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid var(--royal);color:var(--royal);background:white;cursor:pointer;margin-right:3px">Reassign</button>
           <button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer">Reopen</button>
         ` : ''}
         ${p.status==='Pending Allocation'||p.status==='' ? `<span style="font-size:0.7rem;color:var(--muted)">Not allocated</span>` : ''}
@@ -917,6 +914,66 @@ async function fetchFeedback(){
   } catch(e){
     console.log('Feedback fetch error:', e);
     return [];
+  }
+}
+
+let reassignPatientId = '';
+let reassignPatientName = '';
+
+async function showReassign(patientId, patientName){
+  reassignPatientId = patientId;
+  reassignPatientName = patientName;
+  document.getElementById('reassign-patient-name').textContent = 'Reassigning: ' + patientName;
+  
+  // Populate dropdown with tenant users
+  const select = document.getElementById('reassign-select');
+  select.innerHTML = '<option value="">Loading therapists...</option>';
+  
+  const users = await fetchTenantUsers().catch(()=>[]);
+  if(users.length > 0){
+    select.innerHTML = '<option value="">Select new therapist…</option>' + 
+      users.map(u=>'<option value="'+u.displayName+'">'+u.displayName+(u.jobTitle?' — '+u.jobTitle:'')+'</option>').join('');
+  } else {
+    select.innerHTML = '<option value="">Select new therapist…</option>' +
+      getMockStaff().map(s=>'<option value="'+s.name+'">'+s.name+'</option>').join('');
+  }
+  
+  const modal = document.getElementById('reassign-modal');
+  modal.style.display = 'flex';
+}
+
+function closeReassign(){
+  document.getElementById('reassign-modal').style.display = 'none';
+  reassignPatientId = '';
+  reassignPatientName = '';
+}
+
+async function confirmReassign(){
+  const newTherapist = document.getElementById('reassign-select').value;
+  if(!newTherapist){ alert('Please select a therapist.'); return; }
+  
+  try {
+    const res = await fetch(UPDATE_PATIENT_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        patientId: reassignPatientId,
+        patientName: reassignPatientName,
+        therapist: newTherapist,
+        status: 'Active',
+        note: 'Reassigned by management'
+      })
+    });
+    const data = await res.json();
+    if(data.success){
+      closeReassign();
+      alert('✓ '+reassignPatientName+' has been reassigned to '+newTherapist);
+      loadPatients().catch(e=>console.log(e));
+    } else {
+      alert('Something went wrong. Please try again.');
+    }
+  } catch(e){
+    alert('Connection error. Please try again.');
   }
 }
 
