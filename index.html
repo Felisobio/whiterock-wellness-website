@@ -1144,7 +1144,7 @@ async function showConsentPrompt(){
       document.getElementById('returning-confirmed').style.display='block';
       // Update their record with the new booking
       const bookedName=returnedName||_bookingPhone||'Returning Patient';
-      sendToMicrosoftLists({PatientName:bookedName,Phone:_bookingPhone,Email:_bookingEmail,Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',Concern:'',PatientType:'Returning Patient',Source:'Silent Duplicate Check — Patient said First Visit',SubmittedAt:new Date().toISOString()}).catch(e=>console.log(e));
+      sendToMicrosoftLists({PatientName:bookedName,Phone:_bookingPhone,Email:_bookingEmail,Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',Concern:'',Status:'Pending Allocation',PatientType:'Returning Patient',Source:'Silent Duplicate Check — Patient said First Visit',SubmittedAt:new Date().toISOString()}).catch(e=>console.log(e));
       setTimeout(()=>fireBookingWhatsApp(),1500);
     }
     // If not found — consent form stays visible, patient proceeds normally
@@ -1210,7 +1210,7 @@ async function showReturningPrompt(){
       :_bookingPhone
       ?'We searched with your phone number from your booking — we found your record straight away.'
       :'We searched with your email address from your booking — we found you immediately.';
-    sendToMicrosoftLists({PatientName:bookedName,Phone:_bookingPhone,Email:_bookingEmail,Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',Concern:'',PatientType:'Returning Patient',Source:'Silent Check — Yes Button ('+foundVia+')',SubmittedAt:new Date().toISOString()}).catch(e=>console.log(e));
+    sendToMicrosoftLists({PatientName:bookedName,Phone:_bookingPhone,Email:_bookingEmail,Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',Concern:'',Status:'Pending Allocation',PatientType:'Returning Patient',Source:'Silent Check — Yes Button ('+foundVia+')',SubmittedAt:new Date().toISOString()}).catch(e=>console.log(e));
     // Show confirmed with contextual message
     prompt.style.display='none';
     const confirmed=document.getElementById('returning-confirmed');
@@ -1281,7 +1281,7 @@ async function confirmReturning(){
     if(found){
       isReturningPatient=true;
       const bookedName=((document.getElementById('ff').value||'')+' '+(document.getElementById('fl').value||'')).trim()||returnedName||'Returning Patient';
-      sendToMicrosoftLists({PatientName:bookedName,Phone:document.getElementById('fp').value||val,Email:document.getElementById('fe').value||'',Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',Concern:document.getElementById('fs').value||'Not specified',PreferredDate:document.getElementById('fd').value||'',PreferredTime:document.getElementById('ft').value||'Any available time',Notes:document.getElementById('fn').value||'',PatientType:'Returning Patient',Source:'Returning Patient Lookup',SubmittedAt:new Date().toISOString()}).catch(e=>console.log(e));
+      sendToMicrosoftLists({PatientName:bookedName,Phone:document.getElementById('fp').value||val,Email:document.getElementById('fe').value||'',Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',Concern:document.getElementById('fs').value||'Not specified',PreferredDate:document.getElementById('fd').value||'',PreferredTime:document.getElementById('ft').value||'Any available time',Notes:document.getElementById('fn').value||'',Status:'Pending Allocation',PatientType:'Returning Patient',Source:'Returning Patient Lookup',SubmittedAt:new Date().toISOString()}).catch(e=>console.log(e));
       document.getElementById('returning-prompt').style.display='none';
       document.getElementById('returning-confirmed').style.display='block';
       setTimeout(()=>fireBookingWhatsApp(),1500);
