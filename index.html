@@ -238,7 +238,7 @@ section{padding:100px 5%}
 .doc-bio{color:var(--muted);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem}
 .doc-highlights{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:2rem}
 .doc-hl{display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--text)}
-.doc-hl::before{content:'\u2713';width:24px;height:24px;background:var(--sky);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:var(--royal);font-weight:800;flex-shrink:0}
+.doc-hl::before{content:'✓';width:24px;height:24px;background:var(--sky);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:var(--royal);font-weight:800;flex-shrink:0}
 #testimonials{background:var(--offwhite)}
 .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
 .testi-card{background:white;border-radius:16px;padding:2rem;border:1px solid var(--border);position:relative;transition:all 0.2s}
@@ -731,21 +731,13 @@ footer{background:#030A18;padding:3rem 5% 2rem}
 <!-- TESTIMONIALS -->
 <section id="testimonials">
 <div class="section-max">
-  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:3.5rem">
+  <div style="margin-bottom:3.5rem">
     <div>
       <div class="label">Patient Reviews</div>
       <h2 class="section-h" style="margin-bottom:0.5rem">Real Nigerians.<br>Real results.</h2>
       <p style="color:var(--muted);font-size:1rem;max-width:480px;line-height:1.8">Don't take our word for it &mdash; hear from the people whose lives we've changed.</p>
     </div>
     <!-- LIVE RATING BADGE -->
-    <div id="rating-badge" style="display:none;background:white;border:1px solid var(--border);border-radius:16px;padding:1.1rem 1.5rem;text-align:center;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
-      <div id="rating-avg" style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:var(--navy);line-height:1">5.0</div>
-      <div id="rating-stars-display" style="color:#FFB800;font-size:1.1rem;letter-spacing:2px;margin:4px 0">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-      <div id="rating-count" style="font-size:0.72rem;color:var(--muted);font-weight:600">from verified patients</div>
-      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
-        <span style="font-size:0.7rem;color:var(--cyan);font-weight:700">&#10003; WhiteRock Verified</span>
-      </div>
-    </div>
   </div>
 
   <!-- LIVE REVIEWS GRID — populated by JS, falls back to hardcoded -->
@@ -782,13 +774,6 @@ async function loadLiveReviews(){
       .filter(f=>parseFloat(f.Rating)>=4 && f.PublishToWebsite!==false && f.PublishToWebsite!=='false')
       .sort((a,b)=>new Date(b.SessionDate||b.SubmittedAt||0)-new Date(a.SessionDate||a.SubmittedAt||0));
     if(!allLiveReviews.length) return;
-    // Calculate live average
-    const avg=(data.reduce((s,f)=>s+parseFloat(f.Rating||0),0)/data.length).toFixed(1);
-    document.getElementById('rating-avg').textContent=avg;
-    document.getElementById('rating-count').textContent='from '+data.length+' verified patient'+(data.length!==1?'s':'');
-    const fullStars=Math.round(parseFloat(avg));
-    document.getElementById('rating-stars-display').innerHTML='&#9733;'.repeat(fullStars)+'<span style="color:#E2EAF0">'+'&#9733;'.repeat(5-fullStars)+'</span>';
-    document.getElementById('rating-badge').style.display='block';
     renderReviews();
   }catch(e){ /* silently fall back to hardcoded */ }
 }
