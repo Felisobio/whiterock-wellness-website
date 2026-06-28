@@ -3,227 +3,381 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rate Your Session — WhiteRock Wellness</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Rate Your Session &mdash; WhiteRock Wellness</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#0A1628;--royal:#1A3FBF;--cyan:#00AAFF;--sky:#E8F4FF;--offwhite:#F5F9FF;--muted:#5A6A7A;--border:rgba(26,63,191,0.12);--warning:#F59E0B}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145deg,#030A18,#0A1628,#0D2050);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
-.card{background:white;border-radius:24px;padding:2.5rem;width:100%;max-width:480px;box-shadow:0 40px 80px rgba(0,0,0,0.4);text-align:center}
-.logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1.75rem}
-.logo-text{font-size:1.1rem;font-weight:800;color:var(--navy)}
-.logo-text span{color:var(--cyan)}
-.therapist-badge{background:var(--sky);border-radius:12px;padding:0.85rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.75rem}
-.therapist-avatar{width:42px;height:42px;border-radius:50%;background:var(--royal);color:white;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;flex-shrink:0}
-.therapist-info{text-align:left}
-.therapist-name{font-size:0.9rem;font-weight:700;color:var(--navy)}
-.therapist-label{font-size:0.72rem;color:var(--muted)}
-h2{font-size:1.3rem;font-weight:700;color:var(--navy);margin-bottom:0.4rem}
-.subtitle{font-size:0.85rem;color:var(--muted);margin-bottom:2rem;line-height:1.6}
+:root{--navy:#0A1628;--royal:#1A3FBF;--cyan:#00AAFF;--sky:#E8F4FF;--white:#FFFFFF;--offwhite:#F5F9FF;--text:#0A1628;--muted:#5A6A7A;--border:rgba(26,63,191,0.12)}
+body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--offwhite);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:2rem 1rem}
+.logo-bar{display:flex;align-items:center;gap:10px;margin-bottom:2.5rem;text-decoration:none}
+.logo-text{font-size:1.15rem;font-weight:800;color:var(--navy)}.logo-text span{color:var(--cyan)}
+.card{background:white;border-radius:24px;padding:2.5rem 2rem;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(10,22,40,0.08);border:1px solid var(--border)}
+.step{display:none}.step.active{display:block}
 
-/* Stars */
-.stars-wrap{display:flex;justify-content:center;gap:0.5rem;margin-bottom:0.75rem}
-.star{font-size:2.8rem;cursor:pointer;transition:transform 0.15s;color:#E2EAF0;line-height:1}
-.star:hover,.star.active{color:var(--warning);transform:scale(1.15)}
-.star-label{font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;min-height:1.2rem;font-weight:500}
+/* STEP 1 — STAR RATING */
+.rating-header{text-align:center;margin-bottom:2rem}
+.rating-header .emoji{font-size:3rem;display:block;margin-bottom:1rem}
+.rating-header h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:0.4rem}
+.rating-header p{color:var(--muted);font-size:0.9rem;line-height:1.6}
+.patient-info{background:var(--sky);border-radius:10px;padding:0.75rem 1rem;margin-bottom:1.75rem;font-size:0.82rem;color:var(--royal);font-weight:600;text-align:center}
+.stars-row{display:flex;justify-content:center;gap:0.75rem;margin-bottom:1.5rem}
+.star-btn{background:none;border:none;cursor:pointer;font-size:3rem;line-height:1;color:#E2EAF0;transition:all 0.15s;padding:0.25rem}
+.star-btn:hover,.star-btn.lit{color:#FFB800;transform:scale(1.15)}
+.star-btn:active{transform:scale(0.95)}
+.rating-label{text-align:center;font-size:0.88rem;font-weight:600;color:var(--muted);min-height:1.5rem;margin-bottom:1.5rem;transition:all 0.2s}
 
-/* Comment */
-.comment-wrap{margin-bottom:1.5rem;text-align:left}
-.comment-wrap label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.4rem}
-.comment-wrap textarea{width:100%;padding:0.75rem;border:1.5px solid #E2EAF0;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;resize:none;outline:none;min-height:90px;transition:border-color 0.2s}
-.comment-wrap textarea:focus{border-color:var(--cyan)}
+/* STEP 2a — POSITIVE (4-5 stars) */
+.positive-header{text-align:center;margin-bottom:1.5rem}
+.positive-header .big-emoji{font-size:3.5rem;display:block;margin-bottom:0.75rem}
+.positive-header h2{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:0.4rem}
+.positive-header p{color:var(--muted);font-size:0.88rem;line-height:1.65}
+.comment-area{width:100%;padding:0.85rem 1rem;border:1.5px solid #E2EAF0;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;outline:none;resize:vertical;min-height:100px;margin-bottom:1.25rem;color:var(--text);transition:border-color 0.2s}
+.comment-area:focus{border-color:var(--cyan)}
+.google-cta{background:linear-gradient(135deg,#0A1628,#1A3FBF);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1rem}
+.google-cta-icon{width:44px;height:44px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.google-cta-text h4{color:white;font-size:0.9rem;font-weight:700;margin-bottom:0.2rem}
+.google-cta-text p{color:rgba(255,255,255,0.6);font-size:0.75rem;line-height:1.5}
+.btn-primary{width:100%;background:var(--royal);color:white;border:none;padding:0.95rem;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.2s;margin-bottom:0.75rem}
+.btn-primary:hover{background:var(--cyan);color:var(--navy)}
+.btn-primary.google{background:white;color:var(--navy);border:1.5px solid #E2EAF0;display:flex;align-items:center;justify-content:center;gap:0.6rem}
+.btn-primary.google:hover{border-color:var(--royal);background:var(--sky)}
+.btn-skip{width:100%;background:none;border:none;color:var(--muted);font-size:0.82rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;padding:0.5rem;text-decoration:underline}
+.btn-skip:hover{color:var(--navy)}
 
-.submit-btn{width:100%;background:var(--royal);color:white;border:none;padding:1rem;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.2s;margin-bottom:0.75rem}
-.submit-btn:hover{background:var(--cyan);color:var(--navy)}
-.submit-btn:disabled{opacity:0.6;cursor:not-allowed}
-.privacy{font-size:0.72rem;color:var(--muted)}
+/* STEP 2b — PRIVATE (1-3 stars) */
+.private-header{text-align:center;margin-bottom:1.5rem}
+.private-header .big-emoji{font-size:3rem;display:block;margin-bottom:0.75rem}
+.private-header h2{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--navy);margin-bottom:0.4rem}
+.private-header p{color:var(--muted);font-size:0.88rem;line-height:1.65}
 
-/* Success */
-#success{display:none;text-align:center}
-.success-emoji{font-size:4rem;margin-bottom:1rem;display:block}
-.success-title{font-size:1.4rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem}
-.success-sub{font-size:0.88rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6}
-.google-btn{display:inline-flex;align-items:center;gap:0.5rem;background:#4285F4;color:white;padding:0.75rem 1.5rem;border-radius:10px;font-weight:700;font-size:0.9rem;text-decoration:none;transition:all 0.2s}
-.google-btn:hover{background:#3367D6}
-.google-btn svg{width:18px;height:18px}
+/* STEP 3 — THANK YOU */
+.thankyou{text-align:center}
+.thankyou .big-emoji{font-size:4rem;display:block;margin-bottom:1rem}
+.thankyou h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:0.75rem}
+.thankyou p{color:var(--muted);font-size:0.9rem;line-height:1.75;margin-bottom:1.5rem}
+.google-redirect-bar{background:linear-gradient(135deg,rgba(0,170,255,0.08),rgba(26,63,191,0.06));border:1.5px solid rgba(26,63,191,0.2);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:0.85rem;color:var(--royal);font-weight:600;display:flex;align-items:center;gap:0.6rem}
+.redirecting-dots::after{content:'...';animation:dots 1.5s infinite}
+@keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
+.stars-display{color:#FFB800;font-size:1.4rem;letter-spacing:2px;margin-bottom:0.5rem}
+.whatsapp-home{display:inline-flex;align-items:center;gap:0.5rem;background:#25D366;color:white;padding:0.75rem 1.5rem;border-radius:50px;font-weight:700;font-size:0.9rem;text-decoration:none;transition:all 0.2s}
+.whatsapp-home:hover{background:#20B858}
 
-/* Error */
-#error-screen{display:none;text-align:center;padding:2rem}
-#error-screen h2{color:var(--navy);margin-bottom:0.5rem}
-#error-screen p{color:var(--muted);font-size:0.88rem}
+.progress-dots{display:flex;justify-content:center;gap:6px;margin-bottom:2rem}
+.progress-dot{width:8px;height:8px;border-radius:50%;background:#E2EAF0;transition:all 0.3s}
+.progress-dot.active{background:var(--royal);width:24px;border-radius:4px}
+.progress-dot.done{background:var(--cyan)}
+
+@media(max-width:480px){.card{padding:1.75rem 1.25rem}.star-btn{font-size:2.5rem}}
 </style>
 </head>
 <body>
-<div class="card">
 
-  <!-- Error screen - shown if no valid params -->
-  <div id="error-screen">
-    <div style="font-size:3rem;margin-bottom:1rem">🔗</div>
-    <h2>Invalid link</h2>
-    <p>This survey link is not valid. Please contact WhiteRock Wellness directly.</p>
+<a href="index.html" class="logo-bar">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="36" width="36">
+    <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1Z"/>
+  </svg>
+  <div class="logo-text">White<span>Rock</span> Wellness</div>
+</a>
+
+<div class="card">
+  <div class="progress-dots">
+    <div class="progress-dot active" id="dot-1"></div>
+    <div class="progress-dot" id="dot-2"></div>
+    <div class="progress-dot" id="dot-3"></div>
   </div>
 
-  <!-- Survey form -->
-  <div id="survey-form">
-    <div class="logo">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="32" width="32">
-        <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1Z"/>
-      </svg>
-      <div class="logo-text">White<span>Rock</span> Wellness</div>
+  <!-- STEP 1: STAR RATING -->
+  <div class="step active" id="step-rating">
+    <div class="rating-header">
+      <span class="emoji">&#129309;</span>
+      <h2>How was your session?</h2>
+      <p>Your honest feedback helps Dr. Paul and the team grow. It only takes 30 seconds.</p>
     </div>
+    <div class="patient-info" id="patient-info-bar">Loading your session details...</div>
+    <div class="stars-row" id="stars-row">
+      <button class="star-btn" data-val="1" onclick="hoverStar(1)" onmouseenter="hoverStar(1)" onmouseleave="resetStars()">&#9733;</button>
+      <button class="star-btn" data-val="2" onclick="hoverStar(2)" onmouseenter="hoverStar(2)" onmouseleave="resetStars()">&#9733;</button>
+      <button class="star-btn" data-val="3" onclick="hoverStar(3)" onmouseenter="hoverStar(3)" onmouseleave="resetStars()">&#9733;</button>
+      <button class="star-btn" data-val="4" onclick="hoverStar(4)" onmouseenter="hoverStar(4)" onmouseleave="resetStars()">&#9733;</button>
+      <button class="star-btn" data-val="5" onclick="hoverStar(5)" onmouseenter="hoverStar(5)" onmouseleave="resetStars()">&#9733;</button>
+    </div>
+    <div class="rating-label" id="rating-label">Tap a star to rate</div>
+  </div>
 
-    <div class="therapist-badge" id="therapist-badge">
-      <div class="therapist-avatar" id="therapist-avatar">?</div>
-      <div class="therapist-info">
-        <div class="therapist-name" id="therapist-name">Your Therapist</div>
-        <div class="therapist-label">Session with WhiteRock Wellness</div>
+  <!-- STEP 2a: POSITIVE (4 or 5 stars) -->
+  <div class="step" id="step-positive">
+    <div class="positive-header">
+      <span class="big-emoji" id="positive-emoji">&#127775;</span>
+      <div class="stars-display" id="positive-stars"></div>
+      <h2 id="positive-title">That's wonderful to hear!</h2>
+      <p id="positive-subtitle">We'd love to hear a few words before we take you to Google.</p>
+    </div>
+    <textarea class="comment-area" id="positive-comment" placeholder="Tell us what made your session great — what did you notice? How do you feel now? (Optional)"></textarea>
+    <div class="google-cta">
+      <div class="google-cta-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+      </div>
+      <div class="google-cta-text">
+        <h4>We'll open Google Reviews for you &#10024;</h4>
+        <p>Your review helps other Nigerians find the care they need. It takes just 1 minute on Google.</p>
       </div>
     </div>
-
-    <h2>How was your session?</h2>
-    <p class="subtitle">Your honest feedback helps us improve and reward great care. It takes just 30 seconds.</p>
-
-    <div class="stars-wrap" id="stars">
-      <span class="star" data-val="1" onclick="setRating(1)">★</span>
-      <span class="star" data-val="2" onclick="setRating(2)">★</span>
-      <span class="star" data-val="3" onclick="setRating(3)">★</span>
-      <span class="star" data-val="4" onclick="setRating(4)">★</span>
-      <span class="star" data-val="5" onclick="setRating(5)">★</span>
-    </div>
-    <div class="star-label" id="star-label">Tap a star to rate</div>
-
-    <div class="comment-wrap">
-      <label>Comment (optional)</label>
-      <textarea id="comment" placeholder="Tell us about your experience — what helped, what could be better…"></textarea>
-    </div>
-
-    <button class="submit-btn" id="submit-btn" onclick="submitRating()">Submit Rating</button>
-    <div class="privacy">🔒 Your feedback is private and used only to improve our care</div>
+    <button class="btn-primary" onclick="submitPositive()">Submit &amp; Go to Google Review &#8599;</button>
   </div>
 
-  <!-- Success screen -->
-  <div id="success">
-    <span class="success-emoji" id="success-emoji">⭐</span>
-    <div class="success-title">Thank you for your feedback!</div>
-    <div class="success-sub" id="success-sub">Your rating has been recorded. We really appreciate you taking the time.</div>
-    <div id="google-prompt" style="display:none">
-      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem">Would you also share your experience on Google? It helps others find us.</p>
-      <a href="https://g.page/r/YOUR_GOOGLE_REVIEW_LINK/review" target="_blank" class="google-btn">
-        <svg viewBox="0 0 24 24" fill="white"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Leave a Google Review
-      </a>
+  <!-- STEP 2b: PRIVATE (1, 2 or 3 stars) -->
+  <div class="step" id="step-private">
+    <div class="private-header">
+      <span class="big-emoji">&#128591;</span>
+      <div class="stars-display" id="private-stars"></div>
+      <h2 id="private-title">Thank you for being honest.</h2>
+      <p id="private-message">We're sorry your experience wasn't everything it should have been. Your feedback goes directly to Dr. Paul and helps us do better.</p>
     </div>
+    <textarea class="comment-area" id="private-comment" placeholder="What could we have done better? Please be as specific as you like — we take every piece of feedback seriously."></textarea>
+    <button class="btn-primary" style="background:#0A1628" onclick="submitPrivate()">Send feedback privately to Dr. Paul</button>
+    <p style="font-size:0.75rem;color:var(--muted);text-align:center;margin-top:0.75rem;line-height:1.6">&#128274; This feedback is strictly private and goes only to clinic management. It will never appear publicly.</p>
   </div>
 
+  <!-- STEP 3: THANK YOU — elements shown/hidden by JS depending on star rating -->
+  <div class="step" id="step-thankyou">
+    <div class="thankyou">
+      <span class="big-emoji" id="thankyou-emoji">&#127881;</span>
+      <div class="stars-display" id="thankyou-stars"></div>
+      <h2 id="thankyou-title">Thank you so much!</h2>
+      <p id="thankyou-message">Your kind words mean the world to our team.</p>
+
+      <!-- POSITIVE ONLY: Google redirect notice -->
+      <div class="google-redirect-bar" id="google-redirect-bar" style="display:none">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        <span>Google Reviews is opening in a new tab <span class="redirecting-dots"></span></span>
+      </div>
+
+      <!-- POSITIVE ONLY: WhatsApp share + Google link -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;margin-bottom:1.25rem">
+        <a id="wa-share-btn" href="#" target="_blank" style="display:none;align-items:center;gap:0.6rem;background:#25D366;color:white;padding:0.8rem 1.75rem;border-radius:50px;font-weight:700;font-size:0.9rem;text-decoration:none;transition:all 0.2s;width:100%;justify-content:center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Share with friends on WhatsApp &#128172;
+        </a>
+        <a id="google-own-link" href="#" target="_blank" style="display:none;align-items:center;gap:6px;color:var(--muted);font-size:0.8rem;text-decoration:underline">
+          Google Review tab didn't open? Click here
+        </a>
+      </div>
+
+      <!-- PRIVATE ONLY: shown for 1-3 star thank you -->
+      <div id="private-thankyou-section" style="display:none;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:0.84rem;color:#92400E;line-height:1.7;text-align:left">
+        &#128274; Your feedback has been sent privately to Dr. Paul. It will never appear publicly. We take every word seriously.
+      </div>
+
+      <a href="index.html" class="whatsapp-home" style="background:var(--navy)">&#127968; Back to WhiteRock Wellness</a>
+    </div>
+  </div>
 </div>
 
 <script>
-const SAVE_FEEDBACK_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/448a101e912c4a199cb8a444b5651f4e/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vO5m4Gd-m7Xmp-VpXsRbQACA1sWL3RNyzp_2NlywU9g';
+// URL PARAMS
+const params=new URLSearchParams(window.location.search);
+const patientId=params.get('id')||'';
+const patientName=params.get('patient')||'Valued Patient';
+const therapist=params.get('therapist')||'Dr. Paul Chima';
+const sessionDate=params.get('date')||new Date().toISOString().split('T')[0];
 
-const starLabels = ['','Poor — not what we hoped for','Fair — some room to improve','Good — solid session','Great — really happy!','Excellent — absolutely loved it!'];
+// POWER AUTOMATE - ALL star ratings save here, no exceptions
+const SAVE_FEEDBACK_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a0b25f698c1d4700ab23bcfc15a2b6a0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=3RCnApnmMMEkJS-L5WrCHByyTmff8_d0iBE85sDvVsg';
 
-let selectedRating = 0;
-let patientId = '';
-let patientName = '';
-let therapist = '';
-let sessionDate = '';
+// IMPORTANT: Replace with your actual Google Business Profile review link
+// Google Business Profile > Get more reviews > Copy the short link
+const GOOGLE_REVIEW_URL='https://g.page/r/YOUR_GOOGLE_REVIEW_LINK/review';
 
-// Parse URL params
-function getParam(name){
-  const url = new URLSearchParams(window.location.search);
-  return url.get(name) || '';
+// STATE
+let selectedRating=0;
+const ratingLabels=['','Poor - we can do better','Below expectations','Okay - room to improve','Great experience!','Outstanding - absolutely loved it!'];
+
+// INIT
+const firstName=patientName.split(' ')[0];
+document.getElementById('patient-info-bar').textContent=firstName+' • Session with '+therapist+' • '+formatDate(sessionDate);
+
+function formatDate(d){
+  if(!d)return'';
+  try{return new Date(d).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}catch(e){return d;}
 }
 
-function init(){
-  patientId = getParam('id');
-  patientName = decodeURIComponent(getParam('patient') || 'Patient');
-  therapist = decodeURIComponent(getParam('therapist') || '');
-  sessionDate = getParam('date') || new Date().toISOString().split('T')[0];
-
-  if(!patientId && !therapist){
-    document.getElementById('survey-form').style.display = 'none';
-    document.getElementById('error-screen').style.display = 'block';
-    return;
-  }
-
-  // Set therapist info
-  if(therapist){
-    const initials = therapist.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-    document.getElementById('therapist-avatar').textContent = initials;
-    document.getElementById('therapist-name').textContent = therapist;
-  }
+// STAR INTERACTIONS
+function hoverStar(n){
+  document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('lit',i<n));
+  document.getElementById('rating-label').innerHTML='<span style="color:var(--navy);font-weight:700">'+ratingLabels[n]+'</span>';
 }
-
-function setRating(val){
-  selectedRating = val;
-  document.querySelectorAll('.star').forEach((s,i)=>{
-    s.classList.toggle('active', i < val);
-  });
-  document.getElementById('star-label').textContent = starLabels[val];
+function resetStars(){
+  if(selectedRating>0){hoverStar(selectedRating);return;}
+  document.querySelectorAll('.star-btn').forEach(b=>b.classList.remove('lit'));
+  document.getElementById('rating-label').textContent='Tap a star to rate';
 }
-
-// Hover effects
-document.querySelectorAll('.star').forEach((s,i)=>{
-  s.addEventListener('mouseover', ()=>{
-    document.querySelectorAll('.star').forEach((st,j)=>{
-      st.style.color = j <= i ? '#F59E0B' : '#E2EAF0';
-    });
-  });
-  s.addEventListener('mouseout', ()=>{
-    document.querySelectorAll('.star').forEach((st,j)=>{
-      st.style.color = j < selectedRating ? '#F59E0B' : '#E2EAF0';
-    });
+document.querySelectorAll('.star-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    selectedRating=parseInt(btn.dataset.val);
+    hoverStar(selectedRating);
+    setTimeout(()=>proceedToStep2(),350);
   });
 });
 
-async function submitRating(){
-  if(!selectedRating){ alert('Please select a star rating before submitting.'); return; }
-
-  const btn = document.getElementById('submit-btn');
-  btn.disabled = true;
-  btn.textContent = 'Submitting…';
-
-  const comment = document.getElementById('comment').value.trim();
-
-  try {
-    const res = await fetch(SAVE_FEEDBACK_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        patientName: patientName,
-        patientId: patientId,
-        therapist: therapist,
-        rating: selectedRating,
-        comment: comment,
-        sessionDate: sessionDate
-      })
-    });
-
-    // Show success
-    document.getElementById('survey-form').style.display = 'none';
-    const success = document.getElementById('success');
-    success.style.display = 'block';
-
-    // Set emoji based on rating
-    const emojis = ['','😔','😐','🙂','😊','🌟'];
-    document.getElementById('success-emoji').textContent = emojis[selectedRating];
-
-    // Show Google prompt for 4-5 star ratings
-    if(selectedRating >= 4){
-      document.getElementById('google-prompt').style.display = 'block';
-      document.getElementById('success-sub').textContent = 'Your rating has been recorded. We are thrilled you had a great experience!';
-    } else {
-      document.getElementById('success-sub').textContent = 'Your rating has been recorded. We will use your feedback to improve. Thank you for your honesty.';
-    }
-
-  } catch(e){
-    alert('Connection error. Please try again.');
-    btn.disabled = false;
-    btn.textContent = 'Submit Rating';
+function proceedToStep2(){
+  setDot(2);
+  if(selectedRating>=4){
+    document.getElementById('positive-emoji').textContent=selectedRating===5?'\uD83C\uDF1F':'\uD83D\uDE01';
+    document.getElementById('positive-stars').innerHTML=
+      '<span style="color:#FFB800">'+'\u2605'.repeat(selectedRating)+'</span>'+
+      '<span style="color:#E2EAF0">'+'\u2605'.repeat(5-selectedRating)+'</span>';
+    document.getElementById('positive-title').textContent=
+      selectedRating===5?'That is absolutely wonderful, '+firstName+'!':'So glad you had a great session, '+firstName+'!';
+    document.getElementById('positive-subtitle').textContent=
+      selectedRating===5
+        ?'We are genuinely over the moon to hear this. Add a few words if you like, then we will take you straight to Google.'
+        :'Thank you for the kind rating. Feel free to add a few words, then we will take you to Google.';
+    showStep('step-positive');
+  }else{
+    document.getElementById('private-stars').innerHTML=
+      '<span style="color:#F59E0B">'+'\u2605'.repeat(selectedRating)+'</span>'+
+      '<span style="color:#E2EAF0">'+'\u2605'.repeat(5-selectedRating)+'</span>';
+    const titles=['','We sincerely apologise, '+firstName+'.','We are sorry to hear that, '+firstName+'.','Thank you for your honesty, '+firstName+'.'];
+    const msgs=[
+      '',
+      'A 1-star experience is something we take extremely seriously. Dr. Paul will personally review exactly what happened and we will reach out to make this right. You deserve better, and we will do better.',
+      'You deserve exceptional care every time you visit us. Dr. Paul personally reads all private feedback and your experience will be addressed. We hope to earn your trust back.',
+      'We are sorry your session was not everything it should have been. Your feedback goes directly to Dr. Paul and helps us grow into the clinic every Nigerian deserves.'
+    ];
+    document.getElementById('private-title').textContent=titles[selectedRating];
+    document.getElementById('private-message').textContent=msgs[selectedRating];
+    showStep('step-private');
   }
 }
 
-init();
+// SAVE FEEDBACK - called for ALL star ratings, every time, no exceptions
+async function saveFeedback(comment, leftGoogle){
+  const isPublic=selectedRating>=4;
+  try{
+    await fetch(SAVE_FEEDBACK_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        Title:patientName,
+        PatientID:patientId,
+        Therapist:therapist,
+        Rating:selectedRating,
+        Comment:comment,
+        SessionDate:sessionDate,
+        LeftGoogleReview:leftGoogle,
+        PublishToWebsite:isPublic,
+        Private:!isPublic,
+        Source:'WhiteRock Survey',
+        SubmittedAt:new Date().toISOString()
+      })
+    });
+  }catch(e){console.log('Feedback save error:',e);}
+}
+
+// SUBMIT POSITIVE (4 or 5 stars)
+async function submitPositive(){
+  const comment=document.getElementById('positive-comment').value.trim();
+  document.querySelectorAll('#step-positive .btn-primary').forEach(b=>{b.disabled=true;b.style.opacity='0.6';});
+
+  // Save to Lists immediately - do not wait, fire and move on
+  saveFeedback(comment, true);
+
+  // Show thank you screen right away
+  showThankYouPositive();
+
+  // Open Google Review in new tab immediately (300ms so page renders first)
+  setTimeout(()=>window.open(GOOGLE_REVIEW_URL,'_blank'),300);
+}
+
+// SUBMIT PRIVATE (1, 2 or 3 stars)
+async function submitPrivate(){
+  const comment=document.getElementById('private-comment').value.trim();
+  const btn=document.querySelector('#step-private .btn-primary');
+  btn.disabled=true;
+  btn.textContent='Sending to Dr. Paul...';
+  btn.style.opacity='0.7';
+
+  // Save to Lists (private flag set - never shown on website)
+  await saveFeedback(comment, false);
+
+  showThankYouPrivate();
+}
+
+// THANK YOU - POSITIVE (4 or 5 stars)
+function showThankYouPositive(){
+  setDot(3);
+  document.getElementById('thankyou-emoji').textContent=selectedRating===5?'\uD83C\uDF89':'\uD83D\uDE0A';
+  document.getElementById('thankyou-stars').innerHTML='<span style="color:#FFB800">'+'\u2605'.repeat(selectedRating)+'</span><span style="color:#E2EAF0">'+'\u2605'.repeat(5-selectedRating)+'</span>';
+
+  document.getElementById('thankyou-title').textContent=
+    selectedRating===5?'Thank you so much, '+firstName+'!':'Thank you, '+firstName+'!';
+
+  document.getElementById('thankyou-message').textContent=
+    selectedRating===5
+      ?'Your 5-star rating genuinely means the world to every person on our team. We have opened Google Reviews for you in a new tab - one tap to share this with the world and help other Nigerians find the care they need. We are so grateful for your trust.'
+      :'Your kind rating means so much to us. We have opened Google Reviews in a new tab - your words could help another Nigerian find the relief you found with us. Thank you for trusting WhiteRock Wellness.';
+
+  // Show Google redirect bar
+  document.getElementById('google-redirect-bar').style.display='flex';
+
+  // Build WhatsApp share message - beautiful pre-filled recommendation
+  const waMsg=selectedRating===5
+    ?'I just had a 5-star session at WhiteRock Wellness in Oniru, Lagos with '+therapist+'! \u2B50\uFE0F\n\nIf you or anyone you know is dealing with back pain, neck pain, sciatica, or any spinal issue - Dr. Paul is the real deal. He fixed what others could not.\n\nBook here: https://whiterock-wellness.com \uD83D\uDC99'
+    :'Just had a great 4-star session at WhiteRock Wellness in Oniru, Lagos! \u2B50\uFE0F\n\nDr. Paul and the team really know their stuff. Highly recommend for anyone with back or neck issues.\n\nBook here: https://whiterock-wellness.com';
+
+  document.getElementById('wa-share-btn').href='https://wa.me/?text='+encodeURIComponent(waMsg);
+  document.getElementById('wa-share-btn').style.display='inline-flex';
+  document.getElementById('google-own-link').href=GOOGLE_REVIEW_URL;
+  document.getElementById('google-own-link').style.display='inline-flex';
+  document.getElementById('private-thankyou-section').style.display='none';
+
+  showStep('step-thankyou');
+}
+
+// THANK YOU - PRIVATE (1, 2 or 3 stars)
+function showThankYouPrivate(){
+  setDot(3);
+  document.getElementById('thankyou-emoji').textContent='\uD83D\uDE4F';
+  document.getElementById('thankyou-stars').innerHTML='<span style="color:#F59E0B">'+'\u2605'.repeat(selectedRating)+'</span><span style="color:#E2EAF0">'+'\u2605'.repeat(5-selectedRating)+'</span>';
+
+  const titles=['','We hear you, '+firstName+'. We are truly sorry.','We are sorry, '+firstName+'.','Thank you for your honesty, '+firstName+'.'];
+  const msgs=[
+    '',
+    'A 1-star experience is something we take with the utmost seriousness. Dr. Paul will personally review every word you have shared and we will reach out to you directly. You deserve better - and we will make it right.',
+    'You deserve exceptional care every single time, and we clearly fell short today. Dr. Paul personally reviews all private feedback and your experience will be addressed. We hope to earn your trust back.',
+    'Thank you for giving us the chance to improve. Your honest feedback is exactly what helps WhiteRock grow into the clinic every Nigerian deserves. Dr. Paul reads every word.'
+  ];
+
+  document.getElementById('thankyou-title').textContent=titles[selectedRating];
+  document.getElementById('thankyou-message').textContent=msgs[selectedRating];
+
+  // Hide Google/WhatsApp elements - private flow never goes to Google
+  document.getElementById('google-redirect-bar').style.display='none';
+  document.getElementById('wa-share-btn').style.display='none';
+  document.getElementById('google-own-link').style.display='none';
+  document.getElementById('private-thankyou-section').style.display='block';
+
+  showStep('step-thankyou');
+}
+
+// HELPERS
+function showStep(id){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function setDot(n){
+  document.querySelectorAll('.progress-dot').forEach((d,i)=>{
+    d.classList.remove('active','done');
+    if(i+1<n)d.classList.add('done');
+    if(i+1===n)d.classList.add('active');
+  });
+}
 </script>
 </body>
 </html>
