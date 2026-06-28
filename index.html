@@ -1073,10 +1073,9 @@ loadHealthTips();
 
     <!-- RETURNING LOOKUP - AUTO SEARCH, NO BUTTON -->
     <div id="returning-prompt" style="display:none;background:var(--offwhite);border:1.5px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:1rem;text-align:left">
-      <div style="font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.35rem">Welcome back! Enter your phone number or email:</div>
-      <div id="returning-lookup-hint" style="font-size:0.72rem;color:var(--muted);margin-bottom:0.6rem">Please use the same phone or email you filled in the booking form.</div>
-      <input type="tel" id="returning-lookup" placeholder="800 000 0000 or your@email.com" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none;margin-bottom:0.5rem;box-sizing:border-box;transition:border-color 0.2s" oninput="onLookupInput(this.value)">
-      <div id="lookup-status" style="display:none;font-size:0.78rem;padding:0.6rem 0.85rem;border-radius:8px;margin-bottom:0.5rem;text-align:left;line-height:1.6"></div>
+      <div style="font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.35rem">Checking our records&hellip;</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem">We are searching using the phone number and email you booked with.</div>
+      <div id="lookup-status" style="font-size:0.82rem;padding:0.6rem 0.85rem;border-radius:8px;text-align:left;line-height:1.6;background:rgba(26,63,191,0.07);color:var(--royal)">Searching&hellip;</div>
     </div>
 
     <!-- WARM WELCOME BACK -->
@@ -1100,8 +1099,7 @@ loadHealthTips();
 const POWER_AUTOMATE_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c3eccbf19a9d4994a5dfe971ab58af96/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GI0LL2CWNbGwVCm36BkS5eghAPvA4mPs63MigacspKA';
 const LOOKUP_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a505c7eaa54440539bab508994af082b/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=seJxLgz7oYoC_zC21oXBfblWFfIGilGCuttzh7kg3AQ';
 let bookingWaMsg='',isReturningPatient=false,_lookupDebounce=null;
-// Saved from booking form before fields are cleared — used for validation + silent check
-let _bookingPhone='',_bookingEmail='';
+let _bookingPhone='',_bookingEmail='',_bookingName='';
 async function sendToMicrosoftLists(data){try{await fetch(POWER_AUTOMATE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});}catch(e){console.log('Lists error:',e);}}
 function submitForm(){
   const req=[{id:'ff'},{id:'fl'},{id:'fp'},{id:'fs'},{id:'fd'},{id:'fn'}];
@@ -1118,6 +1116,7 @@ function submitForm(){
   // Save for post-modal validation and silent duplicate check
   _bookingPhone=phone.replace(/[^0-9+]/g,'');
   _bookingEmail=(document.getElementById('fe').value||'').trim().toLowerCase();
+  _bookingName=name;
   sendToMicrosoftLists({PatientName:name,Phone:phone,Email:document.getElementById('fe').value||'',Specialist:spec,Concern:concern,PreferredDate:date,PreferredTime:time,Notes:document.getElementById('fn').value||'',PatientType:'New Patient',Source:'WhiteRock Website',SubmittedAt:new Date().toISOString()});
   document.getElementById('modal').classList.add('show');
   ['ff','fl','fp','fe','fs','fd','ft','fn'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -1143,175 +1142,106 @@ async function showConsentPrompt(){
       consent.style.display='none';
       document.getElementById('returning-confirmed').style.display='block';
       // Update their record with the new booking
-      const bookedName=returnedName||_bookingPhone||'Returning Patient';
-      sendToMicrosoftLists({PatientName:bookedName,Phone:_bookingPhone,Email:_bookingEmail,Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',Concern:'',Status:'Pending Allocation',PatientType:'Returning Patient',Source:'Silent Duplicate Check — Patient said First Visit',SubmittedAt:new Date().toISOString()}).catch(e=>console.log(e));
+      const bookedName=_bookingName||returnedName||_bookingPhone||'Unknown Patient';
+      sendToMicrosoftLists({PatientName:bookedName,Phone:_bookingPhone,Email:_bookingEmail,Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',Concern:document.getElementById('fs')?document.getElementById('fs').value||'':'' ,Status:'Pending Allocation',PatientType:'Returning Patient',Source:'Silent Duplicate Check — Patient said First Visit',SubmittedAt:new Date().toISOString()}).catch(e=>console.log(e));
       setTimeout(()=>fireBookingWhatsApp(),1500);
     }
     // If not found — consent form stays visible, patient proceeds normally
   }catch(e){/* silent fail — consent form stays shown */}
 }
 
-// ── "Yes, returning" → validate against booking form first, then lookup ──
-// ── "Yes, returning" → silent check first using booking form details ──
+// ── "Yes, returning" → search ONLY using booking form phone + email ──
 async function showReturningPrompt(){
   document.getElementById('returning-check').style.display='none';
-  // Show a brief searching state
   const prompt=document.getElementById('returning-prompt');
   prompt.style.display='block';
   const status=document.getElementById('lookup-status');
-  const hint=document.getElementById('returning-lookup-hint');
-  // Update hint dynamically
-  const hintText=_bookingEmail?'your email ('+_bookingEmail.substring(0,3)+'***)':_bookingPhone?'your phone number':'your phone or email';
-  if(hint) hint.textContent='Please use the same '+hintText+' you filled in the booking form.';
 
-  // Only silent-check if we have booking details
+  // If we have no booking details at all, go straight to consent form
   if(!_bookingPhone && !_bookingEmail){
-    setTimeout(()=>document.getElementById('returning-lookup').focus(),200);
+    prompt.style.display='none';
+    document.getElementById('consent-prompt').style.display='block';
     return;
   }
 
-  // Show searching state immediately
-  status.style.display='block';
-  status.style.cssText='display:block;background:rgba(26,63,191,0.07);color:var(--royal);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.8rem;line-height:1.6;';
-  const checkedWith=_bookingPhone&&_bookingEmail?'your phone number and email address':_bookingPhone?'your phone number':'your email address';
-  status.textContent='Checking our records with '+checkedWith+' from your booking...';
-  document.getElementById('returning-lookup').disabled=true;
+  // Show what we are searching with
+  const checkedWith=_bookingPhone&&_bookingEmail
+    ?'your phone number and email address'
+    :_bookingPhone?'your phone number':'your email address';
+  status.style.cssText='background:rgba(26,63,191,0.07);color:var(--royal);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.8rem;line-height:1.6;';
+  status.textContent='Searching with '+checkedWith+' from your booking form...';
 
   const controller=new AbortController();
   const timeoutId=setTimeout(()=>controller.abort(),10000);
 
-  // Search phone first, then email if needed
+  // Search phone first, then email — using ONLY what was in the booking form
   let found=false, returnedName='', foundVia='';
   const toCheck=[
-    {val:_bookingPhone,via:'phone number'},
-    {val:_bookingEmail,via:'email address'}
+    {val:_bookingPhone, via:'phone number'},
+    {val:_bookingEmail, via:'email address'}
   ].filter(x=>x.val);
 
   for(const check of toCheck){
     try{
-      const res=await fetch(LOOKUP_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lookup:check.val,SubmittedAt:new Date().toISOString()}),signal:controller.signal});
+      const res=await fetch(LOOKUP_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({lookup:check.val, SubmittedAt:new Date().toISOString()}),
+        signal:controller.signal
+      });
       let data={};
       try{data=await res.json();}catch(e){}
       if(data&&(data.found===true||data.Found===true||(data.PatientName&&data.PatientName.length>0)||(data.value&&data.value.length>0)||(Array.isArray(data)&&data.length>0)||data.id||data.ID||data.PatientID)){
-        found=true;returnedName=data.PatientName||data.patientName||'';foundVia=check.via;break;
+        found=true; returnedName=data.PatientName||data.patientName||''; foundVia=check.via; break;
       }
-    }catch(e){if(e.name==='AbortError')break;}
+    }catch(e){ if(e.name==='AbortError') break; }
   }
   clearTimeout(timeoutId);
-  document.getElementById('returning-lookup').disabled=false;
 
   if(found){
-    // Found — skip input entirely, go straight to welcome
+    // FOUND — welcome them back
     isReturningPatient=true;
-    const bookedName=((document.getElementById('ff')?document.getElementById('ff').value:'')||returnedName||'').trim()||'Returning Patient';
-    // Build a warm message about how we found them
+    const bookedName=_bookingName||returnedName||'Unknown Patient';
     const foundMsg=_bookingPhone&&_bookingEmail
-      ?'We searched with your phone number and email address from your booking — we found your record right away.'
-      :_bookingPhone
-      ?'We searched with your phone number from your booking — we found your record straight away.'
-      :'We searched with your email address from your booking — we found you immediately.';
-    sendToMicrosoftLists({PatientName:bookedName,Phone:_bookingPhone,Email:_bookingEmail,Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',Concern:'',Status:'Pending Allocation',PatientType:'Returning Patient',Source:'Silent Check — Yes Button ('+foundVia+')',SubmittedAt:new Date().toISOString()}).catch(e=>console.log(e));
-    // Show confirmed with contextual message
+      ?'We searched with your phone number and email — we found your record right away.'
+      :foundVia==='phone number'
+      ?'We searched with your phone number — we found your record straight away.'
+      :'We searched with your email address — we found you immediately.';
+    sendToMicrosoftLists({
+      PatientName:bookedName,
+      Phone:_bookingPhone,
+      Email:_bookingEmail,
+      Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',
+      Concern:document.getElementById('fs')?document.getElementById('fs').value||'':'',
+      Status:'Pending Allocation',
+      PatientType:'Returning Patient',
+      Source:'Silent Check — Yes Button ('+foundVia+')',
+      SubmittedAt:new Date().toISOString()
+    }).catch(e=>console.log(e));
     prompt.style.display='none';
-    const confirmed=document.getElementById('returning-confirmed');
-    confirmed.style.display='block';
-    // Inject the found-via message into the confirmed div
+    document.getElementById('returning-confirmed').style.display='block';
     const foundNote=document.getElementById('returning-found-note');
     if(foundNote) foundNote.textContent=foundMsg;
     setTimeout(()=>fireBookingWhatsApp(),1500);
+
   } else {
-    // Not found via booking details — show manual input with contextual not-found message
+    // NOT FOUND — honest message, go to consent form. No manual input allowed.
     const notFoundMsg=_bookingPhone&&_bookingEmail
-      ?'We searched with your phone number and email address but couldn\'t find a match. You may have used different details before — please try below.'
+      ?'We searched with your phone number and email address from your booking but could not find a previous record with us.'
       :_bookingPhone
-      ?'We searched with your phone number but couldn\'t find a match. Perhaps a different number was used? Please try below.'
-      :'We searched with your email address but couldn\'t find a match. Please try a different number or email below.';
-    status.style.cssText='display:block;background:rgba(245,158,11,0.07);color:#92400E;border:1px solid rgba(245,158,11,0.25);border-radius:8px;padding:0.65rem 0.85rem;font-size:0.8rem;line-height:1.7;';
-    status.textContent=notFoundMsg;
-    document.getElementById('returning-lookup').focus();
+      ?'We searched with your phone number from your booking but could not find a previous record.'
+      :'We searched with your email address from your booking but could not find a previous record.';
+    status.style.cssText='background:rgba(239,68,68,0.06);color:#7A1A1A;border-radius:8px;padding:0.75rem 1rem;line-height:1.75;font-size:0.83rem;text-align:left;border:1px solid rgba(239,68,68,0.15);';
+    status.innerHTML=notFoundMsg+' You may be visiting us for the first time, or your details may have changed. Please complete our <a href="consent.html" style="color:var(--royal);font-weight:700;text-decoration:underline">consent form</a> so Dr. Paul is fully prepared for you.';
+    // Auto-transition to consent form after 4 seconds
+    setTimeout(()=>{
+      prompt.style.display='none';
+      document.getElementById('consent-prompt').style.display='block';
+    }, 4000);
   }
 }
-function onLookupInput(val){
-  const input=document.getElementById('returning-lookup');
-  const status=document.getElementById('lookup-status');
-  clearTimeout(_lookupDebounce);
-  if(!val||val.trim().length<3){input.style.borderColor='#E2EAF0';status.style.display='none';return;}
-  const trimmed=val.trim();
-  const isEmail=trimmed.includes('@')&&trimmed.indexOf('.',trimmed.indexOf('@'))>trimmed.indexOf('@');
-  const digitsOnly=trimmed.replace(/[^0-9]/g,'');
-  const isPhone=digitsOnly.length>=10;
-  if(!isEmail&&!isPhone){
-    input.style.borderColor='#E2EAF0';status.style.display='block';
-    status.style.cssText='display:block;background:rgba(26,63,191,0.05);color:var(--muted);padding:0.5rem 0.75rem;border-radius:6px;font-size:0.78rem;';
-    status.textContent=trimmed.includes('@')?'Finish typing your email address...':'Keep typing your phone number (10+ digits needed)...';
-    return;
-  }
-  // ── Validate against booking form before hitting the database ──
-  const enteredNorm=isEmail?trimmed.toLowerCase():digitsOnly;
-  const bookingPhoneNorm=_bookingPhone.replace(/[^0-9]/g,'');
-  const bookingEmailNorm=_bookingEmail.toLowerCase();
-  const matchesPhone=bookingPhoneNorm&&(enteredNorm.endsWith(bookingPhoneNorm.slice(-9))||bookingPhoneNorm.endsWith(enteredNorm.slice(-9)));
-  const matchesEmail=bookingEmailNorm&&enteredNorm===bookingEmailNorm;
-  if(_bookingPhone||_bookingEmail){
-    if(!matchesPhone&&!matchesEmail){
-      input.style.borderColor='#F59E0B';
-      status.style.cssText='display:block;background:rgba(245,158,11,0.08);color:#92400E;border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:0.65rem 0.85rem;line-height:1.7;font-size:0.8rem;';
-      status.innerHTML='That doesn\'t match what you booked with. Please use the <strong>same phone or email</strong> you filled in the booking form.';
-      return;
-    }
-  }
-  input.style.borderColor='var(--cyan)';
-  status.style.cssText='display:block;background:rgba(0,170,255,0.06);color:var(--royal);padding:0.5rem 0.75rem;border-radius:6px;font-size:0.78rem;';
-  status.textContent='Searching automatically...';
-  _lookupDebounce=setTimeout(()=>confirmReturning(),800);
-}
-async function confirmReturning(){
-  const val=document.getElementById('returning-lookup').value.trim();
-  if(!val)return;
-  const status=document.getElementById('lookup-status');
-  status.style.cssText='display:block;background:rgba(26,63,191,0.08);color:var(--royal);border-radius:8px;padding:0.6rem 0.85rem;line-height:1.6;font-size:0.82rem;';
-  status.textContent='Checking our patient records...';
-  const controller=new AbortController();
-  const timeoutId=setTimeout(()=>controller.abort(),10000);
-  try{
-    const res=await fetch(LOOKUP_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lookup:val,SubmittedAt:new Date().toISOString()}),signal:controller.signal});
-    clearTimeout(timeoutId);
-    let found=false,returnedName='';
-    try{const data=await res.json();if(data&&(data.found===true||data.Found===true||(data.PatientName&&data.PatientName.length>0)||(data.value&&data.value.length>0)||(Array.isArray(data)&&data.length>0)||data.id||data.ID||data.PatientID)){found=true;returnedName=data.PatientName||data.patientName||'';}}catch(e){found=false;}
-    if(found){
-      isReturningPatient=true;
-      const bookedName=((document.getElementById('ff').value||'')+' '+(document.getElementById('fl').value||'')).trim()||returnedName||'Returning Patient';
-      sendToMicrosoftLists({PatientName:bookedName,Phone:document.getElementById('fp').value||val,Email:document.getElementById('fe').value||'',Specialist:document.querySelector('.spec-opt.active .sn')?.textContent||'Chiropractor',Concern:document.getElementById('fs').value||'Not specified',PreferredDate:document.getElementById('fd').value||'',PreferredTime:document.getElementById('ft').value||'Any available time',Notes:document.getElementById('fn').value||'',Status:'Pending Allocation',PatientType:'Returning Patient',Source:'Returning Patient Lookup',SubmittedAt:new Date().toISOString()}).catch(e=>console.log(e));
-      document.getElementById('returning-prompt').style.display='none';
-      document.getElementById('returning-confirmed').style.display='block';
-      setTimeout(()=>fireBookingWhatsApp(),1500);
-    }else{
-      const input=document.getElementById('returning-lookup');
-      input.style.borderColor='#F59E0B';
-      status.style.cssText='display:block;background:rgba(245,158,11,0.07);color:#92400E;border-radius:8px;padding:0.75rem 1rem;line-height:1.75;font-size:0.83rem;text-align:left;';
-      status.style.cssText='display:block;background:rgba(239,68,68,0.08);color:#991B1B;border-radius:8px;padding:0.75rem 1rem;line-height:1.75;font-size:0.83rem;text-align:left;border:1px solid rgba(239,68,68,0.2);';
-      status.innerHTML='We\'re sorry &mdash; we weren\'t able to find your record with us. &#128591;<br><br>This could be because this is your first visit, or perhaps a different number was used before. Please take a moment to fill in our <a href="consent.html" style="color:var(--royal);font-weight:700;text-decoration:underline">consent form</a> &mdash; it only takes a few minutes and helps Dr. Paul prepare especially for you. We can\'t wait to welcome you! &#128153;';
-      input.style.borderColor='#EF4444';
-      setTimeout(()=>{
-        document.getElementById('returning-prompt').style.display='none';
-        document.getElementById('consent-prompt').style.display='block';
-      },3500);
-    }
-  }catch(err){
-    clearTimeout(timeoutId);
-    const input=document.getElementById('returning-lookup');
-    if(err.name==='AbortError'){
-      input.style.borderColor='#F59E0B';
-      status.style.cssText='display:block;background:rgba(245,158,11,0.07);color:#92400E;border-radius:8px;padding:0.75rem 1rem;line-height:1.75;font-size:0.83rem;text-align:left;';
-      status.innerHTML='Our records are taking a moment to respond - this sometimes happens on the first search of the day.<br><br>Please <strong>try again</strong> - tap the box above and we will search again immediately.';
-      input.focus();
-    }else{
-      input.style.borderColor='#EF4444';
-      status.style.cssText='display:block;background:rgba(239,68,68,0.06);color:#7A1A1A;border-radius:8px;padding:0.75rem 1rem;line-height:1.75;font-size:0.83rem;text-align:left;';
-      status.innerHTML='We are sorry - we were not able to reach our records right now. Please try again, or fill in our <a href="consent.html" style="color:var(--royal);font-weight:700;text-decoration:underline">consent form</a>.';
-    }
-  }
-}
+
+
 function fireBookingWhatsApp(){
   if(bookingWaMsg){
     const clinicFooter=encodeURIComponent('\n\nNo. 3 Ayobaba Tunde Crescent, Oniru, Lagos\n+234 816 284 7976');
@@ -1326,12 +1256,10 @@ function resetBookingModal(){
   document.getElementById('consent-prompt').style.display='none';
   document.getElementById('returning-prompt').style.display='none';
   document.getElementById('returning-confirmed').style.display='none';
-  const lk=document.getElementById('returning-lookup');
-  if(lk){lk.value='';lk.style.borderColor='#E2EAF0';}
   const st=document.getElementById('lookup-status');
-  if(st){st.style.display='none';st.innerHTML='';}
+  if(st){st.style.cssText='background:rgba(26,63,191,0.07);color:var(--royal);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.8rem;line-height:1.6;';st.textContent='Searching\u2026';}
   isReturningPatient=false;
-  _bookingPhone='';_bookingEmail='';
+  _bookingPhone='';_bookingEmail='';_bookingName='';
 }
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===this){this.classList.remove('show');resetBookingModal();}});
 const specLabels={chiro:{notes:'Notes for Dr. Paul Chima * (required)',ph:'How long have you had this? Any previous treatment?'},physio:{notes:'Notes for your Physiotherapist * (required)',ph:'Tell us about your injury or rehabilitation goals...'},massage:{notes:'Notes for your Massage Therapist * (required)',ph:'Any specific areas of tension? Preferred pressure?'},wellness:{notes:'Notes for your Wellness session * (required)',ph:'What are your wellness goals?'}};
@@ -1367,20 +1295,12 @@ setTimeout(()=>{if(!chatOpen){const n=document.getElementById('chat-notif');if(n
 <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
 <script>
 function initPhoneInput(inputId,hiddenId){var input=document.getElementById(inputId);if(!input)return null;var hidden=document.createElement('input');hidden.type='hidden';hidden.id=hiddenId;input.parentNode.appendChild(hidden);var iti=window.intlTelInput(input,{initialCountry:'ng',preferredCountries:['ng','gh','ke','za','gb','us'],separateDialCode:true,utilsScript:'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'});input.addEventListener('change',function(){hidden.value=iti.getNumber();});input.addEventListener('keyup',function(){hidden.value=iti.getNumber();});return iti;}
-var itiBooking=null,itiLookup=null;
+var itiBooking=null;
 document.addEventListener('DOMContentLoaded',function(){
   itiBooking=initPhoneInput('fp','fp-full');
-  itiLookup=initPhoneInput('returning-lookup','returning-lookup-full');
 });
 var _origSubmitForm=submitForm;
 submitForm=function(){var fullPhone=document.getElementById('fp-full');if(fullPhone&&fullPhone.value){document.getElementById('fp').value=fullPhone.value;}else if(itiBooking){document.getElementById('fp').value=itiBooking.getNumber();}; _origSubmitForm();};
-var _origConfirmReturning=confirmReturning;
-confirmReturning=async function(){
-  var fullLookup=document.getElementById('returning-lookup-full');
-  if(fullLookup&&fullLookup.value){document.getElementById('returning-lookup').value=fullLookup.value;}
-  else if(itiLookup){var num=itiLookup.getNumber();if(num&&num.length>4)document.getElementById('returning-lookup').value=num;}
-  await _origConfirmReturning();
-};
 </script>
 </body>
 </html>
