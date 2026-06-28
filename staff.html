@@ -426,6 +426,12 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
         <div class="page" id="page-allocations">
           <div class="page-title">Allocation queue</div>
           <div class="page-sub">Patients pending therapist assignment</div>
+          <!-- DEBUG PANEL — temporary, remove once fixed -->
+          <div style="background:#0A1628;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem">
+            <div style="color:var(--cyan);font-size:0.75rem;font-weight:700;margin-bottom:0.5rem">🔍 Debug — What's coming from Microsoft Lists?</div>
+            <button onclick="showRawData()" style="background:var(--cyan);color:var(--navy);border:none;padding:0.5rem 1rem;border-radius:6px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer">Show all patients from Lists</button>
+            <div id="debug-output" style="margin-top:0.75rem;font-size:0.72rem;color:rgba(255,255,255,0.7);line-height:1.8;max-height:300px;overflow-y:auto;white-space:pre-wrap;display:none"></div>
+          </div>
           <div id="allocations-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
         </div>
 
@@ -727,6 +733,37 @@ function showPage(name, el){
   if(name==='approval') loadApproval();
 }
 
+async function showRawData(){
+  const out = document.getElementById('debug-output');
+  out.style.display = 'block';
+  out.textContent = 'Loading from Microsoft Lists...';
+  try {
+    const res = await fetch(GET_PATIENTS_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({})
+    });
+    const data = await res.json();
+    if(!data || !data.length){ out.textContent = 'No data returned from Lists.'; return; }
+
+    let text = 'TOTAL RECORDS: ' + data.length + '\n';
+    text += '\nFIELD NAMES IN FIRST RECORD:\n' + Object.keys(data[0]).join(', ') + '\n';
+    text += '\n' + '─'.repeat(50) + '\n';
+    data.forEach((p, i) => {
+      text += '\nRECORD ' + (i+1) + ':\n';
+      text += '  Name: ' + (p.PatientName || p.Title || '(no name field)') + '\n';
+      text += '  PatientType: ' + (p.PatientType || p.patientType || '(MISSING)') + '\n';
+      text += '  Status: ' + JSON.stringify(p.Status || '(MISSING)') + '\n';
+      text += '  AssignedTherapist: ' + (p.AssignedTherapist || '(MISSING)') + '\n';
+      text += '  Source: ' + (p.Source || '(MISSING)') + '\n';
+      text += '  PatientID: ' + (p.PatientID || '(MISSING)') + '\n';
+    });
+    out.textContent = text;
+  } catch(e) {
+    out.textContent = 'ERROR: ' + e.message;
+  }
+}
+
 function getInitials(name){ return name ? name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase() : '?'; }
 function getStatusBadge(s){ const m={'Pending Allocation':'badge-pending','Allocated':'badge-allocated','Active':'badge-active','Discharged':'badge-discharged','Closed':'badge-discharged'}; return `<span class="badge ${m[s]||'badge-pending'}">${s||'Pending'}</span>`; }
 function getKPIBadge(s){ if(s>=85) return `<span class="badge badge-excellent">Excellent</span>`; if(s>=70) return `<span class="badge badge-good">Good</span>`; return `<span class="badge badge-review">Review needed</span>`; }
@@ -751,6 +788,20 @@ async function fetchPatients(){
       body: JSON.stringify({})
     });
     const data = await res.json();
+
+    // ── DEBUG: log raw first record so we can see exact field names from Lists ──
+    if(data && data.length > 0){
+      console.log('=== RAW LISTS DATA (first record) ===');
+      console.log(JSON.stringify(data[0], null, 2));
+      console.log('=== ALL FIELD NAMES ===');
+      console.log(Object.keys(data[0]).join(', '));
+      console.log('=== TOTAL RECORDS ===', data.length);
+      // Show any returning patient records
+      const returning = data.filter(p => p.PatientType==='Returning Patient' || p.patientType==='Returning Patient');
+      console.log('=== RETURNING PATIENT RECORDS ===', returning.length);
+      if(returning.length > 0) console.log(JSON.stringify(returning[0], null, 2));
+    }
+
     return data.map(p => ({
       id: p.PatientID || 'WRW-???',
       name: p.PatientName || p.Title || 'Unknown',
