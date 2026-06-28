@@ -1294,11 +1294,10 @@ footer{
 
     <!-- RETURNING PATIENT LOOKUP -->
     <div id="returning-prompt" style="display:none;background:var(--offwhite);border:1.5px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:1rem;text-align:left">
-      <div style="font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">Welcome back! Enter your phone number or email:</div>
-      <input type="tel" id="returning-lookup" placeholder="800 000 0000 or email" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none;margin-bottom:0.5rem;box-sizing:border-box">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem">We will check our records — if found, no consent form needed.</div>
-      <div id="lookup-status" style="display:none;font-size:0.78rem;padding:0.5rem 0.75rem;border-radius:6px;margin-bottom:0.5rem;text-align:center"></div>
-      <button id="lookup-btn" onclick="confirmReturning()" style="width:100%;background:var(--royal);color:white;border:none;padding:0.75rem;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer">Search our records →</button>
+      <div style="font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.35rem">Welcome back! Enter your phone number or email:</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.6rem">We'll search automatically once your entry is complete 🔍</div>
+      <input type="text" id="returning-lookup" placeholder="e.g. +2348162847976 or your@email.com" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none;margin-bottom:0.5rem;box-sizing:border-box;transition:border-color 0.2s" oninput="onLookupInput(this.value)">
+      <div id="lookup-status" style="display:none;font-size:0.78rem;padding:0.6rem 0.85rem;border-radius:8px;margin-bottom:0.5rem;text-align:left;line-height:1.6"></div>
     </div>
 
     <!-- ═══════════════════════════════════════════════════
@@ -1311,9 +1310,8 @@ footer{
       <div style="font-size:0.82rem;color:var(--royal);font-weight:600;background:rgba(26,63,191,0.08);border-radius:8px;padding:0.5rem 0.75rem;display:inline-block">We've got your details. Just show up — we'll take care of everything else. ✨</div>
     </div>
 
-    <div style="background:var(--sky);border-radius:10px;padding:1rem;margin-bottom:1.5rem;font-size:0.85rem;color:var(--royal)">
-      📍 No. 3 Ayobaba Tunde Crescent, Oniru, Lagos<br>
-      📞 +234 816 284 7976
+    <div style="background:var(--sky);border-radius:10px;padding:1rem;margin-bottom:1.5rem;font-size:0.85rem;color:var(--royal);display:flex;align-items:center;gap:0.5rem">
+      💬 Appointment details will be sent to you via WhatsApp shortly.
     </div>
     <button class="modal-close" onclick="document.getElementById('modal').classList.remove('show');resetBookingModal()">Done ✓</button>
   </div>
@@ -1485,31 +1483,84 @@ function showReturningPrompt(){
 }
 
 // ══════════════════════════════════════════════════════════════
-// CONFIRM RETURNING PATIENT — UPDATED
+// AUTO-SEARCH DEBOUNCE — triggers confirmReturning automatically
+// Email: complete when contains @ and a dot after @
+// Phone: complete when 10+ digits present
+// ══════════════════════════════════════════════════════════════
+let _lookupDebounce = null;
+
+function onLookupInput(val){
+  const input = document.getElementById('returning-lookup');
+  const status = document.getElementById('lookup-status');
+
+  // Clear any pending search
+  clearTimeout(_lookupDebounce);
+
+  if(!val || val.trim().length < 3){
+    input.style.borderColor = '#E2EAF0';
+    status.style.display = 'none';
+    return;
+  }
+
+  const trimmed = val.trim();
+  const isEmail = trimmed.includes('@') && trimmed.indexOf('.', trimmed.indexOf('@')) > trimmed.indexOf('@');
+  const digitsOnly = trimmed.replace(/[^0-9]/g,'');
+  const isPhone = digitsOnly.length >= 10;
+
+  if(!isEmail && !isPhone){
+    // Still typing — show gentle hint
+    input.style.borderColor = '#E2EAF0';
+    status.style.display = 'block';
+    status.style.background = 'rgba(26,63,191,0.05)';
+    status.style.color = 'var(--muted)';
+    status.textContent = isEmail || trimmed.includes('@')
+      ? 'Finish typing your email address…'
+      : 'Keep typing your phone number (10+ digits needed)…';
+    return;
+  }
+
+  // Valid — show ready state then auto-search after 800ms
+  input.style.borderColor = 'var(--cyan)';
+  status.style.display = 'block';
+  status.style.background = 'rgba(0,170,255,0.06)';
+  status.style.color = 'var(--royal)';
+  status.textContent = '✓ Searching automatically…';
+
+  _lookupDebounce = setTimeout(() => {
+    confirmReturning();
+  }, 800);
+}
+
+// ══════════════════════════════════════════════════════════════
+// CONFIRM RETURNING PATIENT
+// 10 second timeout · auto-triggered by onLookupInput
 // Pulls booking form data → fires new allocation entry to staff
 // portal → shows warm welcome back message
 // ══════════════════════════════════════════════════════════════
 async function confirmReturning(){
   const val = document.getElementById('returning-lookup').value.trim();
-  if(!val){ alert('Please enter your phone number or email address.'); return; }
+  if(!val) return;
 
-  const btn = document.getElementById('lookup-btn');
   const status = document.getElementById('lookup-status');
-  btn.disabled = true;
-  btn.textContent = 'Searching…';
   status.style.display = 'block';
   status.style.background = 'rgba(26,63,191,0.08)';
   status.style.color = 'var(--royal)';
-  status.style.borderRadius = '6px';
-  status.style.padding = '0.5rem 0.75rem';
+  status.style.borderRadius = '8px';
+  status.style.padding = '0.6rem 0.85rem';
   status.textContent = 'Checking our patient records…';
+
+  // ── 10 second timeout — Power Automate cold start protection ──
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
   try {
     const res = await fetch(LOOKUP_URL, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ lookup: val, SubmittedAt: new Date().toISOString() })
+      body: JSON.stringify({ lookup: val, SubmittedAt: new Date().toISOString() }),
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
 
     // Handle all Power Automate response formats
     let found = false;
@@ -1570,54 +1621,67 @@ async function confirmReturning(){
       setTimeout(() => fireBookingWhatsApp(), 1500);
 
     } else {
-      // ── NOT FOUND — empathetic message ──
+      // ── NOT FOUND — let them try a different number, don't force consent form ──
+      const input = document.getElementById('returning-lookup');
+      input.style.borderColor = '#F59E0B';
       status.style.display = 'block';
-      status.style.background = 'rgba(239,68,68,0.06)';
-      status.style.color = '#7A1A1A';
+      status.style.background = 'rgba(245,158,11,0.07)';
+      status.style.color = '#92400E';
       status.style.borderRadius = '8px';
       status.style.padding = '0.75rem 1rem';
-      status.style.lineHeight = '1.7';
+      status.style.lineHeight = '1.75';
       status.style.fontSize = '0.83rem';
       status.style.textAlign = 'left';
-      status.innerHTML = `We're truly sorry — we weren't able to find your record with us. 🙏<br><br>This could be because this is your first visit, or perhaps a different number was used before. Please take a moment to fill in our <a href="consent.html" style="color:var(--royal);font-weight:700;text-decoration:underline">consent form</a> — it only takes a few minutes and helps Dr. Paul prepare especially for you. We can't wait to welcome you! 💙`;
-      btn.disabled = false;
-      btn.textContent = 'Search our records →';
-      // After 4s, show the consent form prompt prominently
-      setTimeout(()=>{
-        document.getElementById('returning-prompt').style.display = 'none';
-        document.getElementById('consent-prompt').style.display = 'block';
-      }, 4000);
+      status.innerHTML = `We couldn't find that number or email in our records. 🙏<br><br>
+        Could you have used a <strong>different number</strong> during your last visit? Please try again below — or if you're sure this is your first time with us, fill in our
+        <a href="consent.html" style="color:var(--royal);font-weight:700;text-decoration:underline">consent form</a>.`;
+      // Clear the input so they can try again immediately — don't redirect anywhere
+      input.value = '';
+      input.focus();
     }
 
   } catch(err) {
-    // Network/CORS error — empathetic fallback
+    clearTimeout(timeoutId);
+    const input = document.getElementById('returning-lookup');
     status.style.display = 'block';
-    status.style.background = 'rgba(239,68,68,0.06)';
-    status.style.color = '#7A1A1A';
     status.style.borderRadius = '8px';
     status.style.padding = '0.75rem 1rem';
-    status.style.lineHeight = '1.7';
+    status.style.lineHeight = '1.75';
     status.style.fontSize = '0.83rem';
     status.style.textAlign = 'left';
-    status.innerHTML = `We're truly sorry — we weren't able to reach our records right now. Please fill in our <a href="consent.html" style="color:var(--royal);font-weight:700;text-decoration:underline">consent form</a> so we have everything we need to care for you beautifully. 💙`;
-    btn.disabled = false;
-    btn.textContent = 'Search our records →';
-    setTimeout(()=>{
-      document.getElementById('returning-prompt').style.display = 'none';
-      document.getElementById('consent-prompt').style.display = 'block';
-    }, 4000);
+
+    if(err.name === 'AbortError'){
+      // ── TIMEOUT — server was slow, NOT a "not found". Let them retry. ──
+      input.style.borderColor = '#F59E0B';
+      status.style.background = 'rgba(245,158,11,0.07)';
+      status.style.color = '#92400E';
+      status.innerHTML = `Our records are taking a moment to respond — this sometimes happens on the first search of the day. ⏱<br><br>
+        Please <strong>try again</strong> — tap or click on the box above and we'll search again immediately.`;
+      // Re-enable typing so they can trigger the auto-search again
+      input.focus();
+    } else {
+      // ── NETWORK ERROR — genuinely can't connect ──
+      input.style.borderColor = '#EF4444';
+      status.style.background = 'rgba(239,68,68,0.06)';
+      status.style.color = '#7A1A1A';
+      status.innerHTML = `We're truly sorry — we weren't able to reach our records right now. Please try again in a moment, or fill in our
+        <a href="consent.html" style="color:var(--royal);font-weight:700;text-decoration:underline">consent form</a>
+        and we'll have everything ready for you. 💙`;
+    }
   }
 }
 
 // ══════════════════════════════════════════════════════════════
-// FIRE BOOKING WHATSAPP — includes RETURNING PATIENT flag
+// FIRE BOOKING WHATSAPP — includes clinic address + returning flag
 // ══════════════════════════════════════════════════════════════
 function fireBookingWhatsApp(){
   if(bookingWaMsg){
-    let finalMsg = bookingWaMsg;
+    // Add clinic address footer to every booking WhatsApp message
+    const clinicFooter = encodeURIComponent('\n\n📍 No. 3 Ayobaba Tunde Crescent, Oniru, Lagos\n📞 +234 816 284 7976');
+    let finalMsg = bookingWaMsg + clinicFooter;
     if(isReturningPatient){
       const returningHeader = encodeURIComponent('↩ RETURNING PATIENT BOOKING\n━━━━━━━━━━━━━━━━━━━━━━\n');
-      finalMsg = returningHeader + bookingWaMsg;
+      finalMsg = returningHeader + bookingWaMsg + clinicFooter;
     }
     window.open('https://wa.me/2348162847976?text='+finalMsg, '_blank');
   }
@@ -1627,12 +1691,13 @@ function fireBookingWhatsApp(){
 // RESET MODAL — clears all state including returning flag
 // ══════════════════════════════════════════════════════════════
 function resetBookingModal(){
+  clearTimeout(_lookupDebounce);
   document.getElementById('returning-check').style.display='block';
   document.getElementById('consent-prompt').style.display='none';
   document.getElementById('returning-prompt').style.display='none';
   document.getElementById('returning-confirmed').style.display='none';
   const lk=document.getElementById('returning-lookup');
-  if(lk) lk.value='';
+  if(lk){ lk.value=''; lk.style.borderColor='#E2EAF0'; }
   const st=document.getElementById('lookup-status');
   if(st){ st.style.display='none'; st.innerHTML=''; }
   isReturningPatient = false;
@@ -1935,7 +2000,8 @@ confirmReturning = async function(){
   if(fullLookup && fullLookup.value) {
     document.getElementById('returning-lookup').value = fullLookup.value;
   } else if(itiLookup) {
-    document.getElementById('returning-lookup').value = itiLookup.getNumber();
+    var num = itiLookup.getNumber();
+    if(num && num.length > 4) document.getElementById('returning-lookup').value = num;
   }
   await _origConfirmReturning();
 };
