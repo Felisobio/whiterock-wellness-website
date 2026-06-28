@@ -987,7 +987,7 @@ loadHealthTips();
     <div id="returning-prompt" style="display:none;background:var(--offwhite);border:1.5px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:1rem;text-align:left">
       <div style="font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.35rem">Welcome back! Enter your phone number or email:</div>
       <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.6rem">We'll search automatically once your entry is complete &#128269;</div>
-      <input type="text" id="returning-lookup" placeholder="e.g. +2348162847976 or your@email.com" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none;margin-bottom:0.5rem;box-sizing:border-box;transition:border-color 0.2s" oninput="onLookupInput(this.value)">
+      <input type="tel" id="returning-lookup" placeholder="800 000 0000 or your@email.com" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none;margin-bottom:0.5rem;box-sizing:border-box;transition:border-color 0.2s" oninput="onLookupInput(this.value)">
       <div id="lookup-status" style="display:none;font-size:0.78rem;padding:0.6rem 0.85rem;border-radius:8px;margin-bottom:0.5rem;text-align:left;line-height:1.6"></div>
     </div>
 
@@ -1073,8 +1073,13 @@ async function confirmReturning(){
       const input=document.getElementById('returning-lookup');
       input.style.borderColor='#F59E0B';
       status.style.cssText='display:block;background:rgba(245,158,11,0.07);color:#92400E;border-radius:8px;padding:0.75rem 1rem;line-height:1.75;font-size:0.83rem;text-align:left;';
-      status.innerHTML='We could not find that number or email in our records.<br><br>Could you have used a <strong>different number</strong> during your last visit? Please try again - or if this is your first visit, fill in our <a href="consent.html" style="color:var(--royal);font-weight:700;text-decoration:underline">consent form</a>.';
-      input.value='';input.focus();
+      status.style.cssText='display:block;background:rgba(239,68,68,0.08);color:#991B1B;border-radius:8px;padding:0.75rem 1rem;line-height:1.75;font-size:0.83rem;text-align:left;border:1px solid rgba(239,68,68,0.2);';
+      status.innerHTML='We\'re sorry &mdash; we weren\'t able to find your record with us. &#128591;<br><br>This could be because this is your first visit, or perhaps a different number was used before. Please take a moment to fill in our <a href="consent.html" style="color:var(--royal);font-weight:700;text-decoration:underline">consent form</a> &mdash; it only takes a few minutes and helps Dr. Paul prepare especially for you. We can\'t wait to welcome you! &#128153;';
+      input.style.borderColor='#EF4444';
+      setTimeout(()=>{
+        document.getElementById('returning-prompt').style.display='none';
+        document.getElementById('consent-prompt').style.display='block';
+      },3500);
     }
   }catch(err){
     clearTimeout(timeoutId);
@@ -1145,10 +1150,20 @@ setTimeout(()=>{if(!chatOpen){const n=document.getElementById('chat-notif');if(n
 <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
 <script>
 function initPhoneInput(inputId,hiddenId){var input=document.getElementById(inputId);if(!input)return null;var hidden=document.createElement('input');hidden.type='hidden';hidden.id=hiddenId;input.parentNode.appendChild(hidden);var iti=window.intlTelInput(input,{initialCountry:'ng',preferredCountries:['ng','gh','ke','za','gb','us'],separateDialCode:true,utilsScript:'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'});input.addEventListener('change',function(){hidden.value=iti.getNumber();});input.addEventListener('keyup',function(){hidden.value=iti.getNumber();});return iti;}
-var itiBooking=null;
-document.addEventListener('DOMContentLoaded',function(){itiBooking=initPhoneInput('fp','fp-full');});
+var itiBooking=null,itiLookup=null;
+document.addEventListener('DOMContentLoaded',function(){
+  itiBooking=initPhoneInput('fp','fp-full');
+  itiLookup=initPhoneInput('returning-lookup','returning-lookup-full');
+});
 var _origSubmitForm=submitForm;
 submitForm=function(){var fullPhone=document.getElementById('fp-full');if(fullPhone&&fullPhone.value){document.getElementById('fp').value=fullPhone.value;}else if(itiBooking){document.getElementById('fp').value=itiBooking.getNumber();}; _origSubmitForm();};
+var _origConfirmReturning=confirmReturning;
+confirmReturning=async function(){
+  var fullLookup=document.getElementById('returning-lookup-full');
+  if(fullLookup&&fullLookup.value){document.getElementById('returning-lookup').value=fullLookup.value;}
+  else if(itiLookup){var num=itiLookup.getNumber();if(num&&num.length>4)document.getElementById('returning-lookup').value=num;}
+  await _origConfirmReturning();
+};
 </script>
 </body>
 </html>
