@@ -760,16 +760,19 @@ async function fetchPatients(){
       gender: p.Gender || '',
       address: p.Address || '',
       occupation: p.Occupation || '',
-      complaint: p.PrimaryComplaint || '',
+      complaint: p.PrimaryComplaint || p.Concern || '',
       symptoms: p.Symtomps || '',
       duration: typeof p.Duration === 'object' ? (p.Duration?.Value || '') : (p.Duration || ''),
       painLevel: p.PainLevel || '-',
       painAreas: p.PainAreas || '',
-      status: typeof p.Status === 'object' ? (p.Status?.Value || 'Pending Allocation') : (p.Status || 'Pending Allocation'),
+      // Returning patients sent from website have no Status — default them to Pending Allocation
+      status: typeof p.Status === 'object'
+        ? (p.Status?.Value || 'Pending Allocation')
+        : (p.Status || 'Pending Allocation'),
       therapist: p.AssignedTherapist || '',
       date: p.SubmittedAt ? p.SubmittedAt.split('T')[0] : (p.Created ? p.Created.split('T')[0] : ''),
-      // ── Preserve PatientType for returning badge ──
-      PatientType: p.PatientType || p.patientType || 'New Patient'
+      PatientType: p.PatientType || p.patientType || 'New Patient',
+      Source: p.Source || ''
     }));
   } catch(e) {
     console.log('Failed to fetch patients:', e);
@@ -932,78 +935,87 @@ function renderPatientsTable(patients){
 async function loadAllocations(){
   const all = await fetchPatients().catch(() => getMockPatients());
 
-  // ── ALLOCATION FILTER ──
-  // Include: (1) anyone pending/unassigned, (2) returning patients with a fresh booking
-  // who need a therapist assigned for THIS visit even if they have an old record
-  const patients = all.filter(p=>{
-    const needsAssignment = !p.therapist || p.therapist==='' || p.status==='Pending Allocation';
-    const isReturningFreshBooking = (p.PatientType==='Returning Patient' || p.patientType==='Returning Patient')
-      && (p.Source==='Returning Patient Lookup' || p.Source==='Silent Check — Yes Button (phone number)'
-        || p.Source==='Silent Check — Yes Button (email address)' || p.Source==='Silent Duplicate Check — Patient said First Visit')
-      && p.status !== 'Discharged' && p.status !== 'Closed';
-    return needsAssignment || isReturningFreshBooking;
+  // ── ALLOCATION FILTER — simple and reliable ──
+  // Show: (1) anything Pending Allocation, (2) any Returning Patient entry (new visit needs assignment)
+  // Exclude: Discharged, Closed
+  const patients = all.filter(p => {
+    if(p.status === 'Discharged' || p.status === 'Closed') return false;
+    const isPending = p.status === 'Pending Allocation' || !p.therapist || p.therapist === '';
+    const isReturning = p.PatientType === 'Returning Patient' || p.patientType === 'Returning Patient';
+    return isPending || isReturning;
   });
 
-  // Deduplicate by id — returning patient may appear twice (old + new entry)
-  const seen = new Set();
-  const uniquePatients = patients.filter(p=>{ if(seen.has(p.id)) return false; seen.add(p.id); return true; });
+  // Deduplicate — returning patients may have both old and new entries
+  // Keep the most recent entry per patient name
+  const seen = new Map();
+  patients.forEach(p => {
+    const key = p.name.trim().toLowerCase();
+    if(!seen.has(key) || new Date(p.date) > new Date(seen.get(key).date)){
+      seen.set(key, p);
+    }
+  });
+  const uniquePatients = Array.from(seen.values());
 
-  // Sort: returning patients first, then by date descending
-  uniquePatients.sort((a,b)=>{
-    const aRet = a.PatientType==='Returning Patient'||a.patientType==='Returning Patient';
-    const bRet = b.PatientType==='Returning Patient'||b.patientType==='Returning Patient';
+  // Sort: returning patients first, then newest first
+  uniquePatients.sort((a, b) => {
+    const aRet = a.PatientType==='Returning Patient' || a.patientType==='Returning Patient';
+    const bRet = b.PatientType==='Returning Patient' || b.patientType==='Returning Patient';
     if(aRet && !bRet) return -1;
     if(!aRet && bRet) return 1;
     return new Date(b.date||0) - new Date(a.date||0);
   });
 
   document.getElementById('alloc-badge').textContent = uniquePatients.length;
-  document.getElementById('alloc-badge').style.display = uniquePatients.length?'inline-block':'none';
+  document.getElementById('alloc-badge').style.display = uniquePatients.length ? 'inline-block' : 'none';
 
   const tenantUsers = await fetchTenantUsers();
   const userOptions = tenantUsers.length > 0
     ? tenantUsers.map(u => `<option value="${u.displayName}">${u.displayName}${u.jobTitle ? ' — '+u.jobTitle : ''}</option>`).join('')
     : getMockStaff().map(s=>`<option value="${s.name}">${s.name} (${s.role})</option>`).join('');
 
-  document.getElementById('allocations-list').innerHTML = uniquePatients.length ? uniquePatients.map(p=>{
+  document.getElementById('allocations-list').innerHTML = uniquePatients.length ? uniquePatients.map(p => {
     const isReturning = p.PatientType==='Returning Patient' || p.patientType==='Returning Patient';
-    const cardBorder = isReturning ? 'border:1.5px solid rgba(245,158,11,0.4);background:rgba(245,158,11,0.02)' : 'border:1.5px solid #FEF3C7';
-
     return `
-    <div class="alloc-card" style="${cardBorder}">
+    <div class="alloc-card" style="${isReturning ? 'border:1.5px solid rgba(245,158,11,0.5);background:rgba(255,251,235,0.6)' : ''}">
+
+      <!-- PATIENT HEADER -->
       <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem">
-        <div class="patient-init" style="width:38px;height:38px;font-size:0.82rem;${isReturning?'background:rgba(245,158,11,0.15);color:#92400E':''}">${getInitials(p.name)}</div>
+        <div class="patient-init" style="width:38px;height:38px;font-size:0.82rem;${isReturning ? 'background:rgba(245,158,11,0.15);color:#92400E' : ''}">${getInitials(p.name)}</div>
         <div style="flex:1">
           <div style="font-size:0.9rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
             ${p.name} ${getReturningBadge(p)}
           </div>
-          <div style="font-size:0.75rem;color:var(--muted)">${p.id} · Submitted ${p.date}</div>
+          <div style="font-size:0.75rem;color:var(--muted)">${p.id} · Booked ${p.date}</div>
         </div>
-        ${isReturning ? `<div style="font-size:0.65rem;font-weight:700;background:rgba(245,158,11,0.12);color:#92400E;border:1px solid rgba(245,158,11,0.25);border-radius:6px;padding:4px 8px;text-align:center;line-height:1.4">Returning<br>Patient</div>` : ''}
       </div>
 
+      <!-- RETURNING PATIENT NOTICE -->
       ${isReturning ? `
-      <div style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:0.65rem 0.85rem;margin-bottom:0.75rem;font-size:0.78rem;color:#7A4800;line-height:1.6">
-        <strong>↩ Returning patient — new booking.</strong> This patient has visited before. Please check their previous session notes before assigning a therapist, and consider continuity of care.
+      <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:0.6rem 0.85rem;margin-bottom:0.75rem;font-size:0.78rem;color:#7A4800;line-height:1.6;display:flex;gap:0.5rem;align-items:flex-start">
+        <span style="font-size:1rem;flex-shrink:0">↩</span>
+        <span><strong>Returning patient — new visit.</strong> Has been seen before${p.therapist ? ' by <strong>'+p.therapist+'</strong>' : ''}. Consider continuity of care when assigning.</span>
       </div>` : ''}
 
+      <!-- DETAILS -->
       <div class="alloc-details">
-        <div class="alloc-detail-item"><div class="alloc-detail-label">Complaint</div><div class="alloc-detail-val">${p.complaint||'Not specified'}</div></div>
-        <div class="alloc-detail-item"><div class="alloc-detail-label">Pain level</div><div class="alloc-detail-val">${p.painLevel||'—'}/10</div></div>
+        <div class="alloc-detail-item"><div class="alloc-detail-label">Complaint</div><div class="alloc-detail-val">${p.complaint || 'Not specified'}</div></div>
+        <div class="alloc-detail-item"><div class="alloc-detail-label">Pain level</div><div class="alloc-detail-val">${p.painLevel || '—'}/10</div></div>
         ${p.therapist ? `<div class="alloc-detail-item"><div class="alloc-detail-label">Previous therapist</div><div class="alloc-detail-val" style="color:var(--royal);font-weight:600">${p.therapist}</div></div>` : ''}
         ${p.phone ? `<div class="alloc-detail-item"><div class="alloc-detail-label">Phone</div><div class="alloc-detail-val">${p.phone}</div></div>` : ''}
       </div>
+
+      <!-- ASSIGN -->
       <div style="display:flex;gap:0.5rem;align-items:center">
         <select class="alloc-select" id="therapist-${p.id}">
-          <option value="">${isReturning && p.therapist ? 'Reassign or keep: '+p.therapist : 'Select therapist…'}</option>
-          ${isReturning && p.therapist ? `<option value="${p.therapist}" selected>${p.therapist} (previous therapist)</option>` : ''}
+          <option value="">Select therapist to assign…</option>
+          ${isReturning && p.therapist ? `<option value="${p.therapist}">${p.therapist} (previous — recommended)</option>` : ''}
           ${userOptions}
         </select>
         <button class="btn-primary" onclick="allocate('${p.id}','${p.name}')">Assign →</button>
       </div>
-      <textarea class="alloc-comment" id="comment-${p.id}" placeholder="${isReturning ? 'Note for therapist — e.g. same complaint as before, check previous notes…' : 'Allocation note…'}" rows="2"></textarea>
+      <textarea class="alloc-comment" id="comment-${p.id}" placeholder="${isReturning ? 'Note for therapist — e.g. same complaint as previous visit, check session notes…' : 'Allocation note for therapist…'}" rows="2"></textarea>
     </div>`;
-  }).join('') : '<div class="empty-state"><p>No patients pending allocation</p></div>';
+  }).join('') : '<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>All patients allocated</p></div>';
 }
 
 async function fetchFeedback(){
