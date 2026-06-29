@@ -409,14 +409,22 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
           <div class="page-title">Patients</div>
           <div class="page-sub">All patient records from consent form submissions</div>
           <div class="card" style="padding:0;overflow:hidden">
-            <div style="padding:1rem;border-bottom:1px solid var(--border);display:flex;gap:0.5rem;align-items:center">
-              <input type="text" id="patient-search" placeholder="Search by name, ID or complaint…" style="flex:1;padding:0.55rem 0.85rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.84rem;outline:none" oninput="filterPatients(this.value)">
+            <div style="padding:1rem;border-bottom:1px solid var(--border);display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">
+              <input type="text" id="patient-search" placeholder="Search by name, ID or complaint…" style="flex:1;min-width:180px;padding:0.55rem 0.85rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.84rem;outline:none" oninput="filterPatients(this.value)">
               <select id="patient-filter" onchange="filterPatients(document.getElementById('patient-search').value)" style="padding:0.55rem 0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none">
                 <option value="">All statuses</option>
                 <option value="Pending Allocation">Pending</option>
                 <option value="Allocated">Allocated</option>
                 <option value="Active">Active</option>
                 <option value="Discharged">Discharged</option>
+              </select>
+              <select id="patient-type-filter" onchange="filterPatients(document.getElementById('patient-search').value)" style="padding:0.55rem 0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none">
+                <option value="">All patients</option>
+                <option value="New Patient">New patients</option>
+                <option value="Returning Patient">Returning (RP)</option>
+              </select>
+              <select id="patient-therapist-filter" onchange="filterPatients(document.getElementById('patient-search').value)" style="padding:0.55rem 0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none">
+                <option value="">All therapists</option>
               </select>
             </div>
             <div id="patients-table-wrap"><div class="loading"><div class="spinner"></div>Loading patients…</div></div>
@@ -765,7 +773,7 @@ function calcKPI(ratings){ if(!ratings||!ratings.length) return 0; return Math.r
 function getReturningBadge(p){
   const isReturning = p.PatientType === 'Returning Patient' || p.patientType === 'Returning Patient';
   if(!isReturning) return '';
-  return `<span class="badge-returning">↩ Returning</span>`;
+  return `<span style="display:inline-flex;align-items:center;background:rgba(245,158,11,0.12);color:#92400E;border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:0.04em;flex-shrink:0">RP</span>`;
 }
 
 async function fetchPatients(){
@@ -887,26 +895,42 @@ async function loadOverview(){
 }
 
 async function loadPatients(){
-  // Show cached data immediately if available — reflects any local allocations
+  // Show cached data immediately if available
   if(allPatients && allPatients.length){
     renderPatientsTable(allPatients);
+    populateTherapistFilter(allPatients);
   } else {
     document.getElementById('patients-table-wrap').innerHTML = '<div class="loading"><div class="spinner"></div>Loading patients from Microsoft Lists…</div>';
   }
-  // Then refresh from Lists in background
+  // Refresh from Lists in background
   const fresh = await fetchPatients().catch(() => null);
   if(fresh && fresh.length){
     allPatients = fresh;
     renderPatientsTable(allPatients);
+    populateTherapistFilter(allPatients);
   }
+}
+
+function populateTherapistFilter(patients){
+  const sel = document.getElementById('patient-therapist-filter');
+  if(!sel) return;
+  // Get unique therapists from actual patient data
+  const therapists = [...new Set(patients.map(p=>p.therapist).filter(Boolean))].sort();
+  const current = sel.value;
+  sel.innerHTML = '<option value="">All therapists</option>'
+    + therapists.map(t=>`<option value="${t}"${t===current?' selected':''}>${t}</option>`).join('');
 }
 
 function filterPatients(search){
   const status = document.getElementById('patient-filter').value;
+  const patientType = document.getElementById('patient-type-filter') ? document.getElementById('patient-type-filter').value : '';
+  const therapistF = document.getElementById('patient-therapist-filter') ? document.getElementById('patient-therapist-filter').value : '';
   const filtered = allPatients.filter(p=>{
-    const ms = !search||p.name.toLowerCase().includes(search.toLowerCase())||p.id.toLowerCase().includes(search.toLowerCase())||p.complaint.toLowerCase().includes(search.toLowerCase());
+    const ms = !search||p.name.toLowerCase().includes(search.toLowerCase())||p.id.toLowerCase().includes(search.toLowerCase())||(p.complaint||'').toLowerCase().includes(search.toLowerCase());
     const mst = !status||p.status===status;
-    return ms&&mst;
+    const mpt = !patientType||(p.PatientType||'New Patient')===patientType;
+    const mth = !therapistF||(p.therapist||'').toLowerCase().includes(therapistF.toLowerCase());
+    return ms&&mst&&mpt&&mth;
   });
   renderPatientsTable(filtered);
 }
@@ -1293,7 +1317,9 @@ async function loadKPI(){
   var realFeedback = await fetchFeedback().catch(function(){ return []; });
   window._kpiFeedback = realFeedback.length>0?realFeedback:getMockFeedback();
   var allFeedback = window._kpiFeedback;
-  var therapistNames = [...new Set(allFeedback.map(function(f){ return f.therapist; }).filter(Boolean))];
+  var feedbackTherapists = [...new Set(allFeedback.map(function(f){ return f.therapist; }).filter(Boolean))];
+  var patientTherapists = [...new Set((window._allPatientsCache||[]).map(function(p){ return p.therapist; }).filter(Boolean))];
+  var therapistNames = [...new Set([...feedbackTherapists, ...patientTherapists])].sort();
   window._kpiTherapists = therapistNames;
   if(!therapistNames.length){ document.getElementById('kpi-cards-grid').innerHTML='<div class="empty-state"><p>No feedback data yet.</p></div>'; return; }
   if(!window._kpiSelMonths) window._kpiSelMonths = Array(12).fill(true);
@@ -1326,6 +1352,7 @@ async function loadKPI(){
   kpiUpdateClinicStats(allFeedback, therapistNames);
   // Render therapist backlog using patient data
   const patientsForBacklog = await fetchPatients().catch(()=>[]);
+  window._allPatientsCache = patientsForBacklog;
   kpiRenderBacklog(patientsForBacklog, therapistNames);
   kpiRenderCards();
 }
