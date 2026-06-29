@@ -822,7 +822,8 @@ function kpiSetup(isLead, allFeedbackRaw, allPatientsData, fetchedGraphUsers){
   });
   var therapistNames=Object.values(seen).sort();
   window._kpiTherapists=therapistNames;
-  window._kpiFeedback=allFeedback;
+  // Store unfiltered for kpiRenderCards — filtering happens inside
+  if(!window._kpiFeedback || window._kpiFeedback.length===0) window._kpiFeedback=allFeedbackRaw.length>0?allFeedbackRaw:getMockFeedback();
   window._allPatientsCache=allPatientsData;
 
   if(!therapistNames.length){
@@ -895,7 +896,11 @@ function kpiSetup(isLead, allFeedbackRaw, allPatientsData, fetchedGraphUsers){
 
 function calcTherapistKPI(feedback,name){var tf=feedback.filter(f=>f.therapist&&f.therapist.toLowerCase().trim()===name.toLowerCase().trim());if(!tf.length)return 0;return Math.round((tf.reduce((a,b)=>a+b.rating,0)/(5*tf.length))*100);}
 
-function kpiRenderBacklog(){}  // kept for compatibility — no longer used standalone
+var kpiCardPalettes=[
+  {bg:'#0A1628',avBg:'rgba(0,170,255,0.2)',avColor:'#00AAFF',scoreColor:'#00AAFF',mutedColor:'rgba(255,255,255,0.5)'},
+  {bg:'#1A3FBF',avBg:'rgba(0,212,255,0.2)',avColor:'#00D4FF',scoreColor:'#00D4FF',mutedColor:'rgba(255,255,255,0.5)'},
+  {bg:'#0A2050',avBg:'rgba(26,63,191,0.4)',avColor:'#8899FF',scoreColor:'#8899FF',mutedColor:'rgba(255,255,255,0.5)'},
+];
 
 function kpiRenderCards(){
   var allFeedback=window._kpiFeedback||[];
@@ -912,8 +917,9 @@ function kpiRenderCards(){
   var note=document.getElementById('kpi-filter-note');
   if(note) note.textContent=filtered.length+' therapist'+(filtered.length!==1?'s':'')+' \u00b7 '+selMonthNums.length+' month'+(selMonthNums.length!==1?'s':'');
   var grid=document.getElementById('kpi-cards-grid');
-  if(!grid) return;
-  if(!filtered.length){grid.innerHTML='<div style="text-align:center;padding:2rem;font-size:13px;color:var(--muted)">No therapists selected.</div>';return;}
+  if(!grid){ console.error('KPI: kpi-cards-grid not found'); return; }
+  console.log('KPI render: therapists='+therapistNames.length+' filtered='+filtered.length+' feedback='+allFeedback.length+' months='+selMonthNums.length);
+  if(!filtered.length){grid.innerHTML='<div style="text-align:center;padding:2rem;font-size:13px;color:var(--muted)">No therapists selected. Use the Therapists button above to select.</div>';return;}
 
   var filtFb=allFeedback.filter(function(f){return starFilter[Math.round(f.rating)];});
   var openName=window._kpiOpenCard||null;
