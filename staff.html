@@ -272,15 +272,22 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
               </div>
               <div id="kpi-filter-note" style="font-size:11px;color:#1A3FBF;font-weight:600;margin-left:auto;background:rgba(26,63,191,0.1);padding:5px 12px;border-radius:20px"></div>
             </div>
-            <!-- Star filter + comment toggle row (leads only shown via JS) -->
+            <!-- Star filter + comment toggle row -->
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(26,63,191,0.1)">
               <span style="font-size:11px;color:#1A3FBF;font-weight:600">Rating:</span>
-              <div style="display:flex;gap:4px">
-                <button class="kpi-star-btn active-star" data-star="5" onclick="kpiToggleStar(5,this)">5&#9733;</button>
-                <button class="kpi-star-btn active-star" data-star="4" onclick="kpiToggleStar(4,this)">4&#9733;</button>
-                <button class="kpi-star-btn active-star" data-star="3" onclick="kpiToggleStar(3,this)">3&#9733;</button>
-                <button class="kpi-star-btn active-star" data-star="2" onclick="kpiToggleStar(2,this)">2&#9733;</button>
-                <button class="kpi-star-btn active-star" data-star="1" onclick="kpiToggleStar(1,this)">1&#9733;</button>
+              <div style="position:relative">
+                <button onclick="kpiToggleDropdown('stars')" id="kpi-star-label" style="display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:6px;border:1.5px solid rgba(26,63,191,0.3);background:white;color:#1A3FBF;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">&#9733; All stars <span id="kpi-star-count" style="background:#FFF8E7;border:1px solid #FFB800;border-radius:10px;padding:1px 6px;color:#92400E;font-size:10px">5</span></button>
+                <div id="kpi-dd-stars" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:white;border:1px solid rgba(26,63,191,0.2);border-radius:12px;padding:8px;z-index:500;min-width:160px;box-shadow:0 8px 24px rgba(10,22,40,0.12)">
+                  <div style="display:flex;gap:4px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #E2EAF0">
+                    <button onclick="kpiStarSelectAll(true)" style="flex:1;padding:3px;border-radius:5px;border:1px solid #1A3FBF;background:#E8F4FF;color:#1A3FBF;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">All</button>
+                    <button onclick="kpiStarSelectAll(false)" style="flex:1;padding:3px;border-radius:5px;border:1px solid #E2EAF0;background:white;color:#5A6A7A;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Clear</button>
+                  </div>
+                  <button class="kpi-star-btn active-star" data-star="5" onclick="kpiToggleStar(5,this)" style="display:flex;width:100%;margin-bottom:3px;text-align:left">5&#9733;&#9733;&#9733;&#9733;&#9733;</button>
+                  <button class="kpi-star-btn active-star" data-star="4" onclick="kpiToggleStar(4,this)" style="display:flex;width:100%;margin-bottom:3px;text-align:left">4&#9733;&#9733;&#9733;&#9733;&#9734;</button>
+                  <button class="kpi-star-btn active-star" data-star="3" onclick="kpiToggleStar(3,this)" style="display:flex;width:100%;margin-bottom:3px;text-align:left">3&#9733;&#9733;&#9733;&#9734;&#9734;</button>
+                  <button class="kpi-star-btn active-star" data-star="2" onclick="kpiToggleStar(2,this)" style="display:flex;width:100%;margin-bottom:3px;text-align:left">2&#9733;&#9733;&#9734;&#9734;&#9734;</button>
+                  <button class="kpi-star-btn active-star" data-star="1" onclick="kpiToggleStar(1,this)" style="display:flex;width:100%;text-align:left">1&#9733;&#9734;&#9734;&#9734;&#9734;</button>
+                </div>
               </div>
               <div style="width:1px;height:20px;background:rgba(26,63,191,0.2);margin:0 4px"></div>
               <button id="kpi-comment-toggle" onclick="kpiToggleCommentView()" style="display:none;padding:4px 12px;border-radius:6px;border:1.5px solid rgba(26,63,191,0.3);background:white;color:#1A3FBF;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">&#128172; Comments: ON</button>
@@ -719,9 +726,38 @@ async function saveSession(patientId,patientName,safeId){
 window._kpiStarFilter={5:true,4:true,3:true,2:true,1:true};
 window._kpiShowComments=true;
 
+function kpiStarSelectAll(selectAll){
+  if(!window._kpiStarFilter)window._kpiStarFilter={5:true,4:true,3:true,2:true,1:true};
+  [1,2,3,4,5].forEach(function(s){window._kpiStarFilter[s]=selectAll;});
+  var dd=document.getElementById('kpi-dd-stars');
+  if(dd)dd.querySelectorAll('.kpi-star-btn').forEach(function(b){b.classList.toggle('active-star',selectAll);});
+  kpiUpdateStarLabel();
+  kpiRenderCards();
+}
+
+function kpiUpdateStarLabel(){
+  var sf=window._kpiStarFilter||{5:true,4:true,3:true,2:true,1:true};
+  var count=[1,2,3,4,5].filter(function(s){return sf[s];}).length;
+  var badge=document.getElementById('kpi-star-count');
+  if(badge)badge.textContent=count;
+  var lbl=document.getElementById('kpi-star-label');
+  if(lbl){lbl.style.borderColor=count<5?'#FFB800':'rgba(26,63,191,0.3)';lbl.style.color=count<5?'#92400E':'#1A3FBF';}
+}
+
+function kpiSelectAllTherapists(selectAll){
+  var names=window._kpiTherapists||[];
+  names.forEach(function(n){window._kpiSelTherapists[n]=selectAll;});
+  var tchips=document.getElementById('kpi-therapist-chips');
+  if(tchips){tchips.querySelectorAll('.kpi-dd-item').forEach(function(c){c.classList.toggle('on',selectAll);});}
+  var tc=document.getElementById('kpi-t-count');
+  if(tc)tc.textContent=selectAll?'all':'0';
+  kpiRenderCards();
+}
+
 function kpiToggleStar(star,btn){
   window._kpiStarFilter[star]=!window._kpiStarFilter[star];
   btn.classList.toggle('active-star',window._kpiStarFilter[star]);
+  kpiUpdateStarLabel();
   kpiRenderCards();
 }
 function kpiToggleCommentView(){
@@ -755,15 +791,24 @@ async function loadKPI(){
     allPatientsData=allPatientsData.filter(p=>p.therapist&&p.therapist.toLowerCase().includes(myName.split(' ')[0]));
   }
 
-  // Build therapist list from ALL MS users + feedback + patients, deduplicated case-insensitively
-  var excludeNames=['admin','administrator','system','service'];
+  // Build therapist list — only from feedback + patients (real data), NOT all MS users
+  // MS users caused noise (WhiteRock Bookings, info, jerry etc.) — use only names that
+  // appear in actual patient or feedback records, plus known getMockStaff names
+  var excludeNames=['admin','administrator','system','service','whiterock bookings','info','bookings'];
   var allRaw=[
     ...allFeedback.map(f=>f.therapist),
     ...allPatientsData.map(p=>p.therapist),
-    ...(isLead?tenantUsers.map(u=>u.displayName):[currentUser.name])
+    ...(isLead?getMockStaff().map(s=>s.name):[currentUser.name])
   ].filter(Boolean);
   var seen={};
-  allRaw.forEach(name=>{var key=name.toLowerCase().trim();if(excludeNames.indexOf(key)>=0)return;if(!seen[key])seen[key]=name;else if(name!==name.toLowerCase())seen[key]=name;});
+  allRaw.forEach(function(name){
+    var key=name.toLowerCase().trim();
+    if(excludeNames.indexOf(key)>=0) return; // skip non-clinical
+    if(name.trim().length < 2) return; // skip single chars
+    if(!seen[key]) seen[key]=name;
+    // Prefer title case (first letter capital) over all-lowercase
+    else{var cur=seen[key]; if(name[0]===name[0].toUpperCase()&&cur[0]===cur[0].toLowerCase()) seen[key]=name;}
+  });
   var therapistNames=Object.values(seen).sort();
   window._kpiTherapists=therapistNames;
 
@@ -787,7 +832,13 @@ async function loadKPI(){
   var tchips=document.getElementById('kpi-therapist-chips');
   if(tchips){
     tchips.innerHTML='';
-    therapistNames.forEach(name=>{
+    // Select All / Clear All row
+    var actRow=document.createElement('div');
+    actRow.style.cssText='display:flex;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #E2EAF0';
+    actRow.innerHTML='<button onclick="kpiSelectAllTherapists(true)" style="flex:1;padding:4px;border-radius:6px;border:1px solid #1A3FBF;background:#E8F4FF;color:#1A3FBF;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Select All</button>'
+      +'<button onclick="kpiSelectAllTherapists(false)" style="flex:1;padding:4px;border-radius:6px;border:1px solid #E2EAF0;background:white;color:#5A6A7A;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Clear All</button>';
+    tchips.appendChild(actRow);
+    therapistNames.forEach(function(name){
       var chip=document.createElement('div');chip.className='kpi-dd-item on';chip.textContent=name;chip.dataset.name=name;
       chip.onclick=function(){this.classList.toggle('on');window._kpiSelTherapists[this.dataset.name]=this.classList.contains('on');var selCount=Object.values(window._kpiSelTherapists).filter(Boolean).length;var tc=document.getElementById('kpi-t-count');if(tc)tc.textContent=selCount===Object.keys(window._kpiSelTherapists).length?'all':selCount;kpiRenderCards();};
       tchips.appendChild(chip);
@@ -918,11 +969,11 @@ function kpiRenderCards(){
   }
 }
 
-function kpiToggleDropdown(name){var ids=['therapists','months'];ids.forEach(id=>{var dd=document.getElementById('kpi-dd-'+id);if(dd)dd.style.display=(id===name&&dd.style.display==='none')?'block':'none';});}
+function kpiToggleDropdown(name){var ids=['therapists','months','stars'];ids.forEach(function(id){var dd=document.getElementById('kpi-dd-'+id);if(dd)dd.style.display=(id===name&&dd.style.display==='none')?'block':'none';});}
 function kpiSetPeriod(months,btn){var now=new Date(),cm=now.getMonth();window._kpiSelMonths=Array(12).fill(false);for(var i=0;i<months;i++)window._kpiSelMonths[(cm-i+12)%12]=true;document.querySelectorAll('.kpi-period-btn').forEach(b=>b.classList.remove('active-period'));if(btn)btn.classList.add('active-period');kpiUpdateMonthChips();kpiRenderCards();}
 function kpiToggleMonth(idx,el){if(!window._kpiSelMonths)window._kpiSelMonths=Array(12).fill(true);el.classList.toggle('on');window._kpiSelMonths[idx]=el.classList.contains('on');var count=window._kpiSelMonths.filter(Boolean).length;var badge=document.getElementById('kpi-m-count');if(badge)badge.textContent=count;document.querySelectorAll('.kpi-period-btn').forEach(b=>b.classList.remove('active-period'));kpiRenderCards();}
 function kpiUpdateMonthChips(){var mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],selM=window._kpiSelMonths||Array(12).fill(true);var chips=document.getElementById('kpi-month-chips');if(!chips)return;chips.innerHTML=mn.map((name,i)=>'<div class="kpi-dd-item'+(selM[i]?' on':'')+'" data-month="'+i+'" onclick="kpiToggleMonth('+i+',this)">'+name+'</div>').join('');var count=selM.filter(Boolean).length;var badge=document.getElementById('kpi-m-count');if(badge)badge.textContent=count;}
-document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('[onclick*="kpiToggleDropdown"]')){['therapists','months'].forEach(id=>{var dd=document.getElementById('kpi-dd-'+id);if(dd&&(!e.target.closest||!e.target.closest('#kpi-dd-'+id)))dd.style.display='none';});}});
+document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('[onclick*="kpiToggleDropdown"]')){['therapists','months','stars'].forEach(function(id){var dd=document.getElementById('kpi-dd-'+id);if(dd&&(!e.target.closest||!e.target.closest('#kpi-dd-'+id)))dd.style.display='none';});}});
 
 var kpiDetailChart=null,kpiActiveTherapist=null;
 function kpiOpenDetail(name){
