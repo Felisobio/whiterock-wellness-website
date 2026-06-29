@@ -749,59 +749,69 @@ function kpiToggleCommentView(){
   kpiRenderCards();
 }
 
-async function loadKPI(){
+function loadKPI(){
   var isLead=currentUser.role==='Lead'||currentUser.role==='Admin';
-  if(isLead)document.getElementById('kpi-mgmt-actions').style.display='flex';
-  document.getElementById('kpi-cards-grid').innerHTML='<div class="loading"><div class="spinner"></div>Loading KPI data...</div>';
+  if(isLead) document.getElementById('kpi-mgmt-actions').style.display='flex';
 
-  // Fetch feedback + patients simultaneously (no longer need MS users for therapist list)
-  var results=await Promise.all([
-    fetchFeedback().catch(()=>[]),
-    fetchPatients().catch(()=>[])
-  ]);
-  var realFeedback=results[0],allPatientsData=results[1];
+  // Role visibility
+  var tWrap=document.getElementById('kpi-therapist-filter-wrap');
+  var cmtBtn=document.getElementById('kpi-comment-toggle');
+  if(tWrap) tWrap.style.display=isLead?'block':'none';
+  if(cmtBtn) cmtBtn.style.display=isLead?'inline-block':'none';
+  if(!isLead) window._kpiShowComments=false;
+  if(!window._kpiSelMonths) window._kpiSelMonths=Array(12).fill(true);
 
-  window._kpiFeedback=realFeedback.length>0?realFeedback:getMockFeedback();
-  window._allPatientsCache=allPatientsData;
-  var allFeedback=window._kpiFeedback;
+  // STEP 1 — Render immediately with whatever we have (mock or cached)
+  var initFeedback = window._kpiFeedback || getMockFeedback();
+  var initPatients = window._allPatientsCache || [];
+  kpiSetup(isLead, initFeedback, initPatients, false);
 
-  // Non-leads see only their own data
+  // STEP 2 — Fetch real data in background, then re-render
+  var feedbackPromise = fetchFeedback().catch(function(){ return []; });
+  var patientsPromise = fetchPatients().catch(function(){ return []; });
+
+  // Hard 12-second deadline — render no matter what
+  var deadline = new Promise(function(resolve){
+    setTimeout(function(){ resolve(null); }, 12000);
+  });
+
+  Promise.race([
+    Promise.all([feedbackPromise, patientsPromise]),
+    deadline
+  ]).then(function(results){
+    if(!results) return; // timed out — already rendered with mock
+    var realFeedback=results[0], allPatientsData=results[1];
+    var feedback = realFeedback&&realFeedback.length>0 ? realFeedback : (window._kpiFeedback||getMockFeedback());
+    window._kpiFeedback = feedback;
+    window._allPatientsCache = allPatientsData||[];
+    kpiSetup(isLead, feedback, allPatientsData||[], true);
+  }).catch(function(e){
+    console.log('KPI load error:', e);
+  });
+}
+
+function kpiSetup(isLead, allFeedbackRaw, allPatientsData, fetchedGraphUsers){
+  var excludeNames=['admin','administrator','system','service','whiterock bookings','info','bookings'];
+  var allFeedback=allFeedbackRaw;
+
   if(!isLead){
     var myName=currentUser.name.toLowerCase();
-    allFeedback=allFeedback.filter(f=>f.therapist&&f.therapist.toLowerCase().includes(myName.split(' ')[0]));
-    allPatientsData=allPatientsData.filter(p=>p.therapist&&p.therapist.toLowerCase().includes(myName.split(' ')[0]));
+    allFeedback=allFeedback.filter(function(f){return f.therapist&&f.therapist.toLowerCase().includes(myName.split(' ')[0]);});
+    allPatientsData=allPatientsData.filter(function(p){return p.therapist&&p.therapist.toLowerCase().includes(myName.split(' ')[0]);});
   }
 
-  // Build therapist list — MS Graph users filtered to @whiterock-wellness.com only,
-  // plus anyone who appears in actual patient/feedback records
-  var excludeNames=['admin','administrator','system','service','whiterock bookings','info','bookings'];
-  var msNames=[];
-  if(isLead){
-    try{
-      var account=msalInstance.getAllAccounts()[0];
-      if(account){
-        var tr=await msalInstance.acquireTokenSilent({scopes:['https://graph.microsoft.com/User.ReadBasic.All'],account}).catch(function(){return null;});
-        if(tr){
-          var gRes=await fetchWithTimeout('https://graph.microsoft.com/v1.0/users?$select=displayName,mail,jobTitle&$top=100&$orderby=displayName',{headers:{'Authorization':'Bearer '+tr.accessToken}},8000).catch(function(){return null;});
-          if(gRes&&gRes.ok){
-            var gData=await gRes.json().catch(function(){return{};});
-            if(gData.value){
-              // Only include users with a whiterock-wellness.com email
-              msNames=gData.value.filter(function(u){
-                return u.displayName&&u.mail&&u.mail.toLowerCase().includes('@whiterock-wellness.com')&&!u.displayName.includes('#EXT#');
-              }).map(function(u){return u.displayName;});
-            }
-          }
-        }
-      }
-    }catch(e){console.log('Graph fetch failed:',e);}
-  }
-
+  // Build therapist list from patients + feedback + known staff
   var allRaw=[
     ...allFeedback.map(function(f){return f.therapist;}),
     ...allPatientsData.map(function(p){return p.therapist;}),
-    ...(isLead?[...msNames,...getMockStaff().map(function(s){return s.name;})]:[currentUser.name])
+    ...(isLead ? getMockStaff().map(function(s){return s.name;}) : [currentUser.name])
   ].filter(Boolean);
+
+  // Add cached MS users if available
+  if(isLead && window._cachedMsTherapists){
+    allRaw=allRaw.concat(window._cachedMsTherapists);
+  }
+
   var seen={};
   allRaw.forEach(function(name){
     var key=name.toLowerCase().trim();
@@ -812,26 +822,21 @@ async function loadKPI(){
   });
   var therapistNames=Object.values(seen).sort();
   window._kpiTherapists=therapistNames;
+  window._kpiFeedback=allFeedback;
+  window._allPatientsCache=allPatientsData;
 
-  if(!therapistNames.length){document.getElementById('kpi-cards-grid').innerHTML='<div class="empty-state"><p>No data yet. Assign therapists to patients to get started.</p></div>';return;}
-
-  // Role-based visibility
-  var tWrap=document.getElementById('kpi-therapist-filter-wrap');
-  var cmtBtn=document.getElementById('kpi-comment-toggle');
-  if(tWrap)tWrap.style.display=isLead?'block':'none';
-  if(cmtBtn)cmtBtn.style.display=isLead?'inline-block':'none';
-  if(!isLead)window._kpiShowComments=false;
-
-  if(!window._kpiSelMonths)window._kpiSelMonths=Array(12).fill(true);
-  if(!window._kpiMetrics)window._kpiMetrics={score:true,sessions:true,stars:true,trend:true,chart:true};
+  if(!therapistNames.length){
+    document.getElementById('kpi-cards-grid').innerHTML='<div class="empty-state"><p>No data yet. Assign therapists to patients to get started.</p></div>';
+    return;
+  }
 
   window._kpiSelTherapists={};
-  therapistNames.forEach(n=>window._kpiSelTherapists[n]=true);
+  therapistNames.forEach(function(n){window._kpiSelTherapists[n]=true;});
 
+  // Rebuild therapist chips
   var tchips=document.getElementById('kpi-therapist-chips');
   if(tchips){
     tchips.innerHTML='';
-    // Select All / Clear All row
     var actRow=document.createElement('div');
     actRow.style.cssText='display:flex;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #E2EAF0';
     actRow.innerHTML='<button onclick="kpiSelectAllTherapists(true)" style="flex:1;padding:4px;border-radius:6px;border:1px solid #1A3FBF;background:#E8F4FF;color:#1A3FBF;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Select All</button>'
@@ -839,16 +844,54 @@ async function loadKPI(){
     tchips.appendChild(actRow);
     therapistNames.forEach(function(name){
       var chip=document.createElement('div');chip.className='kpi-dd-item on';chip.textContent=name;chip.dataset.name=name;
-      chip.onclick=function(){this.classList.toggle('on');window._kpiSelTherapists[this.dataset.name]=this.classList.contains('on');var selCount=Object.values(window._kpiSelTherapists).filter(Boolean).length;var tc=document.getElementById('kpi-t-count');if(tc)tc.textContent=selCount===Object.keys(window._kpiSelTherapists).length?'all':selCount;kpiRenderCards();};
+      chip.onclick=function(){
+        this.classList.toggle('on');
+        window._kpiSelTherapists[this.dataset.name]=this.classList.contains('on');
+        var selCount=Object.values(window._kpiSelTherapists).filter(Boolean).length;
+        var tc=document.getElementById('kpi-t-count');
+        if(tc) tc.textContent=selCount===Object.keys(window._kpiSelTherapists).length?'all':selCount;
+        kpiRenderCards();
+      };
       tchips.appendChild(chip);
     });
   }
 
-  if(!window._kpiSelMonths){var now2=new Date(),cm=now2.getMonth();window._kpiSelMonths=Array(12).fill(false);for(var i=0;i<6;i++)window._kpiSelMonths[(cm-i+12)%12]=true;}
+  if(!window._kpiSelMonths){
+    var now2=new Date(),cm=now2.getMonth();
+    window._kpiSelMonths=Array(12).fill(false);
+    for(var i=0;i<6;i++) window._kpiSelMonths[(cm-i+12)%12]=true;
+  }
   kpiUpdateMonthChips();
-  kpiUpdateClinicStats(allFeedback,therapistNames);
+  kpiUpdateClinicStats(allFeedback, therapistNames);
   kpiRenderCards();
+
+  // After initial render, silently try to get MS Graph users and refresh if new names found
+  if(isLead && !window._cachedMsTherapists){
+    setTimeout(function(){
+      var account=msalInstance&&msalInstance.getAllAccounts()[0];
+      if(!account) return;
+      msalInstance.acquireTokenSilent({scopes:['https://graph.microsoft.com/User.ReadBasic.All'],account})
+        .then(function(tr){
+          return fetch('https://graph.microsoft.com/v1.0/users?$select=displayName,mail&$top=100',{headers:{'Authorization':'Bearer '+tr.accessToken}});
+        })
+        .then(function(r){return r.json();})
+        .then(function(data){
+          if(!data.value) return;
+          var names=data.value.filter(function(u){
+            return u.displayName&&u.mail&&u.mail.toLowerCase().includes('@whiterock-wellness.com')&&!u.displayName.includes('#EXT#');
+          }).map(function(u){return u.displayName;});
+          window._cachedMsTherapists=names;
+          // Only re-render if new therapists found
+          var newOnes=names.filter(function(n){return !window._kpiTherapists.some(function(t){return t.toLowerCase()===n.toLowerCase();});});
+          if(newOnes.length>0){
+            kpiSetup(isLead, window._kpiFeedback||[], window._allPatientsCache||[], true);
+          }
+        })
+        .catch(function(e){console.log('Graph silent fetch failed:',e);});
+    }, 500);
+  }
 }
+
 
 function calcTherapistKPI(feedback,name){var tf=feedback.filter(f=>f.therapist&&f.therapist.toLowerCase().trim()===name.toLowerCase().trim());if(!tf.length)return 0;return Math.round((tf.reduce((a,b)=>a+b.rating,0)/(5*tf.length))*100);}
 
