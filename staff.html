@@ -882,9 +882,18 @@ async function loadOverview(){
 }
 
 async function loadPatients(){
-  document.getElementById('patients-table-wrap').innerHTML = '<div class="loading"><div class="spinner"></div>Loading patients from Microsoft Lists…</div>';
-  allPatients = await fetchPatients().catch(() => getMockPatients());
-  renderPatientsTable(allPatients);
+  // Show cached data immediately if available — reflects any local allocations
+  if(allPatients && allPatients.length){
+    renderPatientsTable(allPatients);
+  } else {
+    document.getElementById('patients-table-wrap').innerHTML = '<div class="loading"><div class="spinner"></div>Loading patients from Microsoft Lists…</div>';
+  }
+  // Then refresh from Lists in background
+  const fresh = await fetchPatients().catch(() => null);
+  if(fresh && fresh.length){
+    allPatients = fresh;
+    renderPatientsTable(allPatients);
+  }
 }
 
 function filterPatients(search){
@@ -992,9 +1001,12 @@ async function loadAllocations(){
     ? tenantUsers.map(u => `<option value="${u.displayName}">${u.displayName}${u.jobTitle ? ' — '+u.jobTitle : ''}</option>`).join('')
     : getMockStaff().map(s=>`<option value="${s.name}">${s.name} (${s.role})</option>`).join('');
 
+  // Store patients in window so allocate() can look them up by index safely
+  window._allocPatients = uniquePatients;
+
   document.getElementById('allocations-list').innerHTML = uniquePatients.length ? uniquePatients.map(function(p, idx) {
     const isReturning = p.PatientType==='Returning Patient' || p.patientType==='Returning Patient';
-    const safeId = 'alloc_'+idx; // Use index — patient IDs may all be WRW-???
+    const safeId = 'alloc_'+idx;
     return `
     <div class="alloc-card" style="${isReturning ? 'border:1.5px solid rgba(245,158,11,0.5);background:rgba(255,251,235,0.6)' : ''}">
 
@@ -1031,7 +1043,7 @@ async function loadAllocations(){
           ${isReturning && p.therapist ? `<option value="${p.therapist}">${p.therapist} (previous — recommended)</option>` : ''}
           ${userOptions}
         </select>
-        <button class="btn-primary" onclick="allocate('${safeId}','${p.name}','${p.id}')">Assign →</button>
+        <button class="btn-primary" onclick="allocate(${idx})">Assign →</button>
       </div>
       <textarea class="alloc-comment" id="comment-${safeId}" placeholder="${isReturning ? 'Note for therapist — e.g. same complaint as previous visit, check session notes…' : 'Allocation note for therapist…'}" rows="2"></textarea>
     </div>`;
@@ -1113,26 +1125,59 @@ async function updatePatientStatus(patientId, patientName, newStatus){
   } catch(e){ alert('Connection error. Please try again.'); }
 }
 
-async function allocate(safeId, patientName, patientId){
+async function allocate(idx){
+  const p = (window._allocPatients || [])[idx];
+  if(!p){ alert('Patient not found. Please refresh the page.'); return; }
+  const safeId = 'alloc_'+idx;
   const therapistEl = document.getElementById('therapist-'+safeId);
   const commentEl = document.getElementById('comment-'+safeId);
   const therapist = therapistEl ? therapistEl.value : '';
   const comment = commentEl ? commentEl.value : '';
   if(!therapist){ alert('Please select a therapist.'); return; }
   const btn = event.target;
+  const card = btn.closest('.alloc-card');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
     await fetch(UPDATE_PATIENT_URL, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ patientId: patientId||safeId, patientName, therapist, status: 'Active', note: comment })
+      body: JSON.stringify({
+        patientId: p.id,
+        patientName: p.name,
+        therapist: therapist,
+        status: 'Active',
+        note: comment
+      })
     });
+    // Success — update local data immediately without waiting for API refresh
+    p.therapist = therapist;
+    p.status = 'Active';
+    // Update allPatients cache so Patients page reflects the change
+    if(window.allPatients){
+      var found = allPatients.find(function(ap){ return ap.name === p.name || ap.id === p.id; });
+      if(found){ found.therapist = therapist; found.status = 'Active'; }
+    }
+    // Remove card from DOM immediately
     btn.textContent = '✓ Allocated!'; btn.style.background = '#22C55E';
     setTimeout(()=>{
-      loadAllocations().catch(e=>console.log(e));
-      fetchPatients().then(data=>{ allPatients=data; }).catch(e=>console.log(e));
-    }, 2000);
-  } catch(e){ alert('Connection error. Please try again.'); btn.disabled=false; btn.textContent='Assign →'; }
+      if(card) card.style.transition = 'opacity 0.4s';
+      if(card) card.style.opacity = '0';
+      setTimeout(()=>{
+        if(card) card.remove();
+        // Update badge count
+        const remaining = document.querySelectorAll('#allocations-list .alloc-card').length;
+        const badge = document.getElementById('alloc-badge');
+        if(badge){ badge.textContent = remaining; badge.style.display = remaining ? 'inline-block' : 'none'; }
+        // If no more cards show empty state
+        if(remaining === 0){
+          document.getElementById('allocations-list').innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>All patients allocated</p></div>';
+        }
+      }, 400);
+    }, 800);
+  } catch(e){
+    alert('Connection error. Please try again.');
+    btn.disabled=false; btn.textContent='Assign →';
+  }
 }
 
 async function loadSessions(){
