@@ -749,63 +749,64 @@ function kpiToggleCommentView(){
   kpiRenderCards();
 }
 
-async function loadKPI(){
+function loadKPI(){
   var isLead = currentUser.role==='Lead' || currentUser.role==='Admin';
   if(isLead) document.getElementById('kpi-mgmt-actions').style.display='flex';
 
-  // Show loading
-  document.getElementById('kpi-cards-grid').innerHTML='<div class="loading"><div class="spinner"></div>Loading KPI data...</div>';
-
-  // Role visibility
   var tWrap = document.getElementById('kpi-therapist-filter-wrap');
   var cmtBtn = document.getElementById('kpi-comment-toggle');
   if(tWrap) tWrap.style.display = isLead ? 'block' : 'none';
   if(cmtBtn) cmtBtn.style.display = isLead ? 'inline-block' : 'none';
   if(!isLead) window._kpiShowComments = false;
 
-  // Fetch with timeout
-  function tFetch(url, opts){
-    return Promise.race([
-      fetch(url, opts),
-      new Promise(function(_,rej){ setTimeout(function(){ rej(new Error('timeout')); }, 8000); })
-    ]);
-  }
+  // Render immediately with mock/cached data — never wait
+  kpiDoRender(isLead, window._kpiFeedback || getMockFeedback(), window._allPatientsCache || []);
 
-  var feedback = [], patients = [];
-  try {
-    var r1 = await tFetch(GET_FEEDBACK_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:'{}' });
-    var d1 = await r1.json();
-    if(Array.isArray(d1)) feedback = d1.map(function(f){ return {patient:f.Title||'',patientId:f.PatientID||'',therapist:f.Therapist||'',rating:parseFloat(f.Rating)||0,comment:f.Comment||'',date:f.SessionDate||''}; });
-  } catch(e){ console.log('Feedback fetch failed:', e.message); }
+  // Fetch real data in background without blocking
+  fetch(GET_FEEDBACK_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!Array.isArray(data) || !data.length) return;
+      var fb = data.map(function(f){ return {patient:f.Title||'',patientId:f.PatientID||'',therapist:f.Therapist||'',rating:parseFloat(f.Rating)||0,comment:f.Comment||'',date:f.SessionDate||''}; });
+      window._kpiFeedback = fb;
+      kpiDoRender(isLead, window._kpiFeedback, window._allPatientsCache || []);
+    })
+    .catch(function(e){ console.log('Feedback fetch error:', e.message); });
 
-  try {
-    var r2 = await tFetch(GET_PATIENTS_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:'{}' });
-    var d2 = await r2.json();
-    if(Array.isArray(d2)) patients = d2.map(function(p){ return {
-      id:p.PatientID||'WRW-???', name:p.PatientName||p.Title||'Unknown',
-      status:typeof p.Status==='object'?(p.Status.Value||'Pending Allocation'):(p.Status||'Pending Allocation'),
-      therapist:p.AssignedTherapist||'', date:p.SubmittedAt?p.SubmittedAt.split('T')[0]:''
-    }; });
-  } catch(e){ console.log('Patients fetch failed:', e.message); }
+  fetch(GET_PATIENTS_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!Array.isArray(data)) return;
+      var pts = data.map(function(p){ return {
+        id:p.PatientID||'WRW-???', name:p.PatientName||p.Title||'Unknown',
+        status:typeof p.Status==='object'?(p.Status.Value||'Pending Allocation'):(p.Status||'Pending Allocation'),
+        therapist:p.AssignedTherapist||'', date:p.SubmittedAt?p.SubmittedAt.split('T')[0]:''
+      };});
+      window._allPatientsCache = pts;
+      kpiDoRender(isLead, window._kpiFeedback || getMockFeedback(), pts);
+    })
+    .catch(function(e){ console.log('Patients fetch error:', e.message); });
+}
 
-  // Use mock if empty
-  if(feedback.length === 0) feedback = getMockFeedback();
+function kpiDoRender(isLead, feedback, patients){
+  if(!feedback || !feedback.length) feedback = getMockFeedback();
 
   // Filter for non-leads
   if(!isLead){
     var me = currentUser.name.toLowerCase().split(' ')[0];
     feedback = feedback.filter(function(f){ return f.therapist && f.therapist.toLowerCase().includes(me); });
-    patients = patients.filter(function(p){ return p.therapist && p.therapist.toLowerCase().includes(me); });
+    patients = (patients||[]).filter(function(p){ return p.therapist && p.therapist.toLowerCase().includes(me); });
   }
 
   // Build therapist list
-  var raw = [];
+  var raw = [], skip = ['admin','administrator','system','service','whiterock bookings','info','bookings'];
   feedback.forEach(function(f){ if(f.therapist) raw.push(f.therapist); });
-  patients.forEach(function(p){ if(p.therapist) raw.push(p.therapist); });
-  getMockStaff().forEach(function(s){ if(isLead) raw.push(s.name); });
-  if(!isLead) raw.push(currentUser.name);
+  (patients||[]).forEach(function(p){ if(p.therapist) raw.push(p.therapist); });
+  if(isLead) getMockStaff().forEach(function(s){ raw.push(s.name); });
+  else raw.push(currentUser.name);
+  if(window._cachedMsTherapists) raw = raw.concat(window._cachedMsTherapists);
 
-  var seen = {}, skip = ['admin','administrator','system','service','whiterock bookings','info','bookings'];
+  var seen = {};
   raw.forEach(function(name){
     var k = name.toLowerCase().trim();
     if(skip.indexOf(k)>=0 || name.trim().length<2) return;
@@ -814,12 +815,10 @@ async function loadKPI(){
   });
   var therapists = Object.values(seen).sort();
 
-  // Store globally
   window._kpiFeedback = feedback;
-  window._allPatientsCache = patients;
+  window._allPatientsCache = patients||[];
   window._kpiTherapists = therapists;
 
-  // Defaults
   if(!window._kpiSelMonths){
     var now=new Date(), cm=now.getMonth();
     window._kpiSelMonths = Array(12).fill(false);
@@ -827,67 +826,38 @@ async function loadKPI(){
   }
   if(!window._kpiStarFilter) window._kpiStarFilter={5:true,4:true,3:true,2:true,1:true};
 
-  window._kpiSelTherapists = {};
-  therapists.forEach(function(n){ window._kpiSelTherapists[n]=true; });
-
-  // Build therapist chips
-  var tchips = document.getElementById('kpi-therapist-chips');
-  if(tchips){
-    tchips.innerHTML='';
-    var row = document.createElement('div');
-    row.style.cssText='display:flex;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #E2EAF0';
-    row.innerHTML='<button onclick="kpiSelectAllTherapists(true)" style="flex:1;padding:4px;border-radius:6px;border:1px solid #1A3FBF;background:#E8F4FF;color:#1A3FBF;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Select All</button>'
-      +'<button onclick="kpiSelectAllTherapists(false)" style="flex:1;padding:4px;border-radius:6px;border:1px solid #E2EAF0;background:white;color:#5A6A7A;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Clear All</button>';
-    tchips.appendChild(row);
-    therapists.forEach(function(name){
-      var chip=document.createElement('div'); chip.className='kpi-dd-item on'; chip.textContent=name; chip.dataset.name=name;
-      chip.onclick=function(){
-        this.classList.toggle('on');
-        window._kpiSelTherapists[this.dataset.name]=this.classList.contains('on');
-        var c=Object.values(window._kpiSelTherapists).filter(Boolean).length;
-        var tc=document.getElementById('kpi-t-count');
-        if(tc) tc.textContent=c===Object.keys(window._kpiSelTherapists).length?'all':c;
-        kpiRenderCards();
-      };
-      tchips.appendChild(chip);
-    });
-    var tc=document.getElementById('kpi-t-count');
-    if(tc) tc.textContent='all';
+  // Only rebuild chips if therapist list changed
+  var prevList = (window._kpiSelTherapists ? Object.keys(window._kpiSelTherapists) : []).sort().join(',');
+  var newList = therapists.sort().join(',');
+  if(prevList !== newList){
+    window._kpiSelTherapists = {};
+    therapists.forEach(function(n){ window._kpiSelTherapists[n]=true; });
+    var tchips = document.getElementById('kpi-therapist-chips');
+    if(tchips){
+      tchips.innerHTML='';
+      var row=document.createElement('div');
+      row.style.cssText='display:flex;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #E2EAF0';
+      row.innerHTML='<button onclick="kpiSelectAllTherapists(true)" style="flex:1;padding:4px;border-radius:6px;border:1px solid #1A3FBF;background:#E8F4FF;color:#1A3FBF;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Select All</button>'
+        +'<button onclick="kpiSelectAllTherapists(false)" style="flex:1;padding:4px;border-radius:6px;border:1px solid #E2EAF0;background:white;color:#5A6A7A;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Clear All</button>';
+      tchips.appendChild(row);
+      therapists.forEach(function(name){
+        var chip=document.createElement('div'); chip.className='kpi-dd-item on'; chip.textContent=name; chip.dataset.name=name;
+        chip.onclick=function(){
+          this.classList.toggle('on');
+          window._kpiSelTherapists[this.dataset.name]=this.classList.contains('on');
+          var c=Object.values(window._kpiSelTherapists).filter(Boolean).length;
+          var tc=document.getElementById('kpi-t-count');
+          if(tc) tc.textContent=c===therapists.length?'all':c;
+          kpiRenderCards();
+        };
+        tchips.appendChild(chip);
+      });
+    }
   }
 
   kpiUpdateMonthChips();
   kpiUpdateClinicStats(feedback, therapists);
   kpiRenderCards();
-
-  // Silently try MS Graph for more therapists
-  if(isLead){
-    setTimeout(function(){
-      var account = msalInstance && msalInstance.getAllAccounts()[0];
-      if(!account) return;
-      msalInstance.acquireTokenSilent({scopes:['https://graph.microsoft.com/User.ReadBasic.All'],account})
-        .then(function(tr){
-          return fetch('https://graph.microsoft.com/v1.0/users?$select=displayName,mail&$top=100',{headers:{'Authorization':'Bearer '+tr.accessToken}});
-        })
-        .then(function(r){ return r.json(); })
-        .then(function(data){
-          if(!data.value) return;
-          var msNames = data.value
-            .filter(function(u){ return u.displayName && u.mail && u.mail.toLowerCase().includes('@whiterock-wellness.com') && !u.displayName.includes('#EXT#'); })
-            .map(function(u){ return u.displayName; });
-          var added = false;
-          msNames.forEach(function(n){
-            var k=n.toLowerCase().trim();
-            if(!seen[k]){ seen[k]=n; added=true; }
-          });
-          if(added){
-            window._kpiTherapists = Object.values(seen).sort();
-            window._kpiTherapists.forEach(function(n){ window._kpiSelTherapists[n]=true; });
-            kpiRenderCards();
-          }
-        })
-        .catch(function(e){ console.log('Graph silent:', e.message); });
-    }, 1000);
-  }
 }
 
 
@@ -898,6 +868,75 @@ var kpiCardPalettes=[
   {bg:'#1A3FBF',avBg:'rgba(0,212,255,0.2)',avColor:'#00D4FF',scoreColor:'#00D4FF',mutedColor:'rgba(255,255,255,0.5)'},
   {bg:'#0A2050',avBg:'rgba(26,63,191,0.4)',avColor:'#8899FF',scoreColor:'#8899FF',mutedColor:'rgba(255,255,255,0.5)'},
 ];
+
+function kpiToggleDropdown(name){
+  var ids=['therapists','months','stars'];
+  ids.forEach(function(id){
+    var dd=document.getElementById('kpi-dd-'+id);
+    if(dd) dd.style.display=(id===name && dd.style.display==='none')?'block':'none';
+  });
+}
+
+function kpiSetPeriod(months,btn){
+  var now=new Date(), cm=now.getMonth();
+  window._kpiSelMonths=Array(12).fill(false);
+  for(var i=0;i<months;i++) window._kpiSelMonths[(cm-i+12)%12]=true;
+  document.querySelectorAll('.kpi-period-btn').forEach(function(b){b.classList.remove('active-period');});
+  if(btn) btn.classList.add('active-period');
+  kpiUpdateMonthChips();
+  kpiRenderCards();
+}
+
+function kpiToggleMonth(idx,el){
+  if(!window._kpiSelMonths) window._kpiSelMonths=Array(12).fill(true);
+  el.classList.toggle('on');
+  window._kpiSelMonths[idx]=el.classList.contains('on');
+  var count=window._kpiSelMonths.filter(Boolean).length;
+  var badge=document.getElementById('kpi-m-count');
+  if(badge) badge.textContent=count;
+  document.querySelectorAll('.kpi-period-btn').forEach(function(b){b.classList.remove('active-period');});
+  kpiRenderCards();
+}
+
+function kpiUpdateMonthChips(){
+  var mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var selM=window._kpiSelMonths||Array(12).fill(true);
+  var chips=document.getElementById('kpi-month-chips');
+  if(!chips) return;
+  chips.innerHTML=mn.map(function(name,i){
+    return '<div class="kpi-dd-item'+(selM[i]?' on':'')+'" onclick="kpiToggleMonth('+i+',this)">'+name+'</div>';
+  }).join('');
+  var count=selM.filter(Boolean).length;
+  var badge=document.getElementById('kpi-m-count');
+  if(badge) badge.textContent=count;
+}
+
+function kpiUpdateClinicStats(allFeedback, therapistNames){
+  var el=document.getElementById('kpi-clinic-stats');
+  if(!el) return;
+  var t=allFeedback.length;
+  var cs=t>0?Math.round((allFeedback.reduce(function(a,b){return a+b.rating;},0)/(5*t))*100):0;
+  var exc=therapistNames.filter(function(n){return calcTherapistKPI(allFeedback,n)>=85;}).length;
+  var nr=therapistNames.filter(function(n){return calcTherapistKPI(allFeedback,n)<70&&calcTherapistKPI(allFeedback,n)>0;}).length;
+  var cards=[
+    {label:'Clinic satisfaction',val:cs+'%',sub:t+' ratings total',bg:'#0A1628',vc:'#00AAFF',sc:'rgba(255,255,255,0.5)'},
+    {label:'Sessions rated',val:''+t,sub:therapistNames.length+' therapists',bg:'#E8F4FF',vc:'#1A3FBF',sc:'#1A3FBF'},
+    {label:'Excellent performers',val:''+exc,sub:'85%+ threshold',bg:'#E8F4FF',vc:'#0A1628',sc:'#1A3FBF'},
+    {label:'Needs review',val:''+nr,sub:'Below 70%',bg:nr>0?'#0A1628':'#E8F4FF',vc:nr>0?'#00AAFF':'#1A3FBF',sc:nr>0?'rgba(255,255,255,0.5)':'#1A3FBF'},
+  ];
+  el.innerHTML=cards.map(function(s){
+    return '<div style="background:'+s.bg+';border-radius:12px;padding:0.9rem 1rem"><div style="font-size:11px;color:'+s.sc+';margin-bottom:4px">'+s.label+'</div><div style="font-size:26px;font-weight:700;color:'+s.vc+';line-height:1">'+s.val+'</div><div style="font-size:11px;color:'+s.sc+';margin-top:4px">'+s.sub+'</div></div>';
+  }).join('');
+}
+
+document.addEventListener('click',function(e){
+  if(!e.target.closest || !e.target.closest('[onclick*="kpiToggleDropdown"]')){
+    ['therapists','months','stars'].forEach(function(id){
+      var dd=document.getElementById('kpi-dd-'+id);
+      if(dd && (!e.target.closest || !e.target.closest('#kpi-dd-'+id))) dd.style.display='none';
+    });
+  }
+});
 
 function kpiRenderCards(){
   var allFeedback=window._kpiFeedback||[];
