@@ -3,748 +3,271 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patient Consent Form – WhiteRock Wellness LTD</title>
+<title>Patient Consent Form &#8211; WhiteRock Wellness LTD</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --navy:#0A1628;
-  --royal:#1A3FBF;
-  --cyan:#00AAFF;
-  --cyan-lt:#00D4FF;
-  --sky:#E8F4FF;
-  --white:#FFFFFF;
-  --offwhite:#F5F9FF;
-  --text:#0A1628;
-  --muted:#5A6A7A;
-  --border:rgba(26,63,191,0.12);
-}
+:root{--navy:#0A1628;--royal:#1A3FBF;--cyan:#00AAFF;--cyan-lt:#00D4FF;--sky:#E8F4FF;--white:#FFFFFF;--offwhite:#F5F9FF;--text:#0A1628;--muted:#5A6A7A;--border:rgba(26,63,191,0.12)}
 html{scroll-behavior:smooth}
 body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--offwhite);line-height:1.6;overflow-x:hidden}
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#0A1628}
-::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:3px}
-
-/* NAV */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 5%;height:72px;
-  background:rgba(10,22,40,0.97);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(0,170,255,0.15);
-}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0A1628}::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:72px;background:rgba(10,22,40,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,170,255,0.15)}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.nav-logo-text .t1{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.15rem;font-weight:800;color:#fff}
-.nav-logo-text .t1 span{color:#00AAFF}
-.nav-logo-text .t2{font-family:'Plus Jakarta Sans',sans-serif;font-size:0.58rem;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:0.18em;text-transform:uppercase;margin-top:1px}
+.nav-logo-text .t1{font-size:1.15rem;font-weight:800;color:#fff}.nav-logo-text .t1 span{color:#00AAFF}
+.nav-logo-text .t2{font-size:0.58rem;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:0.18em;text-transform:uppercase;margin-top:1px}
 .back-link{color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.82rem;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s}
 .back-link:hover{color:var(--cyan)}
-
-/* HERO BANNER */
-.consent-hero{
-  background:linear-gradient(145deg,#030A18 0%,#0A1628 50%,#0D2050 100%);
-  padding:120px 5% 60px;
-  text-align:center;
-  position:relative;overflow:hidden;
-}
-.consent-hero::before{
-  content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);
-  width:600px;height:600px;
-  background:radial-gradient(circle,rgba(0,170,255,0.1) 0%,transparent 65%);
-  pointer-events:none;
-}
-.consent-hero .label{
-  font-size:0.72rem;font-weight:700;letter-spacing:0.18em;
-  text-transform:uppercase;color:var(--cyan);
-  display:inline-flex;align-items:center;gap:0.6rem;margin-bottom:1rem;
-}
-.consent-hero .label::before{content:'';width:20px;height:2px;background:var(--cyan)}
-.consent-hero .label::after{content:'';width:20px;height:2px;background:var(--cyan)}
-.consent-hero h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2rem,4vw,3.2rem);
-  font-weight:700;color:white;
-  line-height:1.15;margin-bottom:1rem;
-}
+.consent-hero{background:linear-gradient(145deg,#030A18 0%,#0A1628 50%,#0D2050 100%);padding:120px 5% 60px;text-align:center;position:relative;overflow:hidden}
+.consent-hero::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(0,170,255,0.1) 0%,transparent 65%);pointer-events:none}
+.consent-hero .label{font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--cyan);display:inline-flex;align-items:center;gap:0.6rem;margin-bottom:1rem}
+.consent-hero .label::before,.consent-hero .label::after{content:'';width:20px;height:2px;background:var(--cyan)}
+.consent-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:700;color:white;line-height:1.15;margin-bottom:1rem}
 .consent-hero p{color:rgba(255,255,255,0.6);font-size:1rem;max-width:580px;margin:0 auto 2rem;line-height:1.8}
-/* STICKY PROGRESS BAR */
-.sticky-progress{
-  position:sticky;top:72px;z-index:100;
-  background:rgba(10,22,40,0.97);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(0,170,255,0.15);
-  padding:0.75rem 5%;
-}
-.progress-steps{
-  display:flex;align-items:center;justify-content:center;gap:0;
-  max-width:520px;margin:0 auto;
-}
+.sticky-progress{position:sticky;top:72px;z-index:100;background:rgba(10,22,40,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,170,255,0.15);padding:0.75rem 5%}
+.progress-steps{display:flex;align-items:center;justify-content:center;gap:0;max-width:520px;margin:0 auto}
 .step-wrap{display:flex;flex-direction:column;align-items:center}
-.step-circle{
-  width:38px;height:38px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.82rem;font-weight:700;
-  border:2px solid rgba(255,255,255,0.18);
-  color:rgba(255,255,255,0.35);
-  transition:all 0.35s;background:transparent;
-  cursor:default;user-select:none;
-}
-.step-circle.active{
-  background:var(--cyan);border-color:var(--cyan);
-  color:var(--navy);box-shadow:0 0 0 4px rgba(0,170,255,0.2);
-  cursor:default;
-}
-.step-circle.done{
-  background:rgba(34,197,94,0.15);border-color:#22C55E;color:#22C55E;
-  cursor:pointer;
-}
-.step-circle.done:hover{
-  background:rgba(34,197,94,0.3);transform:scale(1.08);
-}
-.step-label{
-  font-size:0.62rem;color:rgba(255,255,255,0.35);
-  margin-top:5px;white-space:nowrap;font-weight:500;
-  transition:color 0.3s;
-}
-.step-label.active{color:var(--cyan)}
-.step-label.done{color:#22C55E}
-.step-connector{
-  flex:1;max-width:70px;height:2px;
-  background:rgba(255,255,255,0.1);
-  border-radius:2px;margin-bottom:18px;
-  transition:background 0.35s;
-}
+.step-circle{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;border:2px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.35);transition:all 0.35s;background:transparent;cursor:default;user-select:none}
+.step-circle.active{background:var(--cyan);border-color:var(--cyan);color:var(--navy);box-shadow:0 0 0 4px rgba(0,170,255,0.2)}
+.step-circle.done{background:rgba(34,197,94,0.15);border-color:#22C55E;color:#22C55E;cursor:pointer}
+.step-circle.done:hover{background:rgba(34,197,94,0.3);transform:scale(1.08)}
+.step-label{font-size:0.62rem;color:rgba(255,255,255,0.35);margin-top:5px;white-space:nowrap;font-weight:500;transition:color 0.3s}
+.step-label.active{color:var(--cyan)}.step-label.done{color:#22C55E}
+.step-connector{flex:1;max-width:70px;height:2px;background:rgba(255,255,255,0.1);border-radius:2px;margin-bottom:18px;transition:background 0.35s}
 .step-connector.done{background:var(--cyan)}
-
-
-/* PAIN BODY DIAGRAM */
-.pzone{cursor:pointer;transition:fill 0.15s}
-.pzone:hover{fill:rgba(0,170,255,0.2)}
-.pzone.selected{fill:rgba(239,68,68,0.45)}
-
-/* SIGNATURE TABS */
+.pzone{cursor:pointer;transition:fill 0.15s}.pzone:hover{fill:rgba(0,170,255,0.2)}.pzone.selected{fill:rgba(239,68,68,0.45)}
 .sig-tab-btns{display:flex;gap:0;margin-bottom:0;border-radius:10px 10px 0 0;overflow:hidden;border:1.5px solid #E2EAF0;border-bottom:none}
 .sig-tab{flex:1;padding:0.6rem;text-align:center;font-size:0.78rem;font-weight:600;cursor:pointer;background:var(--offwhite);color:var(--muted);border:none;font-family:"Plus Jakarta Sans",sans-serif;transition:all 0.2s}
 .sig-tab.active{background:white;color:var(--royal)}
-
-/* NEXT / BACK BUTTONS */
-.nav-btns{
-  display:flex;gap:0.75rem;justify-content:flex-end;
-  margin-top:2rem;padding-top:1.5rem;
-  border-top:1px solid var(--border);
-}
-.btn-back{
-  background:var(--offwhite);border:1.5px solid #E2EAF0;
-  color:var(--muted);padding:0.85rem 2rem;border-radius:10px;
-  font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:0.92rem;font-weight:600;cursor:pointer;
-  transition:all 0.2s;
-}
+.nav-btns{display:flex;gap:0.75rem;justify-content:flex-end;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.btn-back{background:var(--offwhite);border:1.5px solid #E2EAF0;color:var(--muted);padding:0.85rem 2rem;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.92rem;font-weight:600;cursor:pointer;transition:all 0.2s}
 .btn-back:hover{border-color:var(--royal);color:var(--royal)}
-.btn-next{
-  background:linear-gradient(135deg,var(--royal),var(--cyan));
-  color:white;border:none;padding:0.85rem 2.25rem;border-radius:10px;
-  font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:0.92rem;font-weight:700;cursor:pointer;
-  transition:all 0.2s;box-shadow:0 4px 16px rgba(26,63,191,0.25);
-}
+.btn-next{background:linear-gradient(135deg,var(--royal),var(--cyan));color:white;border:none;padding:0.85rem 2.25rem;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.92rem;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 16px rgba(26,63,191,0.25)}
 .btn-next:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(26,63,191,0.35)}
-
-/* MAIN CONTAINER */
 .form-container{max-width:860px;margin:0 auto;padding:3rem 5% 6rem}
-
-/* SECTION CARDS */
-.form-section{
-  background:white;border-radius:20px;
-  border:1px solid var(--border);
-  padding:2.5rem;margin-bottom:1.5rem;
-  box-shadow:0 4px 20px rgba(26,63,191,0.06);
-}
-.section-header{
-  display:flex;align-items:center;gap:1rem;
-  margin-bottom:2rem;padding-bottom:1.25rem;
-  border-bottom:1px solid var(--border);
-}
-.section-num{
-  width:40px;height:40px;border-radius:10px;
-  background:linear-gradient(135deg,var(--royal),var(--cyan));
-  display:flex;align-items:center;justify-content:center;
-  font-size:1rem;font-weight:800;color:white;flex-shrink:0;
-}
-.section-title{font-size:1.1rem;font-weight:700;color:var(--navy)}
-.section-sub{font-size:0.8rem;color:var(--muted);margin-top:2px}
-
-/* PATIENT ID BADGE */
-.patient-id-badge{
-  background:linear-gradient(135deg,var(--navy),var(--royal));
-  border-radius:14px;padding:1.25rem 1.75rem;
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:2rem;
-}
+.form-section{background:white;border-radius:20px;border:1px solid var(--border);padding:2.5rem;margin-bottom:1.5rem;box-shadow:0 4px 20px rgba(26,63,191,0.06)}
+.section-header{display:flex;align-items:center;gap:1rem;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.section-num{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--royal),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:white;flex-shrink:0}
+.section-title{font-size:1.1rem;font-weight:700;color:var(--navy)}.section-sub{font-size:0.8rem;color:var(--muted);margin-top:2px}
+.patient-id-badge{background:linear-gradient(135deg,var(--navy),var(--royal));border-radius:14px;padding:1.25rem 1.75rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
 .pid-label{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:4px}
 .pid-number{font-size:2rem;font-weight:800;color:var(--cyan);letter-spacing:0.06em;font-family:'Playfair Display',serif}
-.pid-date{font-size:0.78rem;color:rgba(255,255,255,0.4);margin-top:4px}
-.pid-icon{font-size:2.5rem;opacity:0.3}
-
-/* FORM ELEMENTS */
+.pid-date{font-size:0.78rem;color:rgba(255,255,255,0.4);margin-top:4px}.pid-icon{font-size:2.5rem;opacity:0.3}
 .fg{margin-bottom:1.25rem}
-.fg label{
-  display:block;font-size:0.72rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:0.08em;
-  color:var(--muted);margin-bottom:0.4rem;
-}
+.fg label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.4rem}
 .fg label .req{color:#EF4444}
-.fg input,.fg select,.fg textarea{
-  width:100%;padding:0.8rem 1rem;
-  border:1.5px solid #E2EAF0;border-radius:10px;
-  font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:0.9rem;color:var(--text);
-  outline:none;transition:border-color 0.2s,box-shadow 0.2s;background:var(--offwhite);
-}
-.fg input:focus,.fg select:focus,.fg textarea:focus{
-  border-color:var(--cyan);background:white;
-  box-shadow:0 0 0 3px rgba(0,170,255,0.1);
-}
+.fg input,.fg select,.fg textarea{width:100%;padding:0.8rem 1rem;border:1.5px solid #E2EAF0;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem;color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;background:var(--offwhite)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--cyan);background:white;box-shadow:0 0 0 3px rgba(0,170,255,0.1)}
 .fg textarea{resize:vertical;min-height:80px}
 .fg .hint{font-size:0.72rem;color:var(--muted);margin-top:0.35rem;line-height:1.5}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
 .fg input,.fg select{height:48px}
-
-/* PAIN SCALE */
+/* Country code + phone row */
+.phone-row{display:flex;gap:8px;align-items:stretch}
+.phone-row input{flex:1}
+.country-select{padding:0.6rem 0.5rem;border:1.5px solid #E2EAF0;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none;background:var(--offwhite);color:var(--text);flex-shrink:0;height:48px;width:auto}
+.country-select:focus{border-color:var(--cyan);background:white}
 .pain-scale{margin-bottom:1.25rem}
 .pain-scale label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem}
 .pain-label .req{color:#EF4444}
 .pain-options{display:grid;grid-template-columns:repeat(5,1fr);gap:0.5rem}
-.pain-opt{
-  border:2px solid #E2EAF0;border-radius:12px;
-  padding:0.75rem 0.5rem;text-align:center;cursor:pointer;
-  transition:all 0.2s;position:relative;
-}
+.pain-opt{border:2px solid #E2EAF0;border-radius:12px;padding:0.75rem 0.5rem;text-align:center;cursor:pointer;transition:all 0.2s}
 .pain-opt:hover{border-color:var(--cyan);background:var(--sky)}
-.pain-opt.selected{border-color:var(--pain-color,var(--cyan));background:var(--pain-bg,var(--sky))}
 .pain-opt .pain-emoji{font-size:1.6rem;display:block;margin-bottom:0.3rem}
 .pain-opt .pain-num{font-size:1.1rem;font-weight:800;color:var(--navy);display:block}
 .pain-opt .pain-desc{font-size:0.62rem;color:var(--muted);display:block;line-height:1.3;margin-top:2px}
-.pain-bar{
-  height:6px;border-radius:3px;margin-top:1rem;
-  background:linear-gradient(to right,#22C55E,#F59E0B,#EF4444);
-  position:relative;
-}
-.pain-bar-marker{
-  position:absolute;top:-5px;width:16px;height:16px;
-  border-radius:50%;background:white;
-  border:3px solid var(--royal);
-  transform:translateX(-50%);
-  transition:left 0.3s;
-  left:0%;
-}
-.pain-value-display{
-  display:flex;justify-content:space-between;
-  font-size:0.68rem;color:var(--muted);margin-top:0.4rem;
-}
-
-/* FILE UPLOAD */
-.upload-zone{
-  border:2px dashed #C8E8FF;border-radius:14px;
-  padding:2rem;text-align:center;
-  background:var(--sky);cursor:pointer;
-  transition:all 0.2s;position:relative;
-}
+.pain-bar{height:6px;border-radius:3px;margin-top:1rem;background:linear-gradient(to right,#22C55E,#F59E0B,#EF4444);position:relative}
+.pain-bar-marker{position:absolute;top:-5px;width:16px;height:16px;border-radius:50%;background:white;border:3px solid var(--royal);transform:translateX(-50%);transition:left 0.3s;left:0%}
+.pain-value-display{display:flex;justify-content:space-between;font-size:0.68rem;color:var(--muted);margin-top:0.4rem}
+.upload-zone{border:2px dashed #C8E8FF;border-radius:14px;padding:2rem;text-align:center;background:var(--sky);cursor:pointer;transition:all 0.2s;position:relative}
 .upload-zone:hover{border-color:var(--cyan);background:#D8EFFF}
-.upload-zone input[type=file]{
-  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
-}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .upload-icon{font-size:2.5rem;margin-bottom:0.5rem;display:block}
 .upload-title{font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem}
 .upload-sub{font-size:0.8rem;color:var(--muted)}
-.upload-badge{
-  display:inline-block;margin-top:0.75rem;
-  font-size:0.72rem;font-weight:600;
-  padding:0.3rem 0.85rem;border-radius:20px;
-  background:rgba(26,63,191,0.1);color:var(--royal);
-  border:1px solid rgba(26,63,191,0.2);
-}
+.upload-badge{display:inline-block;margin-top:0.75rem;font-size:0.72rem;font-weight:600;padding:0.3rem 0.85rem;border-radius:20px;background:rgba(26,63,191,0.1);color:var(--royal);border:1px solid rgba(26,63,191,0.2)}
 #file-list{margin-top:1rem;display:flex;flex-direction:column;gap:0.5rem}
-.file-item{
-  display:flex;align-items:center;gap:0.75rem;
-  background:white;border:1px solid var(--border);
-  border-radius:8px;padding:0.6rem 1rem;font-size:0.82rem;
-}
-.file-item-name{flex:1;color:var(--navy);font-weight:500}
-.file-item-size{color:var(--muted);font-size:0.75rem}
-.file-item-remove{
-  background:none;border:none;cursor:pointer;
-  color:#EF4444;font-size:1rem;padding:2px 6px;border-radius:4px;
-}
+.file-item{display:flex;align-items:center;gap:0.75rem;background:white;border:1px solid var(--border);border-radius:8px;padding:0.6rem 1rem;font-size:0.82rem}
+.file-item-name{flex:1;color:var(--navy);font-weight:500}.file-item-size{color:var(--muted);font-size:0.75rem}
+.file-item-remove{background:none;border:none;cursor:pointer;color:#EF4444;font-size:1rem;padding:2px 6px;border-radius:4px}
 .file-item-remove:hover{background:#FEF2F2}
-
-/* CONSENT DOCUMENT */
-.consent-doc{
-  background:var(--offwhite);border-radius:14px;
-  border:1.5px solid var(--border);
-  padding:0;overflow:hidden;
-  font-size:0.88rem;line-height:1.85;color:#2A3A4A;
-}
-.consent-doc-header{
-  background:linear-gradient(135deg,var(--navy),var(--royal));
-  padding:2rem 2.5rem;text-align:center;
-}
-.consent-doc-header h2{
-  font-family:'Playfair Display',serif;
-  font-size:1.3rem;color:white;margin-bottom:0.25rem;
-}
+.consent-doc{background:var(--offwhite);border-radius:14px;border:1.5px solid var(--border);padding:0;overflow:hidden;font-size:0.88rem;line-height:1.85;color:#2A3A4A}
+.consent-doc-header{background:linear-gradient(135deg,var(--navy),var(--royal));padding:2rem 2.5rem;text-align:center}
+.consent-doc-header h2{font-family:'Playfair Display',serif;font-size:1.3rem;color:white;margin-bottom:0.25rem}
 .consent-doc-header p{font-size:0.8rem;color:rgba(255,255,255,0.6);letter-spacing:0.06em}
 .consent-doc-body{padding:2rem 2.5rem;max-height:480px;overflow-y:auto}
 .consent-doc-body::-webkit-scrollbar{width:4px}
 .consent-doc-body::-webkit-scrollbar-track{background:#f0f0f0}
 .consent-doc-body::-webkit-scrollbar-thumb{background:var(--royal);border-radius:2px}
 .consent-clause{margin-bottom:1.75rem}
-.consent-clause h4{
-  font-size:0.82rem;font-weight:800;
-  text-transform:uppercase;letter-spacing:0.1em;
-  color:var(--royal);margin-bottom:0.6rem;
-  display:flex;align-items:center;gap:0.5rem;
-}
-.consent-clause h4::before{
-  content:'';width:16px;height:2px;background:var(--royal);
-}
+.consent-clause h4{font-size:0.82rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--royal);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem}
+.consent-clause h4::before{content:'';width:16px;height:2px;background:var(--royal)}
 .consent-clause p{color:#3A4A5A;line-height:1.85;font-size:0.875rem}
 .consent-clause p strong{color:var(--navy);font-weight:700}
-.warning-box{
-  background:rgba(239,68,68,0.06);
-  border-left:3px solid #EF4444;
-  border-radius:0 8px 8px 0;
-  padding:0.85rem 1rem;margin:0.75rem 0;
-  font-size:0.82rem;color:#7A1A1A;line-height:1.7;
-}
-.info-box{
-  background:rgba(0,170,255,0.06);
-  border-left:3px solid var(--cyan);
-  border-radius:0 8px 8px 0;
-  padding:0.85rem 1rem;margin:0.75rem 0;
-  font-size:0.82rem;color:#0A2A4A;line-height:1.7;
-}
-
-/* SIGNATURE AREA */
-.sig-area{
-  border:2px solid #E2EAF0;border-radius:12px;
-  padding:1.5rem;text-align:center;
-  background:var(--offwhite);margin-bottom:1rem;
-}
-.sig-canvas-wrap{
-  background:white;border:1.5px dashed #C8E8FF;
-  border-radius:8px;margin-bottom:0.75rem;overflow:hidden;
-}
+.warning-box{background:rgba(239,68,68,0.06);border-left:3px solid #EF4444;border-radius:0 8px 8px 0;padding:0.85rem 1rem;margin:0.75rem 0;font-size:0.82rem;color:#7A1A1A;line-height:1.7}
+.info-box{background:rgba(0,170,255,0.06);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:0.85rem 1rem;margin:0.75rem 0;font-size:0.82rem;color:#0A2A4A;line-height:1.7}
+.sig-area{border:2px solid #E2EAF0;border-radius:12px;padding:1.5rem;text-align:center;background:var(--offwhite);margin-bottom:1rem}
+.sig-canvas-wrap{background:white;border:1.5px dashed #C8E8FF;border-radius:8px;margin-bottom:0.75rem;overflow:hidden}
 canvas#sigCanvas{width:100%;height:140px;cursor:crosshair;touch-action:none}
 .sig-actions{display:flex;gap:0.5rem;justify-content:center}
-.sig-btn{
-  background:var(--offwhite);border:1.5px solid #E2EAF0;
-  color:var(--muted);padding:0.4rem 1rem;border-radius:6px;
-  font-size:0.78rem;font-weight:600;cursor:pointer;
-  font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s;
-}
+.sig-btn{background:var(--offwhite);border:1.5px solid #E2EAF0;color:var(--muted);padding:0.4rem 1rem;border-radius:6px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s}
 .sig-btn:hover{border-color:var(--cyan);color:var(--royal)}
 .sig-label-hint{font-size:0.72rem;color:var(--muted);margin-top:0.5rem}
-
-/* CHECKBOX AGREEMENT */
 .check-group{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem}
 .check-item{display:flex;gap:0.85rem;align-items:flex-start}
-.check-item input[type=checkbox]{
-  width:20px;height:20px;border-radius:5px;
-  accent-color:var(--royal);flex-shrink:0;margin-top:2px;cursor:pointer;
-}
+.check-item input[type=checkbox]{width:20px;height:20px;border-radius:5px;accent-color:var(--royal);flex-shrink:0;margin-top:2px;cursor:pointer}
 .check-item label{font-size:0.85rem;color:#3A4A5A;line-height:1.6;cursor:pointer}
 .check-item label strong{color:var(--navy)}
-
-/* SUBMIT BUTTON */
-.submit-final{
-  width:100%;background:linear-gradient(135deg,var(--royal),var(--cyan));
-  color:white;border:none;padding:1.2rem;border-radius:14px;
-  font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:1.05rem;font-weight:800;cursor:pointer;
-  transition:all 0.3s;margin-top:0.5rem;letter-spacing:0.02em;
-  box-shadow:0 8px 30px rgba(26,63,191,0.3);
-}
+.submit-final{width:100%;background:linear-gradient(135deg,var(--royal),var(--cyan));color:white;border:none;padding:1.2rem;border-radius:14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800;cursor:pointer;transition:all 0.3s;margin-top:0.5rem;letter-spacing:0.02em;box-shadow:0 8px 30px rgba(26,63,191,0.3)}
 .submit-final:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(26,63,191,0.4)}
 .submit-final:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-.submit-note{
-  text-align:center;font-size:0.78rem;color:var(--muted);
-  margin-top:0.75rem;display:flex;align-items:center;justify-content:center;gap:0.4rem;
-}
-
-/* SUCCESS SCREEN */
-#success-screen{
-  display:none;text-align:center;padding:4rem 2rem;
-}
+.submit-note{text-align:center;font-size:0.78rem;color:var(--muted);margin-top:0.75rem;display:flex;align-items:center;justify-content:center;gap:0.4rem}
+#success-screen{display:none;text-align:center;padding:4rem 2rem}
 #success-screen.show{display:block}
-.success-icon{
-  width:80px;height:80px;border-radius:50%;
-  background:linear-gradient(135deg,#22C55E,#16A34A);
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 1.5rem;font-size:2.5rem;
-  box-shadow:0 12px 40px rgba(34,197,94,0.35);
-}
-.success-id{
-  display:inline-block;
-  background:linear-gradient(135deg,var(--navy),var(--royal));
-  color:var(--cyan);font-size:1.4rem;font-weight:800;
-  padding:0.6rem 2rem;border-radius:10px;
-  font-family:'Playfair Display',serif;letter-spacing:0.08em;
-  margin:1rem 0;
-}
-
-/* RESPONSIVE */
-@media(max-width:640px){
-  .frow,.frow3{grid-template-columns:1fr}
-  .pain-options{grid-template-columns:repeat(5,1fr)}
-  .pain-opt .pain-desc{display:none}
-  .consent-doc-body{padding:1.25rem}
-  .form-section{padding:1.5rem}
-  .patient-id-badge{flex-direction:column;text-align:center;gap:0.5rem}
-  .step-connector{max-width:28px}
-  .step-label{font-size:0.55rem}
-  .step-circle{width:30px;height:30px;font-size:0.7rem}
-  .sticky-progress{padding:0.6rem 3%}
-  .nav-btns{flex-direction:column}
-  .btn-next,.btn-back{width:100%;text-align:center}
-}
-
-/* POLICY HIGHLIGHT */
-.policy-highlight{
-  background:linear-gradient(135deg,rgba(239,68,68,0.08),rgba(239,68,68,0.03));
-  border:1.5px solid rgba(239,68,68,0.25);
-  border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;
-}
-.policy-highlight h4{
-  color:#B91C1C;font-size:0.82rem;font-weight:800;
-  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;
-  display:flex;align-items:center;gap:0.4rem;
-}
-.policy-highlight p{font-size:0.82rem;color:#7A1A1A;line-height:1.75}
+.success-icon{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#22C55E,#16A34A);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2.5rem;box-shadow:0 12px 40px rgba(34,197,94,0.35)}
+.success-id{display:inline-block;background:linear-gradient(135deg,var(--navy),var(--royal));color:var(--cyan);font-size:1.4rem;font-weight:800;padding:0.6rem 2rem;border-radius:10px;font-family:'Playfair Display',serif;letter-spacing:0.08em;margin:1rem 0}
+@media(max-width:640px){.frow{grid-template-columns:1fr}.pain-options{grid-template-columns:repeat(5,1fr)}.pain-opt .pain-desc{display:none}.consent-doc-body{padding:1.25rem}.form-section{padding:1.5rem}.patient-id-badge{flex-direction:column;text-align:center;gap:0.5rem}.step-connector{max-width:28px}.step-label{font-size:0.55rem}.step-circle{width:30px;height:30px;font-size:0.7rem}.sticky-progress{padding:0.6rem 3%}.nav-btns{flex-direction:column}.btn-next,.btn-back{width:100%;text-align:center}.phone-row{flex-wrap:wrap}.country-select{width:100%}}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="40" width="40">
-      <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1ZM833.36,359.33v87.4c0,.15-.23.23-.35.12l-139.83-139.83c-19.5-19.53-45.51-30.19-73.12-30c-56.67.43-101.61,48.22-101.61,104.89v60.84c0,.19-.23.27-.35.15l-165.42-165.46h-2.24c45.28-.15,82.04-36.98,82.04-82.31v-87.36c0-.15.23-.27.35-.15l139.83,139.86c19.5,19.5,45.51,30.15,73.12,29.96,56.67-.39,101.61-48.18,101.61-104.85v-60.88c0-.15.23-.23.35-.12l165.42,165.46h2.24c-45.28.12-82.04,36.98-82.04,82.27Z"/>
-    </svg>
-    <div class="nav-logo-text">
-      <span class="t1">White<span>Rock</span></span>
-      <span class="t2">Wellness LTD</span>
-    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="40" width="40"><path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1Z"/></svg>
+    <div class="nav-logo-text"><span class="t1">White<span>Rock</span></span><span class="t2">Wellness LTD</span></div>
   </a>
-  <a href="index.html" class="back-link">← Back to website</a>
+  <a href="index.html" class="back-link">&larr; Back to website</a>
 </nav>
 
-<!-- HERO -->
 <div class="consent-hero">
   <div class="label">Patient Consent</div>
-  <h1>Patient Intake &<br>Consent Agreement</h1>
+  <h1>Patient Intake &amp;<br>Consent Agreement</h1>
   <p>Please complete all sections carefully and honestly. This information is strictly confidential and used only to provide you with the safest, most effective care possible.</p>
 </div>
 
-<!-- STICKY PROGRESS BAR -->
 <div class="sticky-progress" id="sticky-bar">
   <div class="progress-steps">
-    <div class="step-wrap">
-      <div class="step-circle active" id="s1c" onclick="clickStep(1)" title="Your Details">1</div>
-      <div class="step-label active" id="s1l">Your Details</div>
-    </div>
+    <div class="step-wrap"><div class="step-circle active" id="s1c" onclick="clickStep(1)">1</div><div class="step-label active" id="s1l">Your Details</div></div>
     <div class="step-connector" id="sc1"></div>
-    <div class="step-wrap">
-      <div class="step-circle" id="s2c" onclick="clickStep(2)" title="Health Info">2</div>
-      <div class="step-label" id="s2l">Health Info</div>
-    </div>
+    <div class="step-wrap"><div class="step-circle" id="s2c" onclick="clickStep(2)">2</div><div class="step-label" id="s2l">Health Info</div></div>
     <div class="step-connector" id="sc2"></div>
-    <div class="step-wrap">
-      <div class="step-circle" id="s3c" onclick="clickStep(3)" title="Documents">3</div>
-      <div class="step-label" id="s3l">Documents</div>
-    </div>
+    <div class="step-wrap"><div class="step-circle" id="s3c" onclick="clickStep(3)">3</div><div class="step-label" id="s3l">Documents</div></div>
     <div class="step-connector" id="sc3"></div>
-    <div class="step-wrap">
-      <div class="step-circle" id="s4c" onclick="clickStep(4)" title="Consent">4</div>
-      <div class="step-label" id="s4l">Consent</div>
-    </div>
+    <div class="step-wrap"><div class="step-circle" id="s4c" onclick="clickStep(4)">4</div><div class="step-label" id="s4l">Consent</div></div>
   </div>
+</div>
 
-<!-- FORM -->
 <div class="form-container">
-
-  <!-- SUCCESS SCREEN -->
   <div id="success-screen">
     <div class="form-section">
-      <div class="success-icon">✓</div>
+      <div class="success-icon">&#10003;</div>
       <h2 style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy);margin-bottom:0.75rem">Consent Form Submitted!</h2>
-      <p style="color:var(--muted);font-size:0.95rem;max-width:440px;margin:0 auto 1.5rem;line-height:1.8">Thank you. Your patient record has been created and your therapist will be fully prepared before your arrival. Your unique patient ID is:</p>
-      <div class="success-id" id="success-pid">WRW–1200</div>
+      <p style="color:var(--muted);font-size:0.95rem;max-width:440px;margin:0 auto 1.5rem;line-height:1.8">Thank you. Your patient record has been created. Your unique patient ID is:</p>
+      <div class="success-id" id="success-pid">WRW&ndash;1200</div>
       <p style="color:var(--muted);font-size:0.82rem;margin-top:0.5rem">Please keep this ID for your records.</p>
       <div style="background:var(--offwhite);border-radius:14px;padding:1.5rem;margin:2rem auto;max-width:400px;border:1px solid var(--border)">
         <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--cyan);margin-bottom:1rem">What happens next</div>
         <div style="display:flex;flex-direction:column;gap:0.85rem">
-          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem;color:var(--text)">
-            <span style="width:24px;height:24px;background:var(--royal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">1</span>
-            Our team reviews your form and documents within 30 minutes to 1 hour
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem;color:var(--text)">
-            <span style="width:24px;height:24px;background:var(--royal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">2</span>
-            Dr. Paul or your assigned therapist prepares your personalised plan
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem;color:var(--text)">
-            <span style="width:24px;height:24px;background:var(--royal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">3</span>
-            You receive a WhatsApp confirmation with your appointment details
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem;color:var(--text)">
-            <span style="width:24px;height:24px;background:#22C55E;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">✓</span>
-            Arrive at the clinic — everything is ready for you
-          </div>
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem"><span style="width:24px;height:24px;background:var(--royal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">1</span>Our team reviews your form within 30 minutes to 1 hour</div>
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem"><span style="width:24px;height:24px;background:var(--royal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">2</span>Dr. Paul or your assigned therapist prepares your personalised plan</div>
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem"><span style="width:24px;height:24px;background:var(--royal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">3</span>You receive a WhatsApp confirmation with your appointment details</div>
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem"><span style="width:24px;height:24px;background:#22C55E;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700;flex-shrink:0">&#10003;</span>Arrive at the clinic &mdash; everything is ready for you</div>
         </div>
       </div>
-      <a href="index.html" style="display:inline-block;background:var(--royal);color:white;padding:0.85rem 2.5rem;border-radius:50px;font-weight:700;text-decoration:none;font-size:0.95rem">Return to WhiteRock Wellness →</a>
+      <a href="index.html" style="display:inline-block;background:var(--royal);color:white;padding:0.85rem 2.5rem;border-radius:50px;font-weight:700;text-decoration:none;font-size:0.95rem">Return to WhiteRock Wellness &rarr;</a>
     </div>
   </div>
-
   <form id="consent-form" onsubmit="return false">
-
   <!-- SECTION 1: PATIENT DETAILS -->
   <div class="form-section" id="sec1" data-section="1">
-    <div class="section-header">
-      <div class="section-num">1</div>
-      <div>
-        <div class="section-title">Patient Details</div>
-        <div class="section-sub">Only Name and Phone are required — everything else is optional</div>
-      </div>
-    </div>
-
-    <!-- Patient ID badge -->
+    <div class="section-header"><div class="section-num">1</div><div><div class="section-title">Patient Details</div><div class="section-sub">Only Name and Phone are required &mdash; everything else helps us provide better care</div></div></div>
     <div class="patient-id-badge">
-      <div>
-        <div class="pid-label">Your Patient ID</div>
-        <div class="pid-number" id="patient-id-display">WRW–1200</div>
-        <div class="pid-date" id="pid-date-display">Issued: —</div>
-      </div>
-      <div class="pid-icon">🪪</div>
+      <div><div class="pid-label">Your Patient ID</div><div class="pid-number" id="patient-id-display">WRW&ndash;1200</div><div class="pid-date" id="pid-date-display">Issued: &mdash;</div></div>
+      <div class="pid-icon">&#128667;</div>
     </div>
-
     <div class="frow">
-      <div class="fg">
-        <label>First Name <span class="req">*</span></label>
-        <input type="text" id="c-fname" placeholder="e.g. Amaka" required>
-      </div>
-      <div class="fg">
-        <label>Last Name <span class="req">*</span></label>
-        <input type="text" id="c-lname" placeholder="e.g. Okonkwo" required>
-      </div>
+      <div class="fg"><label>First Name <span class="req">*</span></label><input type="text" id="c-fname" placeholder="e.g. Amaka" required></div>
+      <div class="fg"><label>Last Name <span class="req">*</span></label><input type="text" id="c-lname" placeholder="e.g. Okonkwo" required></div>
     </div>
-
     <div class="frow">
-      <div class="fg">
-        <label>Age</label>
-        <input type="number" id="c-age" placeholder="e.g. 34" min="1" max="120" required>
-      </div>
-      <div class="fg">
-        <label>Gender</label>
-        <select id="c-gender">
-          <option value="">Select…</option>
-          <option>Male</option>
-          <option>Female</option>
-          <option>Prefer not to say</option>
-        </select>
-      </div>
+      <div class="fg"><label>Age</label><input type="number" id="c-age" placeholder="e.g. 34" min="1" max="120"></div>
+      <div class="fg"><label>Gender</label><select id="c-gender"><option value="">Select&hellip;</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select></div>
     </div>
-
     <div class="frow">
       <div class="fg">
         <label>Phone / WhatsApp <span class="req">*</span></label>
-        <input type="tel" id="c-phone" placeholder="+234 800 000 0000" required>
+        <div class="phone-row">
+          <select id="c-phone-country" class="country-select"><option value="+234">&#127475;&#127468; +234</option><option value="+1">&#127482;&#127480; +1</option><option value="+44">&#127468;&#127463; +44</option><option value="+233">&#127468;&#127469; +233</option><option value="+254">&#127472;&#127466; +254</option><option value="+27">&#127487;&#127462; +27</option><option value="+971">&#127462;&#127466; +971</option><option value="+49">&#127465;&#127466; +49</option><option value="+33">&#127467;&#127479; +33</option></select>
+          <input type="tel" id="c-phone" placeholder="800 000 0000" required>
+        </div>
       </div>
-      <div class="fg">
-        <label>Email Address</label>
-        <input type="email" id="c-email" placeholder="your@email.com" required>
-      </div>
+      <div class="fg"><label>Email Address</label><input type="email" id="c-email" placeholder="your@email.com"></div>
     </div>
-
-    <div class="fg">
-      <label>Home Address</label>
-      <input type="text" id="c-address" placeholder="e.g. 12 Adeola Odeku Street, Victoria Island, Lagos">
+    <div class="fg"><label>Home Address</label><input type="text" id="c-address" placeholder="e.g. 12 Adeola Odeku Street, Victoria Island, Lagos"></div>
+    <div class="frow">
+      <div class="fg"><label>Occupation</label><input type="text" id="c-occupation" placeholder="e.g. Software Engineer, Trader, Nurse"></div>
+      <div class="fg"><label>How did you hear about us?</label><select id="c-referral"><option value="">Select&hellip;</option><option>Google Search</option><option>Instagram</option><option>TikTok</option><option>Facebook</option><option>YouTube</option><option>Friend or family referral</option><option>Doctor referral</option><option>WhatsApp</option><option>Walk-in / saw the clinic</option><option>Other</option></select></div>
     </div>
-
+    <!-- EMERGENCY CONTACT — split Name + Phone -->
     <div class="frow">
       <div class="fg">
-        <label>Occupation</label>
-        <input type="text" id="c-occupation" placeholder="e.g. Software Engineer, Trader, Nurse">
+        <label>Emergency Contact Name <span class="req">*</span></label>
+        <input type="text" id="c-emergency-name" placeholder="e.g. Emeka Obi" required>
       </div>
       <div class="fg">
-        <label>Emergency Contact Name & Phone <span class="req">*</span></label>
-        <input type="text" id="c-emergency" placeholder="e.g. Emeka Obi — 0812 345 6789" required>
+        <label>Emergency Contact Phone <span class="req">*</span></label>
+        <div class="phone-row">
+          <select id="c-emergency-country" class="country-select"><option value="+234">&#127475;&#127468; +234</option><option value="+1">&#127482;&#127480; +1</option><option value="+44">&#127468;&#127463; +44</option><option value="+233">&#127468;&#127469; +233</option><option value="+254">&#127472;&#127466; +254</option><option value="+27">&#127487;&#127462; +27</option><option value="+971">&#127462;&#127466; +971</option><option value="+49">&#127465;&#127466; +49</option><option value="+33">&#127467;&#127479; +33</option></select>
+          <input type="tel" id="c-emergency-phone" placeholder="800 000 0000" required>
+        </div>
       </div>
     </div>
-
-    <div class="fg">
-      <label>How did you hear about us?</label>
-      <select id="c-referral">
-        <option value="">Select…</option>
-        <option>Google Search</option>
-        <option>Instagram</option>
-        <option>TikTok</option>
-        <option>Facebook</option>
-        <option>YouTube</option>
-        <option>Friend or family referral</option>
-        <option>Doctor referral</option>
-        <option>WhatsApp</option>
-        <option>Walk-in / saw the clinic</option>
-        <option>Other</option>
-      </select>
-    </div>
-    <div class="nav-btns">
-      <button type="button" class="btn-next" onclick="goToStep(2)">Continue to Health Info →</button>
-    </div>
+    <div class="nav-btns"><button type="button" class="btn-next" onclick="goToStep(2)">Continue to Health Info &rarr;</button></div>
   </div>
+  <!-- SECTION 2: HEALTH INFO -->
   <div class="form-section" id="sec2" data-section="2" style="display:none">
-    <div class="section-header">
-      <div class="section-num">2</div>
-      <div>
-        <div class="section-title">Health & Complaint Information</div>
-        <div class="section-sub">Only your main complaint is required — fill as much or as little as you like</div>
-      </div>
-    </div>
-
+    <div class="section-header"><div class="section-num">2</div><div><div class="section-title">Health &amp; Complaint Information</div><div class="section-sub">Only your main complaint is required &mdash; fill as much or as little as you like</div></div></div>
     <div class="fg">
       <label>Primary Complaint / What is bothering you? <span class="req">*</span></label>
       <select id="c-complaint" required>
-        <option value="">Select your main issue…</option>
-        <optgroup label="── Spine Conditions ──">
-          <option>Scoliosis (curved spine)</option>
-          <option>Kyphosis (hunchback / upper spine)</option>
-          <option>Lordosis / Lower back pain</option>
-          <option>Spondylosis (spinal degeneration / wear)</option>
-          <option>Spondylolisthesis (slipped vertebra)</option>
-          <option>Spondylitis / Ankylosing Spondylitis</option>
-          <option>Slipped / Herniated Disc</option>
-        </optgroup>
-        <optgroup label="── Pain & Nerve Issues ──">
-          <option>Upper back pain</option>
-          <option>Neck pain or stiffness</option>
-          <option>Sciatica (pain shooting down leg)</option>
-          <option>Shoulder or arm pain</option>
-          <option>Knee or hip pain</option>
-          <option>Headaches or migraines</option>
-          <option>Indigestion / Acid Reflux (nerve-related)</option>
-        </optgroup>
-        <optgroup label="── Lifestyle & Wellness ──">
-          <option>Bad posture correction</option>
-          <option>Work / desk-related back pain</option>
-          <option>Sports injury</option>
-          <option>Pregnancy back pain</option>
-          <option>Insomnia / Sleep disorder</option>
-          <option>Stress & muscle tension</option>
-          <option>Corporate Wellness & Retreat session</option>
-        </optgroup>
-        <optgroup label="── Other ──">
-          <option>General wellness & prevention</option>
-          <option>Post-surgery rehabilitation</option>
-          <option>Not sure — need full assessment</option>
-        </optgroup>
+        <option value="">Select your main issue&hellip;</option>
+        <optgroup label="Spine Conditions"><option>Scoliosis (curved spine)</option><option>Kyphosis (hunchback / upper spine)</option><option>Lordosis / Lower back pain</option><option>Spondylosis (spinal degeneration)</option><option>Spondylolisthesis (slipped vertebra)</option><option>Spondylitis / Ankylosing Spondylitis</option><option>Slipped / Herniated Disc</option></optgroup>
+        <optgroup label="Pain &amp; Nerve Issues"><option>Upper back pain</option><option>Neck pain or stiffness</option><option>Sciatica (pain shooting down leg)</option><option>Shoulder or arm pain</option><option>Knee or hip pain</option><option>Headaches or migraines</option><option>Indigestion / Acid Reflux (nerve-related)</option></optgroup>
+        <optgroup label="Lifestyle &amp; Wellness"><option>Bad posture correction</option><option>Work / desk-related back pain</option><option>Sports injury</option><option>Pregnancy back pain</option><option>Insomnia / Sleep disorder</option><option>Stress &amp; muscle tension</option><option>Corporate Wellness &amp; Retreat session</option></optgroup>
+        <optgroup label="Other"><option>General wellness &amp; prevention</option><option>Post-surgery rehabilitation</option><option>Not sure &mdash; need full assessment</option></optgroup>
       </select>
     </div>
-
-    <div class="fg">
-      <label>Describe your symptoms in your own words</label>
-      <textarea id="c-symptoms" placeholder="When did it start? Where exactly is the pain? Does it spread anywhere? What makes it better or worse? Have you had any treatment before for this?" style="min-height:110px" required></textarea>
-      <div class="hint">💡 The more detail you provide, the better prepared your therapist will be.</div>
-    </div>
-
-    <div class="fg">
-      <label>How long have you had this condition?</label>
-      <select id="c-duration">
-        <option value="">Select…</option>
-        <option>Less than 1 week</option>
-        <option>1–4 weeks</option>
-        <option>1–3 months</option>
-        <option>3–6 months</option>
-        <option>6–12 months</option>
-        <option>1–3 years</option>
-        <option>More than 3 years</option>
-        <option>Since childhood</option>
-      </select>
-    </div>
-
-    <!-- PAIN TOLERANCE SCALE -->
+    <div class="fg"><label>Describe your symptoms in your own words</label><textarea id="c-symptoms" placeholder="When did it start? Where exactly is the pain? Does it spread? What makes it better or worse? Any previous treatment?" style="min-height:110px"></textarea><div class="hint">The more detail you provide, the better prepared your therapist will be.</div></div>
+    <div class="fg"><label>How long have you had this condition?</label><select id="c-duration"><option value="">Select&hellip;</option><option>Less than 1 week</option><option>1&ndash;4 weeks</option><option>1&ndash;3 months</option><option>3&ndash;6 months</option><option>6&ndash;12 months</option><option>1&ndash;3 years</option><option>More than 3 years</option><option>Since childhood</option></select></div>
     <div class="pain-scale">
-      <label class="pain-label">Current Pain Level <span class="req">*</span> <span style="font-size:0.68rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">— Select the level that best describes your pain right now</span></label>
+      <label class="pain-label">Current Pain Level <span class="req">*</span> <span style="font-size:0.68rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">&mdash; Select the level that best describes your pain right now</span></label>
       <div class="pain-options" id="pain-options">
-        <div class="pain-opt" data-level="1" data-color="#22C55E" data-bg="rgba(34,197,94,0.08)" onclick="selectPain(this)">
-          <span class="pain-emoji">😌</span>
-          <span class="pain-num">1–2</span>
-          <span class="pain-desc">Mild discomfort, barely noticeable</span>
-        </div>
-        <div class="pain-opt" data-level="2" data-color="#84CC16" data-bg="rgba(132,204,22,0.08)" onclick="selectPain(this)">
-          <span class="pain-emoji">🙂</span>
-          <span class="pain-num">3–4</span>
-          <span class="pain-desc">Annoying, manageable, distracting</span>
-        </div>
-        <div class="pain-opt" data-level="3" data-color="#F59E0B" data-bg="rgba(245,158,11,0.08)" onclick="selectPain(this)">
-          <span class="pain-emoji">😐</span>
-          <span class="pain-num">5–6</span>
-          <span class="pain-desc">Moderate, affects daily activity</span>
-        </div>
-        <div class="pain-opt" data-level="4" data-color="#F97316" data-bg="rgba(249,115,22,0.08)" onclick="selectPain(this)">
-          <span class="pain-emoji">😣</span>
-          <span class="pain-num">7–8</span>
-          <span class="pain-desc">Severe, difficult to concentrate</span>
-        </div>
-        <div class="pain-opt" data-level="5" data-color="#EF4444" data-bg="rgba(239,68,68,0.08)" onclick="selectPain(this)">
-          <span class="pain-emoji">😭</span>
-          <span class="pain-num">9–10</span>
-          <span class="pain-desc">Unbearable, incapacitating pain</span>
-        </div>
+        <div class="pain-opt" data-level="1" data-color="#22C55E" data-bg="rgba(34,197,94,0.08)" onclick="selectPain(this)"><span class="pain-emoji">&#128524;</span><span class="pain-num">1&ndash;2</span><span class="pain-desc">Mild, barely noticeable</span></div>
+        <div class="pain-opt" data-level="2" data-color="#84CC16" data-bg="rgba(132,204,22,0.08)" onclick="selectPain(this)"><span class="pain-emoji">&#128578;</span><span class="pain-num">3&ndash;4</span><span class="pain-desc">Annoying, manageable</span></div>
+        <div class="pain-opt" data-level="3" data-color="#F59E0B" data-bg="rgba(245,158,11,0.08)" onclick="selectPain(this)"><span class="pain-emoji">&#128528;</span><span class="pain-num">5&ndash;6</span><span class="pain-desc">Moderate, affects daily life</span></div>
+        <div class="pain-opt" data-level="4" data-color="#F97316" data-bg="rgba(249,115,22,0.08)" onclick="selectPain(this)"><span class="pain-emoji">&#128547;</span><span class="pain-num">7&ndash;8</span><span class="pain-desc">Severe, hard to function</span></div>
+        <div class="pain-opt" data-level="5" data-color="#EF4444" data-bg="rgba(239,68,68,0.08)" onclick="selectPain(this)"><span class="pain-emoji">&#128557;</span><span class="pain-num">9&ndash;10</span><span class="pain-desc">Unbearable, incapacitating</span></div>
       </div>
       <div class="pain-bar"><div class="pain-bar-marker" id="pain-marker"></div></div>
       <div class="pain-value-display"><span>No pain</span><span>Moderate</span><span>Worst imaginable</span></div>
       <input type="hidden" id="c-pain-level" value="">
     </div>
-
-    <div class="fg">
-      <label>Previous treatments or surgeries for this condition</label>
-      <textarea id="c-prev-treatment" placeholder="e.g. Physiotherapy in 2021, Paracetamol/NSAIDs, MRI scan (date), Surgery (type & year)…"></textarea>
-    </div>
-
+    <div class="fg"><label>Previous treatments or surgeries</label><textarea id="c-prev-treatment" placeholder="e.g. Physiotherapy 2021, Paracetamol/NSAIDs, MRI scan, Surgery&hellip;"></textarea></div>
     <div class="frow">
-      <div class="fg">
-        <label>Do you have any known allergies?</label>
-        <select id="c-allergies">
-          <option value="">Select…</option>
-          <option>No known allergies</option>
-          <option>Drug allergies</option>
-          <option>Food allergies</option>
-          <option>Latex allergy</option>
-          <option>Multiple allergies</option>
-        </select>
-      </div>
-      <div class="fg">
-        <label>Are you currently on any medication?</label>
-        <input type="text" id="c-medication" placeholder="e.g. Ibuprofen, Amlodipine, or 'None'">
-      </div>
+      <div class="fg"><label>Known allergies?</label><select id="c-allergies"><option value="">Select&hellip;</option><option>No known allergies</option><option>Drug allergies</option><option>Food allergies</option><option>Latex allergy</option><option>Multiple allergies</option></select></div>
+      <div class="fg"><label>Current medication?</label><input type="text" id="c-medication" placeholder="e.g. Ibuprofen, Amlodipine, or None"></div>
     </div>
-
     <div class="fg">
-      <label>Relevant medical history <span style="font-size:0.68rem;font-weight:400;text-transform:none;letter-spacing:0">(tick all that apply)</span></label>
+      <label>Relevant medical history (tick all that apply)</label>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.6rem;margin-top:0.6rem">
-        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Osteoporosis" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Osteoporosis / Bone loss</label>
-        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Arthritis" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Arthritis</label>
-        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Diabetes" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Diabetes</label>
-        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Hypertension" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> High blood pressure</label>
-        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Stroke" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Prior stroke or heart condition</label>
-        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Cancer" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Cancer (any history)</label>
-        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='#E2EAF0'"><input type="checkbox" name="history" value="Pregnancy" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Currently pregnant</label>
-        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--sky);border:1.5px solid rgba(0,170,255,0.25);border-radius:10px;padding:0.65rem 0.9rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='rgba(0,170,255,0.25)'"><input type="checkbox" name="history" value="None" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> None of the above</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem"><input type="checkbox" name="history" value="Osteoporosis" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Osteoporosis / Bone loss</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem"><input type="checkbox" name="history" value="Arthritis" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Arthritis</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem"><input type="checkbox" name="history" value="Diabetes" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Diabetes</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem"><input type="checkbox" name="history" value="Hypertension" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> High blood pressure</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem"><input type="checkbox" name="history" value="Stroke" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Prior stroke or heart condition</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem"><input type="checkbox" name="history" value="Cancer" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Cancer (any history)</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--offwhite);border:1.5px solid #E2EAF0;border-radius:10px;padding:0.65rem 0.9rem"><input type="checkbox" name="history" value="Pregnancy" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> Currently pregnant</label>
+        <label style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;font-weight:400;background:var(--sky);border:1.5px solid rgba(0,170,255,0.25);border-radius:10px;padding:0.65rem 0.9rem"><input type="checkbox" name="history" value="None" style="width:18px;height:18px;accent-color:var(--royal);flex-shrink:0"> None of the above</label>
       </div>
     </div>
-
     <!-- BODY PAIN DIAGRAM -->
     <div class="fg" style="margin-top:0.5rem">
       <label>Where is your pain? <span class="req">*</span> <span style="font-size:0.68rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">Tap the body to mark all pain areas</span></label>
@@ -819,881 +342,256 @@ canvas#sigCanvas{width:100%;height:140px;cursor:crosshair;touch-action:none}
         </div>
         <div style="margin-top:1rem;text-align:center">
           <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.4rem">Areas selected:</div>
-          <div id="pain-areas-display" style="min-height:22px;font-size:0.82rem;font-weight:600;color:var(--royal);line-height:1.6">None — tap the body diagram above</div>
+          <div id="pain-areas-display" style="min-height:22px;font-size:0.82rem;font-weight:600;color:var(--royal);line-height:1.6">None &mdash; tap the body diagram above</div>
           <input type="hidden" id="c-pain-areas" value="">
           <button type="button" onclick="clearPainAreas()" style="margin-top:0.4rem;font-size:0.72rem;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;font-family:'Plus Jakarta Sans',sans-serif">Clear all</button>
         </div>
       </div>
     </div>
-
-    <!-- SESSION GOAL -->
-    <div class="fg">
-      <label>What is your main goal for this treatment?</label>
-      <input type="text" id="c-goal" placeholder="e.g. Sit through a full workday without pain, return to football, sleep without waking up in pain…" required>
-      <div class="hint">Your therapist uses this as a measurable target for your recovery.</div>
-    </div>
-
-    <!-- LIFESTYLE QUESTIONS -->
+    <div class="fg"><label>What is your main goal for this treatment?</label><input type="text" id="c-goal" placeholder="e.g. Sit through a full workday without pain, return to football, sleep without waking&hellip;"><div class="hint">Your therapist uses this as a measurable target for your recovery.</div></div>
     <div style="background:linear-gradient(135deg,rgba(26,63,191,0.04),rgba(0,170,255,0.03));border:1.5px solid rgba(0,170,255,0.15);border-radius:14px;padding:1.5rem;margin-bottom:1.25rem">
-      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--royal);margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem"><span style="width:18px;height:2px;background:var(--royal);display:inline-block"></span>Lifestyle snapshot</div>
+      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--royal);margin-bottom:1.25rem">Lifestyle snapshot</div>
       <div class="frow" style="margin-bottom:1rem">
-        <div class="fg" style="margin-bottom:0">
-          <label>Hours sitting daily (work + commute)</label>
-          <select id="c-sitting">
-            <option value="">Select…</option>
-            <option>Less than 2 hours</option>
-            <option>2–4 hours</option>
-            <option>4–6 hours</option>
-            <option>6–8 hours</option>
-            <option>8–10 hours</option>
-            <option>More than 10 hours</option>
-          </select>
-        </div>
-        <div class="fg" style="margin-bottom:0">
-          <label>Exercise frequency</label>
-          <select id="c-exercise">
-            <option value="">Select…</option>
-            <option>Never / rarely</option>
-            <option>1–2 times a week</option>
-            <option>3–4 times a week</option>
-            <option>5+ times a week</option>
-            <option>Professional athlete</option>
-          </select>
-        </div>
+        <div class="fg" style="margin-bottom:0"><label>Hours sitting daily</label><select id="c-sitting"><option value="">Select&hellip;</option><option>Less than 2 hours</option><option>2&ndash;4 hours</option><option>4&ndash;6 hours</option><option>6&ndash;8 hours</option><option>8&ndash;10 hours</option><option>More than 10 hours</option></select></div>
+        <div class="fg" style="margin-bottom:0"><label>Exercise frequency</label><select id="c-exercise"><option value="">Select&hellip;</option><option>Never / rarely</option><option>1&ndash;2 times a week</option><option>3&ndash;4 times a week</option><option>5+ times a week</option><option>Professional athlete</option></select></div>
       </div>
       <div class="frow" style="margin-bottom:1rem">
-        <div class="fg" style="margin-bottom:0">
-          <label>Usual sleeping position</label>
-          <select id="c-sleep-pos">
-            <option value="">Select…</option>
-            <option>On my back</option>
-            <option>On my side (left)</option>
-            <option>On my side (right)</option>
-            <option>On my stomach</option>
-            <option>Varies / no fixed position</option>
-          </select>
-        </div>
-        <div class="fg" style="margin-bottom:0">
-          <label>Current stress level</label>
-          <select id="c-stress">
-            <option value="">Select…</option>
-            <option>Low — generally calm</option>
-            <option>Moderate — manageable</option>
-            <option>High — frequently stressed</option>
-            <option>Very high — constantly overwhelmed</option>
-          </select>
-        </div>
+        <div class="fg" style="margin-bottom:0"><label>Usual sleeping position</label><select id="c-sleep-pos"><option value="">Select&hellip;</option><option>On my back</option><option>On my side (left)</option><option>On my side (right)</option><option>On my stomach</option><option>Varies</option></select></div>
+        <div class="fg" style="margin-bottom:0"><label>Current stress level</label><select id="c-stress"><option value="">Select&hellip;</option><option>Low &mdash; generally calm</option><option>Moderate &mdash; manageable</option><option>High &mdash; frequently stressed</option><option>Very high &mdash; constantly overwhelmed</option></select></div>
       </div>
-      <div class="fg" style="margin-bottom:0">
-        <label>Type of work / daily activity</label>
-        <select id="c-work-type">
-          <option value="">Select…</option>
-          <option>Desk / office work (mostly sitting)</option>
-          <option>Standing work (retail, teaching, healthcare)</option>
-          <option>Physical / manual labour</option>
-          <option>Driving (commercial or long-distance)</option>
-          <option>Mix of sitting and moving</option>
-          <option>Student</option>
-          <option>Stay-at-home / not currently working</option>
-          <option>Retired</option>
-        </select>
-      </div>
+      <div class="fg" style="margin-bottom:0"><label>Type of work / daily activity</label><select id="c-work-type"><option value="">Select&hellip;</option><option>Desk / office work (mostly sitting)</option><option>Standing work (retail, teaching, healthcare)</option><option>Physical / manual labour</option><option>Driving (commercial or long-distance)</option><option>Mix of sitting and moving</option><option>Student</option><option>Stay-at-home / not currently working</option><option>Retired</option></select></div>
     </div>
-
-    <div class="nav-btns">
-      <button type="button" class="btn-back" onclick="goToStep(1)">← Back</button>
-      <button type="button" class="btn-next" onclick="goToStep(3)">Continue to Documents →</button>
-    </div>
+    <div class="nav-btns"><button type="button" class="btn-back" onclick="goToStep(1)">&larr; Back</button><button type="button" class="btn-next" onclick="goToStep(3)">Continue to Documents &rarr;</button></div>
   </div>
+  <!-- SECTION 3: DOCUMENTS -->
   <div class="form-section" id="sec3" data-section="3" style="display:none">
-    <div class="section-header">
-      <div class="section-num">3</div>
-      <div>
-        <div class="section-title">Medical Documents — Optional</div>
-        <div class="section-sub">Skip this section if you have no documents — you can bring them on the day</div>
-      </div>
-    </div>
-
+    <div class="section-header"><div class="section-num">3</div><div><div class="section-title">Medical Documents &mdash; Optional</div><div class="section-sub">Skip this section if you have no documents &mdash; you can bring them on the day</div></div></div>
     <div class="upload-zone" id="upload-zone">
       <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.heic,.dcm" onchange="handleFiles(this.files)">
-      <span class="upload-icon">📁</span>
-      <div class="upload-title">Tap to upload or drag & drop</div>
+      <span class="upload-icon">&#128193;</span>
+      <div class="upload-title">Tap to upload or drag &amp; drop</div>
       <div class="upload-sub">X-rays, MRI scans, reports, referral letters</div>
-      <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-top:0.75rem">
-        <span class="upload-badge">PDF</span>
-        <span class="upload-badge">JPG / PNG</span>
-        <span class="upload-badge">HEIC</span>
-        <span class="upload-badge">Max 50MB total</span>
-      </div>
+      <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-top:0.75rem"><span class="upload-badge">PDF</span><span class="upload-badge">JPG / PNG</span><span class="upload-badge">HEIC</span><span class="upload-badge">Max 50MB total</span></div>
     </div>
     <div id="file-list"></div>
-    <div id="file-size-warning" style="display:none;color:#EF4444;font-size:0.8rem;margin-top:0.5rem;font-weight:600">⚠ Total file size exceeds 50MB. Please remove some files.</div>
-    <div class="hint" style="margin-top:0.75rem">Having your documents available helps Dr. Paul and your therapist understand your condition more deeply before your first session. You can also bring physical copies on the day.</div>
-    <div class="nav-btns">
-      <button type="button" class="btn-back" onclick="goToStep(2)">← Back</button>
-      <button type="button" class="btn-next" onclick="goToStep(4)">Continue to Consent →</button>
-    </div>
+    <div id="file-size-warning" style="display:none;color:#EF4444;font-size:0.8rem;margin-top:0.5rem;font-weight:600">&#9888; Total file size exceeds 50MB. Please remove some files.</div>
+    <div class="hint" style="margin-top:0.75rem">Having your documents available helps Dr. Paul understand your condition more deeply before your first session. You can also bring physical copies on the day.</div>
+    <div class="nav-btns"><button type="button" class="btn-back" onclick="goToStep(2)">&larr; Back</button><button type="button" class="btn-next" onclick="goToStep(4)">Continue to Consent &rarr;</button></div>
   </div>
-
-  <!-- SECTION 4: CONSENT DOCUMENT -->
+  <!-- SECTION 4: CONSENT -->
   <div class="form-section" id="sec4" data-section="4" style="display:none">
-    <div class="section-header">
-      <div class="section-num">4</div>
-      <div>
-        <div class="section-title">Patient Consent & Agreement</div>
-        <div class="section-sub">Please read the full document carefully before signing</div>
-      </div>
-    </div>
-
-    <!-- The consent document -->
+    <div class="section-header"><div class="section-num">4</div><div><div class="section-title">Patient Consent &amp; Agreement</div><div class="section-sub">Please read the full document carefully before signing</div></div></div>
     <div class="consent-doc">
-      <div class="consent-doc-header">
-        <h2>PATIENT INFORMED CONSENT AGREEMENT</h2>
-        <p>WHITEROCK WELLNESS LTD · NO. 3 AYOBABA TUNDE CRESCENT, ONIRU, LAGOS, NIGERIA</p>
-      </div>
+      <div class="consent-doc-header"><h2>PATIENT INFORMED CONSENT AGREEMENT</h2><p>WHITEROCK WELLNESS LTD &middot; NO. 3 AYOBABA TUNDE CRESCENT, ONIRU, LAGOS, NIGERIA</p></div>
       <div class="consent-doc-body">
-
-        <div class="consent-clause">
-          <h4>Preamble</h4>
-          <p>This Patient Informed Consent Agreement ("Agreement") is entered into between <strong>WhiteRock Wellness LTD</strong> ("the Clinic", "we", "us"), a registered healthcare provider operating from No. 3 Ayobaba Tunde Crescent, Oniru, Lagos, Nigeria, and the undersigned patient ("the Patient", "you"). By submitting this form, you affirm that you have read, understood, and voluntarily agree to all terms contained herein. This Agreement constitutes a legally binding document and shall govern the entirety of your clinical relationship with WhiteRock Wellness LTD.</p>
-        </div>
-
-        <div class="consent-clause">
-          <h4>About WhiteRock Wellness</h4>
-          <p>WhiteRock Wellness LTD is a specialist musculoskeletal clinic offering chiropractic care, physiotherapy, therapeutic massage, and allied wellness services. Our clinical team is led by <strong>Dr. Paul Johnson Chima</strong>, a chiropractor trained at a leading Chinese chiropractic institution, combining Eastern precision with Western evidence-based medicine. Our mission is to identify and eliminate the root cause of pain — not merely suppress symptoms — to restore patients to full function and optimal health.</p>
-          <div class="info-box">WhiteRock Wellness operates on the principle of <strong>root-cause correction</strong>. We treat the source of your condition, not just the symptoms. This approach requires honesty from patients about their full medical history and compliance with the prescribed treatment plan for best outcomes.</div>
-        </div>
-
-        <div class="consent-clause">
-          <h4>Nature of Chiropractic Treatment & Expected Sensations</h4>
-          <p>Chiropractic care involves the <strong>manual manipulation and adjustment of the spine, joints, and associated soft tissues</strong> to correct misalignments (subluxations), relieve nerve compression, restore range of motion, and promote the body's natural healing capacity. The techniques employed at WhiteRock Wellness may include spinal high-velocity low-amplitude (HVLA) thrust adjustments, spinal mobilisation, decompression techniques, soft tissue manipulation, therapeutic massage, and rehabilitative exercises.</p>
-          <div class="warning-box">
-            <strong>IMPORTANT — PLEASE READ:</strong> Chiropractic adjustment and bone-setting procedures are clinical interventions that <strong>involve physical manipulation of your body</strong>. It is entirely normal — and clinically expected — to experience <strong>temporary discomfort, soreness, stiffness, clicking or popping sounds, and brief intensification of existing pain</strong> during and immediately following treatment. These sensations are a natural physiological response to the correction of long-standing structural dysfunction and are not indicative of injury. <strong>Most patients experience significant and lasting relief following the initial recovery period of 24–72 hours.</strong> The discomfort is temporary; the relief is the goal.
-          </div>
-          <p>You acknowledge that you have been fully informed of the physical nature of chiropractic treatment and that you voluntarily consent to receive such treatment, understanding that <strong>physical discomfort during and after the procedure is an inherent and expected component</strong> of the therapeutic process and does not constitute negligence, malpractice, or grounds for complaint or refund.</p>
-        </div>
-
-        <div class="consent-clause">
-          <h4>Known Risks & Contraindications</h4>
-          <p>As with all clinical interventions, chiropractic care carries a small but documented risk profile. By proceeding, you acknowledge awareness of the following potential — though rare — adverse effects:</p>
-          <p style="margin-top:0.6rem"><strong>(a)</strong> Temporary soreness, aching, or stiffness in the treated area lasting 24–72 hours after adjustment;<br>
-          <strong>(b)</strong> Temporary increase in pain intensity as the musculoskeletal system readjusts;<br>
-          <strong>(c)</strong> In extremely rare cases (&lt;1 in 5.85 million cervical adjustments), vertebrobasilar artery injury — a risk comparable to spontaneous occurrence in the general population;<br>
-          <strong>(d)</strong> Minor bruising at points of soft tissue treatment;<br>
-          <strong>(e)</strong> Temporary nerve sensitivity or numbness in adjacent areas.</p>
-          <p style="margin-top:0.6rem">You confirm that you have disclosed all relevant medical history, current medications, prior surgeries, and existing conditions that may affect treatment safety. WhiteRock Wellness cannot be held liable for adverse outcomes arising from <strong>undisclosed medical information</strong>.</p>
-        </div>
-
-        <div class="consent-clause">
-          <h4>Voluntary Consent & Right to Withdraw</h4>
-          <p>Your consent to treatment is entirely voluntary. You have the right to withdraw consent and discontinue treatment at any time during a session by clearly communicating this to your treating practitioner. However, you acknowledge that <strong>partial or incomplete treatment courses may reduce the efficacy of care and are not grounds for a fee refund</strong>. WhiteRock Wellness reserves the right to decline or discontinue treatment if, in the clinical judgment of the practitioner, continuation would be unsafe or contraindicated.</p>
-        </div>
-
-        <div class="consent-clause">
-          <h4>Medical History Accuracy</h4>
-          <p>You warrant that all medical information provided in this form and during clinical consultations is <strong>accurate, complete, and truthful</strong> to the best of your knowledge. You understand that withholding, misrepresenting, or omitting material medical information constitutes a breach of this Agreement and may result in harm, for which WhiteRock Wellness LTD and its practitioners cannot be held responsible. You agree to promptly notify your practitioner of any changes to your health status, medications, or circumstances that may be relevant to your care.</p>
-        </div>
-
-        <div class="consent-clause">
-          <h4>Treatment Plan & Clinical Discretion</h4>
-          <p>WhiteRock Wellness LTD retains full clinical discretion in determining the appropriate treatment modalities, frequency, and duration of care based on the patient's presenting condition. Recommendations provided by the clinical team are based on professional assessment and international chiropractic standards. <strong>The number of sessions required varies by individual condition, severity, duration, and patient compliance</strong>, and the Clinic makes no guarantee of specific outcomes within a prescribed timeframe, though the clinical team will always endeavour to achieve the best possible result.</p>
-        </div>
-
-        <div class="consent-clause">
-          <h4>Confidentiality & Data Protection</h4>
-          <p>All personal and medical information collected through this form and during your treatment at WhiteRock Wellness LTD is held in strict confidence. Your data will be used <strong>solely for the purposes of clinical care, treatment planning, and operational records</strong> of this clinic. We do not share, sell, or disclose your information to third parties without your explicit written consent, except where required by Nigerian law or in a medical emergency requiring disclosure to emergency services. By submitting this form, you consent to WhiteRock Wellness retaining your records for a minimum of seven (7) years in accordance with standard medical practice obligations.</p>
-        </div>
-
-
-
-        <div class="consent-clause">
-          <h4>Payment Terms</h4>
-          <p>All consultation and treatment fees are due at the time of service unless alternative arrangements have been expressly agreed in writing by clinic management. The initial consultation fee is <strong>₦20,000 per session</strong>. Subsequent session fees may vary depending on the treatment modality and duration. Payment may be made by cash or bank transfer. WhiteRock Wellness does not currently accept HMO coverage.</p>
-        </div>
-
-        <div class="consent-clause">
-          <h4>⛔ STRICT NO-REFUND POLICY</h4>
-          <div class="warning-box">
-            <strong>NO REFUND POLICY — PLEASE READ CAREFULLY BEFORE PROCEEDING.</strong><br><br>
-            All fees paid to WhiteRock Wellness LTD are <strong>strictly non-refundable</strong>. This policy applies without exception to:<br><br>
-            <strong>(i)</strong> Consultation fees paid prior to or at the time of assessment;<br>
-            <strong>(ii)</strong> Session fees paid for treatment sessions commenced or partially completed;<br>
-            <strong>(iii)</strong> Package or prepaid session fees, regardless of how many sessions have been attended;<br>
-            <strong>(iv)</strong> Fees paid where the patient voluntarily withdraws from treatment mid-session or mid-course;<br>
-            <strong>(v)</strong> Fees paid where the patient experiences expected discomfort or temporary pain during or following adjustment — as explicitly disclosed in this Agreement.<br><br>
-            The rationale for this policy is as follows: WhiteRock Wellness LTD commits significant clinical time, expertise, practitioner preparation, facility resources, and administrative effort to each patient encounter from the point of booking confirmation. These resources are expended regardless of whether the patient ultimately finds the session comfortable. <strong>Post-treatment discomfort is a clinically normal and expected outcome of chiropractic and bone-setting procedures and does not constitute a service failure.</strong><br><br>
-            In the event of a verified administrative error or a genuine contraindicated treatment that could not have been reasonably identified without the patient's disclosed history, the Clinic reserves the discretion — but not the obligation — to offer a session credit. <strong>Cash refunds will not be issued under any circumstances.</strong>
-          </div>
-        </div>
-
-        <div class="consent-clause">
-          <h4>Appointment Cancellation Policy</h4>
-          <p>We respectfully request a minimum of <strong>24 hours notice</strong> for appointment cancellations or rescheduling. Late cancellations (within 24 hours) or no-shows may result in forfeiture of the session fee or deposit. This policy exists to respect the time of our clinical staff and other patients who may have required that appointment slot.</p>
-        </div>
-
-
-
-
-
-        <div class="consent-clause">
-          <h4>Declaration</h4>
-          <p>By electronically signing this Agreement, you declare that:<br><br>
-          <strong>(a)</strong> You are 18 years of age or older, or are the parent/legal guardian of the patient named herein;<br>
-          <strong>(b)</strong> You have read, understood, and voluntarily agree to all terms of this Agreement without coercion;<br>
-          <strong>(c)</strong> All information provided is accurate and complete to the best of your knowledge;<br>
-          <strong>(d)</strong> You understand and accept the nature of chiropractic treatment including the likelihood of physical discomfort;<br>
-          <strong>(e)</strong> You understand and accept the strict no-refund policy of WhiteRock Wellness LTD;<br>
-          <strong>(f)</strong> You consent to receive chiropractic, physiotherapy, and/or allied wellness treatment from WhiteRock Wellness LTD and its clinical team.</p>
-        </div>
-
+        <div class="consent-clause"><h4>Preamble</h4><p>This Patient Informed Consent Agreement ("Agreement") is entered into between <strong>WhiteRock Wellness LTD</strong> ("the Clinic") and the undersigned patient ("you"). By submitting this form, you affirm that you have read, understood, and voluntarily agree to all terms contained herein.</p></div>
+        <div class="consent-clause"><h4>About WhiteRock Wellness</h4><p>WhiteRock Wellness LTD is a specialist musculoskeletal clinic offering chiropractic care, physiotherapy, therapeutic massage, and allied wellness services. Our clinical team is led by <strong>Dr. Paul Johnson Chima</strong>. Our mission is to identify and eliminate the root cause of pain &mdash; not merely suppress symptoms.</p><div class="info-box">WhiteRock Wellness operates on the principle of <strong>root-cause correction</strong>. We treat the source of your condition, not just the symptoms.</div></div>
+        <div class="consent-clause"><h4>Nature of Chiropractic Treatment &amp; Expected Sensations</h4><p>Chiropractic care involves the <strong>manual manipulation and adjustment of the spine, joints, and associated soft tissues</strong> to correct misalignments, relieve nerve compression, restore range of motion, and promote the body's natural healing capacity.</p><div class="warning-box"><strong>IMPORTANT &mdash; PLEASE READ:</strong> Chiropractic adjustment and bone-setting procedures <strong>involve physical manipulation of your body</strong>. It is entirely normal to experience <strong>temporary discomfort, soreness, stiffness, clicking or popping sounds, and brief intensification of existing pain</strong> during and immediately following treatment. These sensations are a natural physiological response and are not indicative of injury. <strong>Most patients experience significant and lasting relief following the initial recovery period of 24&ndash;72 hours.</strong></div><p>You acknowledge that you have been fully informed of the physical nature of chiropractic treatment and that you voluntarily consent to receive such treatment.</p></div>
+        <div class="consent-clause"><h4>Known Risks &amp; Contraindications</h4><p>As with all clinical interventions, chiropractic care carries a small but documented risk profile. Known risks include temporary soreness lasting 24&ndash;72 hours, temporary increase in pain intensity, minor bruising at points of soft tissue treatment, and temporary nerve sensitivity. You confirm that you have disclosed all relevant medical history. WhiteRock Wellness cannot be held liable for adverse outcomes arising from <strong>undisclosed medical information</strong>.</p></div>
+        <div class="consent-clause"><h4>Voluntary Consent &amp; Right to Withdraw</h4><p>Your consent to treatment is entirely voluntary. You have the right to withdraw consent at any time during a session by clearly communicating this to your treating practitioner. However, <strong>partial or incomplete treatment courses are not grounds for a fee refund</strong>.</p></div>
+        <div class="consent-clause"><h4>Medical History Accuracy</h4><p>You warrant that all medical information provided is <strong>accurate, complete, and truthful</strong> to the best of your knowledge. Withholding or misrepresenting material medical information is a breach of this Agreement.</p></div>
+        <div class="consent-clause"><h4>Confidentiality &amp; Data Protection</h4><p>All personal and medical information is held in strict confidence. Your data is used <strong>solely for clinical care and operational records</strong>. We do not share your information with third parties without your explicit consent, except where required by Nigerian law or in a medical emergency. By submitting this form, you consent to WhiteRock Wellness retaining your records for a minimum of seven (7) years.</p></div>
+        <div class="consent-clause"><h4>Payment Terms</h4><p>All consultation and treatment fees are due at the time of service. The initial consultation fee is <strong>&#8358;20,000 per session</strong>. Subsequent session fees may vary depending on the treatment modality. Payment may be made by cash or bank transfer. WhiteRock Wellness does not currently accept HMO coverage.</p></div>
+        <div class="consent-clause"><h4>&#9940; STRICT NO-REFUND POLICY</h4><div class="warning-box"><strong>NO REFUND POLICY &mdash; PLEASE READ CAREFULLY BEFORE PROCEEDING.</strong><br><br>All fees paid to WhiteRock Wellness LTD are <strong>strictly non-refundable</strong>. This applies without exception to consultation fees, session fees paid for treatment commenced or partially completed, package or prepaid session fees, and fees paid where the patient experiences expected discomfort or temporary pain during or following adjustment &mdash; as explicitly disclosed in this Agreement.<br><br><strong>Post-treatment discomfort is a clinically normal and expected outcome of chiropractic and bone-setting procedures and does not constitute a service failure. Cash refunds will not be issued under any circumstances.</strong></div></div>
+        <div class="consent-clause"><h4>Appointment Cancellation Policy</h4><p>We respectfully request a minimum of <strong>24 hours notice</strong> for appointment cancellations or rescheduling. Late cancellations (within 24 hours) or no-shows may result in forfeiture of the session fee or deposit.</p></div>
+        <div class="consent-clause"><h4>Declaration</h4><p>By electronically signing this Agreement, you declare that: (a) you are 18 years of age or older, or are the parent/legal guardian of the patient named herein; (b) you have read, understood, and voluntarily agree to all terms without coercion; (c) all information provided is accurate and complete to the best of your knowledge; (d) you understand and accept the nature of chiropractic treatment including the likelihood of physical discomfort; (e) you understand and accept the strict no-refund policy; (f) you consent to receive chiropractic, physiotherapy, and allied wellness treatment from WhiteRock Wellness LTD and its clinical team.</p></div>
       </div>
     </div>
-
-    <!-- Checkboxes -->
     <div style="margin-top:1.75rem">
       <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:1rem">Please confirm each statement by ticking the box:</div>
       <div class="check-group">
-        <div class="check-item">
-          <input type="checkbox" id="chk1" required>
-          <label for="chk1">I have read and fully understood the Patient Informed Consent Agreement above in its entirety, including the nature of chiropractic treatment and the expected physical discomfort associated with bone-setting and spinal adjustment procedures.</label>
-        </div>
-        <div class="check-item">
-          <input type="checkbox" id="chk2" required>
-          <label for="chk2">I understand and explicitly accept the <strong>strict no-refund policy</strong> of WhiteRock Wellness LTD. I acknowledge that all fees paid are non-refundable under any circumstances, including post-treatment discomfort.</label>
-        </div>
-        <div class="check-item">
-          <input type="checkbox" id="chk3" required>
-          <label for="chk3">I confirm that all medical history, personal information, and health details provided in this form are <strong>accurate, complete, and truthful</strong> to the best of my knowledge.</label>
-        </div>
-        <div class="check-item">
-          <input type="checkbox" id="chk4" required>
-          <label for="chk4">I voluntarily consent to receive chiropractic, physiotherapy, massage, and allied wellness treatment from WhiteRock Wellness LTD and its clinical team, and I understand that I may withdraw this consent during any session by communicating clearly with my practitioner.</label>
-        </div>
-        <div class="check-item">
-          <input type="checkbox" id="chk5" required>
-          <label for="chk5">I am 18 years of age or older (or I am completing this form as the legal guardian of the named patient), and I agree that this electronic submission constitutes my legally binding signature and agreement to all terms herein.</label>
-        </div>
+        <div class="check-item"><input type="checkbox" id="chk1" required><label for="chk1">I have read and fully understood the Patient Informed Consent Agreement above in its entirety, including the nature of chiropractic treatment and the expected physical discomfort associated with bone-setting and spinal adjustment procedures.</label></div>
+        <div class="check-item"><input type="checkbox" id="chk2" required><label for="chk2">I understand and explicitly accept the <strong>strict no-refund policy</strong> of WhiteRock Wellness LTD. I acknowledge that all fees paid are non-refundable under any circumstances, including post-treatment discomfort.</label></div>
+        <div class="check-item"><input type="checkbox" id="chk3" required><label for="chk3">I confirm that all medical history, personal information, and health details provided in this form are <strong>accurate, complete, and truthful</strong> to the best of my knowledge.</label></div>
+        <div class="check-item"><input type="checkbox" id="chk4" required><label for="chk4">I voluntarily consent to receive chiropractic, physiotherapy, massage, and allied wellness treatment from WhiteRock Wellness LTD and its clinical team, and I understand that I may withdraw this consent during any session by communicating clearly with my practitioner.</label></div>
+        <div class="check-item"><input type="checkbox" id="chk5" required><label for="chk5">I am 18 years of age or older (or I am completing this form as the legal guardian of the named patient), and I agree that this electronic submission constitutes my legally binding signature and agreement to all terms herein.</label></div>
       </div>
     </div>
-
-    <!-- SIGNATURE -->
     <div style="margin-top:1.5rem">
       <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.75rem">Patient Signature <span style="color:#EF4444">*</span></div>
       <div>
-        <div class="sig-tab-btns">
-          <button type="button" class="sig-tab active" id="tab-draw" onclick="switchSigTab('draw')">✍️ Draw signature</button>
-          <button type="button" class="sig-tab" id="tab-type" onclick="switchSigTab('type')">⌨️ Type name instead</button>
-        </div>
-        <div id="sig-draw-panel" class="sig-area" style="border-radius:0 0 12px 12px;border-top:none">
-          <div class="sig-canvas-wrap">
-            <canvas id="sigCanvas" width="800" height="140"></canvas>
-          </div>
-          <div class="sig-actions">
-            <button type="button" class="sig-btn" onclick="clearSig()">Clear &amp; redraw</button>
-          </div>
-          <div class="sig-label-hint">Draw with finger (phone) or mouse (desktop)</div>
-        </div>
-        <div id="sig-type-panel" style="display:none;background:var(--offwhite);border:1.5px solid #E2EAF0;border-top:none;border-radius:0 0 12px 12px;padding:1.25rem">
-          <input type="text" id="sig-typed-name" placeholder="Type your full legal name…" style="width:100%;font-size:1.3rem;font-family:Georgia,serif;text-align:center;border:none;background:white;padding:1rem;border-radius:8px;border:1.5px solid #E2EAF0;color:var(--navy)">
-          <div style="font-size:0.72rem;color:var(--muted);margin-top:0.5rem;text-align:center">Typing your name here constitutes a legally binding electronic signature</div>
-        </div>
+        <div class="sig-tab-btns"><button type="button" class="sig-tab active" id="tab-draw" onclick="switchSigTab('draw')">Draw signature</button><button type="button" class="sig-tab" id="tab-type" onclick="switchSigTab('type')">Type name instead</button></div>
+        <div id="sig-draw-panel" class="sig-area" style="border-radius:0 0 12px 12px;border-top:none"><div class="sig-canvas-wrap"><canvas id="sigCanvas" width="800" height="140"></canvas></div><div class="sig-actions"><button type="button" class="sig-btn" onclick="clearSig()">Clear &amp; redraw</button></div><div class="sig-label-hint">Draw with finger (phone) or mouse (desktop)</div></div>
+        <div id="sig-type-panel" style="display:none;background:var(--offwhite);border:1.5px solid #E2EAF0;border-top:none;border-radius:0 0 12px 12px;padding:1.25rem"><input type="text" id="sig-typed-name" placeholder="Type your full legal name..." style="width:100%;font-size:1.3rem;font-family:Georgia,serif;text-align:center;border:none;background:white;padding:1rem;border-radius:8px;border:1.5px solid #E2EAF0;color:var(--navy)"><div style="font-size:0.72rem;color:var(--muted);margin-top:0.5rem;text-align:center">Typing your name here constitutes a legally binding electronic signature</div></div>
       </div>
     </div>
-
-    <!-- Dated -->
-    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--offwhite);border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;border:1px solid var(--border)">
-      <div style="font-size:0.82rem;color:var(--muted)">Date of Agreement</div>
-      <div style="font-size:0.95rem;font-weight:700;color:var(--navy)" id="consent-date-display">—</div>
-    </div>
-
-    <!-- SUBMIT -->
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--offwhite);border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;border:1px solid var(--border)"><div style="font-size:0.82rem;color:var(--muted)">Date of Agreement</div><div style="font-size:0.95rem;font-weight:700;color:var(--navy)" id="consent-date-display">&mdash;</div></div>
     <div style="margin-top:2rem">
-      <div class="nav-btns" style="border-top:none;margin-top:0;padding-top:0;margin-bottom:1rem">
-        <button type="button" class="btn-back" onclick="goToStep(3)">← Back to Documents</button>
-      </div>
-      <button type="button" class="submit-final" onclick="submitConsent()" id="submit-btn">
-        Submit Patient Consent Form →
-      </button>
-      <div class="submit-note">
-        🔒 Your information is encrypted and stored securely. We never share your data with third parties.
-      </div>
+      <div class="nav-btns" style="border-top:none;margin-top:0;padding-top:0;margin-bottom:1rem"><button type="button" class="btn-back" onclick="goToStep(3)">&larr; Back to Documents</button></div>
+      <button type="button" class="submit-final" onclick="submitConsent()" id="submit-btn">Submit Patient Consent Form &rarr;</button>
+      <div class="submit-note">&#128274; Your information is encrypted and stored securely. We never share your data with third parties.</div>
     </div>
   </div>
-
   </form>
 </div>
-
 <script>
+// PAIN AREAS
+let painAreas=new Set();
+function togglePain(el,label){if(painAreas.has(label)){painAreas.delete(label);el.classList.remove('selected');el.setAttribute('fill','transparent');}else{painAreas.add(label);el.classList.add('selected');el.setAttribute('fill','rgba(239,68,68,0.4)');}updatePainDisplay();}
+function updatePainDisplay(){const d=document.getElementById('pain-areas-display'),i=document.getElementById('c-pain-areas');if(painAreas.size===0){d.textContent='None \u2014 tap the body diagram above';d.style.color='var(--muted)';i.value='';}else{const a=Array.from(painAreas);d.textContent=a.join(' \u00b7 ');d.style.color='var(--royal)';i.value=a.join(', ');}}
+function clearPainAreas(){painAreas.clear();document.querySelectorAll('.pzone.selected').forEach(el=>{el.classList.remove('selected');el.setAttribute('fill','transparent');});updatePainDisplay();}
 
-// ── BODY PAIN DIAGRAM ──
-let painAreas = new Set();
+// SIG TABS
+let sigMode='draw';
+function switchSigTab(mode){sigMode=mode;document.getElementById('sig-draw-panel').style.display=mode==='draw'?'':'none';document.getElementById('sig-type-panel').style.display=mode==='type'?'':'none';document.getElementById('tab-draw').classList.toggle('active',mode==='draw');document.getElementById('tab-type').classList.toggle('active',mode==='type');}
 
-function togglePain(el, label){
-  if(painAreas.has(label)){
-    painAreas.delete(label);
-    el.classList.remove('selected');
-    el.setAttribute('fill','transparent');
-  } else {
-    painAreas.add(label);
-    el.classList.add('selected');
-    el.setAttribute('fill','rgba(239,68,68,0.4)');
-  }
-  updatePainDisplay();
-}
+// PATIENT ID
+function generatePatientID(){return 1200+Math.floor(Math.random()*80);}
+const patientNum=generatePatientID();
+const patientIDStr='WRW\u2013'+patientNum;
+const now=new Date();
+const dateStr=now.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+const timeStr=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+document.getElementById('patient-id-display').textContent=patientIDStr;
+document.getElementById('pid-date-display').textContent='Issued: '+dateStr+' at '+timeStr;
+document.getElementById('consent-date-display').textContent=dateStr;
+document.getElementById('success-pid').textContent=patientIDStr;
 
-function updatePainDisplay(){
-  const disp = document.getElementById('pain-areas-display');
-  const inp = document.getElementById('c-pain-areas');
-  if(painAreas.size === 0){
-    disp.textContent = 'None — tap the body diagram above';
-    disp.style.color = 'var(--muted)';
-    inp.value = '';
-  } else {
-    const arr = Array.from(painAreas);
-    disp.textContent = arr.join(' · ');
-    disp.style.color = 'var(--royal)';
-    inp.value = arr.join(', ');
-  }
-}
+// PAIN SCALE
+let selectedPain='';
+function selectPain(el){document.querySelectorAll('.pain-opt').forEach(o=>{o.classList.remove('selected');o.style.borderColor='#E2EAF0';o.style.background='';});el.classList.add('selected');el.style.borderColor=el.dataset.color;el.style.background=el.dataset.bg;const pct=((parseInt(el.dataset.level)-1)/4)*100;document.getElementById('pain-marker').style.left=pct+'%';selectedPain=el.querySelector('.pain-num').textContent;document.getElementById('c-pain-level').value=selectedPain;}
 
-function clearPainAreas(){
-  painAreas.clear();
-  document.querySelectorAll('.pzone.selected').forEach(el=>{
-    el.classList.remove('selected');
-    el.setAttribute('fill','transparent');
-  });
-  updatePainDisplay();
-}
-
-// ── SIGNATURE TABS ──
-let sigMode = 'draw';
-
-function switchSigTab(mode){
-  sigMode = mode;
-  const drawPanel = document.getElementById('sig-draw-panel');
-  const typePanel = document.getElementById('sig-type-panel');
-  const tabDraw = document.getElementById('tab-draw');
-  const tabType = document.getElementById('tab-type');
-  if(mode === 'draw'){
-    drawPanel.style.display = '';
-    typePanel.style.display = 'none';
-    tabDraw.classList.add('active');
-    tabType.classList.remove('active');
-  } else {
-    drawPanel.style.display = 'none';
-    typePanel.style.display = '';
-    tabDraw.classList.remove('active');
-    tabType.classList.add('active');
-  }
-}
-
-// ── PATIENT ID GENERATOR ──
-function generatePatientID(){
-  const base = 1200;
-  const rand = Math.floor(Math.random()*80);
-  return base + rand;
-}
-const patientNum = generatePatientID();
-const patientIDStr = 'WRW–' + patientNum;
-
-const now = new Date();
-const dateStr = now.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-const timeStr = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-
-document.getElementById('patient-id-display').textContent = patientIDStr;
-document.getElementById('pid-date-display').textContent = 'Issued: ' + dateStr + ' at ' + timeStr;
-document.getElementById('consent-date-display').textContent = dateStr;
-document.getElementById('success-pid').textContent = patientIDStr;
-
-// ── PAIN SCALE ──
-let selectedPain = '';
-function selectPain(el){
-  document.querySelectorAll('.pain-opt').forEach(o=>{
-    o.classList.remove('selected');
-    o.style.removeProperty('--pain-color');
-    o.style.removeProperty('--pain-bg');
-    o.style.borderColor='#E2EAF0';
-    o.style.background='';
-  });
-  el.classList.add('selected');
-  const color = el.dataset.color;
-  const bg = el.dataset.bg;
-  el.style.borderColor = color;
-  el.style.background = bg;
-  const level = parseInt(el.dataset.level);
-  const pct = ((level-1)/4)*100;
-  document.getElementById('pain-marker').style.left = pct + '%';
-  selectedPain = el.querySelector('.pain-num').textContent;
-  document.getElementById('c-pain-level').value = selectedPain;
-}
-
-// ── FILE UPLOAD ──
-let uploadedFiles = [];
-const MAX_SIZE = 50 * 1024 * 1024;
-
-function handleFiles(files){
-  for(let f of files){
-    if(!uploadedFiles.find(u=>u.name===f.name&&u.size===f.size)){
-      uploadedFiles.push(f);
-    }
-  }
-  renderFiles();
-}
-function renderFiles(){
-  const list = document.getElementById('file-list');
-  const warn = document.getElementById('file-size-warning');
-  list.innerHTML = '';
-  let total = 0;
-  uploadedFiles.forEach((f,i)=>{
-    total += f.size;
-    const size = f.size > 1024*1024 ? (f.size/1024/1024).toFixed(1)+' MB' : Math.round(f.size/1024)+' KB';
-    const div = document.createElement('div');
-    div.className = 'file-item';
-    div.innerHTML = `<span>📄</span><span class="file-item-name">${f.name}</span><span class="file-item-size">${size}</span><button class="file-item-remove" onclick="removeFile(${i})" title="Remove">✕</button>`;
-    list.appendChild(div);
-  });
-  warn.style.display = total > MAX_SIZE ? 'block' : 'none';
-}
-function removeFile(i){
-  uploadedFiles.splice(i,1);
-  renderFiles();
-}
-
-// Drag and drop
-const zone = document.getElementById('upload-zone');
+// FILE UPLOAD
+let uploadedFiles=[];
+const MAX_SIZE=50*1024*1024;
+function handleFiles(files){for(let f of files){if(!uploadedFiles.find(u=>u.name===f.name&&u.size===f.size))uploadedFiles.push(f);}renderFiles();}
+function renderFiles(){const list=document.getElementById('file-list'),warn=document.getElementById('file-size-warning');list.innerHTML='';let total=0;uploadedFiles.forEach((f,i)=>{total+=f.size;const size=f.size>1024*1024?(f.size/1024/1024).toFixed(1)+' MB':Math.round(f.size/1024)+' KB';const div=document.createElement('div');div.className='file-item';div.innerHTML='<span>&#128196;</span><span class="file-item-name">'+f.name+'</span><span class="file-item-size">'+size+'</span><button class="file-item-remove" onclick="removeFile('+i+')" title="Remove">&#10005;</button>';list.appendChild(div);});warn.style.display=total>MAX_SIZE?'block':'none';}
+function removeFile(i){uploadedFiles.splice(i,1);renderFiles();}
+const zone=document.getElementById('upload-zone');
 zone.addEventListener('dragover',e=>{e.preventDefault();zone.style.borderColor='var(--cyan)';zone.style.background='#D8EFFF'});
 zone.addEventListener('dragleave',()=>{zone.style.borderColor='#C8E8FF';zone.style.background='var(--sky)'});
-zone.addEventListener('drop',e=>{
-  e.preventDefault();
-  zone.style.borderColor='#C8E8FF';zone.style.background='var(--sky)';
-  handleFiles(e.dataTransfer.files);
-});
+zone.addEventListener('drop',e=>{e.preventDefault();zone.style.borderColor='#C8E8FF';zone.style.background='var(--sky)';handleFiles(e.dataTransfer.files);});
 
-// ── SIGNATURE CANVAS ──
-const canvas = document.getElementById('sigCanvas');
-const ctx = canvas.getContext('2d');
-let drawing = false;
-let hasSig = false;
-
-function resizeCanvas(){
-  const panel = document.getElementById('sig-draw-panel');
-  if(!panel || panel.style.display === 'none') return;
-  const wrap = canvas.parentElement;
-  const w = wrap.offsetWidth || 600;
-  const ratio = window.devicePixelRatio||1;
-  canvas.width = w * ratio;
-  canvas.height = 140 * ratio;
-  canvas.style.width = w + 'px';
-  canvas.style.height = '140px';
-  ctx.setTransform(1,0,0,1,0,0);
-  ctx.scale(ratio,ratio);
-  ctx.strokeStyle = '#0A1628';
-  ctx.lineWidth = 2.5;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-}
-// Resize when section 4 becomes visible
-const _origGoToStep = window.goToStep;
-document.addEventListener('DOMContentLoaded', ()=>{
-  setTimeout(resizeCanvas, 300);
-});
-window.addEventListener('resize', resizeCanvas);
-
-function getPos(e, canvas){
-  const rect = canvas.getBoundingClientRect();
-  const ratio = window.devicePixelRatio||1;
-  if(e.touches){
-    return {x:(e.touches[0].clientX-rect.left),y:(e.touches[0].clientY-rect.top)};
-  }
-  return {x:(e.clientX-rect.left),y:(e.clientY-rect.top)};
-}
-
+// SIGNATURE CANVAS
+const canvas=document.getElementById('sigCanvas');
+const ctx=canvas.getContext('2d');
+let drawing=false,hasSig=false;
+function resizeCanvas(){const wrap=canvas.parentElement;if(!wrap||wrap.offsetWidth===0)return;const w=wrap.offsetWidth,ratio=window.devicePixelRatio||1;canvas.width=w*ratio;canvas.height=140*ratio;canvas.style.width=w+'px';canvas.style.height='140px';ctx.setTransform(1,0,0,1,0,0);ctx.scale(ratio,ratio);ctx.strokeStyle='#0A1628';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';}
+window.addEventListener('resize',resizeCanvas);
+function getPos(e,c){const r=c.getBoundingClientRect();return e.touches?{x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top}:{x:e.clientX-r.left,y:e.clientY-r.top};}
 canvas.addEventListener('mousedown',e=>{drawing=true;const p=getPos(e,canvas);ctx.beginPath();ctx.moveTo(p.x,p.y)});
-canvas.addEventListener('mousemove',e=>{if(!drawing)return;const p=getPos(e,canvas);ctx.lineTo(p.x,p.y);ctx.stroke();hasSig=true});
+canvas.addEventListener('mousemove',e=>{if(!drawing)return;const p=getPos(e,canvas);ctx.lineTo(p.x,p.y);ctx.stroke();hasSig=true;});
 canvas.addEventListener('mouseup',()=>drawing=false);
 canvas.addEventListener('mouseleave',()=>drawing=false);
-canvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;const p=getPos(e,canvas);ctx.beginPath();ctx.moveTo(p.x,p.y)},{passive:false});
-canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;const p=getPos(e,canvas);ctx.lineTo(p.x,p.y);ctx.stroke();hasSig=true},{passive:false});
+canvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;const p=getPos(e,canvas);ctx.beginPath();ctx.moveTo(p.x,p.y);},{passive:false});
+canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;const p=getPos(e,canvas);ctx.lineTo(p.x,p.y);ctx.stroke();hasSig=true;},{passive:false});
 canvas.addEventListener('touchend',()=>drawing=false);
+function clearSig(){ctx.clearRect(0,0,canvas.width,canvas.height);hasSig=false;}
 
-function clearSig(){ctx.clearRect(0,0,canvas.width,canvas.height);hasSig=false}
-
-// ── FORM SUBMISSION ──
+// FORM SUBMISSION
 async function submitConsent(){
-  const required = [
-    {id:'c-fname',name:'First Name'},
-    {id:'c-lname',name:'Last Name'},
-    {id:'c-phone',name:'Phone'},
-    {id:'c-complaint',name:'Primary Complaint'},
-  ];
-  let ok = true;
-  required.forEach(r=>{
-    const el = document.getElementById(r.id);
-    if(!el||!el.value.trim()){
-      if(el) el.style.borderColor='#EF4444';
-      ok = false;
-    } else {
-      if(el) el.style.borderColor='#E2EAF0';
-    }
-  });
-  if(!selectedPain){
-    document.querySelector('.pain-options').style.outline='2px solid #EF4444';
-    document.querySelector('.pain-options').style.borderRadius='12px';
-    ok=false;
-  } else {
-    document.querySelector('.pain-options').style.outline='none';
-  }
-  const chks = ['chk1','chk2','chk3','chk4','chk5'];
-  chks.forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el.checked){ok=false;el.parentElement.style.background='rgba(239,68,68,0.06)';el.parentElement.style.borderRadius='6px';el.parentElement.style.padding='4px';}
-    else {el.parentElement.style.background='';el.parentElement.style.padding='';}
-  });
-  const typedName = document.getElementById('sig-typed-name')?.value?.trim();
-  const sigValid = (sigMode === 'draw' && hasSig) || (sigMode === 'type' && typedName && typedName.length > 2);
-  if(!sigValid){
-    const sigWrap = document.querySelector('.sig-tab-btns')?.parentElement;
-    if(sigWrap) sigWrap.style.outline='2px solid #EF4444';
-    alert('Please provide your signature — either draw it or type your full name.');
-    ok=false;
-  } else {
-    const sigWrap = document.querySelector('.sig-tab-btns')?.parentElement;
-    if(sigWrap) sigWrap.style.outline='none';
-  }
-  if(!ok){
-    alert('Please complete all required fields, select your pain level, tick all consent boxes, and provide your signature before submitting.');
-    window.scrollTo({top:document.getElementById('sec1').offsetTop-100,behavior:'smooth'});
-    return;
-  }
-  // Check file size
-  let totalSize = uploadedFiles.reduce((a,f)=>a+f.size,0);
-  if(totalSize > MAX_SIZE){alert('Your uploaded files exceed 50MB. Please remove some files.');return;}
+  const required=[{id:'c-fname'},{id:'c-lname'},{id:'c-phone'},{id:'c-complaint'},{id:'c-emergency-name'},{id:'c-emergency-phone'}];
+  let ok=true;
+  required.forEach(r=>{const el=document.getElementById(r.id);if(!el||!el.value.trim()){if(el)el.style.borderColor='#EF4444';ok=false;}else el.style.borderColor='#E2EAF0';});
+  if(!selectedPain){document.querySelector('.pain-options').style.outline='2px solid #EF4444';document.querySelector('.pain-options').style.borderRadius='12px';ok=false;}
+  else{document.querySelector('.pain-options').style.outline='none';}
+  ['chk1','chk2','chk3','chk4','chk5'].forEach(id=>{const el=document.getElementById(id);if(!el.checked){ok=false;el.parentElement.style.background='rgba(239,68,68,0.06)';el.parentElement.style.borderRadius='6px';el.parentElement.style.padding='4px';}else{el.parentElement.style.background='';el.parentElement.style.padding='';}});
+  const typedName=document.getElementById('sig-typed-name')?.value?.trim();
+  const sigValid=(sigMode==='draw'&&hasSig)||(sigMode==='type'&&typedName&&typedName.length>2);
+  if(!sigValid){alert('Please provide your signature \u2014 either draw it or type your full name.');ok=false;}
+  if(!ok){alert('Please complete all required fields, select your pain level, tick all consent boxes, and provide your signature.');window.scrollTo({top:document.getElementById('sec1').offsetTop-100,behavior:'smooth'});return;}
+  if(uploadedFiles.reduce((a,f)=>a+f.size,0)>MAX_SIZE){alert('Your uploaded files exceed 50MB. Please remove some files.');return;}
 
-  const btn = document.getElementById('submit-btn');
-  btn.disabled = true;
-  btn.textContent = 'Submitting…';
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true;btn.textContent='Submitting\u2026';
 
-  // Build WhatsApp notification
-  const name = document.getElementById('c-fname').value+' '+document.getElementById('c-lname').value;
-  const phone = document.getElementById('c-phone').value;
-  const complaint = document.getElementById('c-complaint').value;
-  const pain = selectedPain;
-  const waMsg = encodeURIComponent(
-    `🏥 NEW PATIENT CONSENT SUBMITTED\n\n`+
-    `Patient ID: ${patientIDStr}\n`+
-    `Name: ${name}\n`+
-    `Phone: ${phone}\n`+
-    `Complaint: ${complaint}\n`+
-    `Pain Level: ${pain}/10\n`+
-    `Submitted: ${dateStr}\n\n`+
-    `Please review the full patient record in the staff portal.`
-  );
+  // Combine country code + phone (strip leading zeros)
+  const phoneCode=document.getElementById('c-phone-country').value||'+234';
+  const phoneNum=document.getElementById('c-phone').value.trim().replace(/^0+/,'');
+  const fullPhone=phoneCode+phoneNum;
 
-  // ── SEND TO MICROSOFT LISTS ──
-  const LISTS_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/217c95c781d94a49af324744020b0a1e/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=7gBGcRAOp4V6FOXuhsFARqz6yS-ICKWcuIoAMGKFBXs';
+  const emergCode=document.getElementById('c-emergency-country').value||'+234';
+  const emergNum=document.getElementById('c-emergency-phone').value.trim().replace(/^0+/,'');
+  const emergName=document.getElementById('c-emergency-name').value.trim();
+  const fullEmerg=emergName+' \u2014 '+emergCode+emergNum;
 
-  const listData = {
-    PatientName: name,
-    PatientID: patientIDStr,
-    Phone: phone,
-    Email: document.getElementById('c-email').value||'',
-    Age: document.getElementById('c-age').value||'',
-    Gender: document.getElementById('c-gender').value||'',
-    Address: document.getElementById('c-address').value||'',
-    Occupation: document.getElementById('c-occupation').value||'',
-    EmergencyContact: document.getElementById('c-emergency').value||'',
-    Referral: document.getElementById('c-referral').value||'',
-    PrimaryComplaint: complaint,
-    Symptoms: document.getElementById('c-symptoms').value||'',
-    Duration: document.getElementById('c-duration').value||'',
-    PainLevel: pain,
-    PainAreas: document.getElementById('c-pain-areas').value||'',
-    TreatmentGoal: document.getElementById('c-goal').value||'',
-    HoursSitting: document.getElementById('c-sitting').value||'',
-    Exercise: document.getElementById('c-exercise').value||'',
-    SleepingPosition: document.getElementById('c-sleep-pos').value||'',
-    StressLevel: document.getElementById('c-stress').value||'',
-    WorkType: document.getElementById('c-work-type').value||'',
-    PreviousTreatment: document.getElementById('c-prev-treatment').value||'',
-    Allergies: document.getElementById('c-allergies').value||'',
-    CurrentMedication: document.getElementById('c-medication').value||'',
-    MedicalHistory: Array.from(document.querySelectorAll('input[name="history"]:checked')).map(cb=>cb.value).join(', ')||'None',
-    DocumentsUploaded: uploadedFiles.length > 0 ? 'Yes' : 'No',
-    SignatureType: sigMode === 'type' ? 'Typed' : 'Drawn',
-    SubmittedAt: new Date().toISOString()
-  };
+  const name=document.getElementById('c-fname').value+' '+document.getElementById('c-lname').value;
+  const complaint=document.getElementById('c-complaint').value;
+  const waMsg=encodeURIComponent('NEW PATIENT CONSENT SUBMITTED\n\nPatient ID: '+patientIDStr+'\nName: '+name+'\nPhone: '+fullPhone+'\nComplaint: '+complaint+'\nPain Level: '+selectedPain+'/10\nSubmitted: '+dateStr+'\n\nPlease review the full patient record in the staff portal.');
 
-  // Show submitting state
-  btn.textContent = 'Submitting — please wait…';
+  const LISTS_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/217c95c781d94a49af324744020b0a1e/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=7gBGcRAOp4V6FOXuhsFARqz6yS-ICKWcuIoAMGKFBXs';
+  const listData={PatientName:name,PatientID:patientIDStr,Phone:fullPhone,Email:document.getElementById('c-email').value||'',Age:document.getElementById('c-age').value||'',Gender:document.getElementById('c-gender').value||'',Address:document.getElementById('c-address').value||'',Occupation:document.getElementById('c-occupation').value||'',EmergencyContact:fullEmerg,Referral:document.getElementById('c-referral').value||'',PrimaryComplaint:complaint,Symptoms:document.getElementById('c-symptoms').value||'',Duration:document.getElementById('c-duration').value||'',PainLevel:selectedPain,PainAreas:document.getElementById('c-pain-areas').value||'',TreatmentGoal:document.getElementById('c-goal').value||'',HoursSitting:document.getElementById('c-sitting').value||'',Exercise:document.getElementById('c-exercise').value||'',SleepingPosition:document.getElementById('c-sleep-pos').value||'',StressLevel:document.getElementById('c-stress').value||'',WorkType:document.getElementById('c-work-type').value||'',PreviousTreatment:document.getElementById('c-prev-treatment').value||'',Allergies:document.getElementById('c-allergies').value||'',CurrentMedication:document.getElementById('c-medication').value||'',MedicalHistory:Array.from(document.querySelectorAll('input[name="history"]:checked')).map(cb=>cb.value).join(', ')||'None',DocumentsUploaded:uploadedFiles.length>0?'Yes':'No',SignatureType:sigMode==='type'?'Typed':'Drawn',SubmittedAt:new Date().toISOString()};
+  try{await fetch(LISTS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(listData)});}catch(err){console.log('Submission:',err);}
 
-  try {
-    const response = await fetch(LISTS_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(listData)
-    });
-
-    // Try to get the real Patient ID back from the flow
-    let confirmedID = patientIDStr;
-    try {
-      const result = await response.json();
-      if(result.patientID) {
-        confirmedID = result.patientID;
-      }
-    } catch(e) {
-      console.log('Could not parse response, using local ID');
-    }
-
-    // Update success screen with confirmed ID
-    document.getElementById('success-pid').textContent = confirmedID;
-
-  } catch(err) {
-    console.log('Submission error:', err);
-    // Still show success even if network error — WhatsApp will notify clinic
-  }
-
-  // Show success screen
   document.getElementById('consent-form').style.display='none';
-  const ss = document.getElementById('success-screen');
-  ss.style.display='block';
-  ss.classList.add('show');
+  const ss=document.getElementById('success-screen');ss.style.display='block';ss.classList.add('show');
   window.scrollTo({top:0,behavior:'smooth'});
-
-  // Notify clinic via WhatsApp
   window.open('https://wa.me/2348162847976?text='+waMsg,'_blank');
 }
 
-// ── STEP NAVIGATION ──
-let currentStep = 1;
-
+// STEP NAVIGATION
+let currentStep=1;
 function goToStep(n){
-  // Validate before advancing
-  if(n > currentStep){
-    if(currentStep === 1 && !validateStep1()) return;
-    if(currentStep === 2 && !validateStep2()) return;
-  }
-  // Hide all sections
-  [1,2,3,4].forEach(i=>{
-    const s = document.getElementById('sec'+i);
-    if(s) s.style.display = i===n ? 'block' : 'none';
-  });
-  currentStep = n;
-  updateStepUI(n);
-  // Resize canvas when reaching consent step
-  if(n === 4) setTimeout(resizeCanvas, 200);
-  // Scroll to top of form
-  window.scrollTo({top: document.getElementById('sec'+n).offsetTop - 140, behavior:'smooth'});
+  if(n>currentStep){if(currentStep===1&&!validateStep1())return;if(currentStep===2&&!validateStep2())return;}
+  [1,2,3,4].forEach(i=>{const s=document.getElementById('sec'+i);if(s)s.style.display=i===n?'block':'none';});
+  currentStep=n;updateStepUI(n);
+  if(n===4)setTimeout(resizeCanvas,300);
+  window.scrollTo({top:document.getElementById('sec'+n).offsetTop-140,behavior:'smooth'});
 }
-
 function updateStepUI(active){
-  [1,2,3,4].forEach(i=>{
-    const done = i < active;
-    const isActive = i === active;
-    const sc = document.getElementById('s'+i+'c');
-    const sl = document.getElementById('s'+i+'l');
-    if(sc){
-      sc.className = 'step-circle' + (isActive?' active':done?' done':'');
-      sc.textContent = done ? '✓' : i;
-    }
-    if(sl){
-      sl.className = 'step-label' + (isActive?' active':done?' done':'');
-    }
-    if(i<4){
-      const sconn = document.getElementById('sc'+i);
-      if(sconn) sconn.className = 'step-connector' + (i < active ? ' done' : '');
-    }
-  });
+  [1,2,3,4].forEach(i=>{const done=i<active,isActive=i===active;const sc=document.getElementById('s'+i+'c'),sl=document.getElementById('s'+i+'l');if(sc){sc.className='step-circle'+(isActive?' active':done?' done':'');sc.textContent=done?'\u2713':i;}if(sl)sl.className='step-label'+(isActive?' active':done?' done':'');if(i<4){const conn=document.getElementById('sc'+i);if(conn)conn.className='step-connector'+(i<active?' done':'');}});
 }
-
-function clickStep(n){
-  // Only allow navigating to completed steps (going back)
-  if(n >= currentStep) return;
-  // Hide all, show target
-  [1,2,3,4].forEach(i=>{
-    const s = document.getElementById('sec'+i);
-    if(s) s.style.display = i===n ? 'block' : 'none';
-  });
-  currentStep = n;
-  updateStepUI(n);
-  window.scrollTo({top: document.getElementById('sec'+n).offsetTop - 140, behavior:'smooth'});
-}
-
-
+function clickStep(n){if(n>=currentStep)return;[1,2,3,4].forEach(i=>{const s=document.getElementById('sec'+i);if(s)s.style.display=i===n?'block':'none';});currentStep=n;updateStepUI(n);window.scrollTo({top:document.getElementById('sec'+n).offsetTop-140,behavior:'smooth'});}
 function validateStep1(){
-  const req=[
-    {id:'c-fname',name:'First Name'},
-    {id:'c-lname',name:'Last Name'},
-    {id:'c-phone',name:'Phone'},
-  ];
-  let ok=true;
-  req.forEach(r=>{
-    const el=document.getElementById(r.id);
-    if(!el||!el.value.trim()){if(el)el.style.borderColor='#EF4444';ok=false;}
-    else el.style.borderColor='#E2EAF0';
-  });
-  if(!ok) alert('Please fill in all required fields in Patient Details before continuing.');
+  const req=[{id:'c-fname'},{id:'c-lname'},{id:'c-phone'},{id:'c-emergency-name'},{id:'c-emergency-phone'}];
+  let ok=true;req.forEach(r=>{const el=document.getElementById(r.id);if(!el||!el.value.trim()){if(el)el.style.borderColor='#EF4444';ok=false;}else el.style.borderColor='#E2EAF0';});
+  if(!ok)alert('Please fill in all required fields in Patient Details before continuing.');
   return ok;
 }
-
 function validateStep2(){
-  const req=[
-    {id:'c-complaint',name:'Primary Complaint'},
-  ];
-  let ok=true;
-  req.forEach(r=>{
-    const el=document.getElementById(r.id);
-    if(!el||!el.value.trim()){if(el)el.style.borderColor='#EF4444';ok=false;}
-    else el.style.borderColor='#E2EAF0';
-  });
-  if(!ok) alert('Please select your primary complaint before continuing.');
-  return ok;
+  const el=document.getElementById('c-complaint');
+  if(!el||!el.value.trim()){if(el)el.style.borderColor='#EF4444';alert('Please select your primary complaint before continuing.');return false;}
+  el.style.borderColor='#E2EAF0';return true;
 }
-
-
-// Set date min to today for any date inputs
-const todayISO = new Date().toISOString().split('T')[0];
-document.querySelectorAll('input[type=date]').forEach(e=>{ e.min=todayISO; });
+const todayISO=new Date().toISOString().split('T')[0];
+document.querySelectorAll('input[type=date]').forEach(e=>{e.min=todayISO;});
 </script>
-<!-- CONSENT PAGE HELP BOT -->
+
+<!-- HELP BOT -->
 <style>
 #help-bubble{position:fixed;bottom:28px;right:28px;z-index:900}
-#help-toggle{
-  width:58px;height:58px;border-radius:50%;
-  background:linear-gradient(135deg,var(--royal),var(--cyan));
-  border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 6px 28px rgba(0,170,255,0.45);
-  transition:all 0.3s;position:relative;
-}
+#help-toggle{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--royal),var(--cyan));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 28px rgba(0,170,255,0.45);transition:all 0.3s;position:relative}
 #help-toggle:hover{transform:scale(1.08)}
 #help-toggle svg{width:26px;height:26px;fill:white}
-.help-notif{
-  position:absolute;top:-4px;right:-4px;
-  width:20px;height:20px;border-radius:50%;
-  background:#EF4444;color:white;font-size:0.65rem;
-  font-weight:800;display:flex;align-items:center;justify-content:center;
-  border:2px solid white;animation:helpPulse 2s infinite;
-}
+.help-notif{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:#EF4444;color:white;font-size:0.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid white;animation:helpPulse 2s infinite}
 @keyframes helpPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-#help-window{
-  position:absolute;bottom:70px;right:0;
-  width:340px;background:white;border-radius:20px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.18);
-  border:1px solid var(--border);
-  display:flex;flex-direction:column;overflow:hidden;
-  transform:scale(0.88) translateY(16px);
-  opacity:0;visibility:hidden;
-  transform-origin:bottom right;
-  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
-  max-height:540px;
-}
+#help-window{position:absolute;bottom:70px;right:0;width:340px;background:white;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.18);border:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transform:scale(0.88) translateY(16px);opacity:0;visibility:hidden;transform-origin:bottom right;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);max-height:540px}
 #help-window.open{transform:scale(1) translateY(0);opacity:1;visibility:visible}
-.help-header{
-  background:linear-gradient(135deg,var(--navy),var(--royal));
-  padding:1rem 1.25rem;
-  display:flex;align-items:center;gap:0.75rem;flex-shrink:0;
-}
-.help-avatar{
-  width:40px;height:40px;border-radius:50%;
-  background:rgba(0,170,255,0.2);border:2px solid var(--cyan);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;flex-shrink:0;
-}
+.help-header{background:linear-gradient(135deg,var(--navy),var(--royal));padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem;flex-shrink:0}
+.help-avatar{width:40px;height:40px;border-radius:50%;background:rgba(0,170,255,0.2);border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
 .help-header h4{color:white;font-size:0.88rem;font-weight:700;margin-bottom:2px}
 .help-online{display:flex;align-items:center;gap:4px;color:rgba(255,255,255,0.55);font-size:0.7rem}
 .help-online::before{content:'';width:6px;height:6px;border-radius:50%;background:#22C55E;display:inline-block;margin-right:2px}
-.help-msgs{
-  flex:1;overflow-y:auto;padding:1rem;
-  display:flex;flex-direction:column;gap:0.75rem;
-  min-height:200px;max-height:310px;
-  background:var(--offwhite);
-}
-.help-msgs::-webkit-scrollbar{width:4px}
-.help-msgs::-webkit-scrollbar-thumb{background:var(--royal);border-radius:2px}
+.help-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.75rem;min-height:200px;max-height:310px;background:var(--offwhite)}
 .hmsg{display:flex;gap:0.5rem;align-items:flex-end;animation:msgIn 0.3s ease}
 @keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.hmsg.bot{flex-direction:row}
-.hmsg.user{flex-direction:row-reverse}
-.hmsg-av{
-  width:28px;height:28px;border-radius:50%;
-  background:linear-gradient(135deg,var(--royal),var(--cyan));
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.75rem;flex-shrink:0;color:white;font-weight:700;
-}
-.hmsg-bubble{
-  max-width:82%;padding:0.65rem 0.9rem;border-radius:12px;
-  font-size:0.81rem;line-height:1.55;
-}
-.hmsg.bot .hmsg-bubble{
-  background:white;color:var(--text);
-  border-bottom-left-radius:4px;
-  box-shadow:0 1px 4px rgba(0,0,0,0.07);
-}
-.hmsg.user .hmsg-bubble{
-  background:var(--royal);color:white;
-  border-bottom-right-radius:4px;
-}
-.help-typing{
-  display:flex;gap:4px;align-items:center;
-  background:white;padding:0.65rem 0.9rem;
-  border-radius:12px;border-bottom-left-radius:4px;
-  box-shadow:0 1px 4px rgba(0,0,0,0.06);width:fit-content;
-}
+.hmsg.bot{flex-direction:row}.hmsg.user{flex-direction:row-reverse}
+.hmsg-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--royal),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;color:white;font-weight:700}
+.hmsg-bubble{max-width:82%;padding:0.65rem 0.9rem;border-radius:12px;font-size:0.81rem;line-height:1.55}
+.hmsg.bot .hmsg-bubble{background:white;color:var(--text);border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+.hmsg.user .hmsg-bubble{background:var(--royal);color:white;border-bottom-right-radius:4px}
+.help-typing{display:flex;gap:4px;align-items:center;background:white;padding:0.65rem 0.9rem;border-radius:12px;border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.06);width:fit-content}
 .help-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:typB 1.2s infinite}
-.help-dot:nth-child(2){animation-delay:0.2s}
-.help-dot:nth-child(3){animation-delay:0.4s}
+.help-dot:nth-child(2){animation-delay:0.2s}.help-dot:nth-child(3){animation-delay:0.4s}
 @keyframes typB{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
-.help-quickreplies{
-  padding:0.6rem 0.75rem;display:flex;gap:0.4rem;
-  flex-wrap:wrap;background:var(--offwhite);
-  border-top:1px solid var(--border);flex-shrink:0;
-}
-.hqr{
-  background:white;border:1px solid var(--border);
-  color:var(--royal);padding:0.28rem 0.65rem;
-  border-radius:20px;font-size:0.7rem;font-weight:600;
-  cursor:pointer;transition:all 0.2s;
-  font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;
-}
+.help-quickreplies{padding:0.6rem 0.75rem;display:flex;gap:0.4rem;flex-wrap:wrap;background:var(--offwhite);border-top:1px solid var(--border);flex-shrink:0}
+.hqr{background:white;border:1px solid var(--border);color:var(--royal);padding:0.28rem 0.65rem;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap}
 .hqr:hover{background:var(--royal);color:white;border-color:var(--royal)}
-.help-input-area{
-  padding:0.7rem 0.9rem;display:flex;gap:0.5rem;
-  align-items:center;background:white;
-  border-top:1px solid var(--border);flex-shrink:0;
-}
-.help-input{
-  flex:1;border:1.5px solid var(--border);border-radius:24px;
-  padding:0.52rem 0.85rem;font-size:0.81rem;
-  font-family:'Plus Jakarta Sans',sans-serif;
-  outline:none;color:var(--text);background:var(--offwhite);
-  transition:border-color 0.2s;
-}
+.help-input-area{padding:0.7rem 0.9rem;display:flex;gap:0.5rem;align-items:center;background:white;border-top:1px solid var(--border);flex-shrink:0}
+.help-input{flex:1;border:1.5px solid var(--border);border-radius:24px;padding:0.52rem 0.85rem;font-size:0.81rem;font-family:'Plus Jakarta Sans',sans-serif;outline:none;color:var(--text);background:var(--offwhite);transition:border-color 0.2s}
 .help-input:focus{border-color:var(--cyan);background:white}
-.help-send{
-  width:36px;height:36px;border-radius:50%;
-  background:var(--royal);border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:all 0.2s;flex-shrink:0;
-}
+.help-send{width:36px;height:36px;border-radius:50%;background:var(--royal);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
 .help-send:hover{background:var(--cyan)}
 .help-send svg{width:15px;height:15px;fill:none;stroke:white;stroke-width:2.5}
-.help-powered{
-  text-align:center;padding:0.35rem;
-  font-size:0.6rem;color:var(--muted);
-  background:white;border-top:1px solid var(--border);flex-shrink:0;
-}
+.help-powered{text-align:center;padding:0.35rem;font-size:0.6rem;color:var(--muted);background:white;border-top:1px solid var(--border);flex-shrink:0}
 @media(max-width:400px){#help-window{width:292px}#help-bubble{right:14px;bottom:18px}}
 </style>
-
 <div id="help-bubble">
   <div id="help-window">
     <div class="help-header">
-      <div class="help-avatar">💬</div>
-      <div>
-        <h4>Form Help Assistant</h4>
-        <div class="help-online">Here to help · WhiteRock Wellness</div>
-      </div>
-      <button onclick="toggleHelp()" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:1.1rem;padding:4px;line-height:1">✕</button>
+      <div class="help-avatar">&#128172;</div>
+      <div><h4>Form Help Assistant</h4><div class="help-online">Here to help &middot; WhiteRock Wellness</div></div>
+      <button onclick="toggleHelp()" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:1.1rem;padding:4px;line-height:1">&#10005;</button>
     </div>
     <div class="help-msgs" id="help-msgs"></div>
     <div class="help-quickreplies" id="help-qr">
@@ -1705,179 +603,27 @@ document.querySelectorAll('input[type=date]').forEach(e=>{ e.min=todayISO; });
       <button class="hqr" onclick="askHelp('Is my information kept private?')">Privacy</button>
     </div>
     <div class="help-input-area">
-      <input class="help-input" id="help-input" type="text" placeholder="Ask anything about this form…" onkeydown="if(event.key==='Enter')sendHelp()">
-      <button class="help-send" onclick="sendHelp()">
-        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </button>
+      <input class="help-input" id="help-input" type="text" placeholder="Ask anything about this form..." onkeydown="if(event.key==='Enter')sendHelp()">
+      <button class="help-send" onclick="sendHelp()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
     </div>
-    <div class="help-powered">⚡ Powered by Claude AI · WhiteRock Wellness</div>
+    <div class="help-powered">Powered by Claude AI &middot; WhiteRock Wellness</div>
   </div>
   <button id="help-toggle" onclick="toggleHelp()">
     <span class="help-notif" id="help-notif">?</span>
     <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
   </button>
 </div>
-
 <script>
-// ── CONSENT HELP BOT ──
-let helpOpen = false;
-let helpHistory = [];
-let helpGreeted = false;
-
-const HELP_CONTEXT = `You are a warm, helpful assistant on the WhiteRock Wellness patient consent form page. Your ONLY job is to help patients understand and fill in this specific form correctly. You have deep knowledge of every field on the form.
-
-FORM FIELDS — answer questions about each:
-
-SECTION 1 — PATIENT DETAILS:
-- First Name / Last Name: Legal full name as it appears on ID. Used to create the patient record.
-- Age: Current age in years. Just a number, e.g. "34". Required for clinical safety assessment.
-- Gender: Male, Female, or Prefer not to say. Used for treatment planning as some conditions differ by gender.
-- Phone/WhatsApp: Active Nigerian number including country code (e.g. +234 816 284 7976). We use this to confirm your appointment and send your post-session survey.
-- Email Address: Valid email. We send your consent confirmation and appointment details here.
-- Home Address: Where you live — helps us understand travel distance and area. Not mandatory but helpful.
-- Occupation: Your job or daily activity (e.g. "Bank executive", "Teacher", "Trader"). Helps therapist understand posture habits and likely causes of pain.
-- Emergency Contact: Name AND phone number of someone we can reach if needed during your visit. Format: "John Obi — 0812 345 6789". Required for safety.
-- How did you hear about us?: Optional. Helps us know which platforms our patients come from.
-
-SECTION 2 — HEALTH & COMPLAINT:
-- Primary Complaint: Choose from the dropdown the condition closest to what you're experiencing. If unsure, pick "Not sure — need assessment".
-- Symptoms description: Describe in your own words — when it started, where the pain is, does it travel to other areas, what makes it worse or better, any previous treatment. The more detail the better — Dr. Paul reads this before your session.
-- Duration: How long you've had this issue. Be as accurate as possible — chronic conditions (over 6 months) may need a different treatment approach than acute ones.
-- Pain level scale: Pick the emoji that matches your current pain right now:
-  * 1-2 (😌 Mild): Slight discomfort, barely affects daily life
-  * 3-4 (🙂 Annoying): Noticeable but manageable
-  * 5-6 (😐 Moderate): Affects what you can do, hard to ignore
-  * 7-8 (😣 Severe): Very painful, difficult to concentrate or function
-  * 9-10 (😭 Unbearable): Incapacitating, worst pain imaginable
-- Previous treatments: List anything you've tried — physiotherapy, painkillers, injections, surgery, massage, etc. Include dates if you remember. Helps avoid repeat approaches.
-- Allergies: Any known allergies — drug, food, latex etc. Important for clinical safety.
-- Current medication: Any drugs you take regularly, including supplements, blood pressure medication, diabetes drugs, pain relief, etc. Write "None" if you take nothing.
-- Medical history checkboxes: Tick all conditions you have or have had. These affect which treatment techniques are safe for you. Osteoporosis and cancer history especially affect how Dr. Paul adjusts.
-
-SECTION 3 — DOCUMENTS:
-- Upload is completely optional but highly recommended if you have X-rays, MRI scans, blood test results, or referral letters from a hospital.
-- Accepted file types: PDF, JPG, PNG, HEIC (iPhone photo format).
-- Maximum total size: 50MB across all files combined.
-- If files are too large, try compressing images or uploading fewer files. You can also bring physical copies on the day.
-- Documents are confidential and only seen by your clinical team.
-
-SECTION 4 — CONSENT:
-- The consent document must be read fully. It explains what chiropractic treatment involves, the expected sensations (including temporary pain and clicking sounds during adjustment — this is normal and expected), risks, and your rights.
-- Five checkboxes: All five must be ticked. Each confirms a key part of your agreement.
-- Signature: Draw your signature using your finger (on phone) or mouse (on computer) in the white box. If you make a mistake, click "Clear signature" and redraw.
-- The no-refund policy means: once you have paid for a session, we cannot refund it even if you experience discomfort. Discomfort is a normal part of bone-setting treatment and does not mean anything went wrong.
-
-PATIENT ID:
-- Your Patient ID (e.g. WRW–1203) is automatically generated when you open the form. You do not need to create it — it is already shown at the top of the form.
-- Keep your Patient ID after submission — it is how we identify your record in our system.
-
-NAVIGATION:
-- Use the "Continue →" button at the bottom of each section to move forward.
-- Use "← Back" to go back to a previous section without losing your answers.
-- Once a section is completed (shown with ✓ in the progress bar), you can tap that step number in the sticky bar at the top to jump directly to it.
-
-PRIVACY:
-- All your information is strictly confidential.
-- It is stored securely and only shared with your treating clinician at WhiteRock Wellness.
-- We never sell, share, or disclose your data to third parties.
-- Data is retained for 7 years as required by medical record standards.
-
-WHITEROCK WELLNESS:
-- Address: No. 3 Ayobaba Tunde Crescent, Oniru, Lagos, Nigeria
-- Phone/WhatsApp: +234 816 284 7976
-- Hours: Monday–Friday 8am–6pm, Saturday 9am–5pm, Sunday 10am–3pm
-- Lead Chiropractor: Dr. Paul Johnson Chima
-
-YOUR TONE: Warm, clear, reassuring. Use simple English. Keep answers concise — 2 to 4 sentences unless the patient needs more detail. If a question is completely unrelated to the form or the clinic, politely say you can only help with questions about this consent form and direct them to call +234 816 284 7976 for other queries.`;
-
-function toggleHelp(){
-  helpOpen = !helpOpen;
-  const win = document.getElementById('help-window');
-  const notif = document.getElementById('help-notif');
-  win.classList.toggle('open', helpOpen);
-  if(helpOpen){
-    notif.style.display='none';
-    if(!helpGreeted){
-      helpGreeted=true;
-      setTimeout(()=>addHelpBot("👋 Hello! I'm here to help you fill this consent form.\n\nAsk me anything — what a field means, what to write, what the consent clauses mean, or anything else about the form. I'll explain it clearly!"), 350);
-    }
-    setTimeout(()=>document.getElementById('help-input')?.focus(), 450);
-  }
-}
-
-function addHelpBot(text){
-  const msgs = document.getElementById('help-msgs');
-  const el = document.createElement('div');
-  el.className='hmsg bot';
-  el.innerHTML=`<div class="hmsg-av">W</div><div class="hmsg-bubble">${text.replace(/\n/g,'<br>')}</div>`;
-  msgs.appendChild(el);
-  msgs.scrollTop=msgs.scrollHeight;
-}
-
-function addHelpUser(text){
-  const msgs = document.getElementById('help-msgs');
-  const el = document.createElement('div');
-  el.className='hmsg user';
-  el.innerHTML=`<div class="hmsg-bubble">${text}</div><div class="hmsg-av" style="background:var(--muted)">U</div>`;
-  msgs.appendChild(el);
-  msgs.scrollTop=msgs.scrollHeight;
-}
-
-function showHelpTyping(){
-  const msgs=document.getElementById('help-msgs');
-  const t=document.createElement('div');
-  t.className='hmsg bot';t.id='help-typing';
-  t.innerHTML=`<div class="hmsg-av">W</div><div class="help-typing"><div class="help-dot"></div><div class="help-dot"></div><div class="help-dot"></div></div>`;
-  msgs.appendChild(t);msgs.scrollTop=msgs.scrollHeight;
-}
+let helpOpen=false,helpHistory=[],helpGreeted=false;
+const HELP_CONTEXT='You are a warm, helpful assistant on the WhiteRock Wellness patient consent form page. Your ONLY job is to help patients understand and fill in this specific form correctly. WhiteRock Wellness is a chiropractic clinic in Victoria Island, Lagos. Phone: +234 816 284 7976. Lead Chiropractor: Dr. Paul Johnson Chima. Keep answers concise and friendly. For unrelated questions, direct them to call +234 816 284 7976.';
+function toggleHelp(){helpOpen=!helpOpen;const win=document.getElementById('help-window'),notif=document.getElementById('help-notif');win.classList.toggle('open',helpOpen);if(helpOpen){notif.style.display='none';if(!helpGreeted){helpGreeted=true;setTimeout(()=>addHelpBot('Hello! I am here to help you fill this consent form. Ask me anything about what a field means, what to write, or what the consent clauses mean.'),350);}setTimeout(()=>document.getElementById('help-input')?.focus(),450);}}
+function addHelpBot(text){const msgs=document.getElementById('help-msgs'),el=document.createElement('div');el.className='hmsg bot';el.innerHTML='<div class="hmsg-av">W</div><div class="hmsg-bubble">'+text.replace(/\n/g,'<br>')+'</div>';msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;}
+function addHelpUser(text){const msgs=document.getElementById('help-msgs'),el=document.createElement('div');el.className='hmsg user';el.innerHTML='<div class="hmsg-bubble">'+text+'</div><div class="hmsg-av" style="background:var(--muted)">U</div>';msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;}
+function showHelpTyping(){const msgs=document.getElementById('help-msgs'),t=document.createElement('div');t.className='hmsg bot';t.id='help-typing';t.innerHTML='<div class="hmsg-av">W</div><div class="help-typing"><div class="help-dot"></div><div class="help-dot"></div><div class="help-dot"></div></div>';msgs.appendChild(t);msgs.scrollTop=msgs.scrollHeight;}
 function removeHelpTyping(){document.getElementById('help-typing')?.remove();}
-
-async function sendHelp(){
-  const input=document.getElementById('help-input');
-  const text=input.value.trim();
-  if(!text)return;
-  input.value='';
-  addHelpUser(text);
-  helpHistory.push({role:'user',content:text});
-  showHelpTyping();
-  document.getElementById('help-qr').style.display='none';
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:350,
-        system:HELP_CONTEXT,
-        messages:helpHistory
-      })
-    });
-    const data=await res.json();
-    removeHelpTyping();
-    const reply=data.content?.[0]?.text||"I'm having a moment — please call us on +234 816 284 7976 for help.";
-    helpHistory.push({role:'assistant',content:reply});
-    addHelpBot(reply);
-  }catch(e){
-    removeHelpTyping();
-    addHelpBot("Sorry, I'm having a connection issue. Please call us directly:\n📞 +234 816 284 7976");
-  }
-}
-
-function askHelp(text){
-  if(!helpOpen) toggleHelp();
-  setTimeout(()=>{
-    document.getElementById('help-input').value=text;
-    sendHelp();
-  }, helpGreeted?100:600);
-}
-
-setTimeout(()=>{
-  if(!helpOpen){
-    const n=document.getElementById('help-notif');
-    if(n){n.textContent='?';n.style.display='flex';}
-  }
-},5000);
+async function sendHelp(){const input=document.getElementById('help-input'),text=input.value.trim();if(!text)return;input.value='';addHelpUser(text);helpHistory.push({role:'user',content:text});showHelpTyping();document.getElementById('help-qr').style.display='none';try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:350,system:HELP_CONTEXT,messages:helpHistory})});const data=await res.json();removeHelpTyping();const reply=data.content?.[0]?.text||'I am having a moment. Please call us on +234 816 284 7976 for help.';helpHistory.push({role:'assistant',content:reply});addHelpBot(reply);}catch(e){removeHelpTyping();addHelpBot('Sorry, I am having a connection issue. Please call us: +234 816 284 7976');}}
+function askHelp(text){if(!helpOpen)toggleHelp();setTimeout(()=>{document.getElementById('help-input').value=text;sendHelp();},helpGreeted?100:600);}
+setTimeout(()=>{if(!helpOpen){const n=document.getElementById('help-notif');if(n){n.textContent='?';n.style.display='flex';}}},5000);
 </script>
-
 </body>
 </html>
