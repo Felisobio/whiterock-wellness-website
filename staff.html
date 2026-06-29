@@ -858,6 +858,34 @@ function kpiDoRender(isLead, feedback, patients){
   kpiUpdateMonthChips();
   kpiUpdateClinicStats(feedback, therapists);
   kpiRenderCards();
+
+  // Silently pull all MS tenant users and re-render if new names found
+  if(isLead && !window._cachedMsTherapists){
+    var account = msalInstance && msalInstance.getAllAccounts()[0];
+    if(account){
+      msalInstance.acquireTokenSilent({scopes:['https://graph.microsoft.com/User.ReadBasic.All'],account})
+        .then(function(tr){
+          return fetch('https://graph.microsoft.com/v1.0/users?$select=displayName,mail,userType&$top=100',{
+            headers:{'Authorization':'Bearer '+tr.accessToken}
+          });
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if(!data.value) return;
+          var skip=['admin','administrator','system','service','whiterock bookings','info','bookings','jerry'];
+          var names=data.value.filter(function(u){
+            if(!u.displayName||u.displayName.includes('#EXT#')) return false;
+            if(u.userType==='Guest') return false;
+            var k=u.displayName.toLowerCase().trim();
+            return skip.indexOf(k)<0 && u.displayName.trim().length>=3;
+          }).map(function(u){ return u.displayName; });
+          window._cachedMsTherapists = names;
+          // Re-render to add the new names
+          kpiDoRender(isLead, window._kpiFeedback||getMockFeedback(), window._allPatientsCache||[]);
+        })
+        .catch(function(e){ console.log('Graph fetch:', e.message); });
+    }
+  }
 }
 
 
