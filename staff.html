@@ -692,13 +692,23 @@ async function saveSession(patientId,patientName,safeId){
     if(needsApproval){setTimeout(()=>{alert('Notes sent for Lead approval.');btn.disabled=false;btn.textContent='Save session notes';btn.style.background='';},1000);}
     else{
       var surveyUrl='https://whiterock-wellness.com/survey.html?id='+encodeURIComponent(patientId)+'&patient='+encodeURIComponent(patientName)+'&therapist='+encodeURIComponent(currentUser.name)+'&date='+new Date().toISOString().split('T')[0];
-      var waText='Hello '+patientName+', thank you for visiting WhiteRock Wellness today! Please take 30 seconds to rate your session: '+surveyUrl;
-      var pr=allPatients.find(p=>p.id===patientId||p.name===patientName),phone=pr&&pr.phone?pr.phone.replace(/[^0-9]/g,''):'';
-      var waPhone=phone.startsWith('0')?'234'+phone.substring(1):phone,waUrl=waPhone?'https://wa.me/'+waPhone+'?text='+encodeURIComponent(waText):'https://wa.me/?text='+encodeURIComponent(waText);
+      var waText='Hello '+patientName+', thank you for visiting WhiteRock Wellness today! \uD83D\uDC9A\n\nPlease take 30 seconds to rate your session with us:\n'+surveyUrl+'\n\nYour feedback helps us serve you better. \u2014 WhiteRock Wellness Team';
+      var pr=allPatients.find(p=>p.id===patientId||p.name===patientName);
+      var phone=pr&&pr.phone?pr.phone.replace(/[\s\-\(\)]/g,''):'';
+      // Handle all phone formats: +234..., 234..., 0...
+      var waPhone='';
+      if(phone.startsWith('+')){waPhone=phone.substring(1);}
+      else if(phone.startsWith('234')){waPhone=phone;}
+      else if(phone.startsWith('0')){waPhone='234'+phone.substring(1);}
+      else if(phone.length>0){waPhone='234'+phone;}
+      var waUrl=waPhone?'https://wa.me/'+waPhone+'?text='+encodeURIComponent(waText):'https://wa.me/?text='+encodeURIComponent(waText);
       btn.disabled=false;btn.textContent='Save session notes';btn.style.background='';
+      // Auto-open WhatsApp
+      window.open(waUrl,'_blank');
+      // Also show the button in case they need to resend
       var waBtn=document.getElementById('wa-survey-btn-'+patientId);
-      if(!waBtn){waBtn=document.createElement('a');waBtn.id='wa-survey-btn-'+patientId;waBtn.href=waUrl;waBtn.target='_blank';waBtn.style.cssText='display:inline-flex;align-items:center;gap:6px;background:#25D366;color:white;padding:0.55rem 1rem;border-radius:8px;font-size:0.82rem;font-weight:700;text-decoration:none;margin-left:8px';waBtn.innerHTML='&#128172; Send Survey via WhatsApp';btn.parentNode.appendChild(waBtn);}
-      else{waBtn.href=waUrl;waBtn.style.display='inline-flex';}
+      if(!waBtn){waBtn=document.createElement('a');waBtn.id='wa-survey-btn-'+patientId;waBtn.href=waUrl;waBtn.target='_blank';waBtn.style.cssText='display:inline-flex;align-items:center;gap:6px;background:#25D366;color:white;padding:0.55rem 1rem;border-radius:8px;font-size:0.82rem;font-weight:700;text-decoration:none;margin-left:8px';waBtn.innerHTML='&#128172; Resend Survey';btn.parentNode.appendChild(waBtn);}
+      else{waBtn.href=waUrl;waBtn.style.display='inline-flex';waBtn.innerHTML='&#128172; Resend Survey';}
     }
   }catch(e){alert('Connection error.');btn.disabled=false;btn.textContent='Save session notes';}
 }
