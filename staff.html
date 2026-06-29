@@ -344,6 +344,15 @@ const GET_PATIENTS_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environ
 const GET_FEEDBACK_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a0b25f698c1d4700ab23bcfc15a2b6a0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=3RCnApnmMMEkJS-L5WrCHByyTmff8_d0iBE85sDvVsg';
 const UPDATE_PATIENT_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3e392ef2d3034bea80d577dde7f14436/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bv0HbzeLgNthPzZgBP7Mh2XfqP7-gNiOc-H8IAugn3M';
 const SAVE_SESSION_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/df1f1bf9929241dca0a8c3e8a5588b8a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=pXOQmWA8hEfPZD9wIkjacQGkWnluY1ejlW9hy8AqTBI';
+// Fetch with 10-second timeout so KPI never hangs
+function fetchWithTimeout(url, options, ms){
+  ms = ms || 10000;
+  return Promise.race([
+    fetch(url, options),
+    new Promise(function(_,reject){setTimeout(function(){reject(new Error('timeout'));},ms);})
+  ]);
+}
+
 const CLIENT_ID='4b13835c-69e6-4cf9-9823-25cf48f0f5a7';
 const TENANT_ID='89eeb06b-f74d-4def-9463-ffa01a2e8366';
 const AUTHORITY=`https://login.microsoftonline.com/${TENANT_ID}`;
@@ -442,7 +451,7 @@ function getReturningBadge(p){const r=p.PatientType==='Returning Patient'||p.pat
 
 async function fetchPatients(){
   try{
-    const res=await fetch(GET_PATIENTS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
+    const res=await fetchWithTimeout(GET_PATIENTS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})},10000);
     const data=await res.json();
     return data.map(p=>({
       id:p.PatientID||'WRW-???',name:p.PatientName||p.Title||'Unknown',phone:p.Phone||'',email:p.Email||'',age:p.Age||'',gender:p.Gender||'',address:p.Address||'',occupation:p.Occupation||'',
@@ -579,7 +588,7 @@ async function loadAllocations(){
 
 async function fetchFeedback(){
   try{
-    const res=await fetch(GET_FEEDBACK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
+    const res=await fetchWithTimeout(GET_FEEDBACK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})},10000);
     const data=await res.json();
     return Array.isArray(data)?data.map(f=>({patient:f.Title||'',patientId:f.PatientID||'',therapist:f.Therapist||'',rating:parseFloat(f.Rating)||0,comment:f.Comment||'',date:f.SessionDate||''})):[];
   }catch(e){return[];}
@@ -763,23 +772,43 @@ async function loadKPI(){
     allPatientsData=allPatientsData.filter(p=>p.therapist&&p.therapist.toLowerCase().includes(myName.split(' ')[0]));
   }
 
-  // Build therapist list — only from feedback + patients (real data), NOT all MS users
-  // MS users caused noise (WhiteRock Bookings, info, jerry etc.) — use only names that
-  // appear in actual patient or feedback records, plus known getMockStaff names
+  // Build therapist list — MS Graph users filtered to @whiterock-wellness.com only,
+  // plus anyone who appears in actual patient/feedback records
   var excludeNames=['admin','administrator','system','service','whiterock bookings','info','bookings'];
+  var msNames=[];
+  if(isLead){
+    try{
+      var account=msalInstance.getAllAccounts()[0];
+      if(account){
+        var tr=await msalInstance.acquireTokenSilent({scopes:['https://graph.microsoft.com/User.ReadBasic.All'],account}).catch(function(){return null;});
+        if(tr){
+          var gRes=await fetchWithTimeout('https://graph.microsoft.com/v1.0/users?$select=displayName,mail,jobTitle&$top=100&$orderby=displayName',{headers:{'Authorization':'Bearer '+tr.accessToken}},8000).catch(function(){return null;});
+          if(gRes&&gRes.ok){
+            var gData=await gRes.json().catch(function(){return{};});
+            if(gData.value){
+              // Only include users with a whiterock-wellness.com email
+              msNames=gData.value.filter(function(u){
+                return u.displayName&&u.mail&&u.mail.toLowerCase().includes('@whiterock-wellness.com')&&!u.displayName.includes('#EXT#');
+              }).map(function(u){return u.displayName;});
+            }
+          }
+        }
+      }
+    }catch(e){console.log('Graph fetch failed:',e);}
+  }
+
   var allRaw=[
-    ...allFeedback.map(f=>f.therapist),
-    ...allPatientsData.map(p=>p.therapist),
-    ...(isLead?getMockStaff().map(s=>s.name):[currentUser.name])
+    ...allFeedback.map(function(f){return f.therapist;}),
+    ...allPatientsData.map(function(p){return p.therapist;}),
+    ...(isLead?[...msNames,...getMockStaff().map(function(s){return s.name;})]:[currentUser.name])
   ].filter(Boolean);
   var seen={};
   allRaw.forEach(function(name){
     var key=name.toLowerCase().trim();
-    if(excludeNames.indexOf(key)>=0) return; // skip non-clinical
-    if(name.trim().length < 2) return; // skip single chars
+    if(excludeNames.indexOf(key)>=0) return;
+    if(name.trim().length<2) return;
     if(!seen[key]) seen[key]=name;
-    // Prefer title case (first letter capital) over all-lowercase
-    else{var cur=seen[key]; if(name[0]===name[0].toUpperCase()&&cur[0]===cur[0].toLowerCase()) seen[key]=name;}
+    else if(name[0]===name[0].toUpperCase()&&seen[key][0]===seen[key][0].toLowerCase()) seen[key]=name;
   });
   var therapistNames=Object.values(seen).sort();
   window._kpiTherapists=therapistNames;
