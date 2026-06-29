@@ -745,13 +745,12 @@ async function loadKPI(){
   if(isLead)document.getElementById('kpi-mgmt-actions').style.display='flex';
   document.getElementById('kpi-cards-grid').innerHTML='<div class="loading"><div class="spinner"></div>Loading KPI data...</div>';
 
-  // Fetch ALL simultaneously — MS users + feedback + patients
+  // Fetch feedback + patients simultaneously (no longer need MS users for therapist list)
   var results=await Promise.all([
-    fetchTenantUsers().catch(()=>getMockStaff().map(s=>({displayName:s.name,jobTitle:s.role}))),
     fetchFeedback().catch(()=>[]),
     fetchPatients().catch(()=>[])
   ]);
-  var tenantUsers=results[0],realFeedback=results[1],allPatientsData=results[2];
+  var realFeedback=results[0],allPatientsData=results[1];
 
   window._kpiFeedback=realFeedback.length>0?realFeedback:getMockFeedback();
   window._allPatientsCache=allPatientsData;
@@ -834,6 +833,7 @@ function kpiRenderCards(){
   var selM=window._kpiSelMonths||Array(12).fill(true);
   var starFilter=window._kpiStarFilter||{5:true,4:true,3:true,2:true,1:true};
   var isLead=currentUser.role==='Lead'||currentUser.role==='Admin';
+  var showComments=window._kpiShowComments!==false&&isLead;
   var filtered=therapistNames.filter(function(n){return selT[n];});
   var selMonthNums=selM.map(function(v,i){return v?i:-1;}).filter(function(i){return i>=0;});
   var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -844,29 +844,28 @@ function kpiRenderCards(){
   if(!filtered.length){grid.innerHTML='<div style="text-align:center;padding:2rem;font-size:13px;color:var(--muted)">No therapists selected.</div>';return;}
 
   var filtFb=allFeedback.filter(function(f){return starFilter[Math.round(f.rating)];});
-
-  // Remember which card is open
   var openName=window._kpiOpenCard||null;
+  var pal=kpiCardPalettes;
 
-  grid.innerHTML=filtered.map(function(name,fi){
-    var pal=kpiCardPalettes[fi%kpiCardPalettes.length];
+  var html='';
+
+  filtered.forEach(function(name,fi){
+    var p=pal[fi%pal.length];
     var tf=filtFb.filter(function(f){return f.therapist&&f.therapist.toLowerCase().trim()===name.toLowerCase().trim();});
     var allTf=allFeedback.filter(function(f){return f.therapist&&f.therapist.toLowerCase().trim()===name.toLowerCase().trim();});
     var filtTf=tf.filter(function(f){return f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0;});
     var kpi=filtTf.length>0?Math.round((filtTf.reduce(function(a,b){return a+b.rating;},0)/(5*filtTf.length))*100):0;
     var avg=allTf.length>0?(allTf.reduce(function(a,b){return a+b.rating;},0)/allTf.length).toFixed(1):'-';
     var initials=name.split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
-    var badgeText=kpi>=85?'Excellent':kpi>=70?'Good':tf.length===0?'No data':'Review needed';
-    var badgeBg=kpi>=85?'rgba(29,158,117,0.25)':kpi>=70?'rgba(0,170,255,0.15)':tf.length===0?'rgba(90,106,122,0.15)':'rgba(240,80,80,0.25)';
+    var noData=tf.length===0;
+    var kpiColor=kpi>=85?'#1D9E75':kpi>=70?'#1A3FBF':'#EF4444';
+    var badgeText=kpi>=85?'Excellent':kpi>=70?'Good':noData?'No data':'Review needed';
     var now=new Date();
     var thisM=allTf.filter(function(f){return f.date&&new Date(f.date).getMonth()===now.getMonth();});
     var lastM=allTf.filter(function(f){return f.date&&new Date(f.date).getMonth()===(now.getMonth()-1+12)%12;});
     var diff=thisM.length>0&&lastM.length>0?Math.round((thisM.reduce(function(a,b){return a+b.rating;},0)/(5*thisM.length))*100)-Math.round((lastM.reduce(function(a,b){return a+b.rating;},0)/(5*lastM.length))*100):0;
     var trendText=diff>0?'\u2191 +'+diff+'%':diff<0?'\u2193 '+diff+'%':'\u2192 0%';
     var safeId=name.replace(/ /g,'_');
-    var noData=tf.length===0;
-
-    // Backlog counts
     var myPats=allPatients.filter(function(p){return p.therapist&&p.therapist.toLowerCase().trim()===name.toLowerCase().trim();});
     var active=myPats.filter(function(p){return p.status==='Active'||p.status==='Allocated'||p.status==='Pending Allocation';}).length;
     var closed=myPats.filter(function(p){return p.status==='Discharged'||p.status==='Closed';}).length;
@@ -874,98 +873,100 @@ function kpiRenderCards(){
     var noCase=total===0;
     var loadColor=noCase?'#5A6A7A':active>=10?'#EF4444':active>=5?'#F59E0B':'#1D9E75';
     var loadLabel=noCase?'No cases':active>=10?'High':active>=5?'Medium':'Low';
-
-    // Monthly spark data for chart
+    var isOpen=openName===name;
     var monthData=selMonthNums.map(function(m){
       var mf=filtTf.filter(function(f){return f.date&&new Date(f.date).getMonth()===m;});
-      return{m,kpi:mf.length>0?Math.round((mf.reduce(function(a,b){return a+b.rating;},0)/(5*mf.length))*100):0,count:mf.length};
+      return{m:m,kpi:mf.length>0?Math.round((mf.reduce(function(a,b){return a+b.rating;},0)/(5*mf.length))*100):0,count:mf.length};
     });
-
-    // Comments (leads only, recent 3)
-    var showComments=window._kpiShowComments!==false&&isLead;
+    var hasChart=monthData.some(function(d){return d.kpi>0;});
     var comments=allTf.filter(function(f){return f.comment;}).slice(0,3);
 
-    var isOpen=openName===name;
+    // Header row
+    html += '<div class="kpi-unified-card'+(isOpen?' open':'')+'" id="kpi-ucard-'+safeId+'" style="background:white;border:1.5px solid '+(isOpen?'#1A3FBF':'rgba(26,63,191,0.12)')+';border-radius:14px;overflow:hidden;margin-bottom:0">';
+    html += '<div onclick="kpiToggleCard(\''+name+'\')" style="display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;cursor:pointer;background:'+(isOpen?p.bg:'white')+'">';
+    html += '<div style="width:40px;height:40px;border-radius:50%;background:'+(isOpen?p.avBg:'var(--sky)')+';color:'+(isOpen?p.avColor:'var(--royal)')+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">'+initials+'</div>';
+    html += '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:700;color:'+(isOpen?'rgba(255,255,255,0.95)':'var(--navy)')+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+name+'</div>';
+    html += '<div style="font-size:11px;color:'+(isOpen?p.mutedColor:'var(--muted)')+'">'+( noData?'No ratings yet':filtTf.length+' session'+(filtTf.length!==1?'s':'')+' \u00b7 avg '+avg+'\u2605')+'</div></div>';
+    html += '<div style="text-align:right;flex-shrink:0"><div style="font-size:24px;font-weight:800;color:'+(isOpen?p.scoreColor:kpiColor)+';line-height:1">'+(noData?'\u2014':kpi+'%')+'</div>';
+    html += '<div style="font-size:9px;font-weight:700;padding:2px 10px;border-radius:20px;background:'+(kpi>=85?'rgba(29,158,117,0.2)':kpi>=70?'rgba(26,63,191,0.15)':noData?'rgba(90,106,122,0.12)':'rgba(239,68,68,0.15)')+';color:'+(isOpen?p.avColor:kpiColor)+';display:inline-block;margin-top:3px">'+badgeText+'</div></div>';
+    html += '<div style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:'+(isOpen?'rgba(255,255,255,0.12)':'var(--offwhite)')+';color:'+(isOpen?'rgba(255,255,255,0.7)':'var(--muted)')+';flex-shrink:0">'+trendText+'</div>';
+    if(isLead) html += '<div style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:rgba(90,106,122,0.08);color:'+loadColor+';flex-shrink:0">'+(noCase?'No cases':active+' active')+'</div>';
+    html += '<div style="font-size:10px;color:'+(isOpen?p.mutedColor:'var(--muted)')+';flex-shrink:0;transform:rotate('+(isOpen?180:0)+'deg)">\u25bc</div>';
+    html += '</div>'; // end header
 
-    return `<div class="kpi-unified-card${isOpen?' open':''}" id="kpi-ucard-${safeId}" style="background:white;border:1px solid ${isOpen?'#1A3FBF':'var(--border)'};border-radius:14px;overflow:hidden;transition:border-color 0.2s">
-      <!-- HEADER ROW — always visible, click to expand -->
-      <div onclick="kpiToggleCard('${name}')" style="display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;cursor:pointer;background:${isOpen?pal.bg:'white'};transition:background 0.2s">
-        <div style="width:40px;height:40px;border-radius:50%;background:${isOpen?pal.avBg:'var(--sky)'};color:${isOpen?pal.avColor:'var(--royal)'};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">${initials}</div>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:14px;font-weight:700;color:${isOpen?'rgba(255,255,255,0.95)':'var(--navy)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
-          <div style="font-size:11px;color:${isOpen?pal.mutedColor:'var(--muted)'}">${noData?'No ratings yet':filtTf.length+' session'+(filtTf.length!==1?'s':'')+' \u00b7 avg '+avg+'\u2605'}</div>
-        </div>
-        <!-- KPI score -->
-        <div style="text-align:right;flex-shrink:0">
-          <div style="font-size:24px;font-weight:800;color:${isOpen?pal.scoreColor:kpi>=85?'#1D9E75':kpi>=70?'#1A3FBF':'#EF4444'};line-height:1">${noData?'\u2014':kpi+'%'}</div>
-          <div style="font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px;background:${badgeBg};color:${isOpen?pal.avColor:kpi>=85?'#1D9E75':kpi>=70?'#1A3FBF':'#EF4444'};display:inline-block;margin-top:3px">${badgeText}</div>
-        </div>
-        <!-- Trend -->
-        <div style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:${isOpen?'rgba(255,255,255,0.12)':'var(--offwhite)'};color:${isOpen?'rgba(255,255,255,0.8)':'var(--muted)'};flex-shrink:0">${trendText}</div>
-        <!-- Backlog pill -->
-        ${isLead?`<div style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:${noCase?'rgba(90,106,122,0.08)':active>=10?'rgba(239,68,68,0.1)':active>=5?'rgba(245,158,11,0.1)':'rgba(29,158,117,0.1)'};color:${loadColor};flex-shrink:0">${noCase?'No cases':active+' active'}</div>`:''}
-        <!-- Chevron -->
-        <div style="font-size:12px;color:${isOpen?pal.mutedColor:'var(--muted)'};flex-shrink:0;transform:rotate(${isOpen?180:0}deg);transition:transform 0.2s">&#9660;</div>
-      </div>
+    // Expanded detail
+    if(isOpen){
+      html += '<div style="border-top:2px solid '+p.bg+';padding:1.25rem;background:var(--offwhite)">';
 
-      <!-- EXPANDED DETAIL — only when open -->
-      ${isOpen?`<div style="border-top:1px solid ${pal.bg};padding:1.25rem;background:var(--offwhite)">
-        <!-- Stats row -->
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem">
-          <div style="background:white;border-radius:8px;padding:0.7rem 0.75rem;border:1px solid var(--border)"><div style="font-size:20px;font-weight:700;color:${kpi>=85?'#1D9E75':kpi>=70?'#1A3FBF':'#EF4444'}">${noData?'\u2014':kpi+'%'}</div><div style="font-size:10px;color:var(--muted)">KPI score</div></div>
-          <div style="background:white;border-radius:8px;padding:0.7rem 0.75rem;border:1px solid var(--border)"><div style="font-size:20px;font-weight:700;color:var(--navy)">${allTf.length}</div><div style="font-size:10px;color:var(--muted)">Sessions rated</div></div>
-          <div style="background:white;border-radius:8px;padding:0.7rem 0.75rem;border:1px solid var(--border)"><div style="font-size:20px;font-weight:700;color:var(--navy)">${avg}</div><div style="font-size:10px;color:var(--muted)">Avg stars</div></div>
-          <div style="background:white;border-radius:8px;padding:0.7rem 0.75rem;border:1px solid var(--border)"><div style="font-size:20px;font-weight:700;color:${diff>0?'#1D9E75':diff<0?'#EF4444':'var(--muted)'}">${(diff>=0?'+':'')+diff}%</div><div style="font-size:10px;color:var(--muted)">vs last month</div></div>
-        </div>
+      // Stats
+      html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem">';
+      html += '<div style="background:white;border-radius:8px;padding:0.7rem 0.75rem;border:1px solid var(--border)"><div style="font-size:20px;font-weight:700;color:'+kpiColor+'">'+(noData?'\u2014':kpi+'%')+'</div><div style="font-size:10px;color:var(--muted)">KPI score</div></div>';
+      html += '<div style="background:white;border-radius:8px;padding:0.7rem 0.75rem;border:1px solid var(--border)"><div style="font-size:20px;font-weight:700;color:var(--navy)">'+allTf.length+'</div><div style="font-size:10px;color:var(--muted)">Sessions rated</div></div>';
+      html += '<div style="background:white;border-radius:8px;padding:0.7rem 0.75rem;border:1px solid var(--border)"><div style="font-size:20px;font-weight:700;color:var(--navy)">'+avg+'</div><div style="font-size:10px;color:var(--muted)">Avg stars</div></div>';
+      html += '<div style="background:white;border-radius:8px;padding:0.7rem 0.75rem;border:1px solid var(--border)"><div style="font-size:20px;font-weight:700;color:'+(diff>0?'#1D9E75':diff<0?'#EF4444':'var(--muted)')+'">'+(diff>=0?'+':'')+diff+'%</div><div style="font-size:10px;color:var(--muted)">vs last month</div></div>';
+      html += '</div>';
 
-        ${isLead?`<!-- Backlog (leads only) -->
-        <div style="margin-bottom:1rem">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px">Patient Backlog</div>
-          ${noCase
-            ?'<div style="font-size:12px;color:var(--muted);font-style:italic;padding:0.5rem 0">No patients allocated yet</div>'
-            :`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-              <div style="background:rgba(26,63,191,0.06);border-radius:8px;padding:0.75rem;text-align:center"><div style="font-size:24px;font-weight:800;color:#1A3FBF">${active}</div><div style="font-size:10px;color:var(--muted)">Active</div></div>
-              <div style="background:rgba(29,158,117,0.08);border-radius:8px;padding:0.75rem;text-align:center"><div style="font-size:24px;font-weight:800;color:#1D9E75">${closed}</div><div style="font-size:10px;color:var(--muted)">Closed</div></div>
-            </div>
-            <div style="background:#E2EAF0;border-radius:4px;height:5px;overflow:hidden"><div style="height:100%;background:#1A3FBF;width:${Math.min(100,total>0?Math.round((active/total)*100):0)}%;border-radius:4px"></div></div>
-            <div style="font-size:10px;color:var(--muted);margin-top:4px">${total} total patient${total!==1?'s':''} \u00b7 ${loadLabel} workload</div>`
-          }
-        </div>`:''}
+      // Backlog (leads only)
+      if(isLead){
+        html += '<div style="margin-bottom:1rem"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px">Patient Backlog</div>';
+        if(noCase){
+          html += '<div style="font-size:12px;color:var(--muted);font-style:italic">No patients allocated yet</div>';
+        } else {
+          html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">';
+          html += '<div style="background:rgba(26,63,191,0.06);border-radius:8px;padding:0.75rem;text-align:center"><div style="font-size:24px;font-weight:800;color:#1A3FBF">'+active+'</div><div style="font-size:10px;color:var(--muted)">Active</div></div>';
+          html += '<div style="background:rgba(29,158,117,0.08);border-radius:8px;padding:0.75rem;text-align:center"><div style="font-size:24px;font-weight:800;color:#1D9E75">'+closed+'</div><div style="font-size:10px;color:var(--muted)">Closed</div></div>';
+          html += '</div>';
+          var pct=total>0?Math.round((active/total)*100):0;
+          html += '<div style="background:#E2EAF0;border-radius:4px;height:5px;overflow:hidden"><div style="height:100%;background:#1A3FBF;width:'+pct+'%;border-radius:4px"></div></div>';
+          html += '<div style="font-size:10px;color:var(--muted);margin-top:4px">'+total+' total patient'+(total!==1?'s':'')+' \u00b7 '+loadLabel+' workload</div>';
+        }
+        html += '</div>';
+      }
 
-        <!-- Monthly trend chart -->
-        ${monthData.some(function(d){return d.kpi>0;})?`<div style="margin-bottom:1rem">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px">Monthly KPI Trend <span style="font-size:9px;font-weight:400">(click bar for details)</span></div>
-          <div style="display:flex;align-items:flex-end;gap:4px;height:80px" id="kpi-bars-${safeId}">
-            ${monthData.map(function(d,i){
-              var bh=Math.max(d.kpi>0?8:2,Math.round((d.kpi/100)*70));
-              var bc=d.kpi>=85?'#1D9E75':d.kpi>=70?'#1A3FBF':'#EF4444';
-              var opacity=d.kpi>0?1:0.2;
-              return '<div title="'+monthNames[d.m]+': '+d.kpi+'% ('+d.count+' sessions)" onclick="kpiBarClick(\''+name+'\','+d.m+')" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:80px;cursor:pointer">'
-                +'<div style="font-size:8px;color:var(--muted);margin-bottom:2px">'+(d.kpi>0?d.kpi+'%':'')+'</div>'
-                +'<div style="width:100%;background:'+bc+';height:'+bh+'px;border-radius:3px 3px 0 0;opacity:'+opacity+';transition:opacity 0.15s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity='+opacity+'"></div>'
-                +'<div style="font-size:8px;color:var(--muted);margin-top:3px">'+monthNames[d.m]+'</div>'
-                +'</div>';
-            }).join('')}
-          </div>
-        </div>`:'<div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:1rem">No monthly data for selected period.</div>'}
+      // Monthly trend bars
+      if(hasChart){
+        html += '<div style="margin-bottom:1rem"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px">Monthly KPI Trend <span style="font-size:9px;font-weight:400">(click bar for details)</span></div>';
+        html += '<div style="display:flex;align-items:flex-end;gap:4px;height:80px">';
+        monthData.forEach(function(d){
+          var bh=Math.max(d.kpi>0?8:2,Math.round((d.kpi/100)*70));
+          var bc=d.kpi>=85?'#1D9E75':d.kpi>=70?'#1A3FBF':'#EF4444';
+          var op=d.kpi>0?1:0.2;
+          html += '<div title="'+monthNames[d.m]+': '+d.kpi+'% ('+d.count+' sessions)" onclick="kpiBarClick(\''+name.replace(/'/g,"\\'")+'\',' +d.m+')" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:80px;cursor:pointer">';
+          html += '<div style="font-size:8px;color:var(--muted);margin-bottom:2px">'+(d.kpi>0?d.kpi+'%':'')+'</div>';
+          html += '<div style="width:100%;background:'+bc+';height:'+bh+'px;border-radius:3px 3px 0 0;opacity:'+op+'"></div>';
+          html += '<div style="font-size:8px;color:var(--muted);margin-top:3px">'+monthNames[d.m]+'</div></div>';
+        });
+        html += '</div></div>';
+      } else {
+        html += '<div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:1rem">No monthly data for selected period.</div>';
+      }
 
-        <!-- Click-bar drill-down -->
-        <div id="kpi-drill-${safeId}" style="display:none;background:white;border-radius:8px;padding:0.75rem;border:1px solid var(--border);margin-bottom:1rem">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
-            <div id="kpi-drill-title-${safeId}" style="font-size:12px;font-weight:700;color:var(--navy)"></div>
-            <button onclick="document.getElementById('kpi-drill-${safeId}').style.display='none'" style="font-size:10px;padding:2px 8px;border:1px solid #E2EAF0;border-radius:5px;cursor:pointer;background:white;font-family:inherit">Close</button>
-          </div>
-          <div id="kpi-drill-list-${safeId}"></div>
-        </div>
+      // Drill-down panel (hidden, shown on bar click)
+      html += '<div id="kpi-drill-'+safeId+'" style="display:none;background:white;border-radius:8px;padding:0.75rem;border:1px solid var(--border);margin-bottom:1rem">';
+      html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem"><div id="kpi-drill-title-'+safeId+'" style="font-size:12px;font-weight:700;color:var(--navy)"></div>';
+      html += '<button onclick="document.getElementById(\'kpi-drill-'+safeId+'\').style.display=\'none\'" style="font-size:10px;padding:2px 8px;border:1px solid #E2EAF0;border-radius:5px;cursor:pointer;background:white;font-family:inherit">Close</button></div>';
+      html += '<div id="kpi-drill-list-'+safeId+'"></div></div>';
 
-        <!-- Comments (leads only) -->
-        ${showComments&&comments.length?`<div>
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px">Recent Patient Feedback</div>
-          ${comments.map(function(f){return '<div style="padding:0.6rem 0.75rem;background:white;border-radius:8px;border:1px solid var(--border);margin-bottom:6px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:11px;font-weight:700;color:var(--navy)">'+(f.patient||'Patient')+'</span><span style="color:#EDA100;font-size:11px">'+'&#9733;'.repeat(Math.round(f.rating))+'&#9734;'.repeat(5-Math.round(f.rating))+'</span><span style="font-size:10px;color:var(--muted)">'+f.rating+'/5 &middot; '+f.date+'</span></div><div style="font-size:12px;color:var(--muted);font-style:italic">&ldquo;'+f.comment+'&rdquo;</div></div>';}).join('')}
-        </div>`:''}
-      </div>`:''}
-    </div>`;
-  }).join('');
+      // Comments
+      if(showComments && comments.length){
+        html += '<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px">Recent Patient Feedback</div>';
+        comments.forEach(function(f){
+          html += '<div style="padding:0.6rem 0.75rem;background:white;border-radius:8px;border:1px solid var(--border);margin-bottom:6px">';
+          html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:11px;font-weight:700;color:var(--navy)">'+(f.patient||'Patient')+'</span>';
+          html += '<span style="color:#EDA100;font-size:11px">'+'\u2605'.repeat(Math.round(f.rating))+'\u2606'.repeat(5-Math.round(f.rating))+'</span>';
+          html += '<span style="font-size:10px;color:var(--muted)">'+f.rating+'/5 \u00b7 '+f.date+'</span></div>';
+          html += '<div style="font-size:12px;color:var(--muted);font-style:italic">\u201c'+f.comment+'\u201d</div></div>';
+        });
+        html += '</div>';
+      }
+
+      html += '</div>'; // end expanded
+    }
+
+    html += '</div>'; // end card
+  });
+
+  grid.innerHTML=html;
 }
 
 function kpiToggleCard(name){
