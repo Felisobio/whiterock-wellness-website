@@ -439,7 +439,17 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 
         <div class="page" id="page-sessions">
           <div class="page-title">Session notes</div>
-          <div class="page-sub">Write treatment plans and session findings for your patients</div>
+          <div class="page-sub">Select a patient and record their session findings</div>
+          <!-- Patient selector -->
+          <div class="card" style="margin-bottom:1rem;padding:1.25rem">
+            <label style="display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.5rem">Select Patient</label>
+            <select id="session-patient-select" onchange="onSessionPatientSelect(this.value)" style="width:100%;padding:0.75rem 1rem;border:1.5px solid #E2EAF0;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;outline:none;color:var(--navy);background:white">
+              <option value="">— Choose a patient to start session notes —</option>
+            </select>
+          </div>
+          <!-- Session form — shown after patient selected -->
+          <div id="session-form-wrap" style="display:none"></div>
+          <!-- Patient list summary -->
           <div id="sessions-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
         </div>
 
@@ -1214,59 +1224,103 @@ async function loadSessions(){
   const allForSessions = await fetchPatients().catch(()=>getMockPatients());
   const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
   const allAssigned = isLead
-    ? allForSessions.filter(p=>p.status==='Active'||p.status==='Closed')
+    ? allForSessions.filter(p=>p.status==='Active'||p.status==='Allocated')
     : allForSessions.filter(p=>{
         const therapistMatch = p.therapist && (
           p.therapist.toLowerCase() === currentUser.name.toLowerCase() ||
-          p.therapist.toLowerCase().includes(currentUser.email.split('@')[0].toLowerCase())
+          p.therapist.toLowerCase().includes(currentUser.name.split(' ')[0].toLowerCase())
         );
-        return therapistMatch && (p.status==='Active'||p.status==='Closed');
+        return therapistMatch && (p.status==='Active'||p.status==='Allocated');
       });
 
-  document.getElementById('sessions-list').innerHTML = allAssigned.length ? allAssigned.map(p=>`
-    <div class="card" style="${p.status==='Closed'?'opacity:0.7;border-color:rgba(107,114,128,0.3)':''}">
-      <div class="session-patient-card" style="${p.status==='Closed'?'background:rgba(107,114,128,0.1);border-color:rgba(107,114,128,0.2)':''}">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div style="display:flex;align-items:center;gap:0.6rem">
-            <div class="patient-init">${getInitials(p.name)}</div>
-            <div>
-              <div style="font-size:0.88rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:0.4rem">
-                ${p.name} ${getReturningBadge(p)}
-              </div>
-              <div style="font-size:0.72rem;color:var(--muted)">${p.id} · ${p.complaint} · Pain ${p.painLevel}/10</div>
-            </div>
-          </div>
-          <div style="display:flex;gap:0.5rem;align-items:center">
-            ${getStatusBadge(p.status)}
-            ${p.status==='Active' ? `<button onclick="updatePatientStatus('${p.id}','${p.name}','Closed')" style="font-size:0.7rem;padding:3px 10px;border-radius:5px;border:1px solid #EF4444;color:#EF4444;background:white;cursor:pointer">Close</button>` : ''}
-            ${p.status==='Closed' ? `<button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 10px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer">Reopen</button>` : ''}
+  // Store for use in form
+  window._sessionPatients = allAssigned;
+
+  // Populate patient selector dropdown
+  const sel = document.getElementById('session-patient-select');
+  if(sel){
+    sel.innerHTML = '<option value="">— Choose a patient to start session notes —</option>'
+      + allAssigned.map((p,i)=>`<option value="${i}">${p.name}${p.PatientType==='Returning Patient'?' (RP)':''} — ${p.complaint||'No complaint listed'} — ${p.status}</option>`).join('');
+  }
+
+  // Reset form
+  document.getElementById('session-form-wrap').style.display = 'none';
+  document.getElementById('session-form-wrap').innerHTML = '';
+
+  // Show summary list below
+  document.getElementById('sessions-list').innerHTML = allAssigned.length
+    ? `<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem">Your patients (${allAssigned.length})</div>`
+      + allAssigned.map((p,i)=>`
+      <div class="card" style="padding:0.85rem 1rem;margin-bottom:0.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;cursor:pointer;transition:all 0.15s" onclick="document.getElementById('session-patient-select').value='${i}';onSessionPatientSelect('${i}');this.closest('.page').scrollTop=0" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:center;gap:0.75rem">
+          <div class="patient-init" style="width:36px;height:36px;font-size:0.8rem">${getInitials(p.name)}</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:0.4rem">${p.name} ${getReturningBadge(p)}</div>
+            <div style="font-size:0.72rem;color:var(--muted)">${p.complaint||'No complaint'} · Pain ${p.painLevel||'—'}/10 · ${p.therapist||'Unassigned'}</div>
           </div>
         </div>
-      </div>
-      ${p.status==='Active' ? `
-      <div class="session-form">
-        <label>Treatment plan</label>
-        <textarea id="plan-${p.id}" placeholder="Describe the treatment plan…"></textarea>
-        <label>Session findings</label>
-        <textarea id="findings-${p.id}" placeholder="What did you observe and do during this session?"></textarea>
-        <label>Next steps</label>
-        <textarea id="next-${p.id}" placeholder="What should happen at the next session?" rows="2" style="min-height:70px"></textarea>
-        <div style="display:flex;gap:0.5rem;align-items:center;margin-top:0.25rem">
-          <button class="btn-primary" onclick="saveSession('${p.id}','${p.name}')">Save session notes</button>
-          ${currentUser.role==='Junior'||currentUser.role==='Intern'?`<span style="font-size:0.75rem;color:var(--muted)">⚠ Notes sent for Lead approval</span>`:''}
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          ${getStatusBadge(p.status)}
+          <span style="font-size:11px;color:var(--cyan);font-weight:600">Open notes →</span>
         </div>
-      </div>` : `
-      <div style="padding:0.75rem;font-size:0.82rem;color:var(--muted);font-style:italic">
-        Patient is closed — click Reopen to resume sessions.
-      </div>`}
-    </div>
-  `).join('') : '<div class="empty-state"><p>No patients assigned to you</p></div>';
+      </div>`).join('')
+    : '<div class="empty-state"><p>No active patients assigned to you</p></div>';
 }
 
-async function saveSession(patientId, patientName){
-  const plan = document.getElementById('plan-'+patientId) ? document.getElementById('plan-'+patientId).value : '';
-  const findings = document.getElementById('findings-'+patientId).value;
-  const nextSteps = document.getElementById('next-'+patientId) ? document.getElementById('next-'+patientId).value : '';
+function onSessionPatientSelect(idx){
+  const patients = window._sessionPatients || [];
+  const p = patients[parseInt(idx)];
+  const wrap = document.getElementById('session-form-wrap');
+  if(!p || idx===''){
+    wrap.style.display = 'none';
+    wrap.innerHTML = '';
+    return;
+  }
+  wrap.style.display = 'block';
+  const safeId = 'sess_'+idx;
+  wrap.innerHTML = `
+    <div class="card" style="margin-bottom:1rem;border-color:var(--cyan)">
+      <!-- Patient header -->
+      <div style="display:flex;align-items:center;gap:0.75rem;padding-bottom:1rem;margin-bottom:1rem;border-bottom:1px solid var(--border)">
+        <div class="patient-init" style="width:44px;height:44px;font-size:0.9rem">${getInitials(p.name)}</div>
+        <div style="flex:1">
+          <div style="font-size:1rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:0.5rem">${p.name} ${getReturningBadge(p)}</div>
+          <div style="font-size:0.75rem;color:var(--muted)">${p.id} · ${p.complaint||'No complaint'} · Pain ${p.painLevel||'—'}/10</div>
+          <div style="font-size:0.75rem;color:var(--royal);font-weight:600;margin-top:2px">Assigned to: ${p.therapist||'—'}</div>
+        </div>
+        ${getStatusBadge(p.status)}
+      </div>
+
+      <!-- Status change -->
+      <div style="display:flex;gap:0.5rem;margin-bottom:1.25rem;flex-wrap:wrap">
+        <button onclick="updatePatientStatus('${p.id}','${p.name}','Discharged')" style="font-size:0.78rem;padding:5px 14px;border-radius:6px;border:1px solid #EF4444;color:#EF4444;background:white;cursor:pointer;font-family:inherit">Discharge patient</button>
+        <button onclick="updatePatientStatus('${p.id}','${p.name}','Closed')" style="font-size:0.78rem;padding:5px 14px;border-radius:6px;border:1px solid var(--muted);color:var(--muted);background:white;cursor:pointer;font-family:inherit">Close case</button>
+      </div>
+
+      <!-- Session form -->
+      <div class="session-form">
+        <label>Treatment plan *</label>
+        <textarea id="plan-${safeId}" placeholder="Describe the treatment plan for this session…"></textarea>
+        <label>Session findings *</label>
+        <textarea id="findings-${safeId}" placeholder="What did you observe and do during this session? What was the patient's response?"></textarea>
+        <label>Next steps</label>
+        <textarea id="next-${safeId}" placeholder="What should happen at the next session?" rows="2" style="min-height:70px"></textarea>
+        <div style="display:flex;gap:0.75rem;align-items:center;margin-top:0.5rem;flex-wrap:wrap">
+          <button class="btn-primary" style="min-width:160px" onclick="saveSession('${p.id}','${p.name}','${safeId}')">Save session notes</button>
+          <div id="wa-survey-btn-${p.id}"></div>
+          ${currentUser.role==='Junior'||currentUser.role==='Intern'?`<span style="font-size:0.75rem;color:var(--muted)">⚠ Notes require Lead approval</span>`:''}
+        </div>
+      </div>
+    </div>`;
+  // Scroll to form
+  wrap.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+async function saveSession(patientId, patientName, safeId){
+  const domId = safeId || patientId;
+  const plan = document.getElementById('plan-'+domId) ? document.getElementById('plan-'+domId).value : '';
+  const findings = document.getElementById('findings-'+domId) ? document.getElementById('findings-'+domId).value : '';
+  const nextSteps = document.getElementById('next-'+domId) ? document.getElementById('next-'+domId).value : '';
   if(!findings){ alert('Please enter session findings before saving.'); return; }
   const needsApproval = currentUser.role === 'Junior' || currentUser.role === 'Intern';
   const status = needsApproval ? 'Pending Approval' : 'Approved';
@@ -1314,19 +1368,38 @@ async function loadKPI(){
   var isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
   if(isLead) document.getElementById('kpi-mgmt-actions').style.display='flex';
   document.getElementById('kpi-cards-grid').innerHTML='<div class="loading"><div class="spinner"></div>Loading KPI data...</div>';
-  var realFeedback = await fetchFeedback().catch(function(){ return []; });
+
+  // Fetch feedback AND patients simultaneously so therapist list is always complete
+  var results = await Promise.all([
+    fetchFeedback().catch(function(){ return []; }),
+    fetchPatients().catch(function(){ return []; })
+  ]);
+  var realFeedback = results[0];
+  var allPatientsData = results[1];
+
   window._kpiFeedback = realFeedback.length>0?realFeedback:getMockFeedback();
+  window._allPatientsCache = allPatientsData;
   var allFeedback = window._kpiFeedback;
+
+  // Build therapist list from BOTH feedback AND patient records
   var feedbackTherapists = [...new Set(allFeedback.map(function(f){ return f.therapist; }).filter(Boolean))];
-  var patientTherapists = [...new Set((window._allPatientsCache||[]).map(function(p){ return p.therapist; }).filter(Boolean))];
+  var patientTherapists = [...new Set(allPatientsData.map(function(p){ return p.therapist; }).filter(Boolean))];
   var therapistNames = [...new Set([...feedbackTherapists, ...patientTherapists])].sort();
   window._kpiTherapists = therapistNames;
-  if(!therapistNames.length){ document.getElementById('kpi-cards-grid').innerHTML='<div class="empty-state"><p>No feedback data yet.</p></div>'; return; }
-  if(!window._kpiSelMonths) window._kpiSelMonths = Array(12).fill(true);
-  if(!window._kpiSelTherapists){ window._kpiSelTherapists = {}; therapistNames.forEach(n=>window._kpiSelTherapists[n]=true); }
+
+  if(!therapistNames.length){ document.getElementById('kpi-cards-grid').innerHTML='<div class="empty-state"><p>No data yet. Assign therapists to patients to get started.</p></div>'; return; }
+
+  if(!window._kpiSelMonths){ window._kpiSelMonths = Array(12).fill(true); }
   if(!window._kpiMetrics) window._kpiMetrics = {score:true,sessions:true,stars:true,trend:true,chart:true};
+
+  // Always rebuild therapist selection so new therapists appear automatically
+  window._kpiSelTherapists = {};
+  therapistNames.forEach(function(n){ window._kpiSelTherapists[n]=true; });
+
+  // Rebuild therapist chips
   var tchips = document.getElementById('kpi-therapist-chips');
-  if(tchips && tchips.children.length===0){
+  if(tchips){
+    tchips.innerHTML = '';
     therapistNames.forEach(function(name){
       var chip = document.createElement('div');
       chip.className = 'kpi-dd-item on';
@@ -1342,18 +1415,15 @@ async function loadKPI(){
       tchips.appendChild(chip);
     });
   }
+
   if(!window._kpiSelMonths){
-    // Default to last 6 months
     var now2=new Date(); var cm=now2.getMonth();
     window._kpiSelMonths=Array(12).fill(false);
     for(var i=0;i<6;i++) window._kpiSelMonths[(cm-i+12)%12]=true;
   }
   kpiUpdateMonthChips();
   kpiUpdateClinicStats(allFeedback, therapistNames);
-  // Render therapist backlog using patient data
-  const patientsForBacklog = await fetchPatients().catch(()=>[]);
-  window._allPatientsCache = patientsForBacklog;
-  kpiRenderBacklog(patientsForBacklog, therapistNames);
+  kpiRenderBacklog(allPatientsData, therapistNames);
   kpiRenderCards();
 }
 
