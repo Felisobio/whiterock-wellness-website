@@ -385,7 +385,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
         <div class="nav-item" onclick="showPage('sessions',this)">
           <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Sessions
         </div>
-        <div class="nav-item" onclick="showPage('kpi',this)">
+        <div class="nav-item" id="nav-kpi" onclick="showPage('kpi',this)">
           <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>KPI
         </div>
         <div class="nav-item" id="nav-approval" onclick="showPage('approval',this)">
@@ -470,10 +470,10 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
               </button>
             </div>
           </div>
-          <div style="background:#E8F4FF;border:1px solid rgba(26,63,191,0.15);border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.25rem">
+          <div id="kpi-filter-bar" style="background:#E8F4FF;border:1px solid rgba(26,63,191,0.15);border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.25rem">
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-              <!-- Therapists dropdown -->
-              <div style="position:relative">
+              <!-- Therapists dropdown — leads only -->
+              <div id="kpi-therapist-filter-wrap" style="position:relative">
                 <button onclick="kpiToggleDropdown('therapists')" style="display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:10px;border:none;background:#1A3FBF;color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
                   Therapists <span id="kpi-t-count" style="background:rgba(255,255,255,0.25);border-radius:20px;padding:1px 7px;font-size:10px">all</span>
                 </button>
@@ -500,8 +500,8 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
             </div>
           </div>
           <div id="kpi-clinic-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem"></div>
-          <!-- THERAPIST BACKLOG -->
-          <div style="margin-bottom:1.25rem">
+          <!-- THERAPIST BACKLOG — leads only -->
+          <div id="kpi-backlog-section" style="margin-bottom:1.25rem">
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px">Therapist Backlog</div>
             <div id="kpi-backlog-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
           </div>
@@ -751,6 +751,7 @@ function initDashboard(){
   if(!isLead){
     document.getElementById('nav-allocations').style.display = 'none';
     document.getElementById('nav-approval').style.display = 'none';
+    document.getElementById('nav-kpi').style.display = 'none';
   }
   loadOverview().catch(e=>console.log("Overview error:",e));
   updateMobileNav();
@@ -847,9 +848,11 @@ function getMockFeedback(){
 
 function getMockStaff(){
   return [
-    {name:'pauljohnson chima',role:'Lead',specialty:'Chiropractor'},
-    {name:'Felicitas Obiefuna',role:'Admin',specialty:'Administration'},
+    {name:'pauljohnson chima', role:'Lead', specialty:'Chiropractor'},
+    {name:'Felicitas Obiefuna', role:'Admin', specialty:'Administration'},
   ];
+  // Add more staff here as your team grows e.g:
+  // {name:'Sarah Obi', role:'Mid-level', specialty:'Physiotherapist'},
 }
 
 async function loadOverview(){
@@ -1369,7 +1372,7 @@ async function loadKPI(){
   if(isLead) document.getElementById('kpi-mgmt-actions').style.display='flex';
   document.getElementById('kpi-cards-grid').innerHTML='<div class="loading"><div class="spinner"></div>Loading KPI data...</div>';
 
-  // Fetch feedback AND patients simultaneously so therapist list is always complete
+  // Fetch feedback AND patients simultaneously
   var results = await Promise.all([
     fetchFeedback().catch(function(){ return []; }),
     fetchPatients().catch(function(){ return []; })
@@ -1381,13 +1384,31 @@ async function loadKPI(){
   window._allPatientsCache = allPatientsData;
   var allFeedback = window._kpiFeedback;
 
-  // Build therapist list from BOTH feedback AND patient records
+  // Non-leads only see their own data
+  if(!isLead){
+    var myName = currentUser.name.toLowerCase();
+    allFeedback = allFeedback.filter(function(f){
+      return f.therapist && f.therapist.toLowerCase().includes(myName.split(' ')[0]);
+    });
+    allPatientsData = allPatientsData.filter(function(p){
+      return p.therapist && p.therapist.toLowerCase().includes(myName.split(' ')[0]);
+    });
+  }
+
+  // Leads see all therapists including unassigned ones — others see only themselves
   var feedbackTherapists = [...new Set(allFeedback.map(function(f){ return f.therapist; }).filter(Boolean))];
   var patientTherapists = [...new Set(allPatientsData.map(function(p){ return p.therapist; }).filter(Boolean))];
-  var therapistNames = [...new Set([...feedbackTherapists, ...patientTherapists])].sort();
+  var knownTherapists = isLead ? getMockStaff().map(function(s){ return s.name; }) : [currentUser.name];
+  var therapistNames = [...new Set([...feedbackTherapists, ...patientTherapists, ...knownTherapists])].sort();
   window._kpiTherapists = therapistNames;
 
   if(!therapistNames.length){ document.getElementById('kpi-cards-grid').innerHTML='<div class="empty-state"><p>No data yet. Assign therapists to patients to get started.</p></div>'; return; }
+
+  // Apply role-based visibility
+  var therapistWrap = document.getElementById('kpi-therapist-filter-wrap');
+  var backlogSection = document.getElementById('kpi-backlog-section');
+  if(therapistWrap) therapistWrap.style.display = isLead ? 'block' : 'none';
+  if(backlogSection) backlogSection.style.display = isLead ? 'block' : 'none';
 
   if(!window._kpiSelMonths){ window._kpiSelMonths = Array(12).fill(true); }
   if(!window._kpiMetrics) window._kpiMetrics = {score:true,sessions:true,stars:true,trend:true,chart:true};
@@ -1743,7 +1764,8 @@ function showKPIPPTPreview(){
 
   // State
   var selectedStars = {5:true,4:true,3:true,2:true,1:true};
-  var showComments = true;
+  var isLeadUser = currentUser.role==='Lead'||currentUser.role==='Admin';
+  var showComments = isLeadUser; // Only leads see comments — non-leads always false
 
   // Build modal
   var modal = document.createElement('div');
@@ -1785,8 +1807,8 @@ function showKPIPPTPreview(){
       }).join('')
       +'</div>'
       // Comment toggle
-      +'<button onclick="kpiPPTToggleComments()" style="padding:5px 12px;border-radius:6px;border:1.5px solid '+(showComments?'#1A3FBF':'#E2EAF0')+';background:'+(showComments?'#E8F4FF':'white')+';color:'+(showComments?'#1A3FBF':'#AAA')+';font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">'
-      +(showComments?'&#10003; Comments':'Comments off')+'</button>'
+      +(isLeadUser ? '<button onclick="kpiPPTToggleComments()" style="padding:5px 12px;border-radius:6px;border:1.5px solid '+(showComments?'#1A3FBF':'#E2EAF0')+';background:'+(showComments?'#E8F4FF':'white')+';color:'+(showComments?'#1A3FBF':'#AAA')+';font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">'
+      +(showComments?'&#10003; Comments':'Comments off')+'</button>' : '')
       +'<button onclick="kpiPPTClose()" style="padding:5px 14px;border-radius:6px;border:1px solid #E2EAF0;background:white;font-size:12px;color:#5A6A7A;cursor:pointer;font-family:inherit">Close</button>'
       +'</div></div>'
 
