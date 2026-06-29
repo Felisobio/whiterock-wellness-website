@@ -12,10 +12,7 @@
   s.onerror = function(){
     var s2 = document.createElement('script');
     s2.src = 'https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.3/lib/msal-browser.min.js';
-    s2.onerror = function(){
-      document.getElementById('login-error').textContent = 'Authentication library failed to load. Please refresh the page.';
-      document.getElementById('login-error').style.display = 'block';
-    };
+    s2.onerror = function(){ document.getElementById('login-error').textContent='Authentication library failed to load.'; document.getElementById('login-error').style.display='block'; };
     document.head.appendChild(s2);
   };
   document.head.appendChild(s);
@@ -23,53 +20,24 @@
 </script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --navy:#0A1628;--royal:#1A3FBF;--cyan:#00AAFF;
-  --sky:#E8F4FF;--offwhite:#F5F9FF;--white:#FFFFFF;
-  --text:#0A1628;--muted:#5A6A7A;--border:rgba(26,63,191,0.12);
-  --success:#22C55E;--warning:#F59E0B;--danger:#EF4444;
-}
+:root{--navy:#0A1628;--royal:#1A3FBF;--cyan:#00AAFF;--sky:#E8F4FF;--offwhite:#F5F9FF;--white:#FFFFFF;--text:#0A1628;--muted:#5A6A7A;--border:rgba(26,63,191,0.12);--success:#22C55E;--warning:#F59E0B;--danger:#EF4444}
 html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--offwhite);line-height:1.5;overflow-x:hidden}
-
-/* ── LOGIN ── */
-#login-screen{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(145deg,#030A18 0%,#0A1628 50%,#0D2050 100%);
-  padding:1rem;
-}
-.login-card{
-  background:white;border-radius:20px;padding:2.5rem;
-  width:100%;max-width:420px;
-  box-shadow:0 30px 80px rgba(0,0,0,0.4);
-  text-align:center;
-}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#030A18 0%,#0A1628 50%,#0D2050 100%);padding:1rem}
+.login-card{background:white;border-radius:20px;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 30px 80px rgba(0,0,0,0.4);text-align:center}
 .login-logo{display:flex;align-items:center;gap:10px;margin-bottom:2rem;justify-content:center}
 .login-logo-text{font-size:1.3rem;font-weight:800;color:var(--navy)}
 .login-logo-text span{color:var(--cyan)}
 .login-card h2{font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem}
 .login-card p{font-size:0.85rem;color:var(--muted);margin-bottom:2rem;line-height:1.6}
-.ms-login-btn{
-  display:flex;align-items:center;justify-content:center;gap:0.75rem;
-  width:100%;background:#0078d4;color:white;border:none;
-  padding:0.9rem 1.5rem;border-radius:10px;
-  font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;font-weight:600;
-  cursor:pointer;transition:all 0.2s;
-}
+.ms-login-btn{display:flex;align-items:center;justify-content:center;gap:0.75rem;width:100%;background:#0078d4;color:white;border:none;padding:0.9rem 1.5rem;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.2s}
 .ms-login-btn:hover{background:#006cbd}
 .ms-login-btn:disabled{opacity:0.6;cursor:not-allowed}
 .ms-login-btn svg{width:20px;height:20px;flex-shrink:0}
 .login-error{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);color:#991B1B;font-size:0.82rem;padding:0.65rem 1rem;border-radius:8px;margin-top:1rem;display:none;text-align:center}
 .login-loading{color:var(--muted);font-size:0.85rem;margin-top:1rem;display:none}
-
-/* ── DASHBOARD ── */
 #dashboard{display:none}
 .app{display:flex;flex-direction:column;min-height:100vh}
-.topbar{
-  background:var(--navy);height:56px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 1.5rem;position:sticky;top:0;z-index:100;
-  border-bottom:1px solid rgba(0,170,255,0.15);
-}
+.topbar{background:var(--navy);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(0,170,255,0.15)}
 .topbar-logo{color:var(--cyan);font-size:0.9rem;font-weight:700}
 .topbar-logo span{color:rgba(255,255,255,0.5);font-weight:400}
 .topbar-right{display:flex;align-items:center;gap:0.75rem}
@@ -79,137 +47,44 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 .user-avatar{width:34px;height:34px;border-radius:50%;background:var(--royal);border:2px solid rgba(0,170,255,0.3);display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;font-weight:700}
 .signout-btn{background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);font-size:0.75rem;padding:0.3rem 0.75rem;border-radius:6px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s}
 .signout-btn:hover{border-color:var(--danger);color:var(--danger)}
-
 .app-body{display:flex;flex:1}
-.sidebar{
-  width:200px;background:white;border-right:1px solid var(--border);
-  padding:1rem 0;flex-shrink:0;position:sticky;top:56px;
-  height:calc(100vh - 56px);overflow-y:auto;
-}
-@media(max-width:768px){
-  .sidebar{
-    position:fixed;top:56px;left:-240px;width:220px;
-    height:calc(100vh - 56px);z-index:9999;
-    transition:left 0.3s ease;
-    box-shadow:4px 0 20px rgba(0,0,0,0.3);
-    background:white;
-  }
-  .sidebar.open{left:0 !important}
-  .main-content{padding:1rem}
-  .metrics-grid{grid-template-columns:1fr 1fr!important}
-  .two-col{grid-template-columns:1fr!important}
-}
-.mob-menu-btn{
-  display:none;background:none;border:none;cursor:pointer;
-  padding:6px;color:white;
-}
+.sidebar{width:200px;background:white;border-right:1px solid var(--border);padding:1rem 0;flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.mob-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:6px;color:white}
 .mob-menu-btn svg{width:22px;height:22px;stroke:white;fill:none;stroke-width:2}
-@media(max-width:768px){.mob-menu-btn{display:flex;align-items:center}}
-
+@media(max-width:768px){.mob-menu-btn{display:flex;align-items:center}.sidebar{display:none!important}.main-content{padding:1rem}.metrics-grid{grid-template-columns:1fr 1fr!important}.two-col{grid-template-columns:1fr!important}.data-table{font-size:0.72rem}.data-table th,.data-table td{padding:0.5rem 0.4rem}}
 .nav-section{padding:0.5rem 1rem 0.25rem;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
-.nav-item{
-  display:flex;align-items:center;gap:0.6rem;
-  padding:0.6rem 1rem;font-size:0.84rem;color:var(--muted);
-  cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;
-}
+.nav-item{display:flex;align-items:center;gap:0.6rem;padding:0.6rem 1rem;font-size:0.84rem;color:var(--muted);cursor:pointer;transition:all 0.15s;border-left:3px solid transparent}
 .nav-item:hover{background:var(--offwhite);color:var(--navy)}
 .nav-item.active{background:var(--sky);color:var(--royal);border-left-color:var(--cyan);font-weight:600}
 .nav-item svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .nav-badge{margin-left:auto;background:var(--danger);color:white;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:10px}
-
 .main-content{flex:1;padding:1.5rem;overflow-y:auto}
 .page{display:none}
 .page.active{display:block}
 .page-title{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem}
 .page-sub{font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem}
-
-/* ── METRICS ── */
 .metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
 .metric-card{background:white;border-radius:12px;border:1px solid var(--border);padding:1.1rem 1.25rem}
 .metric-label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.4rem}
 .metric-value{font-size:1.8rem;font-weight:800;color:var(--navy);line-height:1}
 .metric-sub{font-size:0.75rem;color:var(--muted);margin-top:0.3rem}
-.metric-sub.good{color:var(--success)}
-.metric-sub.warn{color:var(--warning)}
-.metric-sub.bad{color:var(--danger)}
-
-/* ── CARDS ── */
+.metric-sub.good{color:var(--success)}.metric-sub.warn{color:var(--warning)}.metric-sub.bad{color:var(--danger)}
 .card{background:white;border-radius:12px;border:1px solid var(--border);padding:1.25rem;margin-bottom:1rem}
 .card-title{font-size:0.88rem;font-weight:700;color:var(--navy);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-
-/* ── TABLE ── */
 .data-table{width:100%;border-collapse:collapse;font-size:0.82rem}
 .data-table th{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.5rem 0.75rem;text-align:left;border-bottom:1px solid var(--border);background:var(--offwhite)}
 .data-table td{padding:0.7rem 0.75rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
 .data-table tr:last-child td{border-bottom:none}
 .data-table tr:hover td{background:var(--offwhite)}
 .patient-init{width:30px;height:30px;border-radius:50%;background:var(--sky);color:var(--royal);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0}
-
-/* ── BADGES ── */
 .badge{font-size:0.7rem;font-weight:700;padding:2px 10px;border-radius:20px;display:inline-block;white-space:nowrap}
-.badge-pending{background:#FEF3C7;color:#92400E}
-.badge-allocated{background:#DBEAFE;color:#1E40AF}
-.badge-active{background:#D1FAE5;color:#065F46}
-.badge-discharged{background:#F3F4F6;color:#6B7280}
-.badge-excellent{background:#D1FAE5;color:#065F46}
-.badge-good{background:#DBEAFE;color:#1E40AF}
-.badge-review{background:#FEE2E2;color:#991B1B}
-
-/* ── RETURNING PATIENT BADGE ── */
-.badge-returning{
-  font-size:0.62rem;font-weight:700;
-  background:rgba(245,158,11,0.15);
-  color:#92400E;
-  border:1px solid rgba(245,158,11,0.35);
-  border-radius:10px;
-  padding:2px 8px;
-  white-space:nowrap;
-  display:inline-block;
-}
-
-/* ── KPI ── */
-.kpi-therapist-card{background:white;border-radius:12px;border:1px solid var(--border);padding:1.25rem;margin-bottom:0.75rem}
-.kpi-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-.kpi-info{display:flex;align-items:center;gap:0.75rem}
-.kpi-avatar{width:40px;height:40px;border-radius:50%;background:var(--sky);color:var(--royal);display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;flex-shrink:0}
-.kpi-name{font-size:0.9rem;font-weight:700;color:var(--navy)}
-.kpi-role-label{font-size:0.72rem;color:var(--muted)}
-.kpi-score-big{font-size:1.8rem;font-weight:800;line-height:1}
-.score-bar-wrap{background:var(--offwhite);border-radius:4px;height:8px;overflow:hidden;margin:0.75rem 0 0.5rem}
-.score-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
-.kpi-stats{display:flex;gap:1.5rem;font-size:0.78rem;color:var(--muted)}
-.stars-display{color:var(--warning);letter-spacing:1px;font-size:0.85rem}
-.feedback-list{margin-top:1rem;border-top:1px solid var(--border);padding-top:0.75rem}
-.feedback-item{padding:0.6rem 0;border-bottom:1px solid var(--border);font-size:0.8rem}
-.feedback-item:last-child{border-bottom:none}
-.feedback-meta{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem}
-.feedback-patient{font-weight:600;color:var(--navy);font-size:0.75rem}
-.feedback-date{color:var(--muted);font-size:0.72rem}
-.feedback-stars{color:var(--warning);font-size:0.72rem}
-.feedback-comment{color:var(--muted);font-size:0.78rem;line-height:1.5;font-style:italic}
-.feedback-locked{display:flex;align-items:center;gap:0.4rem;color:var(--muted);font-size:0.78rem;padding:0.5rem;background:var(--offwhite);border-radius:6px;margin-top:0.5rem}
-
-/* ── PERIODIC ── */
-.review-card{background:white;border-radius:12px;border:1px solid var(--border);padding:1.25rem;margin-bottom:0.75rem}
-.review-card.overdue{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.02)}
-.review-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.5rem}
-.review-name{font-size:0.9rem;font-weight:700;color:var(--navy)}
-.review-type{font-size:0.72rem;color:var(--muted)}
-.review-due{font-size:0.75rem;font-weight:600}
-.review-due.overdue{color:var(--danger)}
-.review-due.upcoming{color:var(--warning)}
-.review-body{font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:0.75rem}
-.review-actions{display:flex;gap:0.5rem}
-
-/* ── BUTTONS ── */
+.badge-pending{background:#FEF3C7;color:#92400E}.badge-allocated{background:#DBEAFE;color:#1E40AF}.badge-active{background:#D1FAE5;color:#065F46}.badge-discharged{background:#F3F4F6;color:#6B7280}.badge-excellent{background:#D1FAE5;color:#065F46}.badge-good{background:#DBEAFE;color:#1E40AF}.badge-review{background:#FEE2E2;color:#991B1B}
+.badge-returning{font-size:0.62rem;font-weight:700;background:rgba(245,158,11,0.15);color:#92400E;border:1px solid rgba(245,158,11,0.35);border-radius:10px;padding:2px 8px;white-space:nowrap;display:inline-block}
 .btn-sm{font-size:0.75rem;padding:0.35rem 0.85rem;border-radius:6px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;border:1px solid var(--border);background:white;color:var(--navy);transition:all 0.15s}
 .btn-sm:hover{background:var(--sky);border-color:var(--cyan);color:var(--royal)}
-.btn-sm.danger{border-color:rgba(239,68,68,0.3);color:var(--danger)}
 .btn-primary{background:var(--royal);color:white;border:none;padding:0.55rem 1.25rem;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;transition:all 0.2s}
 .btn-primary:hover{background:var(--cyan);color:var(--navy)}
-
-/* ── ALLOCATION ── */
 .alloc-card{background:white;border-radius:12px;border:1.5px solid #FEF3C7;padding:1.25rem;margin-bottom:0.75rem}
 .alloc-details{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.75rem;font-size:0.8rem}
 .alloc-detail-item{background:var(--offwhite);border-radius:6px;padding:0.4rem 0.6rem}
@@ -217,38 +92,19 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 .alloc-detail-val{color:var(--navy);font-weight:500}
 .alloc-select{flex:1;padding:0.55rem 0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none}
 .alloc-comment{width:100%;padding:0.55rem 0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none;resize:none;margin-top:0.5rem}
-
-/* ── SESSION ── */
-.session-patient-card{background:var(--sky);border-radius:10px;padding:1rem;margin-bottom:0.75rem;border:1px solid rgba(0,170,255,0.2)}
 .session-form textarea{width:100%;padding:0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.84rem;outline:none;resize:vertical;min-height:100px;margin-bottom:0.75rem}
 .session-form textarea:focus{border-color:var(--cyan)}
 .session-form label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.35rem}
-
-/* ── APPROVAL ── */
-.approval-card{background:white;border-radius:12px;border:1.5px solid rgba(26,63,191,0.2);padding:1.25rem;margin-bottom:0.75rem}
-.approval-note{background:var(--offwhite);border-radius:8px;padding:0.75rem;font-size:0.82rem;color:var(--text);line-height:1.6;margin-bottom:0.75rem;border-left:3px solid var(--royal)}
-
-/* ── MISC ── */
 .empty-state{text-align:center;padding:3rem 1rem;color:var(--muted)}
 .empty-state svg{width:40px;height:40px;stroke:var(--muted);fill:none;stroke-width:1.5;margin:0 auto 1rem;display:block}
 .loading{text-align:center;padding:2rem;color:var(--muted);font-size:0.85rem}
 .spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 0.75rem}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── ACCESS DENIED ── */
-#access-denied{
-  min-height:100vh;display:none;align-items:center;justify-content:center;
-  background:linear-gradient(145deg,#030A18,#0A1628);
-  flex-direction:column;gap:1rem;text-align:center;padding:2rem;
-}
+#access-denied{min-height:100vh;display:none;align-items:center;justify-content:center;background:linear-gradient(145deg,#030A18,#0A1628);flex-direction:column;gap:1rem;text-align:center;padding:2rem}
 #access-denied h2{color:white;font-size:1.2rem}
 #access-denied p{color:rgba(255,255,255,0.5);font-size:0.85rem;max-width:400px}
 #access-denied button{background:var(--royal);color:white;border:none;padding:0.75rem 2rem;border-radius:8px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600}
-
 @media(max-width:900px){.metrics-grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.sidebar{width:160px}}
-@media(max-width:600px){.sidebar{display:none}.metrics-grid{grid-template-columns:1fr 1fr}}
-
-/* ── KPI DASHBOARD ── */
 .kpi-dd-item{padding:7px 12px;border-radius:8px;font-size:12px;font-weight:500;color:#0A1628;cursor:pointer;user-select:none;transition:all 0.12s;margin-bottom:2px}
 .kpi-dd-item:hover{background:#E8F4FF}
 .kpi-dd-item.on{background:#1A3FBF;color:white;font-weight:600}
@@ -256,82 +112,38 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
 .kpi-t-card{border-radius:14px;padding:1.1rem;cursor:pointer;position:relative;overflow:hidden;transition:filter 0.15s;border:none}
 .kpi-t-card:hover{filter:brightness(1.1)}
 .kpi-t-card.kpi-active{outline:3px solid #00AAFF;outline-offset:2px}
-.kpi-slide-thumb{border:1px solid rgba(26,63,191,0.2);border-radius:8px;aspect-ratio:16/9;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:9px;color:#1A3FBF;text-align:center;padding:6px;cursor:pointer;transition:all 0.15s}
-.kpi-slide-thumb:hover{border-color:#1A3FBF;background:#E8F4FF}
-.kpi-slide-thumb.excluded{opacity:0.3;background:#f0f0f0;color:#888}
-.kpi-ppt-tag{font-size:11px;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px}
 .kpi-period-btn{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:white;font-size:12px;cursor:pointer;font-family:inherit;color:var(--navy)}
 .kpi-period-btn:hover{background:var(--offwhite)}
 .active-period{background:#E6F1FB!important;border-color:#2a78d6!important;color:#185FA5!important;font-weight:600}
-.kpi-stat-card{background:white;border:1px solid var(--border);border-radius:12px;padding:0.85rem 1rem}
-.kpi-t-card{background:white;border:1px solid var(--border);border-radius:12px;padding:1rem;cursor:pointer;transition:border-color 0.15s;position:relative}
-.kpi-t-card:hover,.kpi-t-card.kpi-active{border-color:#2a78d6}
-.kpi-trend-pill{position:absolute;top:10px;right:10px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;display:flex;align-items:center;gap:3px}
-.kpi-comment-item{padding:0.65rem 0;border-bottom:1px solid var(--border)}
-.kpi-comment-item:last-child{border-bottom:none}
-
-/* ── MOBILE HAMBURGER DRAWER ── */
-.mob-drawer{
-  position:fixed;top:0;left:0;bottom:0;width:280px;
-  background:white;z-index:99999;
-  transform:translateX(-100%);transition:transform 0.3s ease;
-  box-shadow:4px 0 30px rgba(0,0,0,0.2);
-  overflow-y:auto;padding-top:56px;
-}
+.kpi-star-btn{padding:3px 10px;border-radius:6px;border:1.5px solid #E2EAF0;background:white;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;color:#AAA;transition:all 0.15s}
+.kpi-star-btn.active-star{background:#FFF8E7;border-color:#FFB800;color:#92400E}
+.mob-drawer{position:fixed;top:0;left:0;bottom:0;width:280px;background:white;z-index:99999;transform:translateX(-100%);transition:transform 0.3s ease;box-shadow:4px 0 30px rgba(0,0,0,0.2);overflow-y:auto;padding-top:56px}
 .mob-drawer.open{transform:translateX(0)}
-.mob-overlay{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.5);z-index:99998;
-}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99998}
 .mob-overlay.show{display:block}
-.mob-drawer-header{
-  padding:1.25rem 1.25rem 0.5rem;
-  border-bottom:1px solid var(--border);margin-bottom:0.5rem;
-}
+.mob-drawer-header{padding:1.25rem 1.25rem 0.5rem;border-bottom:1px solid var(--border);margin-bottom:0.5rem}
 .mob-drawer-user{font-size:0.88rem;font-weight:700;color:var(--navy)}
 .mob-drawer-role{font-size:0.72rem;color:var(--muted)}
-.mob-drawer-item{
-  display:flex;align-items:center;gap:0.75rem;
-  padding:0.85rem 1.25rem;font-size:0.9rem;
-  color:var(--navy);cursor:pointer;border:none;background:none;
-  width:100%;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;
-  text-align:left;border-left:3px solid transparent;
-}
+.mob-drawer-item{display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1.25rem;font-size:0.9rem;color:var(--navy);cursor:pointer;border:none;background:none;width:100%;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;text-align:left;border-left:3px solid transparent}
 .mob-drawer-item:hover{background:var(--offwhite);color:var(--royal)}
 .mob-drawer-item.active{background:var(--sky);color:var(--royal);border-left-color:var(--cyan);font-weight:600}
 .mob-drawer-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .mob-drawer-divider{height:1px;background:var(--border);margin:0.5rem 0}
 .mob-drawer-signout{color:#EF4444!important}
-@media(max-width:768px){
-  .sidebar{display:none!important}
-  .main-content{padding:1rem}
-  .metrics-grid{grid-template-columns:1fr 1fr!important}
-  .two-col{grid-template-columns:1fr!important}
-  .data-table{font-size:0.72rem}
-  .data-table th,.data-table td{padding:0.5rem 0.4rem}
-}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="36" width="36">
-        <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1Z"/>
-      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="36" width="36"><path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1Z"/></svg>
       <div class="login-logo-text">White<span>Rock</span> Wellness</div>
     </div>
     <h2>Staff Portal</h2>
     <p>Sign in with your WhiteRock Wellness Microsoft account to access the staff dashboard.</p>
     <button class="ms-login-btn" id="ms-login-btn" onclick="signInWithMicrosoft()">
-      <svg viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
-        <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
-        <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
-        <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
-        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
-      </svg>
+      <svg viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
       Sign in with Microsoft
     </button>
     <div class="login-error" id="login-error">Sign in failed. Please use your WhiteRock Wellness Microsoft account.</div>
@@ -339,62 +151,39 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
   </div>
 </div>
 
-<!-- ACCESS DENIED -->
 <div id="access-denied">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="50" width="50">
-    <path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1Z"/>
-  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 640" height="50" width="50"><path fill="#00AAFF" d="M795.26,28.1c-23.63-23.63-58.83-30.61-89.72-17.84-30.85,12.78-50.8,42.62-50.8,76.05v88.1c0,5.1-3.59,9.81-8.65,10.35-2.97.31-5.83-.7-7.91-2.78L480.36,24.17c-15.79-15.79-36.75-24.17-58.1-24.17-13.24,0-26.68,3.2-39.11,9.88-27.14,14.48-43.31,43.55-43.31,74.31v69.72c0,17.06-13.82,30.88-30.88,30.88h-56.4c-17.06,0-30.88,13.86-30.88,30.88v61.77l248.92,248.92c23.63,23.63,58.83,30.65,89.68,17.83,30.88-12.78,50.84-42.62,50.84-76.01v-88.1c0-5.1,3.59-9.84,8.65-10.35,2.97-.35,5.83.69,7.91,2.78l157.82,157.82c15.79,15.79,36.75,24.13,58.1,24.13,13.24,0,26.68-3.2,39.11-9.84,27.14-14.52,43.31-43.55,43.31-74.31v-69.76c0-17.06,13.82-30.88,30.88-30.88h56.4c17.06,0,30.88-13.82,30.88-30.88v-61.77L795.26,28.1Z"/></svg>
   <h2>Access not authorised</h2>
   <p>Your Microsoft account is not registered as a WhiteRock Wellness staff member. Please contact Dr. Paul or Felicitas to be added to the system.</p>
   <button onclick="msalInstance.logoutPopup();location.reload()">Sign out and try again</button>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard">
   <div class="app">
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:0.75rem">
-        <button class="mob-menu-btn" onclick="toggleSidebar()">
-          <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
+        <button class="mob-menu-btn" onclick="toggleSidebar()"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
         <div class="topbar-logo">WhiteRock <span>Staff Portal</span></div>
       </div>
       <div class="topbar-right">
-        <div class="topbar-user">
-          <div class="topbar-name" id="topbar-name">—</div>
-          <div class="topbar-role" id="topbar-role">—</div>
-        </div>
+        <div class="topbar-user"><div class="topbar-name" id="topbar-name">—</div><div class="topbar-role" id="topbar-role">—</div></div>
         <div class="user-avatar" id="user-avatar">?</div>
         <button class="signout-btn" onclick="signOut()">Sign out</button>
       </div>
     </div>
-
     <div class="app-body">
       <div class="sidebar">
         <div class="nav-section">Main</div>
-        <div class="nav-item active" onclick="showPage('overview',this)">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Overview
-        </div>
-        <div class="nav-item" onclick="showPage('patients',this)">
-          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Patients
-        </div>
-        <div class="nav-item" id="nav-allocations" onclick="showPage('allocations',this)">
-          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Allocations
-          <span class="nav-badge" id="alloc-badge" style="display:none">0</span>
-        </div>
-        <div class="nav-item" onclick="showPage('sessions',this)">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Sessions
-        </div>
-        <div class="nav-item" id="nav-kpi" onclick="showPage('kpi',this)">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>KPI
-        </div>
-        <div class="nav-item" id="nav-approval" onclick="showPage('approval',this)">
-          <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Approval queue
-          <span class="nav-badge" id="approval-badge" style="display:none">0</span>
-        </div>
+        <div class="nav-item active" onclick="showPage('overview',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Overview</div>
+        <div class="nav-item" onclick="showPage('patients',this)"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Patients</div>
+        <div class="nav-item" id="nav-allocations" onclick="showPage('allocations',this)"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Allocations<span class="nav-badge" id="alloc-badge" style="display:none">0</span></div>
+        <div class="nav-item" onclick="showPage('sessions',this)"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Sessions</div>
+        <div class="nav-item" id="nav-kpi" onclick="showPage('kpi',this)"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>KPI</div>
+        <div class="nav-item" id="nav-approval" onclick="showPage('approval',this)"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Approval queue<span class="nav-badge" id="approval-badge" style="display:none">0</span></div>
       </div>
-
       <div class="main-content">
+
+        <!-- OVERVIEW -->
         <div class="page active" id="page-overview">
           <div class="page-title">Overview</div>
           <div class="page-sub" id="overview-greeting">Welcome back</div>
@@ -405,6 +194,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
           </div>
         </div>
 
+        <!-- PATIENTS -->
         <div class="page" id="page-patients">
           <div class="page-title">Patients</div>
           <div class="page-sub">All patient records from consent form submissions</div>
@@ -413,10 +203,11 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
               <input type="text" id="patient-search" placeholder="Search by name, ID or complaint…" style="flex:1;min-width:180px;padding:0.55rem 0.85rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.84rem;outline:none" oninput="filterPatients(this.value)">
               <select id="patient-filter" onchange="filterPatients(document.getElementById('patient-search').value)" style="padding:0.55rem 0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none">
                 <option value="">All statuses</option>
-                <option value="Pending Allocation">Pending</option>
+                <option value="Pending Allocation">Pending Allocation</option>
                 <option value="Allocated">Allocated</option>
                 <option value="Active">Active</option>
                 <option value="Discharged">Discharged</option>
+                <option value="Closed">Closed</option>
               </select>
               <select id="patient-type-filter" onchange="filterPatients(document.getElementById('patient-search').value)" style="padding:0.55rem 0.75rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;outline:none">
                 <option value="">All patients</option>
@@ -431,76 +222,73 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
           </div>
         </div>
 
+        <!-- ALLOCATIONS -->
         <div class="page" id="page-allocations">
           <div class="page-title">Allocation queue</div>
           <div class="page-sub">Patients pending therapist assignment</div>
           <div id="allocations-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
         </div>
 
+        <!-- SESSIONS -->
         <div class="page" id="page-sessions">
           <div class="page-title">Session notes</div>
           <div class="page-sub">Select a patient and record their session findings</div>
-          <!-- Patient selector -->
           <div class="card" style="margin-bottom:1rem;padding:1.25rem">
             <label style="display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.5rem">Select Patient</label>
             <select id="session-patient-select" onchange="onSessionPatientSelect(this.value)" style="width:100%;padding:0.75rem 1rem;border:1.5px solid #E2EAF0;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;outline:none;color:var(--navy);background:white">
               <option value="">— Choose a patient to start session notes —</option>
             </select>
           </div>
-          <!-- Session form — shown after patient selected -->
           <div id="session-form-wrap" style="display:none"></div>
-          <!-- Patient list summary -->
           <div id="sessions-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
         </div>
 
+        <!-- KPI — with star filter row + comment toggle + backlog Active/Closed only -->
         <div class="page" id="page-kpi">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1.25rem">
-            <div>
-              <div class="page-title" style="margin-bottom:2px">KPI dashboard</div>
-              <div class="page-sub">Therapist satisfaction · from patient feedback</div>
-            </div>
+            <div><div class="page-title" style="margin-bottom:2px">KPI dashboard</div><div class="page-sub">Therapist satisfaction · from patient feedback</div></div>
             <div id="kpi-mgmt-actions" style="display:none;gap:8px;flex-wrap:wrap">
-              <button onclick="exportKPICSV()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid #1D9E75;background:white;color:#085041;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                Export CSV
-              </button>
-              <button onclick="showKPIPPTPreview()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid #1A3FBF;background:white;color:#0C447C;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                Export PPT
-              </button>
+              <button onclick="exportKPICSV()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid #1D9E75;background:white;color:#085041;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Export CSV</button>
+              <button onclick="showKPIPPTPreview()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid #1A3FBF;background:white;color:#0C447C;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Export PPT</button>
             </div>
           </div>
+
+          <!-- KPI Filter bar with star filter + comment toggle -->
           <div id="kpi-filter-bar" style="background:#E8F4FF;border:1px solid rgba(26,63,191,0.15);border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.25rem">
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-              <!-- Therapists dropdown — leads only -->
               <div id="kpi-therapist-filter-wrap" style="position:relative">
-                <button onclick="kpiToggleDropdown('therapists')" style="display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:10px;border:none;background:#1A3FBF;color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
-                  Therapists <span id="kpi-t-count" style="background:rgba(255,255,255,0.25);border-radius:20px;padding:1px 7px;font-size:10px">all</span>
-                </button>
-                <div id="kpi-dd-therapists" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:white;border:1px solid rgba(26,63,191,0.2);border-radius:12px;padding:8px;z-index:500;min-width:180px;box-shadow:0 8px 24px rgba(10,22,40,0.12)">
-                  <div id="kpi-therapist-chips" style="display:flex;flex-direction:column;gap:4px"></div>
-                </div>
+                <button onclick="kpiToggleDropdown('therapists')" style="display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:10px;border:none;background:#1A3FBF;color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">Therapists <span id="kpi-t-count" style="background:rgba(255,255,255,0.25);border-radius:20px;padding:1px 7px;font-size:10px">all</span></button>
+                <div id="kpi-dd-therapists" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:white;border:1px solid rgba(26,63,191,0.2);border-radius:12px;padding:8px;z-index:500;min-width:180px;box-shadow:0 8px 24px rgba(10,22,40,0.12)"><div id="kpi-therapist-chips" style="display:flex;flex-direction:column;gap:4px"></div></div>
               </div>
-              <!-- Month period buttons -->
               <div style="display:flex;gap:6px;flex-wrap:wrap">
                 <button class="kpi-period-btn" onclick="kpiSetPeriod(1,this)">1M</button>
                 <button class="kpi-period-btn" onclick="kpiSetPeriod(3,this)">3M</button>
                 <button class="kpi-period-btn active-period" onclick="kpiSetPeriod(6,this)">6M</button>
                 <button class="kpi-period-btn" onclick="kpiSetPeriod(12,this)">12M</button>
                 <div style="position:relative">
-                  <button class="kpi-period-btn" onclick="kpiToggleDropdown('months')" style="display:flex;align-items:center;gap:4px">
-                    Custom <span id="kpi-m-count" style="background:#E2EAF0;border-radius:20px;padding:1px 6px;font-size:10px">6</span>
-                  </button>
-                  <div id="kpi-dd-months" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:white;border:1px solid rgba(26,63,191,0.2);border-radius:12px;padding:8px;z-index:500;min-width:200px;box-shadow:0 8px 24px rgba(10,22,40,0.12)">
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px" id="kpi-month-chips"></div>
-                  </div>
+                  <button class="kpi-period-btn" onclick="kpiToggleDropdown('months')" style="display:flex;align-items:center;gap:4px">Custom <span id="kpi-m-count" style="background:#E2EAF0;border-radius:20px;padding:1px 6px;font-size:10px">6</span></button>
+                  <div id="kpi-dd-months" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:white;border:1px solid rgba(26,63,191,0.2);border-radius:12px;padding:8px;z-index:500;min-width:200px;box-shadow:0 8px 24px rgba(10,22,40,0.12)"><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px" id="kpi-month-chips"></div></div>
                 </div>
               </div>
               <div id="kpi-filter-note" style="font-size:11px;color:#1A3FBF;font-weight:600;margin-left:auto;background:rgba(26,63,191,0.1);padding:5px 12px;border-radius:20px"></div>
             </div>
+            <!-- Star filter + comment toggle row (leads only shown via JS) -->
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(26,63,191,0.1)">
+              <span style="font-size:11px;color:#1A3FBF;font-weight:600">Rating:</span>
+              <div style="display:flex;gap:4px">
+                <button class="kpi-star-btn active-star" data-star="5" onclick="kpiToggleStar(5,this)">5&#9733;</button>
+                <button class="kpi-star-btn active-star" data-star="4" onclick="kpiToggleStar(4,this)">4&#9733;</button>
+                <button class="kpi-star-btn active-star" data-star="3" onclick="kpiToggleStar(3,this)">3&#9733;</button>
+                <button class="kpi-star-btn active-star" data-star="2" onclick="kpiToggleStar(2,this)">2&#9733;</button>
+                <button class="kpi-star-btn active-star" data-star="1" onclick="kpiToggleStar(1,this)">1&#9733;</button>
+              </div>
+              <div style="width:1px;height:20px;background:rgba(26,63,191,0.2);margin:0 4px"></div>
+              <button id="kpi-comment-toggle" onclick="kpiToggleCommentView()" style="display:none;padding:4px 12px;border-radius:6px;border:1.5px solid rgba(26,63,191,0.3);background:white;color:#1A3FBF;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">&#128172; Comments: ON</button>
+            </div>
           </div>
+
           <div id="kpi-clinic-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem"></div>
-          <!-- THERAPIST BACKLOG — leads only -->
+          <!-- Backlog — leads only, Active/Closed only -->
           <div id="kpi-backlog-section" style="margin-bottom:1.25rem">
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px">Therapist Backlog</div>
             <div id="kpi-backlog-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
@@ -521,9 +309,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
               <div style="background:var(--offwhite);border-radius:8px;padding:0.6rem 0.75rem"><div id="kpi-d-avg" style="font-size:20px;font-weight:700;color:var(--navy)"></div><div style="font-size:10px;color:var(--muted)">Avg stars</div></div>
               <div style="background:var(--offwhite);border-radius:8px;padding:0.6rem 0.75rem"><div id="kpi-d-trend" style="font-size:20px;font-weight:700"></div><div style="font-size:10px;color:var(--muted)">vs last month</div></div>
             </div>
-            <div style="position:relative;height:200px;margin-bottom:1rem">
-              <canvas id="kpi-detail-chart" role="img" aria-label="Monthly KPI chart">Monthly KPI trend</canvas>
-            </div>
+            <div style="position:relative;height:200px;margin-bottom:1rem"><canvas id="kpi-detail-chart" role="img" aria-label="Monthly KPI chart">Monthly KPI trend</canvas></div>
             <div id="kpi-month-drill" style="display:none;border-top:1px solid var(--border);padding-top:1rem">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
                 <div><div id="kpi-drill-title" style="font-size:13px;font-weight:700;color:var(--navy)"></div><div id="kpi-drill-meta" style="font-size:11px;color:var(--muted)"></div></div>
@@ -534,6 +320,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
           </div>
         </div>
 
+        <!-- APPROVAL -->
         <div class="page" id="page-approval">
           <div class="page-title">Approval queue</div>
           <div class="page-sub">Session notes from Junior and Intern therapists awaiting sign-off</div>
@@ -548,9 +335,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
     <div style="background:white;border-radius:16px;padding:1.5rem;width:100%;max-width:400px">
       <h3 style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem">Reassign Patient</h3>
       <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem" id="reassign-patient-name"></p>
-      <select id="reassign-select" style="width:100%;padding:0.65rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;margin-bottom:0.75rem;outline:none">
-        <option value="">Select new therapist…</option>
-      </select>
+      <select id="reassign-select" style="width:100%;padding:0.65rem;border:1.5px solid #E2EAF0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;margin-bottom:0.75rem;outline:none"><option value="">Select new therapist…</option></select>
       <div style="display:flex;gap:0.5rem">
         <button onclick="confirmReassign()" class="btn-primary" style="flex:1">Confirm Reassign</button>
         <button onclick="closeReassign()" class="btn-sm" style="flex:1">Cancel</button>
@@ -561,1007 +346,549 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:var(--tex
   <!-- MOBILE DRAWER -->
   <div class="mob-overlay" id="mob-overlay" onclick="closeDrawer()"></div>
   <div class="mob-drawer" id="mob-drawer">
-    <div class="mob-drawer-header">
-      <div class="mob-drawer-user" id="mob-drawer-user">Staff</div>
-      <div class="mob-drawer-role" id="mob-drawer-role">WhiteRock Wellness</div>
-    </div>
-    <button class="mob-drawer-item active" id="mob-item-overview" onclick="mobNav('overview')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Overview
-    </button>
-    <button class="mob-drawer-item" id="mob-item-patients" onclick="mobNav('patients')">
-      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Patients
-    </button>
-    <button class="mob-drawer-item" id="mob-item-allocations" onclick="mobNav('allocations')">
-      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Allocations
-    </button>
-    <button class="mob-drawer-item" id="mob-item-sessions" onclick="mobNav('sessions')">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Sessions
-    </button>
-    <button class="mob-drawer-item" id="mob-item-kpi" onclick="mobNav('kpi')">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>KPI
-    </button>
-    <button class="mob-drawer-item" id="mob-item-approval" onclick="mobNav('approval')">
-      <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Approval Queue
-    </button>
+    <div class="mob-drawer-header"><div class="mob-drawer-user" id="mob-drawer-user">Staff</div><div class="mob-drawer-role" id="mob-drawer-role">WhiteRock Wellness</div></div>
+    <button class="mob-drawer-item active" id="mob-item-overview" onclick="mobNav('overview')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Overview</button>
+    <button class="mob-drawer-item" id="mob-item-patients" onclick="mobNav('patients')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Patients</button>
+    <button class="mob-drawer-item" id="mob-item-allocations" onclick="mobNav('allocations')"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Allocations</button>
+    <button class="mob-drawer-item" id="mob-item-sessions" onclick="mobNav('sessions')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Sessions</button>
+    <button class="mob-drawer-item" id="mob-item-kpi" onclick="mobNav('kpi')"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>KPI</button>
+    <button class="mob-drawer-item" id="mob-item-approval" onclick="mobNav('approval')"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Approval Queue</button>
     <div class="mob-drawer-divider"></div>
-    <button class="mob-drawer-item mob-drawer-signout" onclick="signOut()">
-      <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign out
-    </button>
+    <button class="mob-drawer-item mob-drawer-signout" onclick="signOut()"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign out</button>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-const GET_PATIENTS_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/908a72e119d34d46be0537c6ccf5acf6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8IEi3jdhIOOnCzdlgT-n29nbJJbLt0WzBzSSq_3aVDw';
-const GET_FEEDBACK_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a0b25f698c1d4700ab23bcfc15a2b6a0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=3RCnApnmMMEkJS-L5WrCHByyTmff8_d0iBE85sDvVsg';
-const UPDATE_PATIENT_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3e392ef2d3034bea80d577dde7f14436/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bv0HbzeLgNthPzZgBP7Mh2XfqP7-gNiOc-H8IAugn3M';
-const SAVE_SESSION_URL = 'https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/df1f1bf9929241dca0a8c3e8a5588b8a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=pXOQmWA8hEfPZD9wIkjacQGkWnluY1ejlW9hy8AqTBI';
-const CLIENT_ID = '4b13835c-69e6-4cf9-9823-25cf48f0f5a7';
-const TENANT_ID = '89eeb06b-f74d-4def-9463-ffa01a2e8366';
-const AUTHORITY = `https://login.microsoftonline.com/${TENANT_ID}`;
-
-const MANAGEMENT_EMAILS = [
-  'drpaul@whiterock-wellness.com',
-  'obiefunafelis@whiterock-wellness.com'
-];
-
-const STAFF_ROLES = {
-  'drpaul@whiterock-wellness.com': { role: 'Lead', name: 'pauljohnson chima' },
-  'obiefunafelis@whiterock-wellness.com': { role: 'Admin', name: 'Felicitas' }
-};
-
-const msalConfig = {
-  auth: {
-    clientId: CLIENT_ID,
-    authority: AUTHORITY,
-    redirectUri: 'https://whiterock-wellness.com/staff.html'
-  },
-  cache: { cacheLocation: 'sessionStorage', storeAuthStateInCookie: false }
-};
+const GET_PATIENTS_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/908a72e119d34d46be0537c6ccf5acf6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8IEi3jdhIOOnCzdlgT-n29nbJJbLt0WzBzSSq_3aVDw';
+const GET_FEEDBACK_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a0b25f698c1d4700ab23bcfc15a2b6a0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=3RCnApnmMMEkJS-L5WrCHByyTmff8_d0iBE85sDvVsg';
+const UPDATE_PATIENT_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3e392ef2d3034bea80d577dde7f14436/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bv0HbzeLgNthPzZgBP7Mh2XfqP7-gNiOc-H8IAugn3M';
+const SAVE_SESSION_URL='https://default89eeb06bf74d4def9463ffa01a2e83.66.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/df1f1bf9929241dca0a8c3e8a5588b8a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=pXOQmWA8hEfPZD9wIkjacQGkWnluY1ejlW9hy8AqTBI';
+const CLIENT_ID='4b13835c-69e6-4cf9-9823-25cf48f0f5a7';
+const TENANT_ID='89eeb06b-f74d-4def-9463-ffa01a2e8366';
+const AUTHORITY=`https://login.microsoftonline.com/${TENANT_ID}`;
+const MANAGEMENT_EMAILS=['drpaul@whiterock-wellness.com','obiefunafelis@whiterock-wellness.com'];
+const STAFF_ROLES={'drpaul@whiterock-wellness.com':{role:'Lead',name:'pauljohnson chima'},'obiefunafelis@whiterock-wellness.com':{role:'Admin',name:'Felicitas'}};
+const msalConfig={auth:{clientId:CLIENT_ID,authority:AUTHORITY,redirectUri:'https://whiterock-wellness.com/staff.html'},cache:{cacheLocation:'sessionStorage',storeAuthStateInCookie:false}};
 
 let msalInstance;
 function initMSAL(){
-  if(typeof msal === 'undefined'){ setTimeout(initMSAL, 100); return; }
-  msalInstance = new msal.PublicClientApplication(msalConfig);
-  msalInstance.handleRedirectPromise().then(response => {
-    if(response) handleAuthResponse(response);
-    else {
-      const accounts = msalInstance.getAllAccounts();
-      if(accounts.length > 0) verifyAndLoad(accounts[0].username, accounts[0].name);
-    }
-  }).catch(err => {
-    console.error('MSAL error:', err);
-    document.getElementById('login-error').style.display = 'block';
-  });
+  if(typeof msal==='undefined'){setTimeout(initMSAL,100);return;}
+  msalInstance=new msal.PublicClientApplication(msalConfig);
+  msalInstance.handleRedirectPromise().then(response=>{
+    if(response)handleAuthResponse(response);
+    else{const accounts=msalInstance.getAllAccounts();if(accounts.length>0)verifyAndLoad(accounts[0].username,accounts[0].name);}
+  }).catch(err=>{console.error('MSAL error:',err);document.getElementById('login-error').style.display='block';});
 }
 initMSAL();
 
-let currentUser = null;
-let allPatients = [];
+let currentUser=null,allPatients=[];
 
 async function signInWithMicrosoft(){
-  const btn = document.getElementById('ms-login-btn');
-  const loading = document.getElementById('login-loading');
-  btn.disabled = true;
-  loading.style.display = 'block';
-  try {
-    const response = await msalInstance.loginPopup({ scopes: ['User.Read', 'email', 'openid', 'profile'] });
-    handleAuthResponse(response);
-  } catch(err) {
-    console.error('Login error:', err);
-    document.getElementById('login-error').style.display = 'block';
-    btn.disabled = false;
-    loading.style.display = 'none';
-  }
+  const btn=document.getElementById('ms-login-btn'),loading=document.getElementById('login-loading');
+  btn.disabled=true;loading.style.display='block';
+  try{const response=await msalInstance.loginPopup({scopes:['User.Read','email','openid','profile']});handleAuthResponse(response);}
+  catch(err){console.error('Login error:',err);document.getElementById('login-error').style.display='block';btn.disabled=false;loading.style.display='none';}
 }
-
-function handleAuthResponse(response){
-  verifyAndLoad(response.account.username.toLowerCase(), response.account.name);
-}
-
-function verifyAndLoad(email, msName){
-  const emailLower = email.toLowerCase();
-  const isManagement = MANAGEMENT_EMAILS.includes(emailLower);
-  const staffRecord = STAFF_ROLES[emailLower];
-  currentUser = {
-    email: emailLower,
-    name: staffRecord ? staffRecord.name : msName,
-    role: staffRecord ? staffRecord.role : 'Mid-level',
-    isManagement: isManagement
-  };
+function handleAuthResponse(r){verifyAndLoad(r.account.username.toLowerCase(),r.account.name);}
+function verifyAndLoad(email,msName){
+  const e=email.toLowerCase(),s=STAFF_ROLES[e];
+  currentUser={email:e,name:s?s.name:msName,role:s?s.role:'Mid-level',isManagement:MANAGEMENT_EMAILS.includes(e)};
   initDashboard();
 }
 
 async function fetchTenantUsers(){
-  // Always start with known WhiteRock staff as guaranteed baseline
-  const knownStaff = getMockStaff().map(s=>({displayName:s.name, jobTitle:s.role}));
-  try {
-    const account = msalInstance.getAllAccounts()[0];
-    if(!account) return knownStaff;
-    let tokenResponse;
-    try {
-      tokenResponse = await msalInstance.acquireTokenSilent({ scopes: ['https://graph.microsoft.com/User.ReadBasic.All'], account });
-    } catch(e) {
-      return knownStaff; // Can't get token — return known staff
-    }
-    const res = await fetch('https://graph.microsoft.com/v1.0/users?$select=displayName,mail,jobTitle&$top=100&$orderby=displayName', {
-      headers: { 'Authorization': 'Bearer ' + tokenResponse.accessToken }
-    });
-    const data = await res.json();
-    if(data.error || !data.value || !data.value.length) return knownStaff;
-    // Filter out non-staff accounts (guests, system accounts)
-    const realUsers = data.value.filter(u => u.displayName && !u.displayName.includes('#EXT#') && u.mail);
-    return realUsers.length > 0 ? realUsers : knownStaff;
-  } catch(e) {
-    return knownStaff;
-  }
+  const knownStaff=getMockStaff().map(s=>({displayName:s.name,jobTitle:s.role}));
+  try{
+    const account=msalInstance.getAllAccounts()[0];
+    if(!account)return knownStaff;
+    let tr;
+    try{tr=await msalInstance.acquireTokenSilent({scopes:['https://graph.microsoft.com/User.ReadBasic.All'],account});}
+    catch(e){return knownStaff;}
+    const res=await fetch('https://graph.microsoft.com/v1.0/users?$select=displayName,mail,jobTitle&$top=100&$orderby=displayName',{headers:{'Authorization':'Bearer '+tr.accessToken}});
+    const data=await res.json();
+    if(data.error||!data.value||!data.value.length)return knownStaff;
+    const realUsers=data.value.filter(u=>u.displayName&&!u.displayName.includes('#EXT#')&&u.mail);
+    return realUsers.length>0?realUsers:knownStaff;
+  }catch(e){return knownStaff;}
 }
 
-function mobNav(name){
-  closeDrawer();
-  document.querySelectorAll('.mob-drawer-item').forEach(function(b){ b.classList.remove('active'); });
-  var btn = document.getElementById('mob-item-'+name);
-  if(btn) btn.classList.add('active');
-  showPage(name, null);
-}
-
-function updateMobileNav(){
-  const isLead = currentUser && (currentUser.role==='Lead'||currentUser.role==='Admin');
-  var du = document.getElementById('mob-drawer-user');
-  var dr = document.getElementById('mob-drawer-role');
-  if(du) du.textContent = currentUser.name;
-  if(dr) dr.textContent = currentUser.role + ' — WhiteRock Wellness';
-  var mgmtItems = ['mob-item-allocations','mob-item-approval'];
-  mgmtItems.forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) el.style.display = isLead ? 'flex' : 'none';
-  });
-}
-
-function toggleSidebar(){
-  document.getElementById('mob-drawer').classList.toggle('open');
-  document.getElementById('mob-overlay').classList.toggle('show');
-}
-function closeDrawer(){
-  document.getElementById('mob-drawer').classList.remove('open');
-  document.getElementById('mob-overlay').classList.remove('show');
-}
-
+function mobNav(name){closeDrawer();document.querySelectorAll('.mob-drawer-item').forEach(b=>b.classList.remove('active'));var btn=document.getElementById('mob-item-'+name);if(btn)btn.classList.add('active');showPage(name,null);}
+function updateMobileNav(){const isLead=currentUser&&(currentUser.role==='Lead'||currentUser.role==='Admin');var du=document.getElementById('mob-drawer-user'),dr=document.getElementById('mob-drawer-role');if(du)du.textContent=currentUser.name;if(dr)dr.textContent=currentUser.role+' \u2014 WhiteRock Wellness';['mob-item-allocations','mob-item-approval'].forEach(id=>{var el=document.getElementById(id);if(el)el.style.display=isLead?'flex':'none';});}
+function toggleSidebar(){document.getElementById('mob-drawer').classList.toggle('open');document.getElementById('mob-overlay').classList.toggle('show');}
+function closeDrawer(){document.getElementById('mob-drawer').classList.remove('open');document.getElementById('mob-overlay').classList.remove('show');}
 function signOut(){
   msalInstance.logoutPopup().then(()=>{
-    currentUser = null; allPatients = []; window._cachedTenantUsers = null;
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('ms-login-btn').disabled = false;
-    document.getElementById('login-loading').style.display = 'none';
-    document.getElementById('login-error').style.display = 'none';
+    currentUser=null;allPatients=[];window._cachedTenantUsers=null;
+    document.getElementById('dashboard').style.display='none';
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('ms-login-btn').disabled=false;
+    document.getElementById('login-loading').style.display='none';
+    document.getElementById('login-error').style.display='none';
   });
 }
-
 function initDashboard(){
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('access-denied').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  const initials = currentUser.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-  document.getElementById('topbar-name').textContent = currentUser.name;
-  document.getElementById('topbar-role').textContent = currentUser.role;
-  document.getElementById('user-avatar').textContent = initials;
-  document.getElementById('overview-greeting').textContent = `Welcome back, ${currentUser.name.split(' ')[0]}`;
-  const isLead = currentUser.role === 'Lead' || currentUser.role === 'Admin';
-  if(!isLead){
-    document.getElementById('nav-allocations').style.display = 'none';
-    document.getElementById('nav-approval').style.display = 'none';
-    document.getElementById('nav-kpi').style.display = 'none';
-  }
-  loadOverview().catch(e=>console.log("Overview error:",e));
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('access-denied').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  const initials=currentUser.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('topbar-name').textContent=currentUser.name;
+  document.getElementById('topbar-role').textContent=currentUser.role;
+  document.getElementById('user-avatar').textContent=initials;
+  document.getElementById('overview-greeting').textContent=`Welcome back, ${currentUser.name.split(' ')[0]}`;
+  const isLead=currentUser.role==='Lead'||currentUser.role==='Admin';
+  if(!isLead){document.getElementById('nav-allocations').style.display='none';document.getElementById('nav-approval').style.display='none';document.getElementById('nav-kpi').style.display='none';}
+  loadOverview().catch(e=>console.log('Overview error:',e));
   updateMobileNav();
 }
-
-function showPage(name, el){
+function showPage(name,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
-  if(el) el.classList.add('active');
-  const sidebar = document.querySelector('.sidebar');
-  if(sidebar) sidebar.classList.remove('open');
-  if(name==='patients') loadPatients().catch(e=>console.log(e));
-  if(name==='allocations') loadAllocations().catch(e=>console.log(e));
-  if(name==='sessions') loadSessions().catch(e=>console.log(e));
-  if(name==='kpi') loadKPI().catch(e=>console.log(e));
-  if(name==='approval') loadApproval();
+  if(el)el.classList.add('active');
+  const sidebar=document.querySelector('.sidebar');if(sidebar)sidebar.classList.remove('open');
+  if(name==='patients')loadPatients().catch(e=>console.log(e));
+  if(name==='allocations')loadAllocations().catch(e=>console.log(e));
+  if(name==='sessions')loadSessions().catch(e=>console.log(e));
+  if(name==='kpi')loadKPI().catch(e=>console.log(e));
+  if(name==='approval')loadApproval();
 }
-
-function getInitials(name){ return name ? name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase() : '?'; }
-function getStatusBadge(s){ const m={'Pending Allocation':'badge-pending','Allocated':'badge-allocated','Active':'badge-active','Discharged':'badge-discharged','Closed':'badge-discharged'}; return `<span class="badge ${m[s]||'badge-pending'}">${s||'Pending'}</span>`; }
-function getKPIBadge(s){ if(s>=85) return `<span class="badge badge-excellent">Excellent</span>`; if(s>=70) return `<span class="badge badge-good">Good</span>`; return `<span class="badge badge-review">Review needed</span>`; }
-function getKPIColor(s){ if(s>=85) return '#22C55E'; if(s>=70) return '#3B82F6'; return '#EF4444'; }
-function getStars(r){ const f=Math.round(r); return '★'.repeat(f)+'☆'.repeat(5-f); }
-function calcKPI(ratings){ if(!ratings||!ratings.length) return 0; return Math.round((ratings.reduce((a,b)=>a+b,0)/(5*ratings.length))*100); }
-
-// ══════════════════════════════════════════════════════════════
-// RETURNING PATIENT BADGE HELPER
-// ══════════════════════════════════════════════════════════════
-function getReturningBadge(p){
-  const isReturning = p.PatientType === 'Returning Patient' || p.patientType === 'Returning Patient';
-  if(!isReturning) return '';
-  return `<span style="display:inline-flex;align-items:center;background:rgba(245,158,11,0.12);color:#92400E;border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:0.04em;flex-shrink:0">RP</span>`;
-}
+function getInitials(name){return name?name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase():'?';}
+function getStatusBadge(s){const m={'Pending Allocation':'badge-pending','Allocated':'badge-allocated','Active':'badge-active','Discharged':'badge-discharged','Closed':'badge-discharged'};return `<span class="badge ${m[s]||'badge-pending'}">${s||'Pending'}</span>`;}
+function getKPIBadge(s){if(s>=85)return`<span class="badge badge-excellent">Excellent</span>`;if(s>=70)return`<span class="badge badge-good">Good</span>`;return`<span class="badge badge-review">Review needed</span>`;}
+function getKPIColor(s){if(s>=85)return'#22C55E';if(s>=70)return'#3B82F6';return'#EF4444';}
+function calcKPI(r){if(!r||!r.length)return 0;return Math.round((r.reduce((a,b)=>a+b,0)/(5*r.length))*100);}
+function getReturningBadge(p){const r=p.PatientType==='Returning Patient'||p.patientType==='Returning Patient';if(!r)return'';return`<span style="display:inline-flex;align-items:center;background:rgba(245,158,11,0.12);color:#92400E;border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:0.04em;flex-shrink:0">RP</span>`;}
 
 async function fetchPatients(){
-  try {
-    const res = await fetch(GET_PATIENTS_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({})
-    });
-    const data = await res.json();
-    return data.map(p => ({
-      id: p.PatientID || 'WRW-???',
-      name: p.PatientName || p.Title || 'Unknown',
-      phone: p.Phone || '',
-      email: p.Email || '',
-      age: p.Age || '',
-      gender: p.Gender || '',
-      address: p.Address || '',
-      occupation: p.Occupation || '',
-      complaint: p.PrimaryComplaint || p.Concern || '',
-      symptoms: p.Symtomps || '',
-      duration: typeof p.Duration === 'object' ? (p.Duration?.Value || '') : (p.Duration || ''),
-      painLevel: p.PainLevel || '-',
-      painAreas: p.PainAreas || '',
-      // Returning patients sent from website have no Status — default them to Pending Allocation
-      status: typeof p.Status === 'object'
-        ? (p.Status?.Value || 'Pending Allocation')
-        : (p.Status || 'Pending Allocation'),
-      therapist: p.AssignedTherapist || '',
-      date: p.SubmittedAt ? p.SubmittedAt.split('T')[0] : (p.Created ? p.Created.split('T')[0] : ''),
-      PatientType: p.PatientType || p.patientType || 'New Patient',
-      Source: p.Source || ''
+  try{
+    const res=await fetch(GET_PATIENTS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
+    const data=await res.json();
+    return data.map(p=>({
+      id:p.PatientID||'WRW-???',name:p.PatientName||p.Title||'Unknown',phone:p.Phone||'',email:p.Email||'',age:p.Age||'',gender:p.Gender||'',address:p.Address||'',occupation:p.Occupation||'',
+      complaint:p.PrimaryComplaint||p.Concern||'',symptoms:p.Symtomps||'',duration:typeof p.Duration==='object'?(p.Duration?.Value||''):(p.Duration||''),
+      painLevel:p.PainLevel||'-',painAreas:p.PainAreas||'',
+      status:typeof p.Status==='object'?(p.Status?.Value||'Pending Allocation'):(p.Status||'Pending Allocation'),
+      therapist:p.AssignedTherapist||'',date:p.SubmittedAt?p.SubmittedAt.split('T')[0]:(p.Created?p.Created.split('T')[0]:''),
+      PatientType:p.PatientType||p.patientType||'New Patient',Source:p.Source||''
     }));
-  } catch(e) {
-    console.log('Failed to fetch patients:', e);
-    return [];
-  }
+  }catch(e){console.log('Failed to fetch patients:',e);return[];}
 }
-
-function getMockPatients(){
-  return [
-    {id:'WRW-1247',name:'Amaka Okonkwo',phone:'08012345678',complaint:'Lower back pain',status:'Pending Allocation',therapist:'',date:'2026-06-25',painLevel:'7-8',PatientType:'New Patient'},
-    {id:'WRW-1246',name:'Emeka Taiwo',phone:'08023456789',complaint:'Sciatica',status:'Active',therapist:'Dr. Paul Chima',date:'2026-06-24',painLevel:'8-9',PatientType:'New Patient'},
-    {id:'WRW-1245',name:'Bola Adeyemi',phone:'08034567890',complaint:'Neck pain',status:'Allocated',therapist:'Sarah Obi',date:'2026-06-23',painLevel:'5-6',PatientType:'Returning Patient'},
-    {id:'WRW-1244',name:'Chisom Nwosu',phone:'08045678901',complaint:'Scoliosis',status:'Active',therapist:'Dr. Paul Chima',date:'2026-06-22',painLevel:'6-7',PatientType:'New Patient'},
-    {id:'WRW-1243',name:'Tunde Bakare',phone:'08056789012',complaint:'Headaches',status:'Pending Allocation',therapist:'',date:'2026-06-21',painLevel:'4-5',PatientType:'Returning Patient'},
-    {id:'WRW-1242',name:'Ngozi Eze',phone:'08067890123',complaint:'Knee pain',status:'Discharged',therapist:'James Eze',date:'2026-06-18',painLevel:'5-6',PatientType:'New Patient'},
-  ];
-}
-
-function getMockFeedback(){
-  return [
-    {patient:'Emeka Taiwo',therapist:'Dr. Paul Chima',rating:5,comment:'Excellent treatment. Felt immediate relief after the first session.',date:'2026-06-24'},
-    {patient:'Chisom Nwosu',therapist:'Dr. Paul Chima',rating:4,comment:'Very thorough and professional. Pain has reduced significantly.',date:'2026-06-22'},
-    {patient:'Bola Adeyemi',therapist:'Sarah Obi',rating:4,comment:'Good session. She explained everything clearly.',date:'2026-06-23'},
-    {patient:'Amaka Okonkwo',therapist:'Sarah Obi',rating:3,comment:'Treatment was okay but had to wait a bit long.',date:'2026-06-20'},
-    {patient:'Ngozi Eze',therapist:'James Eze',rating:3,comment:'Decent session but felt a bit rushed.',date:'2026-06-18'},
-    {patient:'Tunde Bakare',therapist:'James Eze',rating:2,comment:'Needs to listen more carefully to patient concerns.',date:'2026-06-15'},
-  ];
-}
-
-function getMockStaff(){
-  return [
-    {name:'pauljohnson chima', role:'Lead', specialty:'Chiropractor'},
-    {name:'Felicitas Obiefuna', role:'Admin', specialty:'Administration'},
-  ];
-  // Add more staff here as your team grows e.g:
-  // {name:'Sarah Obi', role:'Mid-level', specialty:'Physiotherapist'},
-}
+function getMockPatients(){return[{id:'WRW-1247',name:'Amaka Okonkwo',phone:'08012345678',complaint:'Lower back pain',status:'Pending Allocation',therapist:'',date:'2026-06-25',painLevel:'7-8',PatientType:'New Patient'},{id:'WRW-1246',name:'Emeka Taiwo',phone:'08023456789',complaint:'Sciatica',status:'Active',therapist:'pauljohnson chima',date:'2026-06-24',painLevel:'8-9',PatientType:'New Patient'},{id:'WRW-1245',name:'Bola Adeyemi',phone:'08034567890',complaint:'Neck pain',status:'Allocated',therapist:'Felicitas',date:'2026-06-23',painLevel:'5-6',PatientType:'Returning Patient'}];}
+function getMockFeedback(){return[{patient:'Emeka Taiwo',therapist:'pauljohnson chima',rating:5,comment:'Excellent treatment. Felt immediate relief.',date:'2026-06-24'},{patient:'Bola Adeyemi',therapist:'Felicitas',rating:4,comment:'Good session, very professional.',date:'2026-06-23'}];}
+function getMockStaff(){return[{name:'pauljohnson chima',role:'Lead',specialty:'Chiropractor'},{name:'Felicitas',role:'Admin',specialty:'Administration'}];}
 
 async function loadOverview(){
-  const patients = await fetchPatients().catch(() => getMockPatients());
-  allPatients = patients;
-  const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
-  const pending = patients.filter(p=>p.status==='Pending Allocation').length;
-  const active = patients.filter(p=>p.status==='Active').length;
-  const realFeedback = await fetchFeedback().catch(()=>[]);
-  const feedbackData = realFeedback.length > 0 ? realFeedback : getMockFeedback();
-  const myFeedback = feedbackData.filter(f=>f.therapist && f.therapist.toLowerCase()===currentUser.name.toLowerCase());
-  const myKPI = calcKPI(myFeedback.map(f=>f.rating));
-  const myPatients = isLead ? patients : patients.filter(p=>p.therapist===currentUser.name);
-
-  document.getElementById('overview-metrics').innerHTML = isLead ? `
-    <div class="metric-card"><div class="metric-label">Total patients</div><div class="metric-value">${patients.length}</div><div class="metric-sub good">+3 this week</div></div>
+  const patients=await fetchPatients().catch(()=>getMockPatients());
+  allPatients=patients;
+  const isLead=currentUser.role==='Lead'||currentUser.role==='Admin';
+  const pending=patients.filter(p=>p.status==='Pending Allocation').length;
+  const active=patients.filter(p=>p.status==='Active').length;
+  const realFeedback=await fetchFeedback().catch(()=>[]);
+  const feedbackData=realFeedback.length>0?realFeedback:getMockFeedback();
+  const myFeedback=feedbackData.filter(f=>f.therapist&&f.therapist.toLowerCase()===currentUser.name.toLowerCase());
+  const myKPI=calcKPI(myFeedback.map(f=>f.rating));
+  const myPatients=isLead?patients:patients.filter(p=>p.therapist===currentUser.name);
+  document.getElementById('overview-metrics').innerHTML=isLead?`
+    <div class="metric-card"><div class="metric-label">Total patients</div><div class="metric-value">${patients.length}</div><div class="metric-sub good">Active system</div></div>
     <div class="metric-card"><div class="metric-label">Pending allocation</div><div class="metric-value">${pending}</div><div class="metric-sub ${pending>0?'warn':'good'}">${pending>0?'Needs attention':'All assigned'}</div></div>
     <div class="metric-card"><div class="metric-label">Active cases</div><div class="metric-value">${active}</div><div class="metric-sub">In treatment</div></div>
     <div class="metric-card"><div class="metric-label">Clinic satisfaction</div><div class="metric-value">${calcKPI(feedbackData.map(f=>f.rating))}%</div><div class="metric-sub good">From patient feedback</div></div>
-  ` : `
+  `:`
     <div class="metric-card"><div class="metric-label">My patients</div><div class="metric-value">${myPatients.length}</div><div class="metric-sub">Assigned to you</div></div>
     <div class="metric-card"><div class="metric-label">My KPI score</div><div class="metric-value" style="color:${getKPIColor(myKPI)}">${myKPI}%</div><div class="metric-sub">${myKPI>=85?'Excellent':myKPI>=70?'Good':'Review needed'}</div></div>
     <div class="metric-card"><div class="metric-label">Sessions rated</div><div class="metric-value">${myFeedback.length}</div><div class="metric-sub">Patient ratings received</div></div>
     <div class="metric-card"><div class="metric-label">Avg rating</div><div class="metric-value">${myFeedback.length?(myFeedback.reduce((a,b)=>a+b.rating,0)/myFeedback.length).toFixed(1):'-'}</div><div class="metric-sub">Out of 5.0</div></div>
   `;
-
-  document.getElementById('recent-patients-list').innerHTML = myPatients.slice(0,4).map(p=>`
+  document.getElementById('recent-patients-list').innerHTML=myPatients.slice(0,4).map(p=>`
     <div style="display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0;border-bottom:1px solid var(--border)">
       <div class="patient-init">${getInitials(p.name)}</div>
-      <div style="flex:1">
-        <div style="font-size:0.84rem;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:0.4rem">
-          ${p.name} ${getReturningBadge(p)}
-        </div>
-        <div style="font-size:0.72rem;color:var(--muted)">${p.complaint} · ${p.id}</div>
-      </div>
+      <div style="flex:1"><div style="font-size:0.84rem;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:0.4rem">${p.name} ${getReturningBadge(p)}</div><div style="font-size:0.72rem;color:var(--muted)">${p.complaint} &middot; ${p.id}</div></div>
       ${getStatusBadge(p.status)}
-    </div>
-  `).join('') || '<div class="empty-state"><p>No patients yet</p></div>';
-
-  if(isLead){
-    document.getElementById('kpi-snapshot-list').innerHTML = getMockStaff().map(s=>{
-      const sf = feedbackData.filter(f=>f.therapist===s.name);
-      const kpi = calcKPI(sf.map(f=>f.rating));
-      return `<div style="display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0;border-bottom:1px solid var(--border)">
-        <div class="patient-init" style="background:var(--sky)">${getInitials(s.name)}</div>
-        <div style="flex:1"><div style="font-size:0.84rem;font-weight:600;color:var(--navy)">${s.name}</div><div style="font-size:0.72rem;color:var(--muted)">${s.role} · ${sf.length} ratings</div></div>
-        <div style="text-align:right"><div style="font-size:0.9rem;font-weight:700;color:${getKPIColor(kpi)}">${kpi}%</div>${getKPIBadge(kpi)}</div>
-      </div>`;
-    }).join('');
-  } else {
-    document.getElementById('kpi-overview-card').style.display='none';
-  }
+    </div>`).join('')||'<div class="empty-state"><p>No patients yet</p></div>';
+  if(isLead){document.getElementById('kpi-snapshot-list').innerHTML=getMockStaff().map(s=>{const sf=feedbackData.filter(f=>f.therapist===s.name),kpi=calcKPI(sf.map(f=>f.rating));return`<div style="display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0;border-bottom:1px solid var(--border)"><div class="patient-init" style="background:var(--sky)">${getInitials(s.name)}</div><div style="flex:1"><div style="font-size:0.84rem;font-weight:600;color:var(--navy)">${s.name}</div><div style="font-size:0.72rem;color:var(--muted)">${s.role} &middot; ${sf.length} ratings</div></div><div style="text-align:right"><div style="font-size:0.9rem;font-weight:700;color:${getKPIColor(kpi)}">${kpi}%</div>${getKPIBadge(kpi)}</div></div>`;}).join('');}
+  else document.getElementById('kpi-overview-card').style.display='none';
 }
 
 async function loadPatients(){
-  // Show cached data immediately if available
-  if(allPatients && allPatients.length){
-    renderPatientsTable(allPatients);
-    populateTherapistFilter(allPatients);
-  } else {
-    document.getElementById('patients-table-wrap').innerHTML = '<div class="loading"><div class="spinner"></div>Loading patients from Microsoft Lists…</div>';
-  }
-  // Refresh from Lists in background
-  const fresh = await fetchPatients().catch(() => null);
-  if(fresh && fresh.length){
-    allPatients = fresh;
-    renderPatientsTable(allPatients);
-    populateTherapistFilter(allPatients);
-  }
+  if(allPatients&&allPatients.length){renderPatientsTable(allPatients);populateTherapistFilter(allPatients);}
+  else document.getElementById('patients-table-wrap').innerHTML='<div class="loading"><div class="spinner"></div>Loading patients\u2026</div>';
+  const fresh=await fetchPatients().catch(()=>null);
+  if(fresh&&fresh.length){allPatients=fresh;renderPatientsTable(allPatients);populateTherapistFilter(allPatients);}
 }
-
 function populateTherapistFilter(patients){
-  const sel = document.getElementById('patient-therapist-filter');
-  if(!sel) return;
-  // Get unique therapists from actual patient data
-  const therapists = [...new Set(patients.map(p=>p.therapist).filter(Boolean))].sort();
-  const current = sel.value;
-  sel.innerHTML = '<option value="">All therapists</option>'
-    + therapists.map(t=>`<option value="${t}"${t===current?' selected':''}>${t}</option>`).join('');
+  const sel=document.getElementById('patient-therapist-filter');if(!sel)return;
+  const therapists=[...new Set(patients.map(p=>p.therapist).filter(Boolean))].sort(),current=sel.value;
+  sel.innerHTML='<option value="">All therapists</option>'+therapists.map(t=>`<option value="${t}"${t===current?' selected':''}>${t}</option>`).join('');
 }
-
 function filterPatients(search){
-  const status = document.getElementById('patient-filter').value;
-  const patientType = document.getElementById('patient-type-filter') ? document.getElementById('patient-type-filter').value : '';
-  const therapistF = document.getElementById('patient-therapist-filter') ? document.getElementById('patient-therapist-filter').value : '';
-  const filtered = allPatients.filter(p=>{
-    const ms = !search||p.name.toLowerCase().includes(search.toLowerCase())||p.id.toLowerCase().includes(search.toLowerCase())||(p.complaint||'').toLowerCase().includes(search.toLowerCase());
-    const mst = !status||p.status===status;
-    const mpt = !patientType||(p.PatientType||'New Patient')===patientType;
-    const mth = !therapistF||(p.therapist||'').toLowerCase().includes(therapistF.toLowerCase());
-    return ms&&mst&&mpt&&mth;
+  const status=document.getElementById('patient-filter').value;
+  const patientType=document.getElementById('patient-type-filter')?document.getElementById('patient-type-filter').value:'';
+  const therapistF=document.getElementById('patient-therapist-filter')?document.getElementById('patient-therapist-filter').value:'';
+  const filtered=allPatients.filter(p=>{
+    const ms=!search||p.name.toLowerCase().includes(search.toLowerCase())||p.id.toLowerCase().includes(search.toLowerCase())||(p.complaint||'').toLowerCase().includes(search.toLowerCase());
+    return ms&&(!status||p.status===status)&&(!patientType||(p.PatientType||'New Patient')===patientType)&&(!therapistF||(p.therapist||'').toLowerCase().includes(therapistF.toLowerCase()));
   });
   renderPatientsTable(filtered);
 }
-
-// ══════════════════════════════════════════════════════════════
-// renderPatientsTable — UPDATED: amber ↩ Returning badge
-// ══════════════════════════════════════════════════════════════
 function renderPatientsTable(patients){
-  const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
-  const list = isLead ? patients : patients.filter(p=>p.therapist===currentUser.name);
-  document.getElementById('patients-table-wrap').innerHTML = list.length ? `
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Patient</th><th>ID</th><th>Complaint</th><th>Pain</th>
-          <th>Therapist</th><th>Status</th><th>Date</th>
-          ${isLead?'<th>Actions</th>':''}
-        </tr>
-      </thead>
-      <tbody>
-        ${list.map(p=>`<tr>
-          <td>
-            <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
-              <div class="patient-init">${getInitials(p.name)}</div>
-              <span style="font-weight:600">${p.name}</span>
-              ${getReturningBadge(p)}
-            </div>
-          </td>
-          <td style="color:var(--muted);font-size:0.78rem">${p.id}</td>
-          <td>${p.complaint}</td>
-          <td style="text-align:center">${p.painLevel}</td>
-          <td style="color:var(--muted)">${p.therapist||'—'}</td>
-          <td>${getStatusBadge(p.status)}</td>
-          <td style="color:var(--muted);font-size:0.78rem">${p.date}</td>
-          ${isLead ? `<td>
-            <div style="display:flex;flex-direction:column;gap:4px;min-width:90px">
-              <button onclick="showReassign('${p.id}','${p.name}')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid var(--royal);color:var(--royal);background:white;cursor:pointer;width:100%">
-                ${p.therapist ? 'Reassign' : 'Assign'}
-              </button>
-              ${p.status==='Active' ? `
-              <button onclick="updatePatientStatus('${p.id}','${p.name}','Closed')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #EF4444;color:#EF4444;background:white;cursor:pointer;width:100%">Close</button>
-              <button onclick="updatePatientStatus('${p.id}','${p.name}','Discharged')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #6B7280;color:#6B7280;background:white;cursor:pointer;width:100%">Discharge</button>
-              ` : ''}
-              ${p.status==='Closed' ? `
-              <button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer;width:100%">Reopen</button>
-              ` : ''}
-              ${p.status==='Allocated' ? `
-              <button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer;width:100%">Activate</button>
-              ` : ''}
-              ${p.status==='Discharged' ? `<span style="font-size:0.7rem;color:var(--muted);text-align:center;display:block">Complete</span>` : ''}
-            </div>
-          </td>` : ''}
-        </tr>`).join('')}
-      </tbody>
-    </table>
-  ` : '<div class="empty-state"><p>No patients found</p></div>';
+  const isLead=currentUser.role==='Lead'||currentUser.role==='Admin';
+  const list=isLead?patients:patients.filter(p=>p.therapist===currentUser.name);
+  document.getElementById('patients-table-wrap').innerHTML=list.length?`
+    <table class="data-table"><thead><tr><th>Patient</th><th>ID</th><th>Complaint</th><th>Pain</th><th>Therapist</th><th>Status</th><th>Date</th>${isLead?'<th>Actions</th>':''}</tr></thead>
+    <tbody>${list.map(p=>`<tr>
+      <td><div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap"><div class="patient-init">${getInitials(p.name)}</div><span style="font-weight:600">${p.name}</span>${getReturningBadge(p)}</div></td>
+      <td style="color:var(--muted);font-size:0.78rem">${p.id}</td><td>${p.complaint}</td><td style="text-align:center">${p.painLevel}</td>
+      <td style="color:var(--muted)">${p.therapist||'&mdash;'}</td><td>${getStatusBadge(p.status)}</td><td style="color:var(--muted);font-size:0.78rem">${p.date}</td>
+      ${isLead?`<td><div style="display:flex;flex-direction:column;gap:4px;min-width:90px">
+        <button onclick="showReassign('${p.id}','${p.name}')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid var(--royal);color:var(--royal);background:white;cursor:pointer;width:100%">${p.therapist?'Reassign':'Assign'}</button>
+        ${p.status==='Active'?`<button onclick="updatePatientStatus('${p.id}','${p.name}','Closed')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #EF4444;color:#EF4444;background:white;cursor:pointer;width:100%">Close</button><button onclick="updatePatientStatus('${p.id}','${p.name}','Discharged')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #6B7280;color:#6B7280;background:white;cursor:pointer;width:100%">Discharge</button>`:''}
+        ${p.status==='Closed'?`<button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer;width:100%">Reopen</button>`:''}
+        ${p.status==='Allocated'?`<button onclick="updatePatientStatus('${p.id}','${p.name}','Active')" style="font-size:0.7rem;padding:3px 8px;border-radius:5px;border:1px solid #22C55E;color:#22C55E;background:white;cursor:pointer;width:100%">Activate</button>`:''}
+        ${p.status==='Discharged'?`<span style="font-size:0.7rem;color:var(--muted);text-align:center;display:block">Complete</span>`:''}
+      </div></td>`:''}
+    </tr>`).join('')}</tbody></table>
+  `:'<div class="empty-state"><p>No patients found</p></div>';
 }
 
 async function loadAllocations(){
-  const all = await fetchPatients().catch(() => getMockPatients());
-
-  // ── ALLOCATION FILTER — simple and reliable ──
-  // Show: (1) anything Pending Allocation, (2) any Returning Patient entry (new visit needs assignment)
-  // Exclude: Discharged, Closed
-  const patients = all.filter(p => {
-    if(p.status === 'Discharged' || p.status === 'Closed') return false;
-    const isPending = p.status === 'Pending Allocation' || !p.therapist || p.therapist === '';
-    const isReturning = p.PatientType === 'Returning Patient' || p.patientType === 'Returning Patient';
-    return isPending || isReturning;
+  const all=await fetchPatients().catch(()=>getMockPatients());
+  const patients=all.filter(p=>{
+    if(p.status==='Discharged'||p.status==='Closed')return false;
+    const isPending=p.status==='Pending Allocation'||!p.therapist||p.therapist==='';
+    const isReturning=p.PatientType==='Returning Patient'||p.patientType==='Returning Patient';
+    return isPending||isReturning;
   });
-
-  // Deduplicate — returning patients may have both old and new entries
-  // Keep the most recent entry per patient name
-  const seen = new Map();
-  patients.forEach(p => {
-    const key = p.name.trim().toLowerCase();
-    if(!seen.has(key) || new Date(p.date) > new Date(seen.get(key).date)){
-      seen.set(key, p);
-    }
-  });
-  const uniquePatients = Array.from(seen.values());
-
-  // Sort: returning patients first, then newest first
-  uniquePatients.sort((a, b) => {
-    const aRet = a.PatientType==='Returning Patient' || a.patientType==='Returning Patient';
-    const bRet = b.PatientType==='Returning Patient' || b.patientType==='Returning Patient';
-    if(aRet && !bRet) return -1;
-    if(!aRet && bRet) return 1;
-    return new Date(b.date||0) - new Date(a.date||0);
-  });
-
-  document.getElementById('alloc-badge').textContent = uniquePatients.length;
-  document.getElementById('alloc-badge').style.display = uniquePatients.length ? 'inline-block' : 'none';
-
-  const tenantUsers = window._cachedTenantUsers || await fetchTenantUsers();
-  window._cachedTenantUsers = tenantUsers; // Cache so repeat calls never return empty
-  const userOptions = tenantUsers.length > 0
-    ? tenantUsers.map(u => `<option value="${u.displayName}">${u.displayName}${u.jobTitle ? ' — '+u.jobTitle : ''}</option>`).join('')
-    : getMockStaff().map(s=>`<option value="${s.name}">${s.name} (${s.role})</option>`).join('');
-
-  // Store patients in window so allocate() can look them up by index safely
-  window._allocPatients = uniquePatients;
-
-  document.getElementById('allocations-list').innerHTML = uniquePatients.length ? uniquePatients.map(function(p, idx) {
-    const isReturning = p.PatientType==='Returning Patient' || p.patientType==='Returning Patient';
-    const safeId = 'alloc_'+idx;
-    return `
-    <div class="alloc-card" style="${isReturning ? 'border:1.5px solid rgba(245,158,11,0.5);background:rgba(255,251,235,0.6)' : ''}">
-
-      <!-- PATIENT HEADER -->
+  const seen=new Map();
+  patients.forEach(p=>{const key=p.name.trim().toLowerCase();if(!seen.has(key)||new Date(p.date)>new Date(seen.get(key).date))seen.set(key,p);});
+  const uniquePatients=Array.from(seen.values());
+  uniquePatients.sort((a,b)=>{const aR=a.PatientType==='Returning Patient'||a.patientType==='Returning Patient';const bR=b.PatientType==='Returning Patient'||b.patientType==='Returning Patient';if(aR&&!bR)return -1;if(!aR&&bR)return 1;return new Date(b.date||0)-new Date(a.date||0);});
+  document.getElementById('alloc-badge').textContent=uniquePatients.length;
+  document.getElementById('alloc-badge').style.display=uniquePatients.length?'inline-block':'none';
+  const tenantUsers=window._cachedTenantUsers||await fetchTenantUsers();
+  window._cachedTenantUsers=tenantUsers;
+  const userOptions=tenantUsers.length>0?tenantUsers.map(u=>`<option value="${u.displayName}">${u.displayName}${u.jobTitle?' \u2014 '+u.jobTitle:''}</option>`).join(''):getMockStaff().map(s=>`<option value="${s.name}">${s.name} (${s.role})</option>`).join('');
+  window._allocPatients=uniquePatients;
+  document.getElementById('allocations-list').innerHTML=uniquePatients.length?uniquePatients.map(function(p,idx){
+    const isReturning=p.PatientType==='Returning Patient'||p.patientType==='Returning Patient';
+    const safeId='alloc_'+idx;
+    return `<div class="alloc-card" style="${isReturning?'border:1.5px solid rgba(245,158,11,0.5);background:rgba(255,251,235,0.6)':''}">
       <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem">
-        <div class="patient-init" style="width:38px;height:38px;font-size:0.82rem;${isReturning ? 'background:rgba(245,158,11,0.15);color:#92400E' : ''}">${getInitials(p.name)}</div>
-        <div style="flex:1">
-          <div style="font-size:0.9rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
-            ${p.name} ${getReturningBadge(p)}
-          </div>
-          <div style="font-size:0.75rem;color:var(--muted)">${p.id} · Booked ${p.date}</div>
-        </div>
+        <div class="patient-init" style="width:38px;height:38px;font-size:0.82rem;${isReturning?'background:rgba(245,158,11,0.15);color:#92400E':''}">${getInitials(p.name)}</div>
+        <div style="flex:1"><div style="font-size:0.9rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">${p.name} ${getReturningBadge(p)}</div><div style="font-size:0.75rem;color:var(--muted)">${p.id} &middot; Booked ${p.date}</div></div>
       </div>
-
-      <!-- RETURNING PATIENT NOTICE -->
-      ${isReturning ? `
-      <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:0.6rem 0.85rem;margin-bottom:0.75rem;font-size:0.78rem;color:#7A4800;line-height:1.6;display:flex;gap:0.5rem;align-items:flex-start">
-        <span style="font-size:1rem;flex-shrink:0">↩</span>
-        <span><strong>Returning patient — new visit.</strong> Has been seen before${p.therapist ? ' by <strong>'+p.therapist+'</strong>' : ''}. Consider continuity of care when assigning.</span>
-      </div>` : ''}
-
-      <!-- DETAILS -->
+      ${isReturning?`<div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:0.6rem 0.85rem;margin-bottom:0.75rem;font-size:0.78rem;color:#7A4800;line-height:1.6;display:flex;gap:0.5rem;align-items:flex-start"><span style="font-size:1rem;flex-shrink:0">&#8617;</span><span><strong>Returning patient \u2014 new visit.</strong> Has been seen before${p.therapist?' by <strong>'+p.therapist+'</strong>':''}. Consider continuity of care when assigning.</span></div>`:''}
       <div class="alloc-details">
-        <div class="alloc-detail-item"><div class="alloc-detail-label">Complaint</div><div class="alloc-detail-val">${p.complaint || 'Not specified'}</div></div>
-        <div class="alloc-detail-item"><div class="alloc-detail-label">Pain level</div><div class="alloc-detail-val">${p.painLevel || '—'}/10</div></div>
-        ${p.therapist ? `<div class="alloc-detail-item"><div class="alloc-detail-label">Previous therapist</div><div class="alloc-detail-val" style="color:var(--royal);font-weight:600">${p.therapist}</div></div>` : ''}
-        ${p.phone ? `<div class="alloc-detail-item"><div class="alloc-detail-label">Phone</div><div class="alloc-detail-val">${p.phone}</div></div>` : ''}
+        <div class="alloc-detail-item"><div class="alloc-detail-label">Complaint</div><div class="alloc-detail-val">${p.complaint||'Not specified'}</div></div>
+        <div class="alloc-detail-item"><div class="alloc-detail-label">Pain level</div><div class="alloc-detail-val">${p.painLevel||'\u2014'}/10</div></div>
+        ${p.therapist?`<div class="alloc-detail-item"><div class="alloc-detail-label">Previous therapist</div><div class="alloc-detail-val" style="color:var(--royal);font-weight:600">${p.therapist}</div></div>`:''}
+        ${p.phone?`<div class="alloc-detail-item"><div class="alloc-detail-label">Phone</div><div class="alloc-detail-val">${p.phone}</div></div>`:''}
       </div>
-
-      <!-- ASSIGN -->
       <div style="display:flex;gap:0.5rem;align-items:center">
         <select class="alloc-select" id="therapist-${safeId}">
-          <option value="">Select therapist to assign…</option>
-          ${isReturning && p.therapist ? `<option value="${p.therapist}">${p.therapist} (previous — recommended)</option>` : ''}
+          <option value="">Select therapist to assign\u2026</option>
+          ${isReturning&&p.therapist?`<option value="${p.therapist}">${p.therapist} (previous \u2014 recommended)</option>`:''}
           ${userOptions}
         </select>
-        <button class="btn-primary" onclick="allocate(${idx})">Assign →</button>
+        <button class="btn-primary" onclick="allocate(${idx})">Assign \u2192</button>
       </div>
-      <textarea class="alloc-comment" id="comment-${safeId}" placeholder="${isReturning ? 'Note for therapist — e.g. same complaint as previous visit, check session notes…' : 'Allocation note for therapist…'}" rows="2"></textarea>
+      <textarea class="alloc-comment" id="comment-${safeId}" placeholder="${isReturning?'Note for therapist \u2014 e.g. same complaint as previous visit...':'Allocation note for therapist\u2026'}" rows="2"></textarea>
     </div>`;
-  }).join('') : '<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>All patients allocated</p></div>';
+  }).join(''):'<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>All patients allocated</p></div>';
 }
 
 async function fetchFeedback(){
-  try {
-    const res = await fetch(GET_FEEDBACK_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({})
-    });
-    const data = await res.json();
-    return Array.isArray(data) ? data.map(f=>({
-      patient: f.Title || '',
-      patientId: f.PatientID || '',
-      therapist: f.Therapist || '',
-      rating: parseFloat(f.Rating) || 0,
-      comment: f.Comment || '',
-      date: f.SessionDate || ''
-    })) : [];
-  } catch(e){ return []; }
+  try{
+    const res=await fetch(GET_FEEDBACK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
+    const data=await res.json();
+    return Array.isArray(data)?data.map(f=>({patient:f.Title||'',patientId:f.PatientID||'',therapist:f.Therapist||'',rating:parseFloat(f.Rating)||0,comment:f.Comment||'',date:f.SessionDate||''})):[];
+  }catch(e){return[];}
 }
 
-let reassignPatientId = '';
-let reassignPatientName = '';
-
-async function showReassign(patientId, patientName){
-  reassignPatientId = patientId;
-  reassignPatientName = patientName;
-  document.getElementById('reassign-patient-name').textContent = 'Reassigning: ' + patientName;
-  const select = document.getElementById('reassign-select');
-  select.innerHTML = '<option value="">Loading therapists...</option>';
-  const users = await fetchTenantUsers().catch(()=>[]);
-  if(users.length > 0){
-    select.innerHTML = '<option value="">Select new therapist…</option>' +
-      users.map(u=>'<option value="'+u.displayName+'">'+u.displayName+(u.jobTitle?' — '+u.jobTitle:'')+'</option>').join('');
-  } else {
-    select.innerHTML = '<option value="">Select new therapist…</option>' +
-      getMockStaff().map(s=>'<option value="'+s.name+'">'+s.name+'</option>').join('');
-  }
-  const modal = document.getElementById('reassign-modal');
-  modal.style.display = 'flex';
+let reassignPatientId='',reassignPatientName='';
+async function showReassign(patientId,patientName){
+  reassignPatientId=patientId;reassignPatientName=patientName;
+  document.getElementById('reassign-patient-name').textContent='Reassigning: '+patientName;
+  const select=document.getElementById('reassign-select');select.innerHTML='<option value="">Loading therapists...</option>';
+  const users=await fetchTenantUsers().catch(()=>[]);
+  select.innerHTML='<option value="">Select new therapist\u2026</option>'+(users.length>0?users.map(u=>'<option value="'+u.displayName+'">'+u.displayName+(u.jobTitle?' \u2014 '+u.jobTitle:'')+'</option>').join(''):getMockStaff().map(s=>'<option value="'+s.name+'">'+s.name+'</option>').join(''));
+  document.getElementById('reassign-modal').style.display='flex';
 }
-
-function closeReassign(){
-  document.getElementById('reassign-modal').style.display = 'none';
-  reassignPatientId = ''; reassignPatientName = '';
-}
-
+function closeReassign(){document.getElementById('reassign-modal').style.display='none';reassignPatientId='';reassignPatientName='';}
 async function confirmReassign(){
-  const newTherapist = document.getElementById('reassign-select').value;
-  if(!newTherapist){ alert('Please select a therapist.'); return; }
-  try {
-    const res = await fetch(UPDATE_PATIENT_URL, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ patientId: reassignPatientId, patientName: reassignPatientName, therapist: newTherapist, status: 'Active', note: 'Reassigned by management' })
-    });
-    closeReassign();
-    alert('✓ '+reassignPatientName+' has been reassigned to '+newTherapist);
-    loadPatients().catch(e=>console.log(e));
-  } catch(e){ alert('Connection error. Please try again.'); }
+  const t=document.getElementById('reassign-select').value;if(!t){alert('Please select a therapist.');return;}
+  try{await fetch(UPDATE_PATIENT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({patientId:reassignPatientId,patientName:reassignPatientName,therapist:t,status:'Active',note:'Reassigned by management'})});closeReassign();alert('\u2713 '+reassignPatientName+' has been reassigned to '+t);loadPatients().catch(e=>console.log(e));}
+  catch(e){alert('Connection error. Please try again.');}
 }
-
-async function updatePatientStatus(patientId, patientName, newStatus){
-  if(!confirm('Are you sure you want to set '+patientName+' to "'+newStatus+'"?')) return;
-  try {
-    await fetch(UPDATE_PATIENT_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ patientId, status: newStatus, note: '' })
-    });
-    alert('✓ '+patientName+' status updated to "'+newStatus+'"');
-    const activePage = document.querySelector('.page.active');
-    if(activePage && activePage.id === 'page-sessions') loadSessions().catch(e=>console.log(e));
-    else if(activePage && activePage.id === 'page-patients') loadPatients().catch(e=>console.log(e));
-  } catch(e){ alert('Connection error. Please try again.'); }
+async function updatePatientStatus(patientId,patientName,newStatus){
+  if(!confirm('Are you sure you want to set '+patientName+' to "'+newStatus+'"?'))return;
+  try{await fetch(UPDATE_PATIENT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({patientId,status:newStatus,note:''})});alert('\u2713 '+patientName+' status updated to "'+newStatus+'"');const a=document.querySelector('.page.active');if(a&&a.id==='page-sessions')loadSessions().catch(e=>console.log(e));else if(a&&a.id==='page-patients')loadPatients().catch(e=>console.log(e));}
+  catch(e){alert('Connection error. Please try again.');}
 }
-
 async function allocate(idx){
-  const p = (window._allocPatients || [])[idx];
-  if(!p){ alert('Patient not found. Please refresh the page.'); return; }
-  const safeId = 'alloc_'+idx;
-  const therapistEl = document.getElementById('therapist-'+safeId);
-  const commentEl = document.getElementById('comment-'+safeId);
-  const therapist = therapistEl ? therapistEl.value : '';
-  const comment = commentEl ? commentEl.value : '';
-  if(!therapist){ alert('Please select a therapist.'); return; }
-  const btn = event.target;
-  const card = btn.closest('.alloc-card');
-  btn.disabled = true; btn.textContent = 'Saving…';
-  try {
-    await fetch(UPDATE_PATIENT_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        patientId: p.id,
-        patientName: p.name,
-        therapist: therapist,
-        status: 'Active',
-        note: comment
-      })
-    });
-    // Success — update local data immediately without waiting for API refresh
-    p.therapist = therapist;
-    p.status = 'Active';
-    // Update allPatients cache so Patients page reflects the change
-    if(window.allPatients){
-      var found = allPatients.find(function(ap){ return ap.name === p.name || ap.id === p.id; });
-      if(found){ found.therapist = therapist; found.status = 'Active'; }
-    }
-    // Remove card from DOM immediately
-    btn.textContent = '✓ Allocated!'; btn.style.background = '#22C55E';
-    setTimeout(()=>{
-      if(card) card.style.transition = 'opacity 0.4s';
-      if(card) card.style.opacity = '0';
-      setTimeout(()=>{
-        if(card) card.remove();
-        // Update badge count
-        const remaining = document.querySelectorAll('#allocations-list .alloc-card').length;
-        const badge = document.getElementById('alloc-badge');
-        if(badge){ badge.textContent = remaining; badge.style.display = remaining ? 'inline-block' : 'none'; }
-        // If no more cards show empty state
-        if(remaining === 0){
-          document.getElementById('allocations-list').innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>All patients allocated</p></div>';
-        }
-      }, 400);
-    }, 800);
-  } catch(e){
-    alert('Connection error. Please try again.');
-    btn.disabled=false; btn.textContent='Assign →';
-  }
+  const p=(window._allocPatients||[])[idx];if(!p){alert('Patient not found.');return;}
+  const safeId='alloc_'+idx,therapistEl=document.getElementById('therapist-'+safeId),commentEl=document.getElementById('comment-'+safeId);
+  const therapist=therapistEl?therapistEl.value:'',comment=commentEl?commentEl.value:'';
+  if(!therapist){alert('Please select a therapist.');return;}
+  const btn=event.target,card=btn.closest('.alloc-card');btn.disabled=true;btn.textContent='Saving\u2026';
+  try{
+    await fetch(UPDATE_PATIENT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({patientId:p.id,patientName:p.name,therapist,status:'Active',note:comment})});
+    p.therapist=therapist;p.status='Active';
+    if(window.allPatients){var found=allPatients.find(ap=>ap.name===p.name||ap.id===p.id);if(found){found.therapist=therapist;found.status='Active';}}
+    btn.textContent='\u2713 Allocated!';btn.style.background='#22C55E';
+    setTimeout(()=>{if(card){card.style.transition='opacity 0.4s';card.style.opacity='0';}setTimeout(()=>{if(card)card.remove();const remaining=document.querySelectorAll('#allocations-list .alloc-card').length;const badge=document.getElementById('alloc-badge');if(badge){badge.textContent=remaining;badge.style.display=remaining?'inline-block':'none';}if(remaining===0)document.getElementById('allocations-list').innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>All patients allocated</p></div>';},400);},800);
+  }catch(e){alert('Connection error.');btn.disabled=false;btn.textContent='Assign \u2192';}
 }
 
 async function loadSessions(){
-  const allForSessions = await fetchPatients().catch(()=>getMockPatients());
-  const isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
-  const allAssigned = isLead
-    ? allForSessions.filter(p=>p.status==='Active'||p.status==='Allocated')
-    : allForSessions.filter(p=>{
-        const therapistMatch = p.therapist && (
-          p.therapist.toLowerCase() === currentUser.name.toLowerCase() ||
-          p.therapist.toLowerCase().includes(currentUser.name.split(' ')[0].toLowerCase())
-        );
-        return therapistMatch && (p.status==='Active'||p.status==='Allocated');
-      });
-
-  // Store for use in form
-  window._sessionPatients = allAssigned;
-
-  // Populate patient selector dropdown
-  const sel = document.getElementById('session-patient-select');
-  if(sel){
-    sel.innerHTML = '<option value="">— Choose a patient to start session notes —</option>'
-      + allAssigned.map((p,i)=>`<option value="${i}">${p.name}${p.PatientType==='Returning Patient'?' (RP)':''} — ${p.complaint||'No complaint listed'} — ${p.status}</option>`).join('');
-  }
-
-  // Reset form
-  document.getElementById('session-form-wrap').style.display = 'none';
-  document.getElementById('session-form-wrap').innerHTML = '';
-
-  // Show summary list below
-  document.getElementById('sessions-list').innerHTML = allAssigned.length
-    ? `<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem">Your patients (${allAssigned.length})</div>`
-      + allAssigned.map((p,i)=>`
-      <div class="card" style="padding:0.85rem 1rem;margin-bottom:0.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;cursor:pointer;transition:all 0.15s" onclick="document.getElementById('session-patient-select').value='${i}';onSessionPatientSelect('${i}');this.closest('.page').scrollTop=0" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="display:flex;align-items:center;gap:0.75rem">
-          <div class="patient-init" style="width:36px;height:36px;font-size:0.8rem">${getInitials(p.name)}</div>
-          <div>
-            <div style="font-size:0.88rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:0.4rem">${p.name} ${getReturningBadge(p)}</div>
-            <div style="font-size:0.72rem;color:var(--muted)">${p.complaint||'No complaint'} · Pain ${p.painLevel||'—'}/10 · ${p.therapist||'Unassigned'}</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:0.5rem">
-          ${getStatusBadge(p.status)}
-          <span style="font-size:11px;color:var(--cyan);font-weight:600">Open notes →</span>
-        </div>
-      </div>`).join('')
-    : '<div class="empty-state"><p>No active patients assigned to you</p></div>';
+  const allForSessions=await fetchPatients().catch(()=>getMockPatients());
+  const isLead=currentUser.role==='Lead'||currentUser.role==='Admin';
+  const allAssigned=isLead?allForSessions.filter(p=>p.status==='Active'||p.status==='Allocated'):allForSessions.filter(p=>{const m=p.therapist&&(p.therapist.toLowerCase()===currentUser.name.toLowerCase()||p.therapist.toLowerCase().includes(currentUser.name.split(' ')[0].toLowerCase()));return m&&(p.status==='Active'||p.status==='Allocated');});
+  window._sessionPatients=allAssigned;
+  const sel=document.getElementById('session-patient-select');
+  if(sel)sel.innerHTML='<option value="">\u2014 Choose a patient to start session notes \u2014</option>'+allAssigned.map((p,i)=>`<option value="${i}">${p.name}${p.PatientType==='Returning Patient'?' (RP)':''} \u2014 ${p.complaint||'No complaint listed'} \u2014 ${p.status}</option>`).join('');
+  document.getElementById('session-form-wrap').style.display='none';document.getElementById('session-form-wrap').innerHTML='';
+  document.getElementById('sessions-list').innerHTML=allAssigned.length?`<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem">Your patients (${allAssigned.length})</div>`+allAssigned.map((p,i)=>`
+    <div class="card" style="padding:0.85rem 1rem;margin-bottom:0.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;cursor:pointer;transition:all 0.15s" onclick="document.getElementById('session-patient-select').value='${i}';onSessionPatientSelect('${i}')" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="display:flex;align-items:center;gap:0.75rem"><div class="patient-init" style="width:36px;height:36px;font-size:0.8rem">${getInitials(p.name)}</div>
+      <div><div style="font-size:0.88rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:0.4rem">${p.name} ${getReturningBadge(p)}</div><div style="font-size:0.72rem;color:var(--muted)">${p.complaint||'No complaint'} &middot; Pain ${p.painLevel||'\u2014'}/10 &middot; ${p.therapist||'Unassigned'}</div></div></div>
+      <div style="display:flex;align-items:center;gap:0.5rem">${getStatusBadge(p.status)}<span style="font-size:11px;color:var(--cyan);font-weight:600">Open notes \u2192</span></div>
+    </div>`).join(''):'<div class="empty-state"><p>No active patients assigned to you</p></div>';
 }
 
 function onSessionPatientSelect(idx){
-  const patients = window._sessionPatients || [];
-  const p = patients[parseInt(idx)];
-  const wrap = document.getElementById('session-form-wrap');
-  if(!p || idx===''){
-    wrap.style.display = 'none';
-    wrap.innerHTML = '';
-    return;
-  }
-  wrap.style.display = 'block';
-  const safeId = 'sess_'+idx;
-  wrap.innerHTML = `
+  const patients=window._sessionPatients||[],p=patients[parseInt(idx)];
+  const wrap=document.getElementById('session-form-wrap');
+  if(!p||idx===''){wrap.style.display='none';wrap.innerHTML='';return;}
+  wrap.style.display='block';const safeId='sess_'+idx;
+  wrap.innerHTML=`
     <div class="card" style="margin-bottom:1rem;border-color:var(--cyan)">
-      <!-- Patient header -->
       <div style="display:flex;align-items:center;gap:0.75rem;padding-bottom:1rem;margin-bottom:1rem;border-bottom:1px solid var(--border)">
         <div class="patient-init" style="width:44px;height:44px;font-size:0.9rem">${getInitials(p.name)}</div>
-        <div style="flex:1">
-          <div style="font-size:1rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:0.5rem">${p.name} ${getReturningBadge(p)}</div>
-          <div style="font-size:0.75rem;color:var(--muted)">${p.id} · ${p.complaint||'No complaint'} · Pain ${p.painLevel||'—'}/10</div>
-          <div style="font-size:0.75rem;color:var(--royal);font-weight:600;margin-top:2px">Assigned to: ${p.therapist||'—'}</div>
-        </div>
+        <div style="flex:1"><div style="font-size:1rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:0.5rem">${p.name} ${getReturningBadge(p)}</div><div style="font-size:0.75rem;color:var(--muted)">${p.id} &middot; ${p.complaint||'No complaint'} &middot; Pain ${p.painLevel||'\u2014'}/10</div><div style="font-size:0.75rem;color:var(--royal);font-weight:600;margin-top:2px">Assigned to: ${p.therapist||'\u2014'}</div></div>
         ${getStatusBadge(p.status)}
       </div>
-
-      <!-- Status change -->
       <div style="display:flex;gap:0.5rem;margin-bottom:1.25rem;flex-wrap:wrap">
         <button onclick="updatePatientStatus('${p.id}','${p.name}','Discharged')" style="font-size:0.78rem;padding:5px 14px;border-radius:6px;border:1px solid #EF4444;color:#EF4444;background:white;cursor:pointer;font-family:inherit">Discharge patient</button>
         <button onclick="updatePatientStatus('${p.id}','${p.name}','Closed')" style="font-size:0.78rem;padding:5px 14px;border-radius:6px;border:1px solid var(--muted);color:var(--muted);background:white;cursor:pointer;font-family:inherit">Close case</button>
       </div>
-
-      <!-- Session form -->
       <div class="session-form">
         <label>Treatment plan *</label>
-        <textarea id="plan-${safeId}" placeholder="Describe the treatment plan for this session…"></textarea>
+        <textarea id="plan-${safeId}" placeholder="Describe the treatment plan for this session\u2026"></textarea>
         <label>Session findings *</label>
-        <textarea id="findings-${safeId}" placeholder="What did you observe and do during this session? What was the patient's response?"></textarea>
+        <textarea id="findings-${safeId}" placeholder="What did you observe and do during this session?"></textarea>
         <label>Next steps</label>
         <textarea id="next-${safeId}" placeholder="What should happen at the next session?" rows="2" style="min-height:70px"></textarea>
         <div style="display:flex;gap:0.75rem;align-items:center;margin-top:0.5rem;flex-wrap:wrap">
           <button class="btn-primary" style="min-width:160px" onclick="saveSession('${p.id}','${p.name}','${safeId}')">Save session notes</button>
           <div id="wa-survey-btn-${p.id}"></div>
-          ${currentUser.role==='Junior'||currentUser.role==='Intern'?`<span style="font-size:0.75rem;color:var(--muted)">⚠ Notes require Lead approval</span>`:''}
+          ${currentUser.role==='Junior'||currentUser.role==='Intern'?'<span style="font-size:0.75rem;color:var(--muted)">&#9888; Notes require Lead approval</span>':''}
         </div>
       </div>
     </div>`;
-  // Scroll to form
-  wrap.scrollIntoView({behavior:'smooth', block:'start'});
+  wrap.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-async function saveSession(patientId, patientName, safeId){
-  const domId = safeId || patientId;
-  const plan = document.getElementById('plan-'+domId) ? document.getElementById('plan-'+domId).value : '';
-  const findings = document.getElementById('findings-'+domId) ? document.getElementById('findings-'+domId).value : '';
-  const nextSteps = document.getElementById('next-'+domId) ? document.getElementById('next-'+domId).value : '';
-  if(!findings){ alert('Please enter session findings before saving.'); return; }
-  const needsApproval = currentUser.role === 'Junior' || currentUser.role === 'Intern';
-  const status = needsApproval ? 'Pending Approval' : 'Approved';
-  const btn = event.target;
-  btn.disabled = true; btn.textContent = 'Saving…';
-  try {
-    const res = await fetch(SAVE_SESSION_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        patientName, patientId,
-        patientEmail: (allPatients.find(p=>p.id===patientId||p.name===patientName)||{}).email||'',
-        patientPhone: (allPatients.find(p=>p.id===patientId||p.name===patientName)||{}).phone||'',
-        therapist: currentUser.name, plan, findings, nextSteps, status,
-        sessionDate: new Date().toISOString().split('T')[0]
-      })
-    });
-    const data = await res.json().catch(()=>({}));
-    // Treat any response (or no JSON) as success — Power Automate fired
-    btn.textContent = '✓ Saved!'; btn.style.background = '#22C55E';
-    if(needsApproval){
-      setTimeout(()=>{ alert('Notes sent for Lead approval.'); btn.disabled=false; btn.textContent='Save session notes'; btn.style.background=''; }, 1000);
-    } else {
-      var surveyUrl = 'https://whiterock-wellness.com/survey.html?id='+encodeURIComponent(patientId)+'&patient='+encodeURIComponent(patientName)+'&therapist='+encodeURIComponent(currentUser.name)+'&date='+new Date().toISOString().split('T')[0];
-      var waText = 'Hello '+patientName+', thank you for visiting WhiteRock Wellness today! Please take 30 seconds to rate your session: '+surveyUrl;
-      var patientRecord = allPatients.find(p=>p.id===patientId||p.name===patientName);
-      var phone = patientRecord && patientRecord.phone ? patientRecord.phone.replace(/[^0-9]/g,'') : '';
-      var waPhone = phone.startsWith('0') ? '234'+phone.substring(1) : phone;
-      var waUrl = waPhone ? 'https://wa.me/'+waPhone+'?text='+encodeURIComponent(waText) : 'https://wa.me/?text='+encodeURIComponent(waText);
-      btn.disabled=false; btn.textContent='Save session notes'; btn.style.background='';
-      var waBtn = document.getElementById('wa-survey-btn-'+patientId);
-      if(!waBtn){
-        waBtn = document.createElement('a');
-        waBtn.id = 'wa-survey-btn-'+patientId;
-        waBtn.href = waUrl; waBtn.target = '_blank';
-        waBtn.style.cssText = 'display:inline-flex;align-items:center;gap:6px;background:#25D366;color:white;padding:0.55rem 1rem;border-radius:8px;font-size:0.82rem;font-weight:700;text-decoration:none;margin-left:8px';
-        waBtn.innerHTML = '💬 Send Survey via WhatsApp';
-        btn.parentNode.appendChild(waBtn);
-      } else { waBtn.href = waUrl; waBtn.style.display = 'inline-flex'; }
+async function saveSession(patientId,patientName,safeId){
+  const domId=safeId||patientId;
+  const plan=document.getElementById('plan-'+domId)?document.getElementById('plan-'+domId).value:'';
+  const findings=document.getElementById('findings-'+domId)?document.getElementById('findings-'+domId).value:'';
+  const nextSteps=document.getElementById('next-'+domId)?document.getElementById('next-'+domId).value:'';
+  if(!findings){alert('Please enter session findings before saving.');return;}
+  const needsApproval=currentUser.role==='Junior'||currentUser.role==='Intern';
+  const btn=event.target;btn.disabled=true;btn.textContent='Saving\u2026';
+  try{
+    await fetch(SAVE_SESSION_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({patientName,patientId,patientEmail:(allPatients.find(p=>p.id===patientId||p.name===patientName)||{}).email||'',patientPhone:(allPatients.find(p=>p.id===patientId||p.name===patientName)||{}).phone||'',therapist:currentUser.name,plan,findings,nextSteps,status:needsApproval?'Pending Approval':'Approved',sessionDate:new Date().toISOString().split('T')[0]})});
+    btn.textContent='\u2713 Saved!';btn.style.background='#22C55E';
+    if(needsApproval){setTimeout(()=>{alert('Notes sent for Lead approval.');btn.disabled=false;btn.textContent='Save session notes';btn.style.background='';},1000);}
+    else{
+      var surveyUrl='https://whiterock-wellness.com/survey.html?id='+encodeURIComponent(patientId)+'&patient='+encodeURIComponent(patientName)+'&therapist='+encodeURIComponent(currentUser.name)+'&date='+new Date().toISOString().split('T')[0];
+      var waText='Hello '+patientName+', thank you for visiting WhiteRock Wellness today! Please take 30 seconds to rate your session: '+surveyUrl;
+      var pr=allPatients.find(p=>p.id===patientId||p.name===patientName),phone=pr&&pr.phone?pr.phone.replace(/[^0-9]/g,''):'';
+      var waPhone=phone.startsWith('0')?'234'+phone.substring(1):phone,waUrl=waPhone?'https://wa.me/'+waPhone+'?text='+encodeURIComponent(waText):'https://wa.me/?text='+encodeURIComponent(waText);
+      btn.disabled=false;btn.textContent='Save session notes';btn.style.background='';
+      var waBtn=document.getElementById('wa-survey-btn-'+patientId);
+      if(!waBtn){waBtn=document.createElement('a');waBtn.id='wa-survey-btn-'+patientId;waBtn.href=waUrl;waBtn.target='_blank';waBtn.style.cssText='display:inline-flex;align-items:center;gap:6px;background:#25D366;color:white;padding:0.55rem 1rem;border-radius:8px;font-size:0.82rem;font-weight:700;text-decoration:none;margin-left:8px';waBtn.innerHTML='&#128172; Send Survey via WhatsApp';btn.parentNode.appendChild(waBtn);}
+      else{waBtn.href=waUrl;waBtn.style.display='inline-flex';}
     }
-  } catch(e){ alert('Connection error.'); btn.disabled=false; btn.textContent='Save session notes'; }
+  }catch(e){alert('Connection error.');btn.disabled=false;btn.textContent='Save session notes';}
+}
+
+// ══ KPI FUNCTIONS ══
+
+window._kpiStarFilter={5:true,4:true,3:true,2:true,1:true};
+window._kpiShowComments=true;
+
+function kpiToggleStar(star,btn){
+  window._kpiStarFilter[star]=!window._kpiStarFilter[star];
+  btn.classList.toggle('active-star',window._kpiStarFilter[star]);
+  kpiRenderCards();
+}
+function kpiToggleCommentView(){
+  window._kpiShowComments=!window._kpiShowComments;
+  const btn=document.getElementById('kpi-comment-toggle');
+  if(btn){btn.textContent='\uD83D\uDCAC Comments: '+(window._kpiShowComments?'ON':'OFF');btn.style.color=window._kpiShowComments?'#1A3FBF':'#AAA';btn.style.borderColor=window._kpiShowComments?'rgba(26,63,191,0.3)':'#E2EAF0';}
+  kpiRenderCards();
 }
 
 async function loadKPI(){
-  var isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
-  if(isLead) document.getElementById('kpi-mgmt-actions').style.display='flex';
+  var isLead=currentUser.role==='Lead'||currentUser.role==='Admin';
+  if(isLead)document.getElementById('kpi-mgmt-actions').style.display='flex';
   document.getElementById('kpi-cards-grid').innerHTML='<div class="loading"><div class="spinner"></div>Loading KPI data...</div>';
 
-  // Fetch feedback AND patients simultaneously
-  var results = await Promise.all([
-    fetchFeedback().catch(function(){ return []; }),
-    fetchPatients().catch(function(){ return []; })
+  // Fetch ALL simultaneously — MS users + feedback + patients
+  var results=await Promise.all([
+    fetchTenantUsers().catch(()=>getMockStaff().map(s=>({displayName:s.name,jobTitle:s.role}))),
+    fetchFeedback().catch(()=>[]),
+    fetchPatients().catch(()=>[])
   ]);
-  var realFeedback = results[0];
-  var allPatientsData = results[1];
+  var tenantUsers=results[0],realFeedback=results[1],allPatientsData=results[2];
 
-  window._kpiFeedback = realFeedback.length>0?realFeedback:getMockFeedback();
-  window._allPatientsCache = allPatientsData;
-  var allFeedback = window._kpiFeedback;
+  window._kpiFeedback=realFeedback.length>0?realFeedback:getMockFeedback();
+  window._allPatientsCache=allPatientsData;
+  var allFeedback=window._kpiFeedback;
 
-  // Non-leads only see their own data
+  // Non-leads see only their own data
   if(!isLead){
-    var myName = currentUser.name.toLowerCase();
-    allFeedback = allFeedback.filter(function(f){
-      return f.therapist && f.therapist.toLowerCase().includes(myName.split(' ')[0]);
-    });
-    allPatientsData = allPatientsData.filter(function(p){
-      return p.therapist && p.therapist.toLowerCase().includes(myName.split(' ')[0]);
-    });
+    var myName=currentUser.name.toLowerCase();
+    allFeedback=allFeedback.filter(f=>f.therapist&&f.therapist.toLowerCase().includes(myName.split(' ')[0]));
+    allPatientsData=allPatientsData.filter(p=>p.therapist&&p.therapist.toLowerCase().includes(myName.split(' ')[0]));
   }
 
-  // Leads see all therapists including unassigned ones — others see only themselves
-  var feedbackTherapists = [...new Set(allFeedback.map(function(f){ return f.therapist; }).filter(Boolean))];
-  var patientTherapists = [...new Set(allPatientsData.map(function(p){ return p.therapist; }).filter(Boolean))];
-  var knownTherapists = isLead ? getMockStaff().map(function(s){ return s.name; }) : [currentUser.name];
-  var therapistNames = [...new Set([...feedbackTherapists, ...patientTherapists, ...knownTherapists])].sort();
-  window._kpiTherapists = therapistNames;
+  // Build therapist list from ALL MS users + feedback + patients, deduplicated case-insensitively
+  var excludeNames=['admin','administrator','system','service'];
+  var allRaw=[
+    ...allFeedback.map(f=>f.therapist),
+    ...allPatientsData.map(p=>p.therapist),
+    ...(isLead?tenantUsers.map(u=>u.displayName):[currentUser.name])
+  ].filter(Boolean);
+  var seen={};
+  allRaw.forEach(name=>{var key=name.toLowerCase().trim();if(excludeNames.indexOf(key)>=0)return;if(!seen[key])seen[key]=name;else if(name!==name.toLowerCase())seen[key]=name;});
+  var therapistNames=Object.values(seen).sort();
+  window._kpiTherapists=therapistNames;
 
-  if(!therapistNames.length){ document.getElementById('kpi-cards-grid').innerHTML='<div class="empty-state"><p>No data yet. Assign therapists to patients to get started.</p></div>'; return; }
+  if(!therapistNames.length){document.getElementById('kpi-cards-grid').innerHTML='<div class="empty-state"><p>No data yet. Assign therapists to patients to get started.</p></div>';return;}
 
-  // Apply role-based visibility
-  var therapistWrap = document.getElementById('kpi-therapist-filter-wrap');
-  var backlogSection = document.getElementById('kpi-backlog-section');
-  if(therapistWrap) therapistWrap.style.display = isLead ? 'block' : 'none';
-  if(backlogSection) backlogSection.style.display = isLead ? 'block' : 'none';
+  // Role-based visibility
+  var tWrap=document.getElementById('kpi-therapist-filter-wrap');
+  var bLog=document.getElementById('kpi-backlog-section');
+  var cmtBtn=document.getElementById('kpi-comment-toggle');
+  if(tWrap)tWrap.style.display=isLead?'block':'none';
+  if(bLog)bLog.style.display=isLead?'block':'none';
+  if(cmtBtn)cmtBtn.style.display=isLead?'inline-block':'none';
+  if(!isLead)window._kpiShowComments=false;
 
-  if(!window._kpiSelMonths){ window._kpiSelMonths = Array(12).fill(true); }
-  if(!window._kpiMetrics) window._kpiMetrics = {score:true,sessions:true,stars:true,trend:true,chart:true};
+  if(!window._kpiSelMonths)window._kpiSelMonths=Array(12).fill(true);
+  if(!window._kpiMetrics)window._kpiMetrics={score:true,sessions:true,stars:true,trend:true,chart:true};
 
-  // Always rebuild therapist selection so new therapists appear automatically
-  window._kpiSelTherapists = {};
-  therapistNames.forEach(function(n){ window._kpiSelTherapists[n]=true; });
+  window._kpiSelTherapists={};
+  therapistNames.forEach(n=>window._kpiSelTherapists[n]=true);
 
-  // Rebuild therapist chips
-  var tchips = document.getElementById('kpi-therapist-chips');
+  var tchips=document.getElementById('kpi-therapist-chips');
   if(tchips){
-    tchips.innerHTML = '';
-    therapistNames.forEach(function(name){
-      var chip = document.createElement('div');
-      chip.className = 'kpi-dd-item on';
-      chip.textContent = name; chip.dataset.name = name;
-      chip.onclick = function(){
-        this.classList.toggle('on');
-        window._kpiSelTherapists[this.dataset.name] = this.classList.contains('on');
-        var selCount = Object.values(window._kpiSelTherapists).filter(Boolean).length;
-        var tcount = document.getElementById('kpi-t-count');
-        if(tcount) tcount.textContent = selCount===Object.keys(window._kpiSelTherapists).length?'all':selCount;
-        kpiRenderCards();
-      };
+    tchips.innerHTML='';
+    therapistNames.forEach(name=>{
+      var chip=document.createElement('div');chip.className='kpi-dd-item on';chip.textContent=name;chip.dataset.name=name;
+      chip.onclick=function(){this.classList.toggle('on');window._kpiSelTherapists[this.dataset.name]=this.classList.contains('on');var selCount=Object.values(window._kpiSelTherapists).filter(Boolean).length;var tc=document.getElementById('kpi-t-count');if(tc)tc.textContent=selCount===Object.keys(window._kpiSelTherapists).length?'all':selCount;kpiRenderCards();};
       tchips.appendChild(chip);
     });
   }
 
-  if(!window._kpiSelMonths){
-    var now2=new Date(); var cm=now2.getMonth();
-    window._kpiSelMonths=Array(12).fill(false);
-    for(var i=0;i<6;i++) window._kpiSelMonths[(cm-i+12)%12]=true;
-  }
+  if(!window._kpiSelMonths){var now2=new Date(),cm=now2.getMonth();window._kpiSelMonths=Array(12).fill(false);for(var i=0;i<6;i++)window._kpiSelMonths[(cm-i+12)%12]=true;}
   kpiUpdateMonthChips();
-  kpiUpdateClinicStats(allFeedback, therapistNames);
-  kpiRenderBacklog(allPatientsData, therapistNames);
+  kpiUpdateClinicStats(allFeedback,therapistNames);
+  kpiRenderBacklog(allPatientsData,therapistNames);
   kpiRenderCards();
 }
 
-function calcTherapistKPI(feedback, name){
-  var tf = feedback.filter(f=>f.therapist===name);
-  if(!tf.length) return 0;
-  return Math.round((tf.reduce((a,b)=>a+b.rating,0)/(5*tf.length))*100);
-}
+function calcTherapistKPI(feedback,name){var tf=feedback.filter(f=>f.therapist&&f.therapist.toLowerCase().trim()===name.toLowerCase().trim());if(!tf.length)return 0;return Math.round((tf.reduce((a,b)=>a+b.rating,0)/(5*tf.length))*100);}
 
-function kpiRenderBacklog(patients, therapistNames){
-  const grid = document.getElementById('kpi-backlog-grid');
-  if(!grid) return;
-  if(!patients || !patients.length){
-    grid.innerHTML = '<div style="grid-column:1/-1;font-size:13px;color:var(--muted);padding:0.5rem">No patient data available.</div>';
-    return;
-  }
-
-  grid.innerHTML = therapistNames.map(function(name){
-    const myPatients = patients.filter(function(p){
-      return p.therapist && p.therapist.toLowerCase().includes(name.split(' ')[0].toLowerCase());
-    });
-    const active   = myPatients.filter(function(p){ return p.status==='Active'; }).length;
-    const open     = myPatients.filter(function(p){ return p.status==='Pending Allocation'||p.status==='Allocated'||!p.status; }).length;
-    const closed   = myPatients.filter(function(p){ return p.status==='Discharged'||p.status==='Closed'; }).length;
-    const total    = myPatients.length;
-    const initials = name.split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
-
-    // Workload indicator
-    var load = 'Low'; var loadColor = '#1D9E75'; var loadBg = 'rgba(29,158,117,0.08)';
-    if(active >= 10){ load='High'; loadColor='#EF4444'; loadBg='rgba(239,68,68,0.08)'; }
-    else if(active >= 5){ load='Medium'; loadColor='#F59E0B'; loadBg='rgba(245,158,11,0.08)'; }
-
-    return `<div style="background:white;border:1px solid var(--border);border-radius:12px;padding:1rem">
+// BACKLOG — Active/Closed only, "No cases" state for unassigned therapists
+function kpiRenderBacklog(patients,therapistNames){
+  const grid=document.getElementById('kpi-backlog-grid');if(!grid)return;
+  if(!patients||!patients.length){grid.innerHTML='<div style="grid-column:1/-1;font-size:13px;color:var(--muted);padding:0.5rem">No patient data available.</div>';return;}
+  grid.innerHTML=therapistNames.map(name=>{
+    const myP=patients.filter(p=>p.therapist&&p.therapist.toLowerCase().trim()===name.toLowerCase().trim());
+    const active=myP.filter(p=>p.status==='Active'||p.status==='Allocated'||p.status==='Pending Allocation').length;
+    const closed=myP.filter(p=>p.status==='Discharged'||p.status==='Closed').length;
+    const total=myP.length,noCase=total===0;
+    const initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    var load='Low',lc='#1D9E75',lb='rgba(29,158,117,0.08)';
+    if(noCase){load='No cases';lc='#5A6A7A';lb='rgba(90,106,122,0.08)';}
+    else if(active>=10){load='High';lc='#EF4444';lb='rgba(239,68,68,0.08)';}
+    else if(active>=5){load='Medium';lc='#F59E0B';lb='rgba(245,158,11,0.08)';}
+    return `<div style="background:white;border:1px solid ${noCase?'#E2EAF0':'var(--border)'};border-radius:12px;padding:1rem;${noCase?'opacity:0.6':''}">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem">
         <div style="width:36px;height:36px;border-radius:50%;background:#E8F4FF;color:#1A3FBF;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">${initials}</div>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:12px;font-weight:700;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
-          <div style="font-size:10px;color:var(--muted)">${total} total patient${total!==1?'s':''}</div>
-        </div>
-        <div style="background:${loadBg};color:${loadColor};font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0">${load}</div>
+        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div><div style="font-size:10px;color:var(--muted)">${noCase?'No patients assigned':total+' total patient'+(total!==1?'s':'')}</div></div>
+        <div style="background:${lb};color:${lc};font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0">${load}</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
-        <div style="background:rgba(26,63,191,0.06);border-radius:8px;padding:8px;text-align:center">
-          <div style="font-size:20px;font-weight:800;color:#1A3FBF">${active}</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px">Active</div>
-        </div>
-        <div style="background:rgba(245,158,11,0.08);border-radius:8px;padding:8px;text-align:center">
-          <div style="font-size:20px;font-weight:800;color:#F59E0B">${open}</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px">Open</div>
-        </div>
-        <div style="background:rgba(29,158,117,0.08);border-radius:8px;padding:8px;text-align:center">
-          <div style="font-size:20px;font-weight:800;color:#1D9E75">${closed}</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px">Closed</div>
-        </div>
-      </div>
-      ${active>0?`<div style="margin-top:8px;background:#E2EAF0;border-radius:4px;height:4px;overflow:hidden">
-        <div style="height:100%;background:#1A3FBF;width:${Math.min(100,Math.round((active/(active+open+closed||1))*100))}%;border-radius:4px"></div>
-      </div>
-      <div style="font-size:9px;color:var(--muted);margin-top:3px">${Math.min(100,Math.round((active/(active+open+closed||1))*100))}% active load</div>`:''}
+      ${noCase
+        ?'<div style="font-size:11px;color:var(--muted);font-style:italic;text-align:center;padding:0.5rem 0">No patients allocated yet</div>'
+        :`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div style="background:rgba(26,63,191,0.06);border-radius:8px;padding:8px;text-align:center"><div style="font-size:20px;font-weight:800;color:#1A3FBF">${active}</div><div style="font-size:9px;color:var(--muted);margin-top:2px">Active</div></div>
+          <div style="background:rgba(29,158,117,0.08);border-radius:8px;padding:8px;text-align:center"><div style="font-size:20px;font-weight:800;color:#1D9E75">${closed}</div><div style="font-size:9px;color:var(--muted);margin-top:2px">Closed</div></div>
+        </div>${active>0?`<div style="margin-top:8px;background:#E2EAF0;border-radius:4px;height:4px;overflow:hidden"><div style="height:100%;background:#1A3FBF;width:${Math.min(100,Math.round((active/(active+closed||1))*100))}%;border-radius:4px"></div></div><div style="font-size:9px;color:var(--muted);margin-top:3px">${Math.min(100,Math.round((active/(active+closed||1))*100))}% active</div>`:''}`
+      }
     </div>`;
   }).join('');
 }
 
-function kpiUpdateClinicStats(allFeedback, therapistNames){
-  var totalRatings = allFeedback.length;
-  var clinicScore = totalRatings>0?Math.round((allFeedback.reduce((a,b)=>a+b.rating,0)/(5*totalRatings))*100):0;
-  var excellent = therapistNames.filter(n=>calcTherapistKPI(allFeedback,n)>=85).length;
-  var needsReview = therapistNames.filter(n=>calcTherapistKPI(allFeedback,n)<70).length;
-  var statCards = [
-    {label:'Clinic satisfaction',val:clinicScore+'%',sub:totalRatings+' ratings total',bg:'#0A1628',valColor:'#00AAFF',subColor:'rgba(255,255,255,0.5)'},
-    {label:'Sessions rated',val:''+totalRatings,sub:therapistNames.length+' active therapists',bg:'#E8F4FF',valColor:'#1A3FBF',subColor:'#1A3FBF'},
-    {label:'Excellent performers',val:''+excellent,sub:'85%+ threshold',bg:'#E8F4FF',valColor:'#0A1628',subColor:'#1A3FBF'},
-    {label:'Needs review',val:''+needsReview,sub:'Below 70%',bg:needsReview>0?'#0A1628':'#E8F4FF',valColor:needsReview>0?'#00AAFF':'#1A3FBF',subColor:needsReview>0?'rgba(255,255,255,0.5)':'#1A3FBF'},
-  ];
-  document.getElementById('kpi-clinic-stats').innerHTML = statCards.map(s=>`<div style="background:${s.bg};border-radius:12px;padding:0.9rem 1rem;border:none"><div style="font-size:11px;color:${s.subColor};margin-bottom:4px">${s.label}</div><div style="font-size:26px;font-weight:700;color:${s.valColor};line-height:1">${s.val}</div><div style="font-size:11px;color:${s.subColor};margin-top:4px">${s.sub}</div></div>`).join('');
+function kpiUpdateClinicStats(allFeedback,therapistNames){
+  var t=allFeedback.length,cs=t>0?Math.round((allFeedback.reduce((a,b)=>a+b.rating,0)/(5*t))*100):0;
+  var exc=therapistNames.filter(n=>calcTherapistKPI(allFeedback,n)>=85).length,nr=therapistNames.filter(n=>calcTherapistKPI(allFeedback,n)<70).length;
+  document.getElementById('kpi-clinic-stats').innerHTML=[
+    {label:'Clinic satisfaction',val:cs+'%',sub:t+' ratings total',bg:'#0A1628',vc:'#00AAFF',sc:'rgba(255,255,255,0.5)'},
+    {label:'Sessions rated',val:''+t,sub:therapistNames.length+' therapists',bg:'#E8F4FF',vc:'#1A3FBF',sc:'#1A3FBF'},
+    {label:'Excellent performers',val:''+exc,sub:'85%+ threshold',bg:'#E8F4FF',vc:'#0A1628',sc:'#1A3FBF'},
+    {label:'Needs review',val:''+nr,sub:'Below 70%',bg:nr>0?'#0A1628':'#E8F4FF',vc:nr>0?'#00AAFF':'#1A3FBF',sc:nr>0?'rgba(255,255,255,0.5)':'#1A3FBF'},
+  ].map(s=>`<div style="background:${s.bg};border-radius:12px;padding:0.9rem 1rem;border:none"><div style="font-size:11px;color:${s.sc};margin-bottom:4px">${s.label}</div><div style="font-size:26px;font-weight:700;color:${s.vc};line-height:1">${s.val}</div><div style="font-size:11px;color:${s.sc};margin-top:4px">${s.sub}</div></div>`).join('');
 }
 
-var kpiCardPalettes = [
-  {bg:'#0A1628',avBg:'rgba(0,170,255,0.2)',avColor:'#00AAFF',scoreColor:'#00AAFF',mutedColor:'rgba(255,255,255,0.5)'},
-  {bg:'#1A3FBF',avBg:'rgba(0,212,255,0.2)',avColor:'#00D4FF',scoreColor:'#00D4FF',mutedColor:'rgba(255,255,255,0.5)'},
-  {bg:'#0A1628',avBg:'rgba(26,63,191,0.4)',avColor:'#8899FF',scoreColor:'#8899FF',mutedColor:'rgba(255,255,255,0.5)'},
-];
+var kpiCardPalettes=[{bg:'#0A1628',avBg:'rgba(0,170,255,0.2)',avColor:'#00AAFF',scoreColor:'#00AAFF',mutedColor:'rgba(255,255,255,0.5)'},{bg:'#1A3FBF',avBg:'rgba(0,212,255,0.2)',avColor:'#00D4FF',scoreColor:'#00D4FF',mutedColor:'rgba(255,255,255,0.5)'},{bg:'#0A1628',avBg:'rgba(26,63,191,0.4)',avColor:'#8899FF',scoreColor:'#8899FF',mutedColor:'rgba(255,255,255,0.5)'}];
 
 function kpiRenderCards(){
-  var allFeedback = window._kpiFeedback||[];
-  var therapistNames = window._kpiTherapists||[];
-  var selT = window._kpiSelTherapists||{};
-  var selM = window._kpiSelMonths||Array(12).fill(true);
-  var metrics = window._kpiMetrics||{score:true,sessions:true,stars:true,trend:true,chart:true};
-  var filtered = therapistNames.filter(n=>selT[n]);
-  var selMonthNums = selM.map((v,i)=>v?i:-1).filter(i=>i>=0);
-  var note = document.getElementById('kpi-filter-note');
-  if(note) note.textContent = filtered.length+' therapist'+(filtered.length!==1?'s':'')+' · '+selMonthNums.length+' month'+(selMonthNums.length!==1?'s':'');
-  if(!filtered.length){ document.getElementById('kpi-cards-grid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;font-size:13px;color:var(--muted)">No therapists selected.</div>'; return; }
-  document.getElementById('kpi-cards-grid').innerHTML = filtered.map((name,fi)=>{
-    var pal = kpiCardPalettes[fi%kpiCardPalettes.length];
-    var tf = allFeedback.filter(f=>f.therapist===name);
-    var filtTf = tf.filter(f=>f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0);
-    var kpi = filtTf.length>0?Math.round((filtTf.reduce((a,b)=>a+b.rating,0)/(5*filtTf.length))*100):calcTherapistKPI(allFeedback,name);
-    var avg = tf.length>0?(tf.reduce((a,b)=>a+b.rating,0)/tf.length).toFixed(1):'-';
-    var initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-    var badgeText = kpi>=85?'Excellent':kpi>=70?'Good':'Review needed';
-    var badgeBg = kpi>=85?'rgba(29,158,117,0.25)':kpi>=70?'rgba(0,170,255,0.15)':'rgba(240,80,80,0.25)';
-    var now = new Date();
-    var thisM = tf.filter(f=>f.date&&new Date(f.date).getMonth()===now.getMonth());
-    var lastM = tf.filter(f=>f.date&&new Date(f.date).getMonth()===(now.getMonth()-1+12)%12);
-    var diff = thisM.length>0&&lastM.length>0? Math.round((thisM.reduce((a,b)=>a+b.rating,0)/(5*thisM.length))*100)- Math.round((lastM.reduce((a,b)=>a+b.rating,0)/(5*lastM.length))*100):0;
-    var trendText = diff>0?'↑ +'+diff+'%':diff<0?'↓ '+diff+'%':'→ 0%';
-    var safeId = name.replace(/ /g,'_');
+  var allFeedback=window._kpiFeedback||[];
+  var therapistNames=window._kpiTherapists||[];
+  var selT=window._kpiSelTherapists||{};
+  var selM=window._kpiSelMonths||Array(12).fill(true);
+  var starFilter=window._kpiStarFilter||{5:true,4:true,3:true,2:true,1:true};
+  var showComments=window._kpiShowComments!==false;
+  var isLead=currentUser.role==='Lead'||currentUser.role==='Admin';
+  var metrics=window._kpiMetrics||{score:true,sessions:true,stars:true,trend:true,chart:true};
+  var filtered=therapistNames.filter(n=>selT[n]);
+  var selMonthNums=selM.map((v,i)=>v?i:-1).filter(i=>i>=0);
+  var note=document.getElementById('kpi-filter-note');
+  if(note)note.textContent=filtered.length+' therapist'+(filtered.length!==1?'s':'')+' \u00b7 '+selMonthNums.length+' month'+(selMonthNums.length!==1?'s':'');
+  if(!filtered.length){document.getElementById('kpi-cards-grid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;font-size:13px;color:var(--muted)">No therapists selected.</div>';return;}
+
+  // Apply star filter
+  var filtFb=allFeedback.filter(f=>starFilter[Math.round(f.rating)]);
+
+  document.getElementById('kpi-cards-grid').innerHTML=filtered.map((name,fi)=>{
+    var pal=kpiCardPalettes[fi%kpiCardPalettes.length];
+    var tf=filtFb.filter(f=>f.therapist&&f.therapist.toLowerCase().trim()===name.toLowerCase().trim());
+    var allTf=allFeedback.filter(f=>f.therapist&&f.therapist.toLowerCase().trim()===name.toLowerCase().trim());
+    var filtTf=tf.filter(f=>f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0);
+    var kpi=filtTf.length>0?Math.round((filtTf.reduce((a,b)=>a+b.rating,0)/(5*filtTf.length))*100):0;
+    var avg=allTf.length>0?(allTf.reduce((a,b)=>a+b.rating,0)/allTf.length).toFixed(1):'-';
+    var initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    var badgeText=kpi>=85?'Excellent':kpi>=70?'Good':tf.length===0?'No data':'Review needed';
+    var badgeBg=kpi>=85?'rgba(29,158,117,0.25)':kpi>=70?'rgba(0,170,255,0.15)':tf.length===0?'rgba(90,106,122,0.15)':'rgba(240,80,80,0.25)';
+    var now=new Date();
+    var thisM=allTf.filter(f=>f.date&&new Date(f.date).getMonth()===now.getMonth());
+    var lastM=allTf.filter(f=>f.date&&new Date(f.date).getMonth()===(now.getMonth()-1+12)%12);
+    var diff=thisM.length>0&&lastM.length>0?Math.round((thisM.reduce((a,b)=>a+b.rating,0)/(5*thisM.length))*100)-Math.round((lastM.reduce((a,b)=>a+b.rating,0)/(5*lastM.length))*100):0;
+    var trendText=diff>0?'\u2191 +'+diff+'%':diff<0?'\u2193 '+diff+'%':'\u2192 0%';
+    var safeId=name.replace(/ /g,'_');
     return `<div class="kpi-t-card" data-name="${name}" onclick="kpiOpenDetail(this.dataset.name)" id="kpi-card-${safeId}" style="background:${pal.bg}">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
         <div style="width:36px;height:36px;border-radius:50%;background:${pal.avBg};color:${pal.avColor};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">${initials}</div>
         ${metrics.trend?`<div style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.8)">${trendText}</div>`:''}
       </div>
       <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);line-height:1.3;margin-bottom:1px">${name}</div>
-      <div style="font-size:10px;color:${pal.mutedColor};margin-bottom:6px">${tf.length} sessions rated</div>
-      ${metrics.score?`<div style="font-size:30px;font-weight:700;line-height:1;color:${pal.scoreColor}">${kpi}%</div>`:''}
+      <div style="font-size:10px;color:${pal.mutedColor};margin-bottom:6px">${tf.length===0?'No ratings yet':tf.length+' session'+(tf.length!==1?'s':'')+' rated'}</div>
+      ${metrics.score?`<div style="font-size:30px;font-weight:700;line-height:1;color:${pal.scoreColor}">${tf.length===0?'\u2014':kpi+'%'}</div>`:''}
       <div style="font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px;background:${badgeBg};color:${pal.avColor};display:inline-block;margin:4px 0 8px">${badgeText}</div>
       ${metrics.sessions||metrics.stars?`<div style="display:flex;gap:14px;margin-bottom:6px">${metrics.sessions?`<div style="font-size:10px;color:${pal.mutedColor}"><span style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);display:block">${filtTf.length}</span>Selected</div>`:''} ${metrics.stars?`<div style="font-size:10px;color:${pal.mutedColor}"><span style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);display:block">${avg}</span>Avg stars</div>`:''}</div>`:''}
       ${metrics.chart?`<div style="height:48px;position:relative"><canvas id="kpi-spark-${safeId}" role="img" aria-label="Mini chart">Trend</canvas></div>`:''}
@@ -1571,469 +898,192 @@ function kpiRenderCards(){
   if(metrics.chart){
     setTimeout(()=>{
       filtered.forEach(name=>{
-        var tf = allFeedback.filter(f=>f.therapist===name);
-        var selMArr = window._kpiSelMonths;
-        var selectedData = [0,1,2,3,4,5,6,7,8,9,10,11].filter(m=>selMArr[m]).map(m=>{
-          var mf = tf.filter(f=>f.date&&new Date(f.date).getMonth()===m);
-          return {s:mf.length>0?Math.round((mf.reduce((a,b)=>a+b.rating,0)/(5*mf.length))*100):null,m};
-        }).filter(d=>d.s!==null);
-        if(selectedData.length<1) return;
-        var canvas = document.getElementById('kpi-spark-'+name.replace(/ /g,'_'));
-        if(!canvas) return;
-        var w = canvas.parentElement.offsetWidth;
-        canvas.width=w; canvas.height=48;
-        var ctx = canvas.getContext('2d');
-        var mn = Math.min(...selectedData.map(d=>d.s))-8;
-        var mx = Math.max(...selectedData.map(d=>d.s))+8;
-        var barW = Math.max(8,Math.floor((w-selectedData.length*2)/selectedData.length));
+        var tf=filtFb.filter(f=>f.therapist&&f.therapist.toLowerCase().trim()===name.toLowerCase().trim());
+        var selMArr=window._kpiSelMonths;
+        var selectedData=[0,1,2,3,4,5,6,7,8,9,10,11].filter(m=>selMArr[m]).map(m=>{var mf=tf.filter(f=>f.date&&new Date(f.date).getMonth()===m);return{s:mf.length>0?Math.round((mf.reduce((a,b)=>a+b.rating,0)/(5*mf.length))*100):null,m};}).filter(d=>d.s!==null);
+        if(selectedData.length<1)return;
+        var canvas=document.getElementById('kpi-spark-'+name.replace(/ /g,'_'));if(!canvas)return;
+        var w=canvas.parentElement.offsetWidth;canvas.width=w;canvas.height=48;
+        var ctx=canvas.getContext('2d'),mn=Math.min(...selectedData.map(d=>d.s))-8,mx=Math.max(...selectedData.map(d=>d.s))+8;
+        var barW=Math.max(8,Math.floor((w-selectedData.length*2)/selectedData.length));
         selectedData.forEach((item,j)=>{
-          var bh = Math.max(4,Math.round(((item.s-mn)/(mx-mn))*36));
-          var x = j*(barW+2);
-          ctx.fillStyle = j===selectedData.length-1?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.3)';
-          ctx.beginPath(); ctx.roundRect(x,48-bh,barW,bh,[2,2,0,0]); ctx.fill();
-          var months=['J','F','M','A','M','J','J','A','S','O','N','D'];
-          ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='7px sans-serif'; ctx.textAlign='center';
-          ctx.fillText(months[item.m],x+barW/2,47);
+          var bh=Math.max(4,Math.round(((item.s-mn)/(mx-mn))*36)),x=j*(barW+2);
+          ctx.fillStyle=j===selectedData.length-1?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.3)';
+          ctx.beginPath();ctx.roundRect(x,48-bh,barW,bh,[2,2,0,0]);ctx.fill();
+          ctx.fillStyle='rgba(255,255,255,0.4)';ctx.font='7px sans-serif';ctx.textAlign='center';
+          ctx.fillText(['J','F','M','A','M','J','J','A','S','O','N','D'][item.m],x+barW/2,47);
         });
       });
     },150);
   }
 }
 
-function kpiToggleDropdown(name){
-  var ids = ['therapists','months','metrics'];
-  ids.forEach(id=>{
-    var dd = document.getElementById('kpi-dd-'+id);
-    if(dd) dd.style.display = (id===name && dd.style.display==='none')?'block':'none';
-  });
-}
+function kpiToggleDropdown(name){var ids=['therapists','months'];ids.forEach(id=>{var dd=document.getElementById('kpi-dd-'+id);if(dd)dd.style.display=(id===name&&dd.style.display==='none')?'block':'none';});}
+function kpiSetPeriod(months,btn){var now=new Date(),cm=now.getMonth();window._kpiSelMonths=Array(12).fill(false);for(var i=0;i<months;i++)window._kpiSelMonths[(cm-i+12)%12]=true;document.querySelectorAll('.kpi-period-btn').forEach(b=>b.classList.remove('active-period'));if(btn)btn.classList.add('active-period');kpiUpdateMonthChips();kpiRenderCards();}
+function kpiToggleMonth(idx,el){if(!window._kpiSelMonths)window._kpiSelMonths=Array(12).fill(true);el.classList.toggle('on');window._kpiSelMonths[idx]=el.classList.contains('on');var count=window._kpiSelMonths.filter(Boolean).length;var badge=document.getElementById('kpi-m-count');if(badge)badge.textContent=count;document.querySelectorAll('.kpi-period-btn').forEach(b=>b.classList.remove('active-period'));kpiRenderCards();}
+function kpiUpdateMonthChips(){var mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],selM=window._kpiSelMonths||Array(12).fill(true);var chips=document.getElementById('kpi-month-chips');if(!chips)return;chips.innerHTML=mn.map((name,i)=>'<div class="kpi-dd-item'+(selM[i]?' on':'')+'" data-month="'+i+'" onclick="kpiToggleMonth('+i+',this)">'+name+'</div>').join('');var count=selM.filter(Boolean).length;var badge=document.getElementById('kpi-m-count');if(badge)badge.textContent=count;}
+document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('[onclick*="kpiToggleDropdown"]')){['therapists','months'].forEach(id=>{var dd=document.getElementById('kpi-dd-'+id);if(dd&&(!e.target.closest||!e.target.closest('#kpi-dd-'+id)))dd.style.display='none';});}});
 
-function kpiSetPeriod(months, btn){
-  var now = new Date();
-  var currentMonth = now.getMonth();
-  window._kpiSelMonths = Array(12).fill(false);
-  for(var i=0; i<months; i++){
-    var m = (currentMonth - i + 12) % 12;
-    window._kpiSelMonths[m] = true;
-  }
-  document.querySelectorAll('.kpi-period-btn').forEach(function(b){ b.classList.remove('active-period'); });
-  if(btn) btn.classList.add('active-period');
-  kpiUpdateMonthChips();
-  kpiRenderCards();
-}
-
-function kpiToggleMonth(idx, el){
-  if(!window._kpiSelMonths) window._kpiSelMonths = Array(12).fill(true);
-  el.classList.toggle('on');
-  window._kpiSelMonths[idx] = el.classList.contains('on');
-  var count = window._kpiSelMonths.filter(Boolean).length;
-  var badge = document.getElementById('kpi-m-count');
-  if(badge) badge.textContent = count;
-  document.querySelectorAll('.kpi-period-btn').forEach(function(b){ b.classList.remove('active-period'); });
-  kpiRenderCards();
-}
-
-function kpiUpdateMonthChips(){
-  var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var selM = window._kpiSelMonths || Array(12).fill(true);
-  var chips = document.getElementById('kpi-month-chips');
-  if(!chips) return;
-  chips.innerHTML = monthNames.map(function(name, i){
-    return '<div class="kpi-dd-item'+(selM[i]?' on':'')+'" data-month="'+i+'" onclick="kpiToggleMonth('+i+',this)">'+name+'</div>';
-  }).join('');
-  var count = selM.filter(Boolean).length;
-  var badge = document.getElementById('kpi-m-count');
-  if(badge) badge.textContent = count;
-}
-
-document.addEventListener('click', function(e){
-  if(!e.target.closest || !e.target.closest('[onclick*="kpiToggleDropdown"]')){
-    ['therapists','months','metrics'].forEach(id=>{
-      var dd = document.getElementById('kpi-dd-'+id);
-      if(dd && !e.target.closest('#kpi-dd-'+id)) dd.style.display='none';
-    });
-  }
-});
-
-var kpiDetailChart = null;
-var kpiActiveTherapist = null;
-
+var kpiDetailChart=null,kpiActiveTherapist=null;
 function kpiOpenDetail(name){
-  var allFeedback = window._kpiFeedback||[];
-  var tf = allFeedback.filter(f=>f.therapist===name);
-  var selM = window._kpiSelMonths||Array(12).fill(true);
-  var selMonthNums = selM.map((v,i)=>v?i:-1).filter(i=>i>=0);
-  var filtTf = tf.filter(f=>f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0);
-  var kpi = filtTf.length>0?Math.round((filtTf.reduce((a,b)=>a+b.rating,0)/(5*filtTf.length))*100):calcTherapistKPI(allFeedback,name);
-  var avg = tf.length>0?(tf.reduce((a,b)=>a+b.rating,0)/tf.length).toFixed(1):'-';
-  var initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-  var scoreColor = kpi>=85?'#1D9E75':kpi>=70?'#1A3FBF':'#EF4444';
+  var allFeedback=window._kpiFeedback||[];
+  var isLead=currentUser.role==='Lead'||currentUser.role==='Admin';
+  var tf=allFeedback.filter(f=>f.therapist&&f.therapist.toLowerCase().trim()===name.toLowerCase().trim());
+  var selM=window._kpiSelMonths||Array(12).fill(true),selMonthNums=selM.map((v,i)=>v?i:-1).filter(i=>i>=0);
+  var filtTf=tf.filter(f=>f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0);
+  var kpi=filtTf.length>0?Math.round((filtTf.reduce((a,b)=>a+b.rating,0)/(5*filtTf.length))*100):0;
+  var avg=tf.length>0?(tf.reduce((a,b)=>a+b.rating,0)/tf.length).toFixed(1):'-';
+  var initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  var scoreColor=kpi>=85?'#1D9E75':kpi>=70?'#1A3FBF':'#EF4444';
   document.querySelectorAll('.kpi-t-card').forEach(c=>c.classList.remove('kpi-active'));
-  var card = document.getElementById('kpi-card-'+name.replace(/ /g,'_'));
-  if(card) card.classList.add('kpi-active');
-  var av = document.getElementById('kpi-d-avatar');
-  av.textContent=initials; av.style.background='#0A1628'; av.style.color='#00AAFF';
+  var card=document.getElementById('kpi-card-'+name.replace(/ /g,'_'));if(card)card.classList.add('kpi-active');
+  var av=document.getElementById('kpi-d-avatar');av.textContent=initials;av.style.background='#0A1628';av.style.color='#00AAFF';
   document.getElementById('kpi-d-name').textContent=name;
   document.getElementById('kpi-d-sub').textContent=filtTf.length+' sessions in selected months';
-  document.getElementById('kpi-d-score').textContent=kpi+'%';
-  document.getElementById('kpi-d-score').style.color=scoreColor;
-  document.getElementById('kpi-d-sessions').textContent=tf.length;
-  document.getElementById('kpi-d-avg').textContent=avg;
-  var now = new Date();
-  var thisM = tf.filter(f=>f.date&&new Date(f.date).getMonth()===now.getMonth());
-  var lastM = tf.filter(f=>f.date&&new Date(f.date).getMonth()===(now.getMonth()-1+12)%12);
-  var diff = thisM.length>0&&lastM.length>0? Math.round((thisM.reduce((a,b)=>a+b.rating,0)/(5*thisM.length))*100)- Math.round((lastM.reduce((a,b)=>a+b.rating,0)/(5*lastM.length))*100):0;
-  var tEl = document.getElementById('kpi-d-trend');
-  tEl.textContent=(diff>=0?'+':'')+diff+'%';
-  tEl.style.color=diff>0?'#1D9E75':diff<0?'#EF4444':'var(--muted)';
-  kpiActiveTherapist = name;
-  document.getElementById('kpi-month-drill').style.display='none';
-  document.getElementById('kpi-detail-panel').style.display='block';
-  var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var labels=[],scores=[],counts=[];
-  selMonthNums.forEach(m=>{
-    var mf = tf.filter(f=>f.date&&new Date(f.date).getMonth()===m);
-    labels.push(monthNames[m]);
-    scores.push(mf.length>0?Math.round((mf.reduce((a,b)=>a+b.rating,0)/(5*mf.length))*100):0);
-    counts.push(mf.length);
-  });
-  if(kpiDetailChart) kpiDetailChart.destroy();
-  kpiDetailChart = new Chart(document.getElementById('kpi-detail-chart').getContext('2d'),{
-    type:'bar',
-    data:{labels,datasets:[{label:'KPI %',data:scores,backgroundColor:scores.map(s=>s>=85?'#1D9E75':s>=70?'#1A3FBF':'#EF4444'),borderRadius:4,borderSkipped:false}]},
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'KPI: '+ctx.parsed.y+'% · '+counts[ctx.dataIndex]+' sessions'}}},
-      scales:{
-        y:{min:0,max:100,ticks:{callback:v=>v+'%',color:'#5A6A7A',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}},
-        x:{ticks:{color:'#5A6A7A',font:{size:11},autoSkip:false},grid:{display:false}}
-      },
+  document.getElementById('kpi-d-score').textContent=kpi+'%';document.getElementById('kpi-d-score').style.color=scoreColor;
+  document.getElementById('kpi-d-sessions').textContent=tf.length;document.getElementById('kpi-d-avg').textContent=avg;
+  var now=new Date(),thisM=tf.filter(f=>f.date&&new Date(f.date).getMonth()===now.getMonth()),lastM=tf.filter(f=>f.date&&new Date(f.date).getMonth()===(now.getMonth()-1+12)%12);
+  var diff=thisM.length>0&&lastM.length>0?Math.round((thisM.reduce((a,b)=>a+b.rating,0)/(5*thisM.length))*100)-Math.round((lastM.reduce((a,b)=>a+b.rating,0)/(5*lastM.length))*100):0;
+  var tEl=document.getElementById('kpi-d-trend');tEl.textContent=(diff>=0?'+':'')+diff+'%';tEl.style.color=diff>0?'#1D9E75':diff<0?'#EF4444':'var(--muted)';
+  kpiActiveTherapist=name;document.getElementById('kpi-month-drill').style.display='none';document.getElementById('kpi-detail-panel').style.display='block';
+  var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],labels=[],scores=[],counts=[];
+  selMonthNums.forEach(m=>{var mf=tf.filter(f=>f.date&&new Date(f.date).getMonth()===m);labels.push(monthNames[m]);scores.push(mf.length>0?Math.round((mf.reduce((a,b)=>a+b.rating,0)/(5*mf.length))*100):0);counts.push(mf.length);});
+  if(kpiDetailChart)kpiDetailChart.destroy();
+  kpiDetailChart=new Chart(document.getElementById('kpi-detail-chart').getContext('2d'),{
+    type:'bar',data:{labels,datasets:[{label:'KPI %',data:scores,backgroundColor:scores.map(s=>s>=85?'#1D9E75':s>=70?'#1A3FBF':'#EF4444'),borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'KPI: '+ctx.parsed.y+'% \u00b7 '+counts[ctx.dataIndex]+' sessions'}}},
+      scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',color:'#5A6A7A',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#5A6A7A',font:{size:11},autoSkip:false},grid:{display:false}}},
       onClick:(e,els)=>{
-        if(!els.length) return;
-        var idx=els[0].index, month=labels[idx], mNum=selMonthNums[idx];
+        if(!els.length)return;
+        var idx=els[0].index,month=labels[idx],mNum=selMonthNums[idx];
         var mf=tf.filter(f=>f.date&&new Date(f.date).getMonth()===mNum);
-        var isLead = currentUser.role==='Lead'||currentUser.role==='Admin';
         document.getElementById('kpi-drill-title').textContent=month+' '+new Date().getFullYear();
-        document.getElementById('kpi-drill-meta').textContent=counts[idx]+' sessions · avg '+(mf.length>0?(mf.reduce((a,b)=>a+b.rating,0)/mf.length).toFixed(1):'-')+' stars';
+        document.getElementById('kpi-drill-meta').textContent=counts[idx]+' sessions \u00b7 avg '+(mf.length>0?(mf.reduce((a,b)=>a+b.rating,0)/mf.length).toFixed(1):'-')+' stars';
         var list=document.getElementById('kpi-comments-list');
-        list.innerHTML=mf.length?mf.map(f=>{
-          var stars='★'.repeat(Math.round(f.rating))+'☆'.repeat(5-Math.round(f.rating));
-          var showCmt=isLead&&f.comment;
-          return `<div style="padding:0.65rem 0;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:12px;font-weight:700;color:var(--navy)">${f.patient||'Patient'}</span><span style="color:#EDA100;font-size:11px">${stars}</span><span style="font-size:10px;color:var(--muted)">${f.rating}/5</span></div>${showCmt?`<div style="font-size:12px;color:var(--muted);font-style:italic">"${f.comment}"</div>`:''}</div>`;
-        }).join(''):'<div style="font-size:12px;color:var(--muted);padding:0.5rem 0">No ratings for this month.</div>';
+        list.innerHTML=mf.length?mf.map(f=>{var stars='\u2605'.repeat(Math.round(f.rating))+'\u2606'.repeat(5-Math.round(f.rating));var showCmt=isLead&&f.comment;return`<div style="padding:0.65rem 0;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:12px;font-weight:700;color:var(--navy)">${f.patient||'Patient'}</span><span style="color:#EDA100;font-size:11px">${stars}</span><span style="font-size:10px;color:var(--muted)">${f.rating}/5</span></div>${showCmt?`<div style="font-size:12px;color:var(--muted);font-style:italic">"${f.comment}"</div>`:''}</div>`;}).join(''):'<div style="font-size:12px;color:var(--muted);padding:0.5rem 0">No ratings for this month.</div>';
         document.getElementById('kpi-month-drill').style.display='block';
       }
     }
   });
   document.getElementById('kpi-detail-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-
-function closeKPIDetail(){
-  document.getElementById('kpi-detail-panel').style.display='none';
-  document.querySelectorAll('.kpi-t-card').forEach(c=>c.classList.remove('kpi-active'));
-  if(kpiDetailChart){kpiDetailChart.destroy();kpiDetailChart=null;}
-  kpiActiveTherapist=null;
-}
+function closeKPIDetail(){document.getElementById('kpi-detail-panel').style.display='none';document.querySelectorAll('.kpi-t-card').forEach(c=>c.classList.remove('kpi-active'));if(kpiDetailChart){kpiDetailChart.destroy();kpiDetailChart=null;}kpiActiveTherapist=null;}
 
 function exportKPICSV(){
-  var feedback=window._kpiFeedback||[];
-  if(!feedback.length){alert('No data to export.');return;}
+  var feedback=window._kpiFeedback||[];if(!feedback.length){alert('No data to export.');return;}
   var headers=['Patient','PatientID','Therapist','Rating','Comment','Session Date'];
   var rows=feedback.map(f=>[f.patient||'',f.patientId||'',f.therapist||'',f.rating||'','"'+(f.comment||'')+'"',f.date||'']);
   var csv=[headers.join(',')].concat(rows.map(r=>r.join(','))).join('\n');
-  var blob=new Blob([csv],{type:'text/csv'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;a.download='WhiteRock_KPI_'+new Date().toISOString().split('T')[0]+'.csv';
-  a.click();URL.revokeObjectURL(url);
+  var blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='WhiteRock_KPI_'+new Date().toISOString().split('T')[0]+'.csv';a.click();URL.revokeObjectURL(url);
 }
 
 function showKPIPPTPreview(){
-  var feedback = window._kpiFeedback || [];
-  var therapists = (window._kpiTherapists || []).filter(function(n){
-    return window._kpiSelTherapists && window._kpiSelTherapists[n];
-  });
-  var selM = window._kpiSelMonths || Array(12).fill(true);
-  var selMonthNums = selM.map(function(v,i){return v?i:-1;}).filter(function(i){return i>=0;});
-  var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  if(!feedback.length){ alert('No KPI data. Please load the KPI page first.'); return; }
-
-  var date = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-  var avg = feedback.length > 0 ? (feedback.reduce(function(a,b){return a+b.rating;},0)/feedback.length).toFixed(1) : '-';
-  var period = selMonthNums.map(function(m){return monthNames[m];}).join(', ') || 'All months';
-
-  // State
-  var selectedStars = {5:true,4:true,3:true,2:true,1:true};
-  var isLeadUser = currentUser.role==='Lead'||currentUser.role==='Admin';
-  var showComments = isLeadUser; // Only leads see comments — non-leads always false
-
-  // Build modal
-  var modal = document.createElement('div');
-  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);overflow-y:auto';
-
+  var feedback=window._kpiFeedback||[];
+  var therapists=(window._kpiTherapists||[]).filter(n=>window._kpiSelTherapists&&window._kpiSelTherapists[n]);
+  var selM=window._kpiSelMonths||Array(12).fill(true);
+  var selMonthNums=selM.map((v,i)=>v?i:-1).filter(i=>i>=0);
+  var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if(!feedback.length){alert('No KPI data. Please load the KPI page first.');return;}
+  var date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  var avg=feedback.length>0?(feedback.reduce((a,b)=>a+b.rating,0)/feedback.length).toFixed(1):'-';
+  var period=selMonthNums.map(m=>monthNames[m]).join(', ')||'All months';
+  var selectedStars={5:true,4:true,3:true,2:true,1:true};
+  var isLeadUser=currentUser.role==='Lead'||currentUser.role==='Admin';
+  var showComments=isLeadUser;
+  var modal=document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);overflow-y:auto';
   function buildModalHTML(){
-    var filtFeedback = feedback.filter(function(f){
-      return selectedStars[Math.round(f.rating)];
+    var filtFeedback=feedback.filter(f=>selectedStars[Math.round(f.rating)]);
+    var starCounts={5:0,4:0,3:0,2:0,1:0};filtFeedback.forEach(f=>{var r=Math.round(f.rating);if(starCounts[r]!==undefined)starCounts[r]++;});
+    var maxCount=Math.max.apply(null,Object.values(starCounts))||1;
+    var therapistRows=therapists.map(name=>{
+      var tf=filtFeedback.filter(f=>f.therapist===name),filtTf=tf.filter(f=>f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0);
+      var kpi=filtTf.length>0?Math.round((filtTf.reduce((a,b)=>a+b.rating,0)/(5*filtTf.length))*100):0;
+      var tavg=filtTf.length>0?(filtTf.reduce((a,b)=>a+b.rating,0)/filtTf.length).toFixed(1):'-';
+      var kpiColor=kpi>=85?'#1D9E75':kpi>=70?'#1A3FBF':'#EF4444';
+      var initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+      return{name,kpi,tavg,kpiColor,initials,filtTf,comments:filtTf.filter(f=>f.comment).slice(0,3)};
     });
-
-    // Star distribution data
-    var starCounts = {5:0,4:0,3:0,2:0,1:0};
-    filtFeedback.forEach(function(f){ var r=Math.round(f.rating); if(starCounts[r]!==undefined) starCounts[r]++; });
-    var maxCount = Math.max.apply(null, Object.values(starCounts)) || 1;
-
-    // Per-therapist data
-    var therapistRows = therapists.map(function(name){
-      var tf = filtFeedback.filter(function(f){return f.therapist===name;});
-      var filtTf = tf.filter(function(f){return f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0;});
-      var kpi = filtTf.length>0?Math.round((filtTf.reduce(function(a,b){return a+b.rating;},0)/(5*filtTf.length))*100):0;
-      var tavg = filtTf.length>0?(filtTf.reduce(function(a,b){return a+b.rating;},0)/filtTf.length).toFixed(1):'-';
-      var kpiColor = kpi>=85?'#1D9E75':kpi>=70?'#1A3FBF':'#EF4444';
-      var initials = name.split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
-      var comments = filtTf.filter(function(f){return f.comment;}).slice(0,3);
-      return {name,kpi,tavg,kpiColor,initials,filtTf,comments};
-    });
-
     return '<div style="background:white;border-radius:16px;padding:1.5rem;width:95%;max-width:960px;max-height:90vh;overflow-y:auto;font-family:Plus Jakarta Sans,sans-serif">'
-      // Header
       +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">'
-      +'<div><div style="font-size:1.1rem;font-weight:800;color:#0A1628">KPI Report Preview</div>'
-      +'<div style="font-size:0.75rem;color:#5A6A7A">'+period+' &middot; '+filtFeedback.length+' sessions</div></div>'
+      +'<div><div style="font-size:1.1rem;font-weight:800;color:#0A1628">KPI Report Preview</div><div style="font-size:0.75rem;color:#5A6A7A">'+period+' \u00b7 '+filtFeedback.length+' sessions</div></div>'
       +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
-      // Star filter buttons
       +'<div style="display:flex;gap:4px;align-items:center"><span style="font-size:11px;color:#5A6A7A;margin-right:2px">Stars:</span>'
-      +[5,4,3,2,1].map(function(s){
-        var on = selectedStars[s];
-        return '<button onclick="kpiPPTToggleStar('+s+')" style="width:28px;height:28px;border-radius:6px;border:1.5px solid '+(on?'#1A3FBF':'#E2EAF0')+';background:'+(on?'#E8F4FF':'white')+';color:'+(on?'#1A3FBF':'#AAA')+';font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">'+s+'&#9733;</button>';
-      }).join('')
-      +'</div>'
-      // Comment toggle
-      +(isLeadUser ? '<button onclick="kpiPPTToggleComments()" style="padding:5px 12px;border-radius:6px;border:1.5px solid '+(showComments?'#1A3FBF':'#E2EAF0')+';background:'+(showComments?'#E8F4FF':'white')+';color:'+(showComments?'#1A3FBF':'#AAA')+';font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">'
-      +(showComments?'&#10003; Comments':'Comments off')+'</button>' : '')
-      +'<button onclick="kpiPPTClose()" style="padding:5px 14px;border-radius:6px;border:1px solid #E2EAF0;background:white;font-size:12px;color:#5A6A7A;cursor:pointer;font-family:inherit">Close</button>'
-      +'</div></div>'
-
-      // SLIDE 1 PREVIEW — Clinic Overview with bar chart
-      +'<div style="background:#0A1628;border-radius:12px;padding:1.5rem;margin-bottom:1rem">'
-      +'<div style="color:#00AAFF;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.75rem">Slide 1 — Clinic Overview</div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">'
-      // Stats
-      +'<div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">'
+      +[5,4,3,2,1].map(s=>{var on=selectedStars[s];return'<button onclick="kpiPPTToggleStar('+s+')" style="width:28px;height:28px;border-radius:6px;border:1.5px solid '+(on?'#1A3FBF':'#E2EAF0')+';background:'+(on?'#E8F4FF':'white')+';color:'+(on?'#1A3FBF':'#AAA')+';font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">'+s+'&#9733;</button>';}).join('')+'</div>'
+      +(isLeadUser?'<button onclick="kpiPPTToggleComments()" style="padding:5px 12px;border-radius:6px;border:1.5px solid '+(showComments?'#1A3FBF':'#E2EAF0')+';background:'+(showComments?'#E8F4FF':'white')+';color:'+(showComments?'#1A3FBF':'#AAA')+';font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">'+(showComments?'&#10003; Comments':'Comments off')+'</button>':'')
+      +'<button onclick="kpiPPTClose()" style="padding:5px 14px;border-radius:6px;border:1px solid #E2EAF0;background:white;font-size:12px;color:#5A6A7A;cursor:pointer;font-family:inherit">Close</button></div></div>'
+      +'<div style="background:#0A1628;border-radius:12px;padding:1.5rem;margin-bottom:1rem"><div style="color:#00AAFF;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.75rem">Slide 1 \u2014 Clinic Overview</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem"><div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">'
       +'<div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:12px;text-align:center"><div style="font-size:28px;font-weight:800;color:#00AAFF">'+avg+'</div><div style="font-size:10px;color:rgba(255,255,255,0.5)">Avg Rating</div></div>'
-      +'<div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:12px;text-align:center"><div style="font-size:28px;font-weight:800;color:#00AAFF">'+filtFeedback.length+'</div><div style="font-size:10px;color:rgba(255,255,255,0.5)">Sessions</div></div>'
-      +'</div>'
-      +'<div style="color:rgba(255,255,255,0.4);font-size:10px">Period: '+period+'</div>'
-      +'</div>'
-      // Star distribution bar chart
-      +'<div>'
-      +'<div style="color:rgba(255,255,255,0.5);font-size:10px;font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em">Rating Distribution</div>'
-      +[5,4,3,2,1].map(function(s){
-        var count = starCounts[s];
-        var pct = Math.round((count/maxCount)*100);
-        var barColor = s>=4?'#1D9E75':s===3?'#F59E0B':'#EF4444';
-        return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">'
-          +'<span style="color:#FFB800;font-size:11px;width:16px;text-align:right">'+s+'</span>'
-          +'<div style="flex:1;background:rgba(255,255,255,0.1);border-radius:3px;height:14px">'
-          +'<div style="width:'+pct+'%;background:'+barColor+';height:100%;border-radius:3px;transition:width 0.3s"></div>'
-          +'</div>'
-          +'<span style="color:rgba(255,255,255,0.6);font-size:10px;width:20px">'+count+'</span>'
+      +'<div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:12px;text-align:center"><div style="font-size:28px;font-weight:800;color:#00AAFF">'+filtFeedback.length+'</div><div style="font-size:10px;color:rgba(255,255,255,0.5)">Sessions</div></div></div>'
+      +'<div style="color:rgba(255,255,255,0.4);font-size:10px">Period: '+period+'</div></div>'
+      +'<div><div style="color:rgba(255,255,255,0.5);font-size:10px;font-weight:600;margin-bottom:8px;text-transform:uppercase">Rating Distribution</div>'
+      +[5,4,3,2,1].map(s=>{var count=starCounts[s],pct=Math.round((count/maxCount)*100),bc=s>=4?'#1D9E75':s===3?'#F59E0B':'#EF4444';return'<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span style="color:#FFB800;font-size:11px;width:16px;text-align:right">'+s+'</span><div style="flex:1;background:rgba(255,255,255,0.1);border-radius:3px;height:14px"><div style="width:'+pct+'%;background:'+bc+';height:100%;border-radius:3px"></div></div><span style="color:rgba(255,255,255,0.6);font-size:10px;width:20px">'+count+'</span></div>';}).join('')
+      +'</div></div></div>'
+      +therapistRows.map(t=>{
+        var monthData=selMonthNums.map(m=>{var mf=t.filtTf.filter(f=>f.date&&new Date(f.date).getMonth()===m),mKpi=mf.length>0?Math.round((mf.reduce((a,b)=>a+b.rating,0)/(5*mf.length))*100):0;return{m,kpi:mKpi};});
+        return'<div style="background:#F5F9FF;border-radius:12px;padding:1.25rem;margin-bottom:0.75rem;border:1px solid #E2EAF0">'
+          +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap"><div style="width:40px;height:40px;border-radius:50%;background:#E8F4FF;color:#1A3FBF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">'+t.initials+'</div>'
+          +'<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#0A1628">'+t.name+'</div><div style="font-size:11px;color:#5A6A7A">'+t.filtTf.length+' sessions \u00b7 avg '+t.tavg+' stars</div></div>'
+          +'<div style="text-align:right"><div style="font-size:26px;font-weight:800;color:'+t.kpiColor+'">'+t.kpi+'%</div><div style="font-size:10px;color:#5A6A7A">KPI Score</div></div></div>'
+          +'<div style="display:flex;align-items:flex-end;gap:4px;height:80px;margin-bottom:'+(showComments&&t.comments.length?'1rem':'0')+'">'
+          +monthData.map(d=>{var bh=Math.max(4,Math.round((d.kpi/100)*70)),bc=d.kpi>=85?'#1D9E75':d.kpi>=70?'#1A3FBF':'#EF4444';return'<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:80px"><div style="font-size:8px;color:#5A6A7A;margin-bottom:2px">'+(d.kpi>0?d.kpi+'%':'')+'</div><div style="width:100%;background:'+bc+';height:'+bh+'px;border-radius:3px 3px 0 0;min-height:4px"></div><div style="font-size:8px;color:#5A6A7A;margin-top:3px">'+monthNames[d.m]+'</div></div>';}).join('')+'</div>'
+          +(showComments&&t.comments.length?'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#5A6A7A;margin-bottom:6px">Patient Feedback</div>'+t.comments.map(f=>'<div style="font-size:12px;color:#0A1628;font-style:italic;margin-bottom:5px;padding:8px 10px;background:white;border-radius:6px;border-left:3px solid '+t.kpiColor+'"><span style="color:#FFB800">'+'&#9733;'.repeat(Math.round(f.rating))+'</span> &ldquo;'+f.comment+'&rdquo; <span style="color:#5A6A7A;font-style:normal;font-size:10px">&mdash; '+(f.patient||'Patient')+'</span></div>').join('')+'</div>':'')
           +'</div>';
       }).join('')
-      +'</div>'
-      +'</div></div>'
-
-      // THERAPIST SLIDES PREVIEW
-      +therapistRows.map(function(t){
-        var monthData = selMonthNums.map(function(m){
-          var mf = t.filtTf.filter(function(f){return f.date&&new Date(f.date).getMonth()===m;});
-          var mKpi = mf.length>0?Math.round((mf.reduce(function(a,b){return a+b.rating;},0)/(5*mf.length))*100):0;
-          return {m,kpi:mKpi,count:mf.length};
-        });
-        var maxKpi = Math.max.apply(null, monthData.map(function(d){return d.kpi;})) || 100;
-
-        return '<div style="background:#F5F9FF;border-radius:12px;padding:1.25rem;margin-bottom:0.75rem;border:1px solid #E2EAF0">'
-          +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap">'
-          +'<div style="width:40px;height:40px;border-radius:50%;background:#E8F4FF;color:#1A3FBF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">'+t.initials+'</div>'
-          +'<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#0A1628">'+t.name+'</div>'
-          +'<div style="font-size:11px;color:#5A6A7A">'+t.filtTf.length+' sessions &middot; avg '+t.tavg+' stars</div></div>'
-          +'<div style="text-align:right"><div style="font-size:26px;font-weight:800;color:'+t.kpiColor+'">'+t.kpi+'%</div>'
-          +'<div style="font-size:10px;color:#5A6A7A">KPI Score</div></div>'
-          +'</div>'
-
-          // Monthly bar chart
-          +(monthData.length>0?'<div style="margin-bottom:'+(showComments&&t.comments.length?'1rem':'0')+'">'
-          +'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5A6A7A;margin-bottom:6px">Monthly KPI Trend</div>'
-          +'<div style="display:flex;align-items:flex-end;gap:4px;height:80px">'
-          +monthData.map(function(d){
-            var barH = maxKpi>0?Math.max(4,Math.round((d.kpi/100)*70)):4;
-            var barColor = d.kpi>=85?'#1D9E75':d.kpi>=70?'#1A3FBF':'#EF4444';
-            return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:80px">'
-              +'<div style="font-size:8px;color:#5A6A7A;margin-bottom:2px">'+(d.kpi>0?d.kpi+'%':'')+'</div>'
-              +'<div style="width:100%;background:'+barColor+';height:'+barH+'px;border-radius:3px 3px 0 0;min-height:4px"></div>'
-              +'<div style="font-size:8px;color:#5A6A7A;margin-top:3px">'+monthNames[d.m]+'</div>'
-              +'</div>';
-          }).join('')
-          +'</div></div>':'')
-
-          // Comments section
-          +(showComments&&t.comments.length?'<div>'
-          +'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5A6A7A;margin-bottom:6px">Patient Feedback</div>'
-          +t.comments.map(function(f){
-            var stars = Math.round(f.rating);
-            return '<div style="font-size:12px;color:#0A1628;font-style:italic;margin-bottom:5px;padding:8px 10px;background:white;border-radius:6px;border-left:3px solid '+t.kpiColor+'">'
-              +'<span style="color:#FFB800">'+'&#9733;'.repeat(stars)+'</span> '
-              +'&ldquo;'+f.comment+'&rdquo; '
-              +'<span style="color:#5A6A7A;font-style:normal;font-size:10px">&mdash; '+(f.patient||'Patient')+'</span>'
-              +'</div>';
-          }).join('')
-          +'</div>':'')
-          +'</div>';
-      }).join('')
-
-      // Export button
       +'<div style="display:flex;justify-content:flex-end;gap:8px;padding-top:1rem;border-top:1px solid #E2EAF0;margin-top:0.5rem">'
       +'<button onclick="kpiPPTClose()" style="padding:8px 18px;border-radius:8px;border:1px solid #E2EAF0;background:white;font-size:13px;cursor:pointer;font-family:inherit;color:#5A6A7A">Cancel</button>'
       +'<button onclick="kpiPPTDownload()" style="padding:8px 22px;border-radius:8px;border:none;background:#1A3FBF;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">&#8595; Download PPTX</button>'
-      +'</div>'
-      +'</div>';
+      +'</div></div>';
   }
-
-  modal.innerHTML = buildModalHTML();
-  document.body.appendChild(modal);
-
-  window.kpiPPTClose = function(){ document.body.removeChild(modal); };
-
-  window.kpiPPTToggleStar = function(s){
-    selectedStars[s] = !selectedStars[s];
-    modal.innerHTML = buildModalHTML();
-  };
-
-  window.kpiPPTToggleComments = function(){
-    showComments = !showComments;
-    modal.innerHTML = buildModalHTML();
-  };
-
-  window.kpiPPTDownload = function(){
-    // Load PptxGenJS and generate real .pptx file
-    var script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
-    script.onload = function(){
-      var filtFeedback = feedback.filter(function(f){ return selectedStars[Math.round(f.rating)]; });
-      var starCounts = {5:0,4:0,3:0,2:0,1:0};
-      filtFeedback.forEach(function(f){ var r=Math.round(f.rating); if(starCounts[r]!==undefined) starCounts[r]++; });
-
-      var pptx = new PptxGenJS();
-      pptx.layout = 'LAYOUT_WIDE';
-      var NAVY='0A1628', CYAN='00AAFF', ROYAL='1A3FBF', WHITE='FFFFFF', MUTED='5A6A7A';
-      var GREEN='1D9E75', AMBER='F59E0B', RED='EF4444';
-
-      // SLIDE 1 — Title
-      var s1 = pptx.addSlide();
-      s1.background = {color:NAVY};
-      s1.addText('WhiteRock Wellness', {x:0,y:1.8,w:'100%',align:'center',color:CYAN,fontSize:14,bold:true,charSpacing:3});
-      s1.addText('KPI Report', {x:0,y:2.4,w:'100%',align:'center',color:WHITE,fontSize:40,bold:true});
-      s1.addText(date+' · '+therapists.length+' Therapist'+(therapists.length!==1?'s':''), {x:0,y:3.4,w:'100%',align:'center',color:'888888',fontSize:14});
-      s1.addText('Period: '+period, {x:0,y:3.8,w:'100%',align:'center',color:'666666',fontSize:12});
-
-      // SLIDE 2 — Overview
-      var s2 = pptx.addSlide();
-      s2.background = {color:WHITE};
-      s2.addText('Clinic Overview', {x:0.5,y:0.3,w:9,color:ROYAL,fontSize:14,bold:true,charSpacing:2});
-      // Stat boxes
-      var stats = [
-        {label:'Avg Rating',val:avg,x:0.5},
-        {label:'Sessions Rated',val:String(filtFeedback.length),x:3.5},
-        {label:'Therapists',val:String(therapists.length),x:6.5},
-      ];
-      stats.forEach(function(st){
-        s2.addShape(pptx.ShapeType.rect,{x:st.x,y:0.8,w:2.5,h:1.4,fill:{color:'E8F4FF'},line:{color:'E8F4FF'}});
-        s2.addText(st.val,{x:st.x,y:0.9,w:2.5,h:0.8,align:'center',color:NAVY,fontSize:32,bold:true});
-        s2.addText(st.label,{x:st.x,y:1.65,w:2.5,align:'center',color:MUTED,fontSize:10});
-      });
-      // Star distribution bars
-      s2.addText('Rating Distribution',{x:0.5,y:2.5,w:9,color:MUTED,fontSize:10,bold:true,charSpacing:1});
-      var maxC = Math.max.apply(null,Object.values(starCounts))||1;
-      [5,4,3,2,1].forEach(function(star,i){
-        var count = starCounts[star];
-        var barW = (count/maxC)*6.5;
-        var barColor = star>=4?GREEN:star===3?AMBER:RED;
-        var y = 2.85 + i*0.45;
-        s2.addText(star+'★',{x:0.5,y:y,w:0.5,h:0.35,align:'right',color:'FFB800',fontSize:10});
-        s2.addShape(pptx.ShapeType.rect,{x:1.1,y:y+0.05,w:6.5,h:0.25,fill:{color:'E8F4FF'},line:{color:'E8F4FF'}});
-        if(barW>0) s2.addShape(pptx.ShapeType.rect,{x:1.1,y:y+0.05,w:barW,h:0.25,fill:{color:barColor},line:{color:barColor}});
-        s2.addText(String(count),{x:7.7,y:y,w:0.4,h:0.35,align:'left',color:MUTED,fontSize:10});
-      });
-      s2.addText('Period: '+period,{x:0.5,y:5,w:9,color:MUTED,fontSize:9});
-
-      // ONE SLIDE PER THERAPIST
-      therapists.forEach(function(name){
-        var tf = filtFeedback.filter(function(f){return f.therapist===name;});
-        var filtTf = tf.filter(function(f){return f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0;});
-        var kpi = filtTf.length>0?Math.round((filtTf.reduce(function(a,b){return a+b.rating;},0)/(5*filtTf.length))*100):0;
-        var tavg = filtTf.length>0?(filtTf.reduce(function(a,b){return a+b.rating;},0)/filtTf.length).toFixed(1):'-';
-        var kpiColor = kpi>=85?GREEN:kpi>=70?ROYAL:RED;
-        var initials = name.split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
-        var comments = filtTf.filter(function(f){return f.comment&&showComments;}).slice(0,3);
-
-        var st = pptx.addSlide();
-        st.background = {color:WHITE};
-        // Header
+  modal.innerHTML=buildModalHTML();document.body.appendChild(modal);
+  window.kpiPPTClose=function(){document.body.removeChild(modal);};
+  window.kpiPPTToggleStar=function(s){selectedStars[s]=!selectedStars[s];modal.innerHTML=buildModalHTML();};
+  window.kpiPPTToggleComments=function(){showComments=!showComments;modal.innerHTML=buildModalHTML();};
+  window.kpiPPTDownload=function(){
+    var script=document.createElement('script');script.src='https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
+    script.onload=function(){
+      var filtFeedback=feedback.filter(f=>selectedStars[Math.round(f.rating)]);
+      var pptx=new PptxGenJS();pptx.layout='LAYOUT_WIDE';
+      var NAVY='0A1628',CYAN='00AAFF',ROYAL='1A3FBF',WHITE='FFFFFF',MUTED='5A6A7A',GREEN='1D9E75',AMBER='F59E0B',RED='EF4444';
+      var s1=pptx.addSlide();s1.background={color:NAVY};
+      s1.addText('WhiteRock Wellness',{x:0,y:1.8,w:'100%',align:'center',color:CYAN,fontSize:14,bold:true,charSpacing:3});
+      s1.addText('KPI Report',{x:0,y:2.4,w:'100%',align:'center',color:WHITE,fontSize:40,bold:true});
+      s1.addText(date+' \u00b7 '+therapists.length+' Therapist'+(therapists.length!==1?'s':''),{x:0,y:3.4,w:'100%',align:'center',color:'888888',fontSize:14});
+      therapists.forEach(name=>{
+        var tf=filtFeedback.filter(f=>f.therapist===name),filtTf=tf.filter(f=>f.date&&selMonthNums.indexOf(new Date(f.date).getMonth())>=0);
+        var kpi=filtTf.length>0?Math.round((filtTf.reduce((a,b)=>a+b.rating,0)/(5*filtTf.length))*100):0;
+        var tavg=filtTf.length>0?(filtTf.reduce((a,b)=>a+b.rating,0)/filtTf.length).toFixed(1):'-';
+        var kpiColor=kpi>=85?GREEN:kpi>=70?ROYAL:RED;
+        var initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        var st=pptx.addSlide();st.background={color:WHITE};
         st.addShape(pptx.ShapeType.rect,{x:0,y:0,w:'100%',h:1.2,fill:{color:NAVY},line:{color:NAVY}});
         st.addText(initials,{x:0.4,y:0.25,w:0.7,h:0.7,align:'center',color:CYAN,fontSize:20,bold:true});
         st.addText(name,{x:1.3,y:0.25,h:0.4,w:6,color:WHITE,fontSize:18,bold:true});
-        st.addText(filtTf.length+' sessions rated · avg '+tavg+' stars',{x:1.3,y:0.65,h:0.3,w:6,color:'888888',fontSize:11});
+        st.addText(filtTf.length+' sessions rated \u00b7 avg '+tavg+' stars',{x:1.3,y:0.65,h:0.3,w:6,color:'888888',fontSize:11});
         st.addText(kpi+'%',{x:8,y:0.1,w:1.8,h:0.65,align:'right',color:kpiColor,fontSize:36,bold:true});
         st.addText('KPI Score',{x:8,y:0.75,w:1.8,align:'right',color:'888888',fontSize:10});
-
-        // Monthly bar chart
-        var chartY = 1.4;
-        st.addText('Monthly KPI Trend',{x:0.4,y:chartY,w:4.5,color:MUTED,fontSize:10,bold:true,charSpacing:1});
-        chartY += 0.3;
-        var chartH = 1.8;
-        var barCount = selMonthNums.length;
-        var barW2 = barCount>0?4.0/barCount:0.3;
-        selMonthNums.forEach(function(m,i){
-          var mf = filtTf.filter(function(f){return f.date&&new Date(f.date).getMonth()===m;});
-          var mKpi = mf.length>0?Math.round((mf.reduce(function(a,b){return a+b.rating;},0)/(5*mf.length))*100):0;
-          var barH2 = (mKpi/100)*chartH;
-          var bColor = mKpi>=85?GREEN:mKpi>=70?ROYAL:RED;
-          var bx = 0.4 + i*(barW2+0.05);
-          var by = chartY + chartH - barH2;
-          if(barH2>0) st.addShape(pptx.ShapeType.rect,{x:bx,y:by,w:Math.max(barW2-0.05,0.1),h:barH2,fill:{color:bColor},line:{color:bColor}});
+        var chartY=1.4,chartH=1.8,barCount=selMonthNums.length,barW2=barCount>0?4.0/barCount:0.3;
+        selMonthNums.forEach((m,i)=>{
+          var mf=filtTf.filter(f=>f.date&&new Date(f.date).getMonth()===m);
+          var mKpi=mf.length>0?Math.round((mf.reduce((a,b)=>a+b.rating,0)/(5*mf.length))*100):0;
+          var barH2=(mKpi/100)*chartH,bColor=mKpi>=85?GREEN:mKpi>=70?ROYAL:RED;
+          var bx=0.4+i*(barW2+0.05),by=chartY+chartH-barH2;
+          if(barH2>0)st.addShape(pptx.ShapeType.rect,{x:bx,y:by,w:Math.max(barW2-0.05,0.1),h:barH2,fill:{color:bColor},line:{color:bColor}});
           st.addText(monthNames[m],{x:bx,y:chartY+chartH+0.05,w:barW2,align:'center',color:MUTED,fontSize:7});
-          if(mKpi>0) st.addText(mKpi+'%',{x:bx,y:by-0.2,w:barW2,align:'center',color:bColor,fontSize:7,bold:true});
+          if(mKpi>0)st.addText(mKpi+'%',{x:bx,y:by-0.2,w:barW2,align:'center',color:bColor,fontSize:7,bold:true});
         });
-
-        // Comments
-        if(showComments && comments.length){
-          var cy = chartY + chartH + 0.5;
-          st.addText('Patient Feedback',{x:0.4,y:cy,w:9.2,color:MUTED,fontSize:10,bold:true,charSpacing:1});
-          cy += 0.3;
-          comments.forEach(function(f){
-            var stars2 = '★'.repeat(Math.round(f.rating));
-            st.addShape(pptx.ShapeType.rect,{x:0.4,y:cy,w:9.2,h:0.5,fill:{color:'F5F9FF'},line:{color:'E2EAF0'}});
-            st.addText(stars2+' "'+f.comment+'" — '+(f.patient||'Patient'),{x:0.55,y:cy+0.05,w:9,h:0.4,color:NAVY,fontSize:9,italic:true});
-            cy += 0.55;
-          });
-        }
-
-        // Right side — stat boxes
-        st.addShape(pptx.ShapeType.rect,{x:5.2,y:1.4,w:2,h:1.2,fill:{color:'F5F9FF'},line:{color:'E2EAF0'}});
-        st.addText(tavg,{x:5.2,y:1.5,w:2,align:'center',color:NAVY,fontSize:28,bold:true});
-        st.addText('Avg Stars /5',{x:5.2,y:2.2,w:2,align:'center',color:MUTED,fontSize:9});
-        st.addShape(pptx.ShapeType.rect,{x:7.4,y:1.4,w:2,h:1.2,fill:{color:'F5F9FF'},line:{color:'E2EAF0'}});
-        st.addText(String(filtTf.length),{x:7.4,y:1.5,w:2,align:'center',color:NAVY,fontSize:28,bold:true});
-        st.addText('Sessions Rated',{x:7.4,y:2.2,w:2,align:'center',color:MUTED,fontSize:9});
+        if(showComments){var comments=filtTf.filter(f=>f.comment).slice(0,3);if(comments.length){var cy=chartY+chartH+0.5;st.addText('Patient Feedback',{x:0.4,y:cy,w:9.2,color:MUTED,fontSize:10,bold:true});cy+=0.3;comments.forEach(f=>{var s2='\u2605'.repeat(Math.round(f.rating));st.addShape(pptx.ShapeType.rect,{x:0.4,y:cy,w:9.2,h:0.5,fill:{color:'F5F9FF'},line:{color:'E2EAF0'}});st.addText(s2+' "'+f.comment+'" \u2014 '+(f.patient||'Patient'),{x:0.55,y:cy+0.05,w:9,h:0.4,color:NAVY,fontSize:9,italic:true});cy+=0.55;});}}
       });
-
       pptx.writeFile({fileName:'WhiteRock_KPI_'+new Date().toISOString().split('T')[0]+'.pptx'});
     };
-    script.onerror = function(){ alert('Could not load PowerPoint library. Please check your internet connection.'); };
+    script.onerror=function(){alert('Could not load PowerPoint library.');};
     document.head.appendChild(script);
   };
 }
 
-function loadApproval(){ document.getElementById('approval-list').innerHTML='<div class="empty-state"><p>No items pending approval.</p></div>'; }
+function loadApproval(){document.getElementById('approval-list').innerHTML='<div class="empty-state"><p>No items pending approval.</p></div>';}
 </script>
 </body>
 </html>
