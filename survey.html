@@ -183,6 +183,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
 const params=new URLSearchParams(window.location.search);
 const patientId=params.get('id')||'';
 const patientName=params.get('patient')||'Valued Patient';
+const patientEmail=params.get('email')||'';
 const therapist=params.get('therapist')||'Dr. Paul Chima';
 const sessionDate=params.get('date')||new Date().toISOString().split('T')[0];
 
@@ -265,6 +266,7 @@ async function saveFeedback(comment, leftGoogle){
       body:JSON.stringify({
         Title:patientName,
         PatientID:patientId,
+        PatientEmail:patientEmail,
         Therapist:therapist,
         Rating:selectedRating,
         Comment:comment,
