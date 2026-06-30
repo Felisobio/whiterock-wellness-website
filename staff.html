@@ -691,7 +691,9 @@ async function saveSession(patientId,patientName,safeId){
     btn.textContent='\u2713 Saved!';btn.style.background='#22C55E';
     if(needsApproval){setTimeout(()=>{alert('Notes sent for Lead approval.');btn.disabled=false;btn.textContent='Save session notes';btn.style.background='';},1000);}
     else{
-      var surveyUrl='https://whiterock-wellness.com/survey.html?id='+encodeURIComponent(patientId)+'&patient='+encodeURIComponent(patientName)+'&therapist='+encodeURIComponent(currentUser.name)+'&date='+new Date().toISOString().split('T')[0];
+      var pr2=allPatients.find(p=>p.id===patientId||p.name===patientName);
+      var patientEmail=pr2&&pr2.email?pr2.email:'';
+      var surveyUrl='https://whiterock-wellness.com/survey.html?id='+encodeURIComponent(patientId)+'&patient='+encodeURIComponent(patientName)+'&email='+encodeURIComponent(patientEmail)+'&therapist='+encodeURIComponent(currentUser.name)+'&date='+new Date().toISOString().split('T')[0];
       var waText='Hello '+patientName+', thank you for visiting WhiteRock Wellness today! \uD83D\uDC9A\n\nPlease take 30 seconds to rate your session with us:\n'+surveyUrl+'\n\nYour feedback helps us serve you better. \u2014 WhiteRock Wellness Team';
       var pr=allPatients.find(p=>p.id===patientId||p.name===patientName);
       var phone=pr&&pr.phone?pr.phone.replace(/[\s\-\(\)]/g,''):'';
