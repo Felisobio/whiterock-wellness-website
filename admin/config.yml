@@ -1,6 +1,11 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: Felisobio/whiterock-wellness-website
   branch: main
+  base_url: https://whiterock-wellness.com
+  auth_endpoint: api/auth
+
+publish_mode: simple
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
@@ -8,12 +13,11 @@ public_folder: "/images/uploads"
 collections:
   - name: "posts"
     label: "Health Tips"
-    folder: "posts"
+    folder: "_posts"
     create: true
     slug: "{{slug}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Category", name: "category", widget: "select", options: ["Back Health", "Neck & Posture", "Lifestyle", "Nutrition", "Exercise", "Mental Wellness", "General Wellness"] }
-      - { label: "Date", name: "date", widget: "datetime" }
-      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Featured Image", name: "thumbnail", widget: "image", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
